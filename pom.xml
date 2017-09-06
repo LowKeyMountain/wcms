@@ -4,7 +4,7 @@
 	<groupId>wcms</groupId>
 	<artifactId>net.itw.wcms</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<description>京唐港首钢码头有限公司智能生产管理系统（TSPGC wharf Capacity Manufacture System，简称：wcms）</description>
+	<description></description>
 
 	<properties>
 		<!-- 基础包  -->
