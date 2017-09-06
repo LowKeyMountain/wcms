@@ -7,6 +7,7 @@ package net.itw.wcms.toolkit.hibernate;
  */
 public abstract class BaseEntity implements Entityable {
 
-	private static final long serialVersionUID = 1L;
-
+	private static final long serialVersionUID = 1L;  
+	
+	
 }
