@@ -23,7 +23,7 @@ import net.itw.wcms.toolkit.hibernate.Entityable;
  */
 @Table(name = "X27_ROLES")
 @Entity
-public class X27_Role implements Entityable {
+public class Role implements Entityable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -32,8 +32,8 @@ public class X27_Role implements Entityable {
 	private Date createDate;
 	private String description;
 
-	private Set<X27_User> users = new HashSet<>();
-	private Set<X27_Privilege> privileges = new HashSet<>();
+	private Set<User> users = new HashSet<>();
+	private Set<Privilege> privileges = new HashSet<>();
 
 	@GeneratedValue
 	@Id
@@ -72,11 +72,11 @@ public class X27_Role implements Entityable {
 	}
 
 	@ManyToMany(mappedBy = "roles")
-	public Set<X27_User> getUsers() {
+	public Set<User> getUsers() {
 		return users;
 	}
 
-	public void setUsers(Set<X27_User> users) {
+	public void setUsers(Set<User> users) {
 		this.users = users;
 	}
 
@@ -84,11 +84,11 @@ public class X27_Role implements Entityable {
 			@JoinColumn(name = "ROLE_ID", referencedColumnName = "ID") }, inverseJoinColumns = {
 					@JoinColumn(name = "PRIVILEGE_ID", referencedColumnName = "ID") })
 	@ManyToMany
-	public Set<X27_Privilege> getPrivileges() {
+	public Set<Privilege> getPrivileges() {
 		return privileges;
 	}
 
-	public void setPrivileges(Set<X27_Privilege> privileges) {
+	public void setPrivileges(Set<Privilege> privileges) {
 		this.privileges = privileges;
 	}
 

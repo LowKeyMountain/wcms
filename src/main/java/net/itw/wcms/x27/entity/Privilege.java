@@ -17,7 +17,7 @@ import javax.persistence.Table;
  */
 @Table(name="X27_PRIVILEGES")
 @Entity
-public class X27_Privilege {
+public class Privilege {
 
 	private Integer id;
 	private String privilName;
@@ -25,7 +25,7 @@ public class X27_Privilege {
 	private String category;
 	private String description;
 	
-	private Set<X27_Role> roles = new HashSet<>();
+	private Set<Role> roles = new HashSet<>();
 	
 	@GeneratedValue
 	@Id
@@ -72,11 +72,11 @@ public class X27_Privilege {
 	}
 	
 	@ManyToMany(mappedBy="privileges")
-	public Set<X27_Role> getRoles() {
+	public Set<Role> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(Set<X27_Role> roles) {
+	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
 	

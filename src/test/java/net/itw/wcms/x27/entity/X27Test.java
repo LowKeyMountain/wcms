@@ -42,13 +42,13 @@ public class X27Test {
 	 */
 	@Test
 	public void testJPA() {
-		X27_Organization org = new X27_Organization();
+		Organization org = new Organization();
 		org.setOrgName("运维部");
 		org.setOrgCode("007");
 		org.setOrgShortName("运维部");
 		org.setCreateDate(new Date());
 
-		X27_User user = new X27_User();
+		User user = new User();
 		user.setUserName("admin");
 		user.setPassword(PasswordUtils.hash("q1w2e3r4"));
 		user.setEmail("admin@gbicc.net");

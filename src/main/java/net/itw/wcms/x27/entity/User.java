@@ -23,7 +23,7 @@ import net.itw.wcms.toolkit.hibernate.Entityable;
  */
 @Table(name = "X27_USERS")
 @Entity
-public class X27_User implements Entityable {
+public class User implements Entityable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -37,8 +37,8 @@ public class X27_User implements Entityable {
 	private Date lastLoginTime;
 	private String lastLoginIp;
 
-	private Set<X27_Role> roles = new HashSet<>();
-	private Set<X27_Organization> orgs = new HashSet<>();
+	private Set<Role> roles = new HashSet<>();
+	private Set<Organization> orgs = new HashSet<>();
 
 	@GeneratedValue
 	@Id
@@ -123,11 +123,11 @@ public class X27_User implements Entityable {
 			@JoinColumn(name = "USER_ID", referencedColumnName = "ID") }, inverseJoinColumns = {
 					@JoinColumn(name = "ROLE_ID", referencedColumnName = "ID") })
 	@ManyToMany
-	public Set<X27_Role> getRoles() {
+	public Set<Role> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(Set<X27_Role> roles) {
+	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
 
@@ -135,11 +135,11 @@ public class X27_User implements Entityable {
 			@JoinColumn(name = "USER_ID", referencedColumnName = "ID") }, inverseJoinColumns = {
 					@JoinColumn(name = "ORG_ID", referencedColumnName = "ID") })
 	@ManyToMany
-	public Set<X27_Organization> getOrgs() {
+	public Set<Organization> getOrgs() {
 		return orgs;
 	}
 
-	public void setOrgs(Set<X27_Organization> orgs) {
+	public void setOrgs(Set<Organization> orgs) {
 		this.orgs = orgs;
 	}
 
