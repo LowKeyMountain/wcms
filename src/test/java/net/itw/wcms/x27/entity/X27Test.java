@@ -26,6 +26,7 @@ public class X27Test {
 		entityManager = entityManagerFactory.createEntityManager();
 	}
 
+	
 	/**
 	 * 测试DataSource是否配置成功
 	 * 
