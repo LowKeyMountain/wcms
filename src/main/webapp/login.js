@@ -62,12 +62,11 @@ var Login = function() {
 				if (result == undefined && result == null) {
 					return;
 				}
-				var obj = jQuery.parseJSON(result);
-				var success = obj.success;
+				var success = result.success;
 				if (success == 0) {
-					location = IncPath + obj.url;
+					location = IncPath + result.url;
 				} else if (success == 1) {
-					$('.alert-danger-span').text(obj.msg);
+					$('.alert-danger-span').text(result.msg);
 					$('.alert-danger', $('.login-form')).show();
 				}
 			});

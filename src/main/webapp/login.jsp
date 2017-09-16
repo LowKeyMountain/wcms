@@ -22,7 +22,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
 <head>
 <meta charset="utf-8" />
-<title>京唐港智能生产管理系统</title>
+<title>京唐港  | 智能管理 - 登录</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta content="width=device-width, initial-scale=1" name="viewport" />
 <meta content="" name="description" />
@@ -208,9 +208,9 @@ License: You must have a valid license purchased only from themeforest(the above
 		var IncPath = '${IncPath}';
 	</script>
 	<!-- BEGIN PAGE LEVEL SCRIPTS -->
-	<script src="${IncPath}/x27/cl.js"
+	<script src="${IncPath}/cl.js"
 		type="text/javascript"></script>
-	<script src="${IncPath}/x27/login.js"
+	<script src="${IncPath}/login.js"
 		type="text/javascript"></script>
 	<!-- END PAGE LEVEL SCRIPTS -->
 	<!-- BEGIN THEME LAYOUT SCRIPTS -->
