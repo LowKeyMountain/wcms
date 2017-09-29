@@ -31,7 +31,7 @@ var Cl = function() {
         		for(var i=0;i<nNodes.length;i++) {
         			if(nNodes[i].cells[idindex].innerText == id)
         			{
-        				var result = eval("("+result+")");
+//        				var result = eval("("+result+")");
         				oTable.fnUpdate( result, i,undefined,false);
         				break;
         			}

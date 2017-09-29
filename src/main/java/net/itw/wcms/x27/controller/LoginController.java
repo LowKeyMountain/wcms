@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,10 +19,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import net.itw.wcms.x27.entity.User;
+import net.itw.wcms.x27.service.IUserService;
+import net.itw.wcms.x27.utils.SessionUtil;
+
+/**
+ * 
+ * Description:主界面及登录验证相关的控制器
+ * 
+ * @author Michael 16 Sep 2017 22:05:49
+ */
 @RestController
 @RequestMapping(value = "/web")
 public class LoginController {
 
+	@Autowired
+	private IUserService userService;
+	
 	protected HttpServletRequest req;
 	protected HttpServletResponse res;
 	protected HttpSession session;
@@ -80,6 +94,11 @@ public class LoginController {
 		} else {
 			url = "/web/main";
 		}
+		
+		// 将当前用户缓存到Session
+		User user = userService.getUserById(1); // TODO: 暂时默认登录用户，为管理员，待完善。
+		session.setAttribute(SessionUtil.SessionSystemLoginUserName, user);
+		
 		map.put("msg", msg);
 		map.put("url", url);
 		map.put("success", success);
@@ -92,7 +111,7 @@ public class LoginController {
 	 * @return
 	 */
 	@RequestMapping(value = "/main")
-	public ModelAndView gotoMainPage() {
+	public ModelAndView main() {
 		modelMap.put("user", "管理员");
 		modelMap.put("hours", Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
 		return new ModelAndView("./main");
