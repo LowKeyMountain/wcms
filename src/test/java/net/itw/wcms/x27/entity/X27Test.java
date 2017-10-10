@@ -36,7 +36,7 @@ public class X27Test {
 		DataSource dataSource = ctx.getBean(DataSource.class);
 		System.out.println(dataSource.getConnection());
 	}
-	
+	//Git commit test.........
 	/**
 	 * 测试Jpa
 	 */
