@@ -31,15 +31,9 @@ public class User implements Entityable {
 	private String userName;
 	private String password;
 	private String email;
+	private String state;
 	private String realName;
-	private Boolean gender;
-	private Boolean isAdmin;
-	private Boolean isLock;
-	private Boolean isDelete;
 	private Date createDate;
-	private String createPerson;
-	private Date updateDate;
-	private String updatePerson;
 	private Date lastLoginTime;
 	private String lastLoginIp;
 
@@ -88,6 +82,14 @@ public class User implements Entityable {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
 	}
 
 	@Column(name = "CREATE_DATE")
@@ -139,65 +141,6 @@ public class User implements Entityable {
 
 	public void setOrgs(Set<Organization> orgs) {
 		this.orgs = orgs;
-	}
-
-	public Boolean getGender() {
-		return gender;
-	}
-
-	public void setGender(Boolean gender) {
-		this.gender = gender;
-	}
-
-	public Boolean getIsAdmin() {
-		return isAdmin;
-	}
-
-	public void setIsAdmin(Boolean isAdmin) {
-		this.isAdmin = isAdmin;
-	}
-
-	public Boolean getIsLock() {
-		return isLock;
-	}
-
-	public void setIsLock(Boolean isLock) {
-		this.isLock = isLock;
-	}
-
-	public Boolean getIsDelete() {
-		return isDelete;
-	}
-
-	public void setIsDelete(Boolean isDelete) {
-		this.isDelete = isDelete;
-	}
-
-	@Column(name = "CREATE_PERSON")
-	public String getCreatePerson() {
-		return createPerson;
-	}
-
-	public void setCreatePerson(String createPerson) {
-		this.createPerson = createPerson;
-	}
-
-	@Column(name = "UPDATE_DATE")
-	public Date getUpdateDate() {
-		return updateDate;
-	}
-
-	public void setUpdateDate(Date updateDate) {
-		this.updateDate = updateDate;
-	}
-
-	@Column(name = "UPDATE_PERSON")
-	public String getUpdatePerson() {
-		return updatePerson;
-	}
-
-	public void setUpdatePerson(String updatePerson) {
-		this.updatePerson = updatePerson;
 	}
 
 }
