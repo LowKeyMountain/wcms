@@ -98,7 +98,7 @@ var DataTableCl = function() {
 }();
 
 var FormCl = function () {
-    var handleValidation = function() {
+    var handleValidation2 = function() {
 		// for more info visit the official plugin documentation:
 	    // http://docs.jquery.com/Plugins/Validation
 	    var form1 = $('#form_cl');
@@ -106,6 +106,90 @@ var FormCl = function () {
 	    var success1 = $('.alert-success', form1);	
 	    form1.validate( );
     }
+    
+    // validation using icons
+    var handleValidation = function() {
+        // for more info visit the official plugin documentation: 
+        // http://docs.jquery.com/Plugins/Validation
+
+        var form2 = $('#form_cl');
+        var error2 = $('.alert-danger', form2);
+        var success2 = $('.alert-success', form2);
+
+        form2.validate({
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block help-block-error', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            ignore: "",  // validate all fields including form hidden input
+            rules: {
+            	userName: {
+                    minlength: 2,
+                    required: true
+                },
+                password: {
+                    required: true,
+                    minlength: 5
+                },
+                confirm_password: {
+                    required: true,
+                    minlength: 5,
+                    equalTo: "#password"
+                },
+                realName: {
+                    required: true,
+                    minlength: 2
+                },
+                gender: {
+                    required: true
+                },
+                isAdmin: {
+                    required: true
+                }
+            },
+            invalidHandler: function (event, validator) { // display error
+															// alert on form
+															// submit
+                success2.hide();
+                error2.show();
+                App.scrollTo(error2, -200);
+            },
+
+            errorPlacement: function (error, element) { // render error placement for each input type
+                var icon = $(element).parent('.input-icon').children('i');
+                icon.removeClass('fa-check').addClass("fa-warning");  
+//                icon.attr("data-original-title", error.text()).tooltip({'container': 'body'}); // Bux: 解决tooltip提示信息，能显示在模式modal框中，加入参数{'container': 'body'}，提示信息显示在父页面上。
+                icon.attr("data-original-title", error.text()).tooltip();
+            },
+
+            highlight: function (element) { // hightlight error inputs
+                $(element)
+                    .closest('.form-group').removeClass("has-success").addClass('has-error'); // set error class to the control group   
+            },
+
+            unhighlight: function (element) { // revert the change done by hightlight
+                
+            },
+
+            success: function (label, element) {
+                var icon = $(element).parent('.input-icon').children('i');
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success'); // set success class to the control group
+                icon.removeClass("fa-warning").addClass("fa-check");
+            },
+
+            submitHandler: function (form) {
+                success2.show();
+                error2.hide();
+//              form[0].submit(); // submit the form
+                var name = $(form).attr("name")
+                if (name == 'form_cl_add') {
+                	User.add();
+                } else if (name == 'form_cl_update') {
+                	User.update();
+                }
+            }
+        });
+    }
+    
     var handleWysihtml5 = function() {
         if (!jQuery().wysihtml5) {            
             return;
@@ -153,61 +237,86 @@ var User = function(){
 		 * 增加用户
 		 */
 		add: function(){
-			var url = BasePath + "/user/add.do";
-			var data={
-				"userName":$("#userName").val(),
-				"password":$("#password").val(),
-				"realName":$("#realName").val(),
-				"gender":$('input[name="gender"]:checked').val(),
-				"isAdmin":$('input[name="isAdmin"]:checked').val()
-//				,
-//				"departmentId":$("#departmentId").val()
+			/* option的参数 
+			var options = {    
+			       target:        '#output1',   // target element(s) to be updated with server response    
+			       beforeSubmit:  showRequest,  // pre-submit callback    
+			       success:       showResponse  // post-submit callback    
+			  
+			       // other available options:    
+			       //url:       url         // override for form's 'action' attribute    
+			       //type:      type        // 'get' or 'post', override for form's 'method' attribute    
+			       //dataType:  null        // 'xml', 'script', or 'json' (expected server response type)    
+			       //clearForm: true        // clear all form fields after successful submit    
+			       //resetForm: true        // reset the form after successful submit    
+			  
+			       // $.ajax options can be used here too, for example:    
+			       //timeout:   3000    
+			   }; 
+			 **/
+			 var options = {
+				target : '#form_cl',
+				type : 'post',
+				dataType : 'json',
+				url : BasePath + "/user/add.do",
+				success : function(result) {
+					 if(!result) return ;
+					 if(result.success == "success"){
+						 Cl.hideModalWindow(Cl.modalName);
+						 Cl.refreshDataTable(DataTableCl.tableName);
+						 alert("增加成功");
+					 } else {
+						 alert("增加失败");
+						 return ;
+					 }
+				},
+				error : function(result){
+					 Cl.hideModalWindow(Cl.modalName);
+					 Cl.refreshDataTable(DataTableCl.tableName);
+					 alert("系统异常，增加失败！");
+				},
+				clearForm: true,
+				resetForm: true,
+			 	timeout:   3000  
 			};
-			Cl.ajaxRequest(url,data,function(result){
-				if(!result) return ;		
-				result = result.replace(/(^\s*)|(\s*$)/g,'');
-				if(result == "success"){								
-					Cl.hideModalWindow(Cl.modalName);
-					Cl.refreshDataTable(DataTableCl.tableName);
-					alert("增加成功");
-				} else {
-					alert("增加失败");
-					return ;			
-				}
-			});
+			 	$("#form_cl").ajaxSubmit(options);
 		},
 		/**
 		 * 修改用户
 		 */
 		update: function(){
-			var url = BasePath + "/user/update.do";
-			var data={
-				"id":$("#id").val(),
-				"userName":$("#userName").val(),
-				"realName":$("#realName").val(),
-				"gender":$('input[name="gender"]:checked').val(),
-				"isAdmin":$('input[name="isAdmin"]:checked').val()
-//				,
-//				"departmentId":$("#departmentId").val()
+			 var options = {
+				target : '#form_cl',
+				type : 'post',
+				dataType : 'json',
+				url : BasePath + "/user/update.do",
+				success : function(result) {
+					 if(!result) return ;
+					 if(result.success == "success"){
+						Cl.hideModalWindow(Cl.modalName);
+						Cl.updateDataRow(DataTableCl.tableName,result.id,1,BasePath + '/user/getUserDataRow.do');
+						 alert("修改成功");
+					 } else {
+						 alert("修改失败");
+						 return ;
+					 }
+				},
+				error : function(result){
+					 Cl.hideModalWindow(Cl.modalName);
+					 Cl.refreshDataTable(DataTableCl.tableName);
+					 alert("系统异常，修改失败！");
+				},
+				clearForm: true,
+				resetForm: true,
+			 	timeout:   3000  
 			};
-			Cl.ajaxRequest(url,data,function(result){
-				if(!result) return ;		
-				result = result.replace(/(^\s*)|(\s*$)/g,'');
-				if(result == "success"){			
-					Cl.hideModalWindow(Cl.modalName);
-					Cl.updateDataRow(DataTableCl.tableName,data.id,1,BasePath + '/user/getUserDataRow.do');
-					alert("修改成功");
-				} else {
-					alert("修改失败");
-					return ;			
-				}
-			});
+		 	$("#form_cl").ajaxSubmit(options);
 		},
 		/**
-		 * 删除角色
+		 * 删除用户
 		 */
 		remove: function(id){
-			if(!confirm("确定要删除该角色")){
+			if(!confirm("确定要删除该用户?")){
 				return;
 			}	
 			var url=BasePath + "/user/delete.do";

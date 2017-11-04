@@ -99,7 +99,7 @@
                          </a>
                      </li>
                      <li class="nav-item  ">
-                         <a href="#" class="nav-link ">
+                         <a href="${IncPath}/role/list" class="nav-link ">
                              <span class="title">角色管理</span>
                          </a>
                      </li>

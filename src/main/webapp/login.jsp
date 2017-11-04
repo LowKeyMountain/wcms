@@ -75,15 +75,15 @@ License: You must have a valid license purchased only from themeforest(the above
 			<div class="col-md-6 bs-reset">
 				<div class="login-bg"
 					style="background-image: url(${IncPath}/assets/pages/img/login/bg1.jpg)">
-					<img class="login-logo" src="${IncPath}/assets/pages/img/login/logo.png" />
+					<!-- <img class="login-logo" src="${IncPath}/assets/pages/img/login/logo.png" /> -->
 				</div>
 			</div>
 			<div class="col-md-6 login-container bs-reset">
 				<div class="login-content">
-					<h1>Metronic Admin Login</h1>
-					<p>Lorem ipsum dolor sit amet, coectetuer adipiscing elit sed
+					<h1>京唐港|智能生产管理系统</h1>
+					<!-- <p>Lorem ipsum dolor sit amet, coectetuer adipiscing elit sed
 						diam nonummy et nibh euismod aliquam erat volutpat. Lorem ipsum
-						dolor sit amet, coectetuer adipiscing.</p>
+						dolor sit amet, coectetuer adipiscing.</p> -->
 					<form action="javascript:;" class="login-form" method="post">
 						<div class="row">
 							<div class="col-xs-6">

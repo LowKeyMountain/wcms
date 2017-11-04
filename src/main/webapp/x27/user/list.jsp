@@ -37,6 +37,11 @@ License: You must have a valid license purchased only from themeforest(the above
         <!-- BEGIN PAGE LEVEL PLUGINS -->
         <link href="${IncPath}/assets/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css" />
         <link href="${IncPath}/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css" />
+         <link href="${IncPath}/assets/global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+        <link href="${IncPath}/assets/global/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="${IncPath}/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet" type="text/css" />
+        <link href="${IncPath}/assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.css" rel="stylesheet" type="text/css" />
+        <link href="${IncPath}/assets/global/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css" rel="stylesheet" type="text/css" />
         <!-- END PAGE LEVEL PLUGINS -->
         <!-- BEGIN THEME GLOBAL STYLES -->
         <link href="${IncPath}/assets/global/css/components.min.css" rel="stylesheet" id="style_components" type="text/css" />
@@ -53,7 +58,7 @@ License: You must have a valid license purchased only from themeforest(the above
     <!-- END HEAD -->
 
 <body
-	class="page-header-fixed page-sidebar-closed-hide-logo page-content-white">
+	class="page-header-fixed page-sidebar-closed-hide-logo page-content-white wysihtml5-supported">
 
 	<jsp:include page="../../header.jsp" />
 
@@ -116,6 +121,7 @@ License: You must have a valid license purchased only from themeforest(the above
 												</button>
 											</div>
 										</div>
+										<!-- 
 										<div class="col-md-6">
 											<div class="btn-group pull-right">
 												<button class="btn green  btn-outline dropdown-toggle"
@@ -135,6 +141,7 @@ License: You must have a valid license purchased only from themeforest(the above
 												</ul>
 											</div>
 										</div>
+										 -->
 									</div>
 								</div>
 								<!-- table table-striped table-bordered table-hover table-checkable order-column -->
@@ -195,12 +202,21 @@ License: You must have a valid license purchased only from themeforest(the above
         <script src="${IncPath}/assets/global/scripts/app.min.js" type="text/javascript"></script>
         <script src="${IncPath}/assets/global/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>
 		<script src="${IncPath}/assets/global/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>
-		<script src="${IncPath}/assets/global/plugins/jquery-validation/js/jquery.validate.min.js"></script>
-		<script src="${IncPath}/assets/global/plugins/jquery-validation/js/additional-methods.min.js"></script>
         <!-- END THEME GLOBAL SCRIPTS -->
         <!-- BEGIN PAGE LEVEL SCRIPTS -->
         <script src="${IncPath}/assets/pages/scripts/table-datatables-managed.min.js" type="text/javascript"></script>
+        <script src="${IncPath}/assets/global/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
+        <script src="${IncPath}/assets/global/plugins/jquery-validation/js/jquery.validate.min.js" type="text/javascript"></script>
+        <script src="${IncPath}/assets/global/plugins/jquery-validation/js/additional-methods.min.js" type="text/javascript"></script>
+        <script src="${IncPath}/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
+        <script src="${IncPath}/assets/global/plugins/bootstrap-wysihtml5/wysihtml5-0.3.0.js" type="text/javascript"></script>
+        <script src="${IncPath}/assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.js" type="text/javascript"></script>
+        <script src="${IncPath}/assets/global/plugins/ckeditor/ckeditor.js" type="text/javascript"></script>
+        <script src="${IncPath}/assets/global/plugins/bootstrap-markdown/lib/markdown.js" type="text/javascript"></script>
+        <script src="${IncPath}/assets/global/plugins/bootstrap-markdown/js/bootstrap-markdown.js" type="text/javascript"></script>
+        <script src="${IncPath}/scripts/jquery-validation/jquery.form.js" type="text/javascript"></script>
         <!-- END PAGE LEVEL SCRIPTS -->
+        <script src="../assets/pages/scripts/form-validation.js" type="text/javascript"></script>
         <!-- BEGIN THEME LAYOUT SCRIPTS -->
         <script src="${IncPath}/assets/layouts/layout/scripts/layout.min.js" type="text/javascript"></script>
         <script src="${IncPath}/assets/layouts/layout/scripts/demo.min.js" type="text/javascript"></script>
@@ -209,9 +225,9 @@ License: You must have a valid license purchased only from themeforest(the above
 			var IncPath = '${IncPath}';
 			var BasePath = '${BasePath}';
 		</script>
-		<script src="${IncPath}/cl.js?v=111"
+		<script src="${IncPath}/cl.js?v=${jsVersion}"
 			type="text/javascript"></script>
-		<script src="${IncPath}/x27/user/user.js?v=112"
+		<script src="${IncPath}/x27/user/user.js?v=${jsVersion}"
 			type="text/javascript"></script>
 		<!-- BEGIN THEME LAYOUT SCRIPTS -->
         <!-- END THEME LAYOUT SCRIPTS -->

@@ -2,23 +2,31 @@ package net.itw.wcms.x27.repository;
 
 import java.util.Date;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
 import net.itw.wcms.x27.entity.User;
 
-public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
+public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecificationExecutor<User>, PagingAndSortingRepository<User, Integer> {
 
 	User getUserByUserName(String userName);
 
 	User getUserById(Integer id);
 	
-    Page<User> findByIsDeleteFalse(Boolean isDelete, Pageable pageable); 
+	Page<User> findByIsDeleteFalse(Pageable pageable);
 	
 	@Modifying(clearAutomatically = true)
 	@Query("delete from User u where u.id =:id")
@@ -80,6 +88,15 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
 			@Param("updateDate") Date updateDate,
 			@Param("updatePerson") String updatePerson
 			);
+	
+	default Page<User> findAllByIsDeleteFalse(Pageable pageable) {
+		return this.findAll(new Specification<User>() {
+			public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				Path<String> isDeleteExp = root.get("isDelete");
+				return cb.equal(isDeleteExp, false);
+			}
+		}, pageable);
+	}
 	
 	/**
 	@Modifying(clearAutomatically = true)

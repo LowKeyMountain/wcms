@@ -16,10 +16,11 @@ import javax.persistence.Table;
 import net.itw.wcms.toolkit.hibernate.Entityable;
 
 /**
- * 
  * Description: 用户体系-角色类
  * 
- * @author Michael 31 Aug 2017 12:49:05
+ * Description:
+ * 
+ * @author Michael 18 Oct 2017 14:38:28
  */
 @Table(name = "X27_ROLES")
 @Entity
@@ -29,8 +30,9 @@ public class Role implements Entityable {
 
 	private Integer id;
 	private String roleName;
-	private Date createDate;
-	private String description;
+	private String remark;
+	private Date updateDate;
+	private String updatePersion;
 
 	private Set<User> users = new HashSet<>();
 	private Set<Privilege> privileges = new HashSet<>();
@@ -54,21 +56,12 @@ public class Role implements Entityable {
 		this.roleName = roleName;
 	}
 
-	@Column(name = "CREATE_DATE")
-	public Date getCreateDate() {
-		return createDate;
+	public String getRemark() {
+		return remark;
 	}
 
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 
 	@ManyToMany(mappedBy = "roles")
@@ -91,5 +84,23 @@ public class Role implements Entityable {
 	public void setPrivileges(Set<Privilege> privileges) {
 		this.privileges = privileges;
 	}
+	
+	@Column(name="UPDATE_DATE")
+	public Date getUpdateDate() {
+		return updateDate;
+	}
 
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
+	}
+	
+	@Column(name="UPDATE_PERSION")
+	public String getUpdatePersion() {
+		return updatePersion;
+	}
+
+	public void setUpdatePersion(String updatePersion) {
+		this.updatePersion = updatePersion;
+	}
+	
 }

@@ -1,19 +1,29 @@
 package net.itw.wcms.x27.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import net.itw.wcms.toolkit.security.PasswordUtils;
 import net.itw.wcms.x27.entity.User;
-import net.itw.wcms.x27.entity.UserSearchModel;
 import net.itw.wcms.x27.repository.UserRepository;
 import net.itw.wcms.x27.service.IUserService;
 import net.itw.wcms.x27.utils.ConstantUtil;
+import net.itw.wcms.x27.utils.PageUtils;
 import net.itw.wcms.x27.utils.StringUtil;
 
 
@@ -42,23 +52,31 @@ public class UserServiceImpl implements IUserService {
 		user.setUpdateDate(d);
 	}
     
-	public Page<User> findByIsDeleteFalse(UserSearchModel searchModel)
+	public Page<User> findByIsDeleteFalse(Pageable pageable)
 	{
-		return userRepository.findByIsDeleteFalse(false, searchModel);
+		return userRepository.findByIsDeleteFalse(pageable);
 	}
 	
+	public Page<User> findAll(Pageable pageable)
+	{
+		return userRepository.findAll(pageable);
+	}
 	
+	public Page<User> findAllByIsDeleteFalse(Pageable pageable)
+	{
+		return userRepository.findAllByIsDeleteFalse(pageable);
+	}
 	
 	@Override
-	public String getUserDataTables(User user, UserSearchModel searchModel)
+	public String getUserDataTables(User user, Pageable pageable)
 	{
-		Page<User> page = findByIsDeleteFalse(searchModel);		
+		Page<User> page = findAllByIsDeleteFalse(pageable);		
 		if(page==null || page.getTotalPages()==0)
 		{
 			return "{\"iTotalRecords\":0,\"iTotalDisplayRecords\":0,\"aaData\":[]}";
 		}
 		
-		int total = page.getSize();
+		int total = page.getTotalPages();
 		StringBuilder sb = new StringBuilder();
 		sb.append(String.format("{\"iTotalRecords\":%d,\"iTotalDisplayRecords\":%d,\"aaData\":[", total, total));
 		int i= 0;
@@ -106,7 +124,7 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public Integer getUserTotalBySearch(UserSearchModel searchModel) {
+	public Integer getUserTotalBySearch(Pageable pageable) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -165,6 +183,42 @@ public class UserServiceImpl implements IUserService {
 		StringBuilder sb = new StringBuilder();
 		addDataRow(sb,u);
 		return sb.toString();
+	}
+
+	@Override
+	public Map<String, Object> getUserBySearch(Map<String, String> serArgs, String sortType) throws Exception {
+        // 获得分页对象pageable，并且在pageable中页码是从0开始，设定按照sortType升序排列
+        Pageable pageable = PageUtils.buildPageRequest(Integer.valueOf(serArgs.get("pageNum")),
+                Integer.valueOf(serArgs.get("pageSize")), sortType);
+
+        Page<User> objPage = userRepository.findAll(new Specification<User>() {
+
+            public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                List<Predicate> lstPredicates = new ArrayList<Predicate>();
+
+                if (StringUtils.isNotBlank(serArgs.get("serSbmc"))) {
+                    lstPredicates.add(cb.like(root.get("sbmc").as(String.class), "%" + serArgs.get("serSbmc") + "%"));
+                }
+                if (StringUtils.isNotBlank(serArgs.get("serSblx"))) {
+                    lstPredicates.add(cb.like(root.get("sblx").as(String.class), "%" + serArgs.get("serSblx") + "%"));
+                }
+                if (StringUtils.isNotBlank(serArgs.get("serSssx"))) {
+                    lstPredicates.add(cb.like(root.get("sssx").as(String.class), "%" + serArgs.get("serSssx") + "%"));
+                }
+                if (StringUtils.isNotBlank(serArgs.get("serJdmc"))) {
+                    lstPredicates.add(cb.like(root.get("jdmc").as(String.class), "%" + serArgs.get("serJdmc") + "%"));
+                }
+
+                if (StringUtils.isNotBlank(serArgs.get("serSbzt"))) {
+                    lstPredicates.add(cb.equal(root.get("sbzt"), serArgs.get("serSbzt")));
+                }
+
+                Predicate[] arrayPredicates = new Predicate[lstPredicates.size()];
+                return cb.and(lstPredicates.toArray(arrayPredicates));
+            }
+        }, pageable);
+
+        return PageUtils.getPageMap(objPage);
 	}
 
 }

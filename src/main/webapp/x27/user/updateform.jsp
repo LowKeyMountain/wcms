@@ -8,12 +8,20 @@
 	<h4 class="modal-title">修改帐户</h4>
 </div>
 
+<!-- BEGIN FORM-->
+<form action="#" id="form_cl" name="form_cl_update" class="form-horizontal">
 <div class="modal-body">
 	<div class="row">
 		<div class="col-md-12">
-			<!-- BEGIN FORM-->
-			<form action="#" id="form_cl" class="form-horizontal">
 				<div class="form-body">
+					<div class="alert alert-danger display-hide">
+						<button class="close" data-close="alert"></button>
+						数据格式异常. 请重新输入.
+					</div>
+					<div class="alert alert-success display-hide">
+						<button class="close" data-close="alert"></button>
+						数据校验通过!
+					</div>
 					<div class="form-group">
 						<label class="control-label col-md-3">用户名 <span
 							class="required"> * </span>
@@ -39,8 +47,11 @@
 							class="required"> * </span>
 						</label>
 						<div class="col-md-8">
-							<input type="text" id="realName" name="realName"
-								data-required="1" class="form-control" value="${user.realName}" />
+                            <div class="input-icon right">
+	                            <i class="fa"></i>
+								<input type="text" id="realName" name="realName"
+									data-required="1" class="form-control" value="${user.realName}" />
+							</div>
 						</div>
 					</div>
 					<div class="form-group">
@@ -80,6 +91,7 @@
 							<div id="form_user_isadmin_error"></div>
 						</div>
 					</div>
+					<!-- 
 					<div class="form-group">
 						<label class="control-label col-md-3">所属部门 <span
 							class="required"> * </span>
@@ -95,18 +107,19 @@
 							</select>
 						</div>
 					</div>
+					 -->
 				</div>
-			</form>
-			<!-- END FORM-->
 		</div>
 	</div>
 </div>
 
 <div class="modal-footer">
 	<button type="button" class="btn default" data-dismiss="modal">关闭</button>
-	<button type="button" class="btn blue"
-		onclick="javascript:User.update();">保存</button>
+	<button type="submit" class="btn blue"
+		onclick="javascript:;">保存</button>
 </div>
+</form>
+<!-- END FORM-->
 
 <script>
 	jQuery(document).ready(function() {
