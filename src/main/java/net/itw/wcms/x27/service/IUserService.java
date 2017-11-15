@@ -1,6 +1,5 @@
 package net.itw.wcms.x27.service;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.Page;
@@ -117,6 +116,15 @@ public interface IUserService {
 	 * @return
 	 */
 	String getUserDataTables(User user, Pageable pageable);
+	
+	/**
+	 * 根据查询条件，返回DataTables控件需要的Json数据格式
+	 * 
+	 * @param pageable
+	 * @param params
+	 * @return
+	 */
+	String getUserDataTables(Pageable pageable, Map<String, String> params);
 	
     /**
      * 查询用户信息列表(支持分页和多条件查询)

@@ -16,7 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import net.itw.wcms.x27.entity.PrivilegeModelConstant;
 import net.itw.wcms.x27.entity.User;
-import net.itw.wcms.x27.entity.UserSearchModel;
 import net.itw.wcms.x27.service.IUserService;
 import net.itw.wcms.x27.utils.ConstantUtil;
 import net.itw.wcms.x27.utils.SessionUtil;

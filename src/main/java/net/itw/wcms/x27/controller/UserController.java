@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import net.itw.wcms.x27.entity.User;
+import net.itw.wcms.x27.service.IRoleService;
 import net.itw.wcms.x27.service.IUserService;
 import net.itw.wcms.x27.utils.ConstantUtil;
 import net.itw.wcms.x27.utils.PageUtils;
@@ -33,6 +34,8 @@ public class UserController {
 
 	@Autowired
 	private IUserService userService;
+	@Autowired
+	private IRoleService roleService;
 
 	protected HttpServletRequest req;
 	protected HttpServletResponse res;
@@ -98,18 +101,17 @@ public class UserController {
 		map.put(ConstantUtil.Success, successInt == 1 ? ConstantUtil.Success : ConstantUtil.Fail);
 		return map;
 	}
-
+	
 	/**
 	 * 返回用户信息列表
-	 * 
-	 * @param user
+	 * @param params
 	 * @param map
 	 * @return
 	 */
 	@RequestMapping(value = "/getUserDataTables", produces = "text/json;charset=UTF-8")
-	public String getUserDataTables(@ModelAttribute("user") User user, ModelMap map) {
-		Pageable pageable = PageUtils.buildPageRequest(1, PageUtils.PageSize);
-		return userService.getUserDataTables(user, pageable);
+	public String getUserDataTables(@RequestParam Map<String, String> params, ModelMap map) {
+		Pageable pageable = PageUtils.buildPageRequest(params);
+		return userService.getUserDataTables(pageable, params);
 	}
 	
 	/**
@@ -231,10 +233,8 @@ public class UserController {
 
 	@RequestMapping("/assignform")
 	public String assignform(Integer id, ModelMap map) {
-
-		// map.put("options", roleService.getRoleForOptions(id));
-		// map.put("id", id);
-		//
+		map.put("options", roleService.getRoleForOptions(id));
+		map.put("id", id);
 		return "user/assignform.ftl";
 	}
 
@@ -247,5 +247,5 @@ public class UserController {
 
 		return ConstantUtil.Success;
 	}
-
+	
 }

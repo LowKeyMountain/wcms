@@ -1,5 +1,7 @@
 package net.itw.wcms.x27.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Pageable;
 
 import net.itw.wcms.x27.entity.Role;
@@ -19,4 +21,24 @@ public interface IRoleService {
 	 * @return
 	 */
 	String getUserDataTables(Role role, Pageable pageable);
+	
+	/**
+	 * 所有角色列表
+	 * @return
+	 */
+	List<Role> getRoleList();
+	
+	/**
+	 * 根据userId获取关联的权限列表
+	 * @param userId
+	 * @return
+	 */
+	List<Role> getRoleListByUserId(Integer userId);
+	
+	/**
+	 * 返回jquery-multi-select需要的options数据
+	 * @param userId
+	 * @return
+	 */
+	String getRoleForOptions(Integer userId);
 }

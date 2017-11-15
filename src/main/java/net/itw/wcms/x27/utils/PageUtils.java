@@ -1,5 +1,6 @@
 package net.itw.wcms.x27.utils;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -65,7 +66,7 @@ public class PageUtils {
         if (!StringUtils.isNotBlank(sortType)) {
             return new PageRequest(pageNum - 1, pageSize);
         } else if (StringUtils.isNotBlank(direction)) {
-            if (Direction.ASC.equals(direction)) {
+            if (Direction.ASC.equals(Direction.fromString(direction))) {
                 sort = new Sort(Direction.ASC, sortType);
             } else {
                 sort = new Sort(Direction.DESC, sortType);
@@ -108,5 +109,49 @@ public class PageUtils {
     public static PageRequest buildPageRequest(int pageNum, int pageSize) {
         return buildPageRequest(pageNum, pageSize, null, null);
     }
+    
+	/**
+	 * 创建分页请求(该方法可以放到util类中)
+	 * 
+	 * @param pageNum
+	 * @param pageSize
+	 * @return
+	 */
+	public static PageRequest buildPageRequest(Map<String, String> aoData) {
+
+		// 每页条数
+		int pageSize = 0;
+		try {
+			String idl = aoData.get("iDisplayLength");
+			pageSize = StringUtils.isBlank(idl) ? PageUtils.PageSize : Integer.parseInt(idl);
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+			pageSize = PageSize;
+		}
+
+		// 当前页
+		int pageNum = 1;
+		String ids = aoData.get("iDisplayStart");
+		int iDisplayStart = StringUtils.isBlank(ids) ? 0 : Integer.parseInt(ids);
+
+		// 排序字段
+		String sortType = "";
+		try {
+			String sColumns = aoData.get("sColumns");
+			String iSortCol_0 = aoData.get("iSortCol_0");
+			if (StringUtils.isNoneBlank(sColumns) && StringUtils.isNoneBlank(iSortCol_0)) {
+				sortType = Arrays.asList(sColumns.split(",")).get(Integer.parseInt(iSortCol_0));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			sortType = "";
+		}
+		
+		//排序方向
+		String sSortDir_0 = aoData.get("sSortDir_0");
+		String direction = StringUtils.isBlank(sSortDir_0) ? "" : sSortDir_0;
+		
+		return buildPageRequest(pageNum, pageSize, sortType, direction);
+	}
 
 }

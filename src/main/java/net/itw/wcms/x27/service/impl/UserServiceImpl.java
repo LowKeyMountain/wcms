@@ -62,15 +62,16 @@ public class UserServiceImpl implements IUserService {
 		return userRepository.findAll(pageable);
 	}
 	
-	public Page<User> findAllByIsDeleteFalse(Pageable pageable)
+	
+	public Page<User> findAllSupportQuery(Pageable pageable, Map<String , String > params)
 	{
-		return userRepository.findAllByIsDeleteFalse(pageable);
+		return userRepository.findAllSupportQuery(pageable, params);
 	}
 	
 	@Override
 	public String getUserDataTables(User user, Pageable pageable)
 	{
-		Page<User> page = findAllByIsDeleteFalse(pageable);		
+		Page<User> page = findAllSupportQuery(pageable, null);		
 		if(page==null || page.getTotalPages()==0)
 		{
 			return "{\"iTotalRecords\":0,\"iTotalDisplayRecords\":0,\"aaData\":[]}";
@@ -94,7 +95,7 @@ public class UserServiceImpl implements IUserService {
 	private void addDataRow(StringBuilder sb,User u)
 	{
 		sb.append("[");
-		sb.append("\"<input type=\\\"checkbox\\\" name=\\\"id[]\\\" value=\\\"").append(u.getId()).append("\\\">\"");
+		sb.append("\"<input type=\\\"checkbox\\\" class=\\\"checkboxes\\\" name=\\\"id[]\\\" value=\\\"").append(u.getId()).append("\\\">\"");
 		sb.append(",").append(u.getId());
 		sb.append(",\"").append(u.getUserName()).append("\"");
 		sb.append(",\"").append(u.getRealName()).append("\"");
@@ -108,7 +109,7 @@ public class UserServiceImpl implements IUserService {
 		.append("<a href=\\\"javascript:User.update_click('").append(u.getId()).append("');\\\" class=\\\"btn btn-xs default btn-editable\\\"><i class=\\\"fa fa-edit\\\"></i> 修改</a>")
 		.append("&nbsp;&nbsp;<a href=\\\"javascript:").append(u.getIsLock()?"User.unlock('":"User.lock('").append(u.getId()).append("');\\\" class=\\\"btn btn-xs default btn-editable\\\"><i class=\\\"fa fa-").append(u.getIsLock()?"un":"").append("lock\\\"></i> ").append(u.getIsLock()?"解锁":"锁定").append("</a>")
 		.append("&nbsp;&nbsp;<a href=\\\"javascript:User.remove('").append(u.getId()).append("');\\\" class=\\\"btn btn-xs default btn-editable\\\"><i class=\\\"fa fa-times\\\"></i> 删除</a>")
-		.append("&nbsp;&nbsp;<a href=\\\"javascript:User.assign_click('").append(u.getId()).append("');\\\" class=\\\"btn btn-xs default btn-editable\\\"><i class=\\\"fa fa-key\\\"></i> 分配角色</a>")
+		.append("&nbsp;&nbsp;<a href=\\\"javascript:User.assign_click('").append(u.getId()).append("');\\\" class=\\\"btn btn-xs default btn-editable\\\"><i class=\\\"fa fa-key\\\"></i> 分配权限</a>")
 		.append("\"");
 		sb.append("]");
 	}
@@ -219,6 +220,28 @@ public class UserServiceImpl implements IUserService {
         }, pageable);
 
         return PageUtils.getPageMap(objPage);
+	}
+
+	@Override
+	public String getUserDataTables(Pageable pageable, Map<String, String> params) {
+		Page<User> page = findAllSupportQuery(pageable, params);		
+		if(page==null || page.getTotalPages()==0)
+		{
+			return "{\"iTotalRecords\":0,\"iTotalDisplayRecords\":0,\"aaData\":[]}";
+		}
+		
+		int total = page.getTotalPages();
+		StringBuilder sb = new StringBuilder();
+		sb.append(String.format("{\"iTotalRecords\":%d,\"iTotalDisplayRecords\":%d,\"aaData\":[", total, total));
+		int i= 0;
+		for(User u:page)
+		{
+			if(i != 0) sb.append(",");
+			addDataRow(sb,u);
+			i++;
+		}
+		sb.append("]}");
+		return sb.toString();
 	}
 
 }

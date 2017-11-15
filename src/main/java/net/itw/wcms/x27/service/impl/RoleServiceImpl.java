@@ -1,5 +1,9 @@
 package net.itw.wcms.x27.service.impl;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -64,6 +68,42 @@ public class RoleServiceImpl implements IRoleService {
 		.append("&nbsp;&nbsp;<a href=\\\"javascript:Role.assign_click('").append(r.getId()).append("');\\\" class=\\\"btn btn-xs default btn-editable\\\"><i class=\\\"fa fa-key\\\"></i> 分配权限</a>")
 		.append("\"");
 		sb.append("]");
+	}
+	
+	@Override
+	public List<Role> getRoleListByUserId(Integer userId)
+	{
+		return roleRepository.getRoleListByUserId(userId);
+	}
+	
+	@Override
+	public List<Role> getRoleList()
+	{
+		return roleRepository.findAll();
+	}
+	
+	@Override
+	public String getRoleForOptions(Integer userId)
+	{
+		List<Role> assignRoles = getRoleListByUserId(userId);
+		List<Role> allRoles = getRoleList();
+		
+		Map<Integer,Role> hmAssignRoles = new HashMap<Integer,Role>();
+		for(Role r:assignRoles)
+		{
+			hmAssignRoles.put(r.getId(),r);
+		}
+		StringBuilder sb = new StringBuilder();
+		for(Role r:allRoles)
+		{
+			sb.append("<option value=\"").append(r.getId()).append("\"");
+			if(hmAssignRoles.containsKey(r.getId()))
+			{
+				sb.append(" selected");
+			}
+			sb.append(">").append(r.getRoleName()).append("</option>");
+		}
+		return sb.toString();
 	}
 
 }
