@@ -23,7 +23,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
-import net.itw.core.lang.Int32;
+import net.itw.wcms.toolkit.lang.Int32;
 import net.itw.wcms.x27.entity.User;
 import net.itw.wcms.x27.utils.StringUtil;
 
@@ -31,6 +31,8 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
 		PagingAndSortingRepository<User, Integer> {
 
 	User getUserByUserName(String userName);
+	
+	User getUserByUserNameAndPassword(String userName, String password);
 
 	User getUserById(Integer id);
 

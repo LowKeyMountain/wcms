@@ -18,8 +18,6 @@ import net.itw.wcms.toolkit.hibernate.Entityable;
 /**
  * Description: 用户体系-角色类
  * 
- * Description:
- * 
  * @author Michael 18 Oct 2017 14:38:28
  */
 @Table(name = "X27_ROLES")

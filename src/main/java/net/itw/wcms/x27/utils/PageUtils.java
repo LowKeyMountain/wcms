@@ -139,7 +139,7 @@ public class PageUtils {
 		try {
 			String sColumns = aoData.get("sColumns");
 			String iSortCol_0 = aoData.get("iSortCol_0");
-			if (StringUtils.isNoneBlank(sColumns) && StringUtils.isNoneBlank(iSortCol_0)) {
+			if (StringUtils.isNoneBlank(sColumns) && sColumns.split(",").length > 0 && StringUtils.isNoneBlank(iSortCol_0)) {
 				sortType = Arrays.asList(sColumns.split(",")).get(Integer.parseInt(iSortCol_0));
 			}
 		} catch (Exception e) {

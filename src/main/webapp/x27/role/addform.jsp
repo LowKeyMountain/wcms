@@ -2,124 +2,46 @@
 	pageEncoding="GBK"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <!-- BEGIN VALIDATION STATES-->
-                            <div class="portlet light portlet-fit portlet-form bordered">
-                                <div class="portlet-title">
-                                    <div class="caption">
-                                        <i class="icon-bubble font-green"></i>
-                                        <span class="caption-subject font-green bold uppercase">Validation Using Icons</span>
-                                    </div>
-                                    <div class="actions">
-                                        <div class="btn-group">
-                                            <a class="btn green btn-outline btn-circle btn-sm" href="javascript:;" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"> Actions
-                                                <i class="fa fa-angle-down"></i>
-                                            </a>
-                                            <ul class="dropdown-menu pull-right">
-                                                <li>
-                                                    <a href="javascript:;"> Option 1</a>
-                                                </li>
-                                                <li class="divider"> </li>
-                                                <li>
-                                                    <a href="javascript:;">Option 2</a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:;">Option 3</a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:;">Option 4</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="portlet-body">
-                                    <!-- BEGIN FORM-->
-                                    <form action="#" id="form_sample_2" class="form-horizontal">
-                                        <div class="form-body">
-                                            <div class="alert alert-danger display-hide">
-                                                <button class="close" data-close="alert"></button> You have some form errors. Please check below. </div>
-                                            <div class="alert alert-success display-hide">
-                                                <button class="close" data-close="alert"></button> Your form validation is successful! </div>
-                                            <div class="form-group  margin-top-20">
-                                                <label class="control-label col-md-3">Name
-                                                    <span class="required"> * </span>
-                                                </label>
-                                                <div class="col-md-4">
-                                                    <div class="input-icon right">
-                                                        <i class="fa"></i>
-                                                        <input type="text" class="form-control" name="name" /> </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3">Email
-                                                    <span class="required"> * </span>
-                                                </label>
-                                                <div class="col-md-4">
-                                                    <div class="input-icon right">
-                                                        <i class="fa"></i>
-                                                        <input type="text" class="form-control" name="email" /> </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3">URL
-                                                    <span class="required"> * </span>
-                                                </label>
-                                                <div class="col-md-4">
-                                                    <div class="input-icon right">
-                                                        <i class="fa"></i>
-                                                        <input type="text" class="form-control" name="url" /> </div>
-                                                    <span class="help-block"> e.g: http://www.demo.com or http://demo.com </span>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3">Number
-                                                    <span class="required"> * </span>
-                                                </label>
-                                                <div class="col-md-4">
-                                                    <div class="input-icon right">
-                                                        <i class="fa"></i>
-                                                        <input type="text" class="form-control" name="number" /> </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3">Digits
-                                                    <span class="required"> * </span>
-                                                </label>
-                                                <div class="col-md-4">
-                                                    <div class="input-icon right">
-                                                        <i class="fa"></i>
-                                                        <input type="text" class="form-control" name="digits" /> </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3">Credit Card
-                                                    <span class="required"> * </span>
-                                                </label>
-                                                <div class="col-md-4">
-                                                    <div class="input-icon right">
-                                                        <i class="fa"></i>
-                                                        <input type="text" class="form-control" name="creditcard" /> </div>
-                                                    <span class="help-block"> e.g: 5500 0000 0000 0004 </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-actions">
-                                            <div class="row">
-                                                <div class="col-md-offset-3 col-md-9">
-                                                    <button type="submit" class="btn green">Submit</button>
-                                                    <button type="button" class="btn default">Cancel</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                    <!-- END FORM-->
-                                </div>
-                            </div>
-                            <!-- END VALIDATION STATES-->
-                        </div>
-                    </div>
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+	<h4 class="modal-title">新增角色</h4>
+</div>
+
+<form action="#" id="form_cl_add" class="form-horizontal">
+<div class="modal-body">
+	<div class="row">
+		<div class="col-md-12">
+			<!-- BEGIN FORM-->
+				<div class="form-body">
+					<div class="form-group">
+						<label class="control-label col-md-3">名称
+						<span class="required">
+							 *
+						</span>
+						</label>
+						<div class="col-md-8">
+							<input type="hidden" id="id" name="id"/>
+							<input type="text" id="roleName" name="roleName" data-required="1" class="form-control"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-3">备注
+						</label>
+						<div class="col-md-8">
+							<input type="text" id="remark" name="remark" data-required="1" class="form-control"/>
+						</div>
+					</div>
+				</div>
+			<!-- END FORM-->
+		</div>
+	</div>
+</div>
+
+<div class="modal-footer">
+	<button type="button" class="btn default" data-dismiss="modal">关闭</button>
+	<button type="button" class="btn blue" onclick="javascript:;">保存</button>
+</div>
+</form>
 
 <script>
     jQuery(document).ready(function() {       

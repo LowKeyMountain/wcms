@@ -5,44 +5,44 @@ var DataTableCl = function() {
         table.dataTable({
             // Internationalisation. For more info refer to http://datatables.net/manual/i18n
             "language": {
-                "aria": {
-                    "sortAscending": ": activate to sort column ascending",
-                    "sortDescending": ": activate to sort column descending"
-                },
-                "emptyTable": "No data available in table",
-                "info": "Showing _START_ to _END_ of _TOTAL_ records",
-                "infoEmpty": "No records found",
-                "infoFiltered": "(filtered1 from _MAX_ total records)",
-                "lengthMenu": "Show _MENU_",
-                "search": "Search:",
-                "zeroRecords": "No matching records found",
-                "paginate": {
-                    "previous":"Prev",
-                    "next": "Next",
-                    "last": "Last",
-                    "first": "First"
-                }
+            	"sProcessing":   "处理中...",
+            	"sLengthMenu":   "显示 _MENU_ 项结果",
+            	"sZeroRecords":  "没有匹配结果",
+            	"sInfo":         "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+            	"sInfoEmpty":    "显示第 0 至 0 项结果，共 0 项",
+            	"sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+            	"sInfoPostFix":  "",
+            	"sSearch":       "搜索:",
+            	"sUrl":          "",
+            	"sEmptyTable":     "表中数据为空",
+            	"sLoadingRecords": "载入中...",
+            	"sInfoThousands":  ",",
+            	"oPaginate": {
+            		"sFirst":    "首页",
+            		"sPrevious": "上页",
+            		"sNext":     "下页",
+            		"sLast":     "末页"
+            	},
+            	"oAria": {
+            		"sSortAscending":  ": 以升序排列此列",
+            		"sSortDescending": ": 以降序排列此列"
+            	}
             },
-			"bServerSide" : true, // server side processing
-			"sAjaxSource" : BasePath + "/role/getRoleDataTables", // ajax source
             
+			"bServerSide" : true, // server side processing
+			"sAjaxSource" : BasePath + "/user/getUserDataTables", // ajax
+			
             // Or you can use remote translation file
             //"language": {
             //   url: '//cdn.datatables.net/plug-ins/3cfcc339e89/i18n/Portuguese.json'
             //},
-
+			
             // Uncomment below line("dom" parameter) to fix the dropdown overflow issue in the datatable cells. The default datatable layout
             // setup uses scrollable div(table-scrollable) with overflow:auto to enable vertical scroll(see: assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js). 
             // So when dropdowns used the scrollable div should be removed. 
             //"dom": "<'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r>t<'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>",
 
             "bStateSave": true, // save datatable state(pagination, sort, etc) in cookie.
-
-            "columnDefs": [ {
-                "targets": 0,
-                "orderable": false,
-                "searchable": false
-            }],
 
             "lengthMenu": [
                 [5, 15, 20, -1],
@@ -51,19 +51,29 @@ var DataTableCl = function() {
             // set the initial value
             "pageLength": 5,            
             "pagingType": "bootstrap_full_number",
-            "columnDefs": [{  // set default column settings
-                'orderable': false,
-                'targets': [0]
-            }, {
-                "searchable": false,
-                "targets": [0]
-            }],
+            "columnDefs" : [ { // set default column settings
+				"targets" : [ 0, -1 ],
+				"orderable" : false,
+				"searchable" : false
+			} ],
+            "columns" : [ 
+                          {"name":""},
+                          {"name":"id"}, 
+                          {"name":"userName"}, 
+                          {"name":"realName"}, 
+                          {"name":"gender"}, 
+                          {"name":"isAdmin"}, 
+                          {"name":"isLock"}, 
+                          {"name":"updatePerson"}, 
+                          {"name":"updateDate"}, 
+                          {"name":""}
+                      ],
             "order": [
                 [1, "asc"]
             ] // set first column as a default sort by asc
         });
 
-        var tableWrapper = jQuery('#sample_1_wrapper');
+        var tableWrapper = jQuery('#datatable_cl_wrapper');
 
         table.find('.group-checkable').change(function () {
             var set = jQuery(this).attr("data-set");
@@ -83,7 +93,6 @@ var DataTableCl = function() {
         table.on('change', 'tbody tr .checkboxes', function () {
             $(this).parents('tr').toggleClass("active");
         });
-    
 	}
 	return {
 		// main function to initiate the module
@@ -98,6 +107,7 @@ var DataTableCl = function() {
 }();
 
 var FormCl = function () {
+    // validation using icons
     var handleValidation = function() {
         // for more info visit the official plugin documentation: 
         // http://docs.jquery.com/Plugins/Validation
@@ -112,8 +122,27 @@ var FormCl = function () {
             focusInvalid: false, // do not focus the last invalid input
             ignore: "",  // validate all fields including form hidden input
             rules: {
-            	roleName: {
+            	userName: {
+                    minlength: 2,
+                    required: true
+                },
+                password: {
+                    required: true,
+                    minlength: 5
+                },
+                confirm_password: {
+                    required: true,
                     minlength: 5,
+                    equalTo: "#password"
+                },
+                realName: {
+                    required: true,
+                    minlength: 2
+                },
+                gender: {
+                    required: true
+                },
+                isAdmin: {
                     required: true
                 }
             },
@@ -153,20 +182,21 @@ var FormCl = function () {
 //              form[0].submit(); // submit the form
                 var name = $(form).attr("name")
                 if (name == 'form_cl_add') {
-                	Role.add();
+                	User.add();
                 } else if (name == 'form_cl_update') {
-                	Role.update();
+                	User.update();
                 }
             }
         });
     }
+    
     var handleWysihtml5 = function() {
         if (!jQuery().wysihtml5) {            
             return;
         }
         if ($('.wysihtml5').size() > 0) {
             $('.wysihtml5').wysihtml5({
-                "stylesheets": ["http://127.0.0.1/privilege_inc/assets/plugins/bootstrap-wysihtml5/wysiwyg-color.css"]
+                "stylesheets": [ IncPath+ "/assets/global/plugins/bootstrap-wysihtml5/wysiwyg-color.css"]
             });
         }
     }
@@ -180,69 +210,31 @@ var FormCl = function () {
     };
 }();
 
-var TreeCl = function () {
-	var ajaxTreeCl = function(roleId) {
-		$("#tree_cl").jstree({
-		     "core" : {
-		         "themes" : {
-		             "responsive": false
-		         }, 
-		         // so that create works
-		         "check_callback" : true,
-		         'data' : {
-		             'url' : function (node) {
-		         		return '../resource/getResourceTreeWithChecked.do?roleId='+roleId;
-		             },
-		             'data' : function (node) {
-		             	return { 'parent' : node.id };
-		             }
-		         }
-		     },
-		     "types" : {
-		         "default" : {
-		             "icon" : "fa fa-folder icon-warning icon-lg"
-		         },
-		         "file" : {
-		             "icon" : "fa fa-file icon-warning icon-lg"
-		         }
-		     },
-		     "state" : { "key" : "resourceTree_role" },
-		     "plugins" : [ "checkbox", "types" ]
-		});
-	}
-	return {
-		//main function to initiate the module
-		init: function (roleId) {
-			ajaxTreeCl(roleId);
-		}
-	};
-}();
-
-var Role = function(){
+var User = function(){
 	return {
 		/**
 		 * 点击增加按钮
 		 */
 		add_click: function() {
 	    	Cl.action='create';
-	    	Cl.showModalWindow(Cl.modalName, BasePath + "/role/addform");
+	    	Cl.showModalWindow(Cl.modalName, BasePath + "/user/addform");
 		},
 		/**
 		 * 点击修改按钮
 		 */
 		update_click: function(id) {
 			Cl.action='update';	
-			Cl.showModalWindow(Cl.modalName, BasePath + "/role/updateform?id=" + id);
+			Cl.showModalWindow(Cl.modalName, BasePath + "/user/updateform?id=" + id);
 		},
 		/**
 		 * 点击分配权限按钮按钮
 		 */
 		assign_click: function(id) {
 			Cl.action='assign';	
-			Cl.showModalWindow(Cl.modalName, BasePath + "/role/assignform?id="+id);
+			Cl.showModalWindow(Cl.modalName,"assignform.do?id="+id);
 		},
 		/**
-		 * 增加角色
+		 * 增加用户
 		 */
 		add: function(){
 			/* option的参数 
@@ -266,7 +258,7 @@ var Role = function(){
 				target : '#form_cl',
 				type : 'post',
 				dataType : 'json',
-				url : BasePath + "/role/add.do",
+				url : BasePath + "/user/add.do",
 				success : function(result) {
 					 if(!result) return ;
 					 if(result.success == "success"){
@@ -290,14 +282,14 @@ var Role = function(){
 			 	$("#form_cl").ajaxSubmit(options);
 		},
 		/**
-		 * 修改角色
+		 * 修改用户
 		 */
 		update: function(){
 			 var options = {
 				target : '#form_cl',
 				type : 'post',
 				dataType : 'json',
-				url : BasePath + "/role/update.do",
+				url : BasePath + "/user/update.do",
 				success : function(result) {
 					 if(!result) return ;
 					 if(result.success == "success"){
@@ -321,13 +313,13 @@ var Role = function(){
 		 	$("#form_cl").ajaxSubmit(options);
 		},
 		/**
-		 * 删除角色
+		 * 删除用户
 		 */
 		remove: function(id){
-			if(!confirm("确定要删除该角色")){
+			if(!confirm("确定要删除该用户?")){
 				return;
-			}
-			var url=BasePath + "/role/delete";
+			}	
+			var url=BasePath + "/user/delete.do";
 			var data={
 				"id":id
 			};
@@ -335,7 +327,7 @@ var Role = function(){
 				if(!result) return ;		
 				result = result.replace(/(^\s*)|(\s*$)/g,'');
 				if(result == "success"){
-					Cl.deleteDataRow(DataTableCl.tableName,data.id,0);
+					Cl.deleteDataRow(DataTableCl.tableName,data.id,1);
 					alert("删除成功");
 				} else {
 					alert("被用户使用的角色不允许删除");
@@ -344,59 +336,110 @@ var Role = function(){
 			});
 		},
 		/**
-		 * 提交资源分配表单
+		 * 用户分配角色
 		 */
 		assign: function(){
-			var checkedStr = Role.getCheckedNodes();
-			if(checkedStr==""){
-				alert("没有选择任何菜单资源");
+			var selectedStr = "";
+			var i = 0;
+			$("#multi_role").find("option:selected").each(function(){
+				if(i==0)
+				{
+					selectedStr = $(this).val();
+				} else {
+					selectedStr = selectedStr + "," + $(this).val();
+				}
+				i++;
+			});
+			if(selectedStr == ""){
+				alert("没有选择任何角色");
 				return;
-			}
-			
-			var url=BasePath + "/role/assign";
+			}	
+			var url="assign.do";
 			var data={
 				"id":$("#id").val(),
-				"checkedStr":checkedStr
-			};
-			
+				"selectedStr":selectedStr
+			};	
 			Cl.ajaxRequest(url,data,function(result){
 				if(!result) return ;		
 				result = result.replace(/(^\s*)|(\s*$)/g,'');
 				if(result == "success"){
 					Cl.hideModalWindow(Cl.modalName);
-					alert("分配权限成功");			
+					alert("分配角色成功");			
 				} else {
-					alert("分配权限失败");
+					alert("分配角色失败");
 					return ;			
 				}
 			});
 		},
 		/**
-		 * 获取选中的节点(选中的checked)
+		 * 复位密码
 		 */
-		getCheckedNodes: function() {
-			var s = '';
-			//模块
-			$('#tree_cl .jstree-undetermined').each(function () {
-		        var node = $(this);
-		        var id = node.attr('id');
-		        var node_parent = node.parents('li:eq(0)');
-		        var pid = node_parent.attr('id');
-		        if (s != '') s += ',';
-		        s += pid;
-		    });
-			//菜单资源
-			$('#tree_cl .jstree-clicked').each(function () {
-		        var node = $(this);
-		        var id = node.attr('id');
-		        var node_parent = node.parents('li:eq(0)');
-		        var pid = node_parent.attr('id');
-		        if (s != '') s += ',';
-		        s += pid;
-		    });	
-			return s;
+		resetpass: function(id){
+			if(!confirm("确定要重置密码为root吗")){
+				return;
+			}	
+			var url=BasePath + "/user/resetpass.do";
+			var data={
+				"id":id
+			};
+			Cl.ajaxRequest(url,data,function(result){
+				if(!result) return ;		
+				result = result.replace(/(^\s*)|(\s*$)/g,'');
+				if(result == "success"){
+					alert("重置成功");
+				} else {
+					alert("重置失败");
+					return ;			
+				}
+			});
+		},
+		/**
+		 * 锁定用户
+		 */
+		lock: function(id){
+			if(!confirm("确定要锁定用户")){
+				return;
+			}	
+			var url=BasePath + "/user/lock.do";
+			var data={
+				"id":id
+			};
+			Cl.ajaxRequest(url,data,function(result){
+				if(!result) return ;		
+				result = result.replace(/(^\s*)|(\s*$)/g,'');
+				if(result == "success"){
+					Cl.updateDataRow(DataTableCl.tableName,data.id,1,BasePath + '/user/getUserDataRow.do');
+					alert("锁定成功");
+				} else {
+					alert("锁定失败");
+					return ;			
+				}
+			});
+		},
+		/**
+		 * 解锁用户
+		 */
+		unlock: function(id){
+			if(!confirm("确定要解锁用户")){
+				return;
+			}	
+			var url=BasePath + "/user/unlock.do";
+			var data={
+				"id":id
+			};
+			Cl.ajaxRequest(url,data,function(result){
+				if(!result) return ;		
+				result = result.replace(/(^\s*)|(\s*$)/g,'');
+				if(result == "success"){
+					Cl.updateDataRow(DataTableCl.tableName,data.id,1,BasePath + '/user/getUserDataRow.do');
+					alert("解锁成功");
+				} else {
+					alert("解锁失败");
+					return ;			
+				}
+			});
 		}
-	}
+	};
 }();
 
 /**

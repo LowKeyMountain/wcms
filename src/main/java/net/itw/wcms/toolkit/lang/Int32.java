@@ -1,4 +1,4 @@
-package net.itw.core.lang;
+package net.itw.wcms.toolkit.lang;
 
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.tomcat.util.MutableInteger;

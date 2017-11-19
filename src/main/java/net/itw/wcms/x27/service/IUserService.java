@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
 
 /**
@@ -14,14 +15,24 @@ import net.itw.wcms.x27.entity.User;
  * @author Michael 16 Sep 2017 22:37:15
  */
 public interface IUserService {
-
+	
+	/**
+	 * 验证用户登录
+	 * @param userName
+	 * @param password
+	 * @param token
+	 * @return
+	 * @throws Exception
+	 */
+	MessageOption verifyLogin(String userName, String password, String token) throws Exception;
+	
 	/**
 	 * 根据用户名查询用户
 	 * 
-	 * @param username
+	 * @param userName
 	 * @return
 	 */
-	User getUserByUsername(String username);
+	User getUserByUserName(String userName);
 
 	/**
 	 * 根据id查询用户

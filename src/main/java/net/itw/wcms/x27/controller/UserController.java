@@ -173,7 +173,6 @@ public class UserController {
 
 	@RequestMapping("/delete")
 	public String delete(@RequestParam("id") Integer id) {
-
 		// 从session取出User对象
 		User operator = SessionUtil.getSessionUser(req);
 
