@@ -21,8 +21,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.toolkit.security.PasswordUtils;
+import net.itw.wcms.x27.entity.Resource;
 import net.itw.wcms.x27.entity.User;
+import net.itw.wcms.x27.repository.ResourceRepository;
 import net.itw.wcms.x27.repository.UserRepository;
+import net.itw.wcms.x27.service.IResourceService;
 import net.itw.wcms.x27.service.IUserService;
 import net.itw.wcms.x27.utils.ConstantUtil;
 import net.itw.wcms.x27.utils.PageUtils;
@@ -34,8 +37,12 @@ public class UserServiceImpl implements IUserService {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private IResourceService resourceService;
 
 	public Integer createUser(User user, User operator) {
+		user.setIsAdmin(false);
 		setPersonInsert(user, operator);
 		user.setPassword(PasswordUtils.hash(user.getPassword()));
 		userRepository.save(user);
@@ -92,8 +99,8 @@ public class UserServiceImpl implements IUserService {
 		sb.append(",").append(u.getId());
 		sb.append(",\"").append(u.getUserName()).append("\"");
 		sb.append(",\"").append(u.getRealName()).append("\"");
-		sb.append(",\"").append(u.getGender() ? "男" : "女").append("\"");
-		sb.append(",\"").append(u.getIsAdmin() ? "管理员" : "普通").append("\"");
+		//sb.append(",\"").append(u.getGender() ? "男" : "女").append("\"");
+//		sb.append(",\"").append(u.getIsAdmin() ? "管理员" : "普通").append("\"");
 		sb.append(",\"").append(u.getIsLock() ? "是" : "否").append("\"");
 		// sb.append(",\"").append(u.getDepartmentName()==null?"":u.getDepartmentName()).append("\"");
 		sb.append(",\"").append(u.getUpdatePerson()).append("\"");
@@ -137,7 +144,7 @@ public class UserServiceImpl implements IUserService {
 	public Integer updateRealNameAndGenderAndIsAdminById(User user, User operator) {
 		setPersonUpdate(user, operator);
 		userRepository.updateRealNameAndGenderAndIsAdminById(user.getId(), user.getRealName(), user.getGender(),
-				user.getIsAdmin(), user.getUpdateDate(), user.getUpdatePerson());
+				false, user.getUpdateDate(), user.getUpdatePerson());
 		return ConstantUtil.SuccessInt;
 	}
 
@@ -170,8 +177,24 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public String assignRole(Integer id, String selectedStr) {
-		return null;
+	public String assignResource(Integer id, String selectedStr) {
+
+		User user = this.getUserById(id);
+
+		String[] selectedArr = selectedStr.split(",");
+
+		user.getResources().clear();
+
+		for (String s : selectedArr) {
+			if (org.springframework.util.StringUtils.hasText(s)) {
+				Resource resource = resourceService.getResourceById(Integer.parseInt(s));
+				if (resource != null) {
+					user.getResources().add(resource);
+				}
+			}
+		}
+		userRepository.saveAndFlush(user);
+		return ConstantUtil.Success;
 	}
 
 	@Override
@@ -243,7 +266,7 @@ public class UserServiceImpl implements IUserService {
 
 		MessageOption option = new MessageOption(ConstantUtil.SuccessInt, "登录成功！");
 
-		if (!StringUtils.equals("00000000", token)) {
+		if (!StringUtils.equals(ConstantUtil.DefaultToken, token)) {
 			option.code = ConstantUtil.FailInt;
 			option.msg = "登录失败：用户令牌失效！";
 			return option;

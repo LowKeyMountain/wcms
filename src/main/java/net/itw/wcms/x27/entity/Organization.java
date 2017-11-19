@@ -1,14 +1,11 @@
 package net.itw.wcms.x27.entity;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import net.itw.wcms.toolkit.hibernate.Entityable;
@@ -32,8 +29,6 @@ public class Organization implements Entityable {
 	private String memo;
 	private Integer parent;
 	private Date createDate;
-	
-	private Set<User> users = new HashSet<>();
 	
 	@GeneratedValue
 	@Id
@@ -96,15 +91,6 @@ public class Organization implements Entityable {
 
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
-	}
-	
-	@ManyToMany(mappedBy="orgs")
-	public Set<User> getUsers() {
-		return users;
-	}
-
-	public void setUsers(Set<User> users) {
-		this.users = users;
 	}
 	
 }

@@ -2,6 +2,7 @@ package net.itw.wcms.x27.utils;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -140,7 +141,11 @@ public class PageUtils {
 			String sColumns = aoData.get("sColumns");
 			String iSortCol_0 = aoData.get("iSortCol_0");
 			if (StringUtils.isNoneBlank(sColumns) && sColumns.split(",").length > 0 && StringUtils.isNoneBlank(iSortCol_0)) {
-				sortType = Arrays.asList(sColumns.split(",")).get(Integer.parseInt(iSortCol_0));
+				Integer iSortCol = Integer.parseInt(iSortCol_0);
+				List<String> list = Arrays.asList(sColumns.split(","));
+				if (list.size() > iSortCol) {
+					sortType = list.get(iSortCol);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

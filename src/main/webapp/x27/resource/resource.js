@@ -28,15 +28,14 @@ var DataTableCl = function() {
             		"sSortDescending": ": 以降序排列此列"
             	}
             },
-            
 			"bServerSide" : true, // server side processing
-			"sAjaxSource" : BasePath + "/user/getUserDataTables", // ajax
-			
+			"sAjaxSource" : BasePath + "/resource/getResourceDataTables", // ajax source
+            
             // Or you can use remote translation file
             //"language": {
             //   url: '//cdn.datatables.net/plug-ins/3cfcc339e89/i18n/Portuguese.json'
             //},
-			
+
             // Uncomment below line("dom" parameter) to fix the dropdown overflow issue in the datatable cells. The default datatable layout
             // setup uses scrollable div(table-scrollable) with overflow:auto to enable vertical scroll(see: assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js). 
             // So when dropdowns used the scrollable div should be removed. 
@@ -44,6 +43,20 @@ var DataTableCl = function() {
 
             "bStateSave": true, // save datatable state(pagination, sort, etc) in cookie.
 
+            "columnDefs": [ {
+                "targets": [0, -1],
+                "orderable": false,
+                "searchable": false
+            }],
+            "columns" : [ 
+                         {"name":""},
+                         {"name":"id"}, 
+                         {"name":"name"}, 
+                         {"name":"remark"}, 
+                         {"name":"updatePerson"}, 
+                         {"name":"updateDate"}, 
+                         {"name":""}
+                     ],
             "lengthMenu": [
                 [5, 15, 20, -1],
                 [5, 15, 20, "All"] // change per page values here
@@ -51,29 +64,12 @@ var DataTableCl = function() {
             // set the initial value
             "pageLength": 5,            
             "pagingType": "bootstrap_full_number",
-            "columnDefs" : [ { // set default column settings
-				"targets" : [ 0, -1 ],
-				"orderable" : false,
-				"searchable" : false
-			} ],
-            "columns" : [ 
-                          {"name":""},
-                          {"name":"id"}, 
-                          {"name":"userName"}, 
-                          {"name":"realName"}, 
-//                          {"name":"gender"}, 
-//                          {"name":"isAdmin"}, 
-                          {"name":"isLock"}, 
-                          {"name":"updatePerson"}, 
-                          {"name":"updateDate"}, 
-                          {"name":""}
-                      ],
             "order": [
                 [1, "asc"]
             ] // set first column as a default sort by asc
         });
 
-        var tableWrapper = jQuery('#datatable_cl_wrapper');
+        var tableWrapper = jQuery('#sample_1_wrapper');
 
         table.find('.group-checkable').change(function () {
             var set = jQuery(this).attr("data-set");
@@ -93,6 +89,7 @@ var DataTableCl = function() {
         table.on('change', 'tbody tr .checkboxes', function () {
             $(this).parents('tr').toggleClass("active");
         });
+    
 	}
 	return {
 		// main function to initiate the module
@@ -107,7 +104,6 @@ var DataTableCl = function() {
 }();
 
 var FormCl = function () {
-    // validation using icons
     var handleValidation = function() {
         // for more info visit the official plugin documentation: 
         // http://docs.jquery.com/Plugins/Validation
@@ -122,27 +118,8 @@ var FormCl = function () {
             focusInvalid: false, // do not focus the last invalid input
             ignore: "",  // validate all fields including form hidden input
             rules: {
-            	userName: {
-                    minlength: 2,
-                    required: true
-                },
-                password: {
-                    required: true,
-                    minlength: 5
-                },
-                confirm_password: {
-                    required: true,
-                    minlength: 5,
-                    equalTo: "#password"
-                },
-                realName: {
-                    required: true,
-                    minlength: 2
-                },
-                gender: {
-                    required: true
-                },
-                isAdmin: {
+            	name: {
+                    minlength: 3,
                     required: true
                 }
             },
@@ -182,21 +159,20 @@ var FormCl = function () {
 //              form[0].submit(); // submit the form
                 var name = $(form).attr("name")
                 if (name == 'form_cl_add') {
-                	User.add();
+                	Resource.add();
                 } else if (name == 'form_cl_update') {
-                	User.update();
+                	Resource.update();
                 }
             }
         });
     }
-    
     var handleWysihtml5 = function() {
         if (!jQuery().wysihtml5) {            
             return;
         }
         if ($('.wysihtml5').size() > 0) {
             $('.wysihtml5').wysihtml5({
-                "stylesheets": [ IncPath+ "/assets/global/plugins/bootstrap-wysihtml5/wysiwyg-color.css"]
+                "stylesheets": ["http://127.0.0.1/privilege_inc/assets/plugins/bootstrap-wysihtml5/wysiwyg-color.css"]
             });
         }
     }
@@ -210,31 +186,69 @@ var FormCl = function () {
     };
 }();
 
-var User = function(){
+var TreeCl = function () {
+	var ajaxTreeCl = function(resourceId) {
+		$("#tree_cl").jstree({
+		     "core" : {
+		         "themes" : {
+		             "responsive": false
+		         }, 
+		         // so that create works
+		         "check_callback" : true,
+		         'data' : {
+		             'url' : function (node) {
+		         		return '../resource/getResourceTreeWithChecked.do?resourceId='+resourceId;
+		             },
+		             'data' : function (node) {
+		             	return { 'parent' : node.id };
+		             }
+		         }
+		     },
+		     "types" : {
+		         "default" : {
+		             "icon" : "fa fa-folder icon-warning icon-lg"
+		         },
+		         "file" : {
+		             "icon" : "fa fa-file icon-warning icon-lg"
+		         }
+		     },
+		     "state" : { "key" : "resourceTree_resource" },
+		     "plugins" : [ "checkbox", "types" ]
+		});
+	}
+	return {
+		//main function to initiate the module
+		init: function (resourceId) {
+			ajaxTreeCl(resourceId);
+		}
+	};
+}();
+
+var Resource = function(){
 	return {
 		/**
 		 * 点击增加按钮
 		 */
 		add_click: function() {
 	    	Cl.action='create';
-	    	Cl.showModalWindow(Cl.modalName, BasePath + "/user/addform");
+	    	Cl.showModalWindow(Cl.modalName, BasePath + "/resource/addform");
 		},
 		/**
 		 * 点击修改按钮
 		 */
 		update_click: function(id) {
 			Cl.action='update';	
-			Cl.showModalWindow(Cl.modalName, BasePath + "/user/updateform?id=" + id);
+			Cl.showModalWindow(Cl.modalName, BasePath + "/resource/updateform?id=" + id);
 		},
 		/**
 		 * 点击分配权限按钮按钮
 		 */
 		assign_click: function(id) {
 			Cl.action='assign';	
-			Cl.showModalWindow(Cl.modalName,"assignform.do?id="+id);
+			Cl.showModalWindow(Cl.modalName, BasePath + "/resource/assignform?id="+id);
 		},
 		/**
-		 * 增加用户
+		 * 增加资源
 		 */
 		add: function(){
 			/* option的参数 
@@ -258,7 +272,7 @@ var User = function(){
 				target : '#form_cl',
 				type : 'post',
 				dataType : 'json',
-				url : BasePath + "/user/add.do",
+				url : BasePath + "/resource/add.do",
 				success : function(result) {
 					 if(!result) return ;
 					 if(result.success == "success"){
@@ -282,19 +296,19 @@ var User = function(){
 			 	$("#form_cl").ajaxSubmit(options);
 		},
 		/**
-		 * 修改用户
+		 * 修改资源
 		 */
 		update: function(){
 			 var options = {
 				target : '#form_cl',
 				type : 'post',
 				dataType : 'json',
-				url : BasePath + "/user/update.do",
+				url : BasePath + "/resource/update.do",
 				success : function(result) {
 					 if(!result) return ;
 					 if(result.success == "success"){
 						Cl.hideModalWindow(Cl.modalName);
-						Cl.updateDataRow(DataTableCl.tableName,result.id,1,BasePath + '/user/getUserDataRow.do');
+						Cl.refreshDataTable(DataTableCl.tableName);
 						 alert("修改成功");
 					 } else {
 						 alert("修改失败");
@@ -313,13 +327,13 @@ var User = function(){
 		 	$("#form_cl").ajaxSubmit(options);
 		},
 		/**
-		 * 删除用户
+		 * 删除资源
 		 */
 		remove: function(id){
-			if(!confirm("确定要删除该用户?")){
+			if(!confirm("确定要删除该资源")){
 				return;
-			}	
-			var url=BasePath + "/user/delete.do";
+			}
+			var url=BasePath + "/resource/delete";
 			var data={
 				"id":id
 			};
@@ -327,120 +341,68 @@ var User = function(){
 				if(!result) return ;		
 				result = result.replace(/(^\s*)|(\s*$)/g,'');
 				if(result == "success"){
-					Cl.deleteDataRow(DataTableCl.tableName,data.id,1);
+					Cl.refreshDataTable(DataTableCl.tableName);
 					alert("删除成功");
 				} else {
-					alert("被用户使用的角色不允许删除");
+					alert("被用户使用的资源不允许删除");
 					return ;			
 				}
 			});
 		},
 		/**
-		 * 用户分配权限
+		 * 提交资源分配表单
 		 */
 		assign: function(){
-			var selectedStr = "";
-			var i = 0;
-			$("#multi_role").find("option:selected").each(function(){
-				if(i==0)
-				{
-					selectedStr = $(this).val();
-				} else {
-					selectedStr = selectedStr + "," + $(this).val();
-				}
-				i++;
-			});
-//			if(selectedStr == ""){
-//				alert("没有选择任何角色");
-//				return;
-//			}	
-			var url=BasePath + "/user/assign.do";
+			var checkedStr = Resource.getCheckedNodes();
+			if(checkedStr==""){
+				alert("没有选择任何菜单资源");
+				return;
+			}
 			
+			var url=BasePath + "/resource/assign";
 			var data={
 				"id":$("#id").val(),
-				"selectedStr":selectedStr
-			};	
+				"checkedStr":checkedStr
+			};
+			
 			Cl.ajaxRequest(url,data,function(result){
 				if(!result) return ;		
 				result = result.replace(/(^\s*)|(\s*$)/g,'');
 				if(result == "success"){
 					Cl.hideModalWindow(Cl.modalName);
-					alert("分配权限成功!");			
+					alert("分配权限成功");			
 				} else {
-					alert("分配权限失败!");
+					alert("分配权限失败");
 					return ;			
 				}
 			});
 		},
 		/**
-		 * 复位密码
+		 * 获取选中的节点(选中的checked)
 		 */
-		resetpass: function(id){
-			if(!confirm("确定要重置密码为root吗")){
-				return;
-			}	
-			var url=BasePath + "/user/resetpass.do";
-			var data={
-				"id":id
-			};
-			Cl.ajaxRequest(url,data,function(result){
-				if(!result) return ;		
-				result = result.replace(/(^\s*)|(\s*$)/g,'');
-				if(result == "success"){
-					alert("重置成功");
-				} else {
-					alert("重置失败");
-					return ;			
-				}
-			});
-		},
-		/**
-		 * 锁定用户
-		 */
-		lock: function(id){
-			if(!confirm("确定要锁定用户")){
-				return;
-			}	
-			var url=BasePath + "/user/lock.do";
-			var data={
-				"id":id
-			};
-			Cl.ajaxRequest(url,data,function(result){
-				if(!result) return ;		
-				result = result.replace(/(^\s*)|(\s*$)/g,'');
-				if(result == "success"){
-					Cl.updateDataRow(DataTableCl.tableName,data.id,1,BasePath + '/user/getUserDataRow.do');
-					alert("锁定成功");
-				} else {
-					alert("锁定失败");
-					return ;			
-				}
-			});
-		},
-		/**
-		 * 解锁用户
-		 */
-		unlock: function(id){
-			if(!confirm("确定要解锁用户")){
-				return;
-			}	
-			var url=BasePath + "/user/unlock.do";
-			var data={
-				"id":id
-			};
-			Cl.ajaxRequest(url,data,function(result){
-				if(!result) return ;		
-				result = result.replace(/(^\s*)|(\s*$)/g,'');
-				if(result == "success"){
-					Cl.updateDataRow(DataTableCl.tableName,data.id,1,BasePath + '/user/getUserDataRow.do');
-					alert("解锁成功");
-				} else {
-					alert("解锁失败");
-					return ;			
-				}
-			});
+		getCheckedNodes: function() {
+			var s = '';
+			//模块
+			$('#tree_cl .jstree-undetermined').each(function () {
+		        var node = $(this);
+		        var id = node.attr('id');
+		        var node_parent = node.parents('li:eq(0)');
+		        var pid = node_parent.attr('id');
+		        if (s != '') s += ',';
+		        s += pid;
+		    });
+			//菜单资源
+			$('#tree_cl .jstree-clicked').each(function () {
+		        var node = $(this);
+		        var id = node.attr('id');
+		        var node_parent = node.parents('li:eq(0)');
+		        var pid = node_parent.attr('id');
+		        if (s != '') s += ',';
+		        s += pid;
+		    });	
+			return s;
 		}
-	};
+	}
 }();
 
 /**

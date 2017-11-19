@@ -14,6 +14,8 @@ public class ConstantUtil {
 	
 	public static final String EmptyJsonObject = "{}";
 	
+	public static final String DefaultToken = "00000000"; 
+	
 	public static final String DefaultMd5Password = "63a9f0ea7bb98050796b649e85481845";	//root
 	
 }

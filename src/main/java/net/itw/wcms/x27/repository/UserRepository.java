@@ -98,7 +98,7 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
 							}
 						}
 					}
-					predicate = cb.and(cb.equal(root.get("isDelete"), false),
+					predicate = cb.and(cb.equal(root.get("isDelete"), false), cb.equal(root.get("isAdmin"), false),
 							cb.or(predicates.toArray(new Predicate[predicates.size()])));
 				}
 				return predicate;

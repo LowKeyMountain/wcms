@@ -98,16 +98,19 @@
                              <span class="title">用户管理</span>
                          </a>
                      </li>
+                     <!-- 
                      <li class="nav-item  ">
                          <a href="${IncPath}/role/list" class="nav-link ">
                              <span class="title">角色管理</span>
                          </a>
                      </li>
+                     -->
                      <li class="nav-item  ">
-                         <a href="#" class="nav-link ">
-                             <span class="title">权限管理</span>
+                         <a href="${IncPath}/resource/list" class="nav-link ">
+                             <span class="title">资源管理</span>
                          </a>
                      </li>
+                      
                      <li class="nav-item  ">
                          <a href="#" class="nav-link ">
                              <span class="title">日志管理</span>

@@ -54,6 +54,8 @@ License: You must have a valid license purchased only from themeforest(the above
         <link href="${IncPath}/assets/layouts/layout/css/themes/darkblue.min.css" rel="stylesheet" type="text/css" id="style_color" />
         <link href="${IncPath}/assets/layouts/layout/css/custom.min.css" rel="stylesheet" type="text/css" />
         <!-- END THEME LAYOUT STYLES -->
+        <link href="${IncPath}/assets/global/plugins/jquery-multi-select/css/multi-select.css" rel="stylesheet" type="text/css" />
+        
         <link rel="shortcut icon" href="favicon.ico" /> </head>
     <!-- END HEAD -->
 
@@ -78,7 +80,7 @@ License: You must have a valid license purchased only from themeforest(the above
 				<div class="row">
 					<div class="col-md-12">
 						<!-- BEGIN PAGE TITLE & BREADCRUMB-->
-						<h3 class="page-title">用户管理</h3>
+						<!-- <h3 class="page-title">用户管理</h3> -->
 						<ul class="page-breadcrumb breadcrumb">
 							<li><i class="fa fa-home"></i> <a
 								href="${BasePath}/web/main"> 主页 </a> <i
@@ -154,8 +156,8 @@ License: You must have a valid license purchased only from themeforest(the above
 											<th width="5%">ID</th>
 											<th width="7.5%">用户名</th>
 											<th width="7.5%">姓名</th>
-											<th width="5%">性别</th>
-											<th width="5%">类型</th>
+											<!-- <th width="5%">性别</th> -->
+											<!-- <th width="5%">类型</th> -->
 											<th width="5%">是否锁定</th>
 											<!-- <th width="10%">所属部门</th> -->
 											<th width="10%">最后操作人</th>
@@ -218,6 +220,8 @@ License: You must have a valid license purchased only from themeforest(the above
         <!-- END PAGE LEVEL SCRIPTS -->
         <script src="../assets/pages/scripts/form-validation.js" type="text/javascript"></script>
         <!-- BEGIN THEME LAYOUT SCRIPTS -->
+        
+        <script src="${IncPath}/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js" type="text/javascript"></script>
         <script src="${IncPath}/assets/layouts/layout/scripts/layout.min.js" type="text/javascript"></script>
         <script src="${IncPath}/assets/layouts/layout/scripts/demo.min.js" type="text/javascript"></script>
         <script src="${IncPath}/assets/layouts/global/scripts/quick-sidebar.min.js" type="text/javascript"></script>

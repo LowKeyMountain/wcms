@@ -43,8 +43,7 @@ public class User implements Entityable {
 	private Date lastLoginTime;
 	private String lastLoginIp;
 
-	private Set<Role> roles = new HashSet<>();
-	private Set<Organization> orgs = new HashSet<>();
+	private Set<Resource> resources = new HashSet<>();
 
 	@GeneratedValue
 	@Id
@@ -117,28 +116,16 @@ public class User implements Entityable {
 		this.lastLoginIp = lastLoginIp;
 	}
 
-	@JoinTable(name = "X27_JOIN_USER_ROLE", joinColumns = {
+	@JoinTable(name = "X27_JOIN_USER_RESOURCE", joinColumns = {
 			@JoinColumn(name = "USER_ID", referencedColumnName = "ID") }, inverseJoinColumns = {
-					@JoinColumn(name = "ROLE_ID", referencedColumnName = "ID") })
+					@JoinColumn(name = "RESOURCE_ID", referencedColumnName = "ID") })
 	@ManyToMany
-	public Set<Role> getRoles() {
-		return roles;
+	public Set<Resource> getResources() {
+		return resources;
 	}
 
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
-	}
-
-	@JoinTable(name = "X27_JOIN_USER_ORG", joinColumns = {
-			@JoinColumn(name = "USER_ID", referencedColumnName = "ID") }, inverseJoinColumns = {
-					@JoinColumn(name = "ORG_ID", referencedColumnName = "ID") })
-	@ManyToMany
-	public Set<Organization> getOrgs() {
-		return orgs;
-	}
-
-	public void setOrgs(Set<Organization> orgs) {
-		this.orgs = orgs;
+	public void setResources(Set<Resource> resources) {
+		this.resources = resources;
 	}
 
 	public Boolean getGender() {

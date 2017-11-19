@@ -4,7 +4,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <div class="modal-header">
 	<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-	<h4 class="modal-title">新增角色</h4>
+	<h4 class="modal-title">新增资源</h4>
 </div>
 
 <form action="#" id="form_cl" name="form_cl_add" class="form-horizontal">
@@ -21,7 +21,7 @@
 						</label>
 						<div class="col-md-8">
 							<input type="hidden" id="id" name="id"/>
-							<input type="text" id="roleName" name="roleName" data-required="1" class="form-control"/>
+							<input type="text" id="name" name="name" data-required="1" class="form-control"/>
 						</div>
 					</div>
 					<div class="form-group">

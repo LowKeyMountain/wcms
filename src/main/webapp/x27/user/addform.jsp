@@ -85,6 +85,7 @@
 							<div id="form_user_gender_error"></div>
 						</div>
 					</div>
+					<!-- 
 					<div class="form-group  margin-top-20">
 						<label class="control-label col-md-3">类型 <span
 							class="required"> * </span>
@@ -101,6 +102,7 @@
 							<div id="form_user_isadmin_error"></div>
 						</div>
 					</div>
+					 -->
 					<!-- 
 					<div class="form-group  margin-top-20">
 						<label class="control-label col-md-3">所属部门

@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
 import net.itw.wcms.x27.service.IUserService;
+import net.itw.wcms.x27.utils.ConstantUtil;
 import net.itw.wcms.x27.utils.SessionUtil;
 
 /**
@@ -56,6 +58,7 @@ public class LoginController {
 		this.modelMap = modelMap;
 		modelMap.put("IncPath", req.getContextPath());
 		modelMap.put("BasePath", req.getContextPath());
+		modelMap.put("jsVersion", System.currentTimeMillis());
 	}
 
 	/**
@@ -86,18 +89,24 @@ public class LoginController {
 
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.putAll(modelMap);
-		// 用户验证
-		if (!"admin".equalsIgnoreCase(userName) || !"123456".equalsIgnoreCase(password)) { // TODO:
-																							// 待完善。
-			success = 1;
-			msg = "用户名或密码错误, 请重新输入!";
-		} else {
-			url = "/web/main";
-		}
 		
-		// 将当前用户缓存到Session
-		User user = userService.getUserById(1); // TODO: 暂时默认登录用户，为管理员，待完善。
-		session.setAttribute(SessionUtil.SessionSystemLoginUserName, user);
+		// 用户验证
+		try {
+			MessageOption option = userService.verifyLogin(userName, password, ConstantUtil.DefaultToken);
+			if (!option.isSuccess()) { 
+				success = option.isSuccess() ? 0 : 1;
+				msg = option.msg;
+			} else {
+				url = "/web/main";
+				// 将当前用户缓存到Session
+				User user = userService.getUserByUserName(userName);
+				session.setAttribute(SessionUtil.SessionSystemLoginUserName, user);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			success = 1;
+			msg = "登录失败：" + e.getMessage();
+		}
 		
 		map.put("msg", msg);
 		map.put("url", url);

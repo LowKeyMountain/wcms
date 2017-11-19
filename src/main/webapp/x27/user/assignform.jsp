@@ -32,6 +32,6 @@
 
 <script>
 	$(document).ready(function() {       
-	   $('#multi_role').multiSelect({selectableHeader: "<div class='custom-header'>所有角色</div>",selectionHeader: "<div class='custom-header'>已拥有角色</div>"});
+	   $('#multi_role').multiSelect({selectableHeader: "<div class='custom-header'>所有权限</div>",selectionHeader: "<div class='custom-header'>已拥有权限</div>"});
 	});
 </script>

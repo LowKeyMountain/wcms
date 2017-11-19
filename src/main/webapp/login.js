@@ -56,7 +56,7 @@ var Login = function() {
 			var url = IncPath + "/web/login";
 			var data = {
 				"username" : $('#username').val(),
-				"password" : $('#password').val()
+				"password" : hex_md5($('#password').val())
 			};
 			Cl.ajaxRequest(url, data, function(result) {
 				if (result == undefined && result == null) {

@@ -32,15 +32,16 @@ import net.itw.wcms.x27.utils.ConstantUtil;
  * @author Michael 19 Nov 2017 08:33:39
  */
 @RestController
+@RequestMapping(value = "/api/http")
 public class AppHttpInterface {
 
 	@Autowired
 	private IUserService userService;
-	@Autowired	
+	@Autowired
 	private TaskService taskService;
 	@Autowired
 	private TaskDetailService taskDetailService;
-	
+
 	/**
 	 * 登录验证
 	 * 
@@ -137,16 +138,15 @@ public class AppHttpInterface {
 		return map;
 	}
 
-
 	/**
 	 * 返回船舶作业信息
 	 * 
 	 * @param json
 	 * @return
-	 */	
+	 */
 	@RequestMapping(value = "/ship/doGetShipList")
 	public Map<?, ?> doGetShipList(@RequestParam("json") String json) {
-		
+
 		Map<String, Object> map = new HashMap<>();
 		String status;
 		try {
@@ -164,14 +164,14 @@ public class AppHttpInterface {
 		} else {
 			List<Task> taskList = taskService.getTaskByStatus(status);
 			if (taskList.size() > 0) {
-		        JSONArray  jsonArray = new JSONArray();
-		        for(Task task: taskList){
-	                JSONObject jo = new JSONObject();
-	                jo.put("taskId", task.getId());
+				JSONArray jsonArray = new JSONArray();
+				for (Task task : taskList) {
+					JSONObject jo = new JSONObject();
+					jo.put("taskId", task.getId());
 					jo.put("cargoType", task.getCargoType() == null ? "" : task.getCargoType());
-	                jo.put("shipName", task.getShip().getShipName());
-		        	jsonArray.add(jo);
-		        }
+					jo.put("shipName", task.getShip().getShipName());
+					jsonArray.add(jo);
+				}
 				map.put("msg", "查询成功!");
 				map.put("code", "1");
 				map.put("data", JSONObject.toJSON(jsonArray));
@@ -182,18 +182,17 @@ public class AppHttpInterface {
 			}
 		}
 		return map;
-	}	
-	
-	
+	}
+
 	/**
 	 * 返回船舶详情信息
 	 * 
 	 * @param json
 	 * @return
-	 */	
+	 */
 	@RequestMapping(value = "/ship/doGetShipDetail")
 	public Map<?, ?> doGetShipDetail(@RequestParam("json") String json) {
-		
+
 		JSONObject data = new JSONObject();
 		Map<String, Object> map = new HashMap<>();
 		String taskId;
@@ -215,15 +214,19 @@ public class AppHttpInterface {
 				data.put("shipId", task.getShip().getId());
 				data.put("shipName", task.getShip().getShipName());
 				data.put("shipEname", task.getShip().getShipEnName() == null ? "" : task.getShip().getShipEnName());
-				data.put("imoNo", task.getShip().getImoNo() == null ? "" :task.getShip().getImoNo());
-				data.put("buildDate", task.getShip().getBuildDate() == null ? "" : DateTimeUtils.date2StrDate(task.getShip().getBuildDate()));
+				data.put("imoNo", task.getShip().getImoNo() == null ? "" : task.getShip().getImoNo());
+				data.put("buildDate", task.getShip().getBuildDate() == null ? ""
+						: DateTimeUtils.date2StrDate(task.getShip().getBuildDate()));
 				data.put("length", task.getShip().getLength() == null ? "" : task.getShip().getLength());
 				data.put("width", task.getShip().getBreadth() == null ? "" : task.getShip().getBreadth());
 				data.put("depth", task.getShip().getMouldedDepth() == null ? "" : task.getShip().getMouldedDepth());
 				data.put("cabinNum", task.getShip().getCabinNum() == null ? "" : task.getShip().getCabinNum());
-				data.put("berthingTime", task.getBerthingTime() == null ? "" : DateTimeUtils.date2StrDateTime(task.getBerthingTime()));
-				data.put("departureTime", task.getDepartureTime() == null ? "" : DateTimeUtils.date2StrDateTime(task.getDepartureTime()));
-				data.put("beginTime", task.getBeginTime() == null ? "" : DateTimeUtils.date2StrDateTime(task.getBeginTime()));
+				data.put("berthingTime",
+						task.getBerthingTime() == null ? "" : DateTimeUtils.date2StrDateTime(task.getBerthingTime()));
+				data.put("departureTime",
+						task.getDepartureTime() == null ? "" : DateTimeUtils.date2StrDateTime(task.getDepartureTime()));
+				data.put("beginTime",
+						task.getBeginTime() == null ? "" : DateTimeUtils.date2StrDateTime(task.getBeginTime()));
 				data.put("endTime", task.getEndTime() == null ? "" : DateTimeUtils.date2StrDateTime(task.getEndTime()));
 				map.put("msg", "查询成功!");
 				map.put("code", "1");
@@ -242,10 +245,10 @@ public class AppHttpInterface {
 	 * 
 	 * @param json
 	 * @return
-	 */	
+	 */
 	@RequestMapping(value = "/ship/doGetCabinList")
 	public Map<?, ?> doGetCabinList(@RequestParam("json") String json) {
-		
+
 		new JSONObject();
 		Map<String, Object> map = new HashMap<>();
 		String taskId;
@@ -264,19 +267,19 @@ public class AppHttpInterface {
 		} else {
 			List<TaskDetail> cabinList = taskDetailService.getTaskDetailByTaskId(Integer.parseInt(taskId));
 			if (cabinList != null) {
-		        JSONArray  jsonArray = new JSONArray();
-		        for(TaskDetail cabin: cabinList){
-	                JSONObject jo = new JSONObject();
-	                jo.put("detailId", cabin.getId());
-	                jo.put("cabinNo", cabin.getCabinNo());
-	                jo.put("cargoType", cabin.getCargoType() == null ? "" : cabin.getCargoType());
+				JSONArray jsonArray = new JSONArray();
+				for (TaskDetail cabin : cabinList) {
+					JSONObject jo = new JSONObject();
+					jo.put("detailId", cabin.getId());
+					jo.put("cabinNo", cabin.getCabinNo());
+					jo.put("cargoType", cabin.getCargoType() == null ? "" : cabin.getCargoType());
 					jo.put("total", cabin.getPreunloading() == null ? "" : cabin.getPreunloading());
 					jo.put("finish", cabin.getActualUnloading() == null ? "" : cabin.getActualUnloading());
 					jo.put("remainder", cabin.getRemainder() == null ? "" : cabin.getRemainder());
 					jo.put("clearance", cabin.getClearance() == null ? "" : cabin.getClearance());
 					jo.put("status", cabin.getStatus() == null ? "" : cabin.getStatus());
-		        	jsonArray.add(jo);
-		        }
+					jsonArray.add(jo);
+				}
 				map.put("msg", "查询成功!");
 				map.put("code", "1");
 				map.put("data", JSONObject.toJSON(jsonArray));
@@ -294,10 +297,10 @@ public class AppHttpInterface {
 	 * 
 	 * @param json
 	 * @return
-	 */	
+	 */
 	@RequestMapping(value = "/ship/doGetShipPosition")
 	public Map<?, ?> doGetShipPosition(@RequestParam("json") String json) {
-		
+
 		Map<String, Object> map = new HashMap<>();
 		String taskId;
 		try {
@@ -315,15 +318,15 @@ public class AppHttpInterface {
 		} else {
 			List<TaskDetail> cabinList = taskDetailService.getTaskDetailByTaskId(Integer.parseInt(taskId));
 			if (cabinList != null) {
-		        JSONArray  jsonArray = new JSONArray();
-		        for(TaskDetail cabin: cabinList){
-	                JSONObject jo = new JSONObject();
-	                jo.put("detailId", cabin.getId());
-	                jo.put("cabinNo", cabin.getCabinNo());
-	                jo.put("startPosition", cabin.getStartPosition() == null ? "" : cabin.getStartPosition());
+				JSONArray jsonArray = new JSONArray();
+				for (TaskDetail cabin : cabinList) {
+					JSONObject jo = new JSONObject();
+					jo.put("detailId", cabin.getId());
+					jo.put("cabinNo", cabin.getCabinNo());
+					jo.put("startPosition", cabin.getStartPosition() == null ? "" : cabin.getStartPosition());
 					jo.put("endPosition", cabin.getEndPosition() == null ? "" : cabin.getEndPosition());
-		        	jsonArray.add(jo);
-		        }
+					jsonArray.add(jo);
+				}
 				map.put("msg", "查询成功!");
 				map.put("code", "1");
 				map.put("data", JSONObject.toJSON(jsonArray));
@@ -341,10 +344,10 @@ public class AppHttpInterface {
 	 * 
 	 * @param json
 	 * @return
-	 */	
+	 */
 	@RequestMapping(value = "/ship/doGetCabinDetail")
 	public Map<?, ?> doGetCabinDetail(@RequestParam("json") String json) {
-		
+
 		JSONObject data = new JSONObject();
 		Map<String, Object> map = new HashMap<>();
 		String detailId;
@@ -366,16 +369,19 @@ public class AppHttpInterface {
 				data.put("detailId", taskDetail.getId());
 				data.put("cabinNo", taskDetail.getCabinNo());
 				data.put("cargoType", taskDetail.getCargoType() == null ? "" : taskDetail.getCargoType());
-				data.put("total",taskDetail.getPreunloading() == null ? "" : taskDetail.getPreunloading());
-				data.put("finish",taskDetail.getActualUnloading() == null ? "" : taskDetail.getActualUnloading());
-				data.put("remainder",taskDetail.getRemainder() == null ? "" : taskDetail.getRemainder());
-				data.put("clearance",taskDetail.getClearance() == null ? "" : taskDetail.getClearance());
-				data.put("status",taskDetail.getStatus()== null ? "" : taskDetail.getStatus());
-				data.put("startTime",taskDetail.getStartTime()== null ? "" : DateTimeUtils.date2StrDateTime(taskDetail.getStartTime()));
-				data.put("endTime",taskDetail.getEndTime()== null ? "" : DateTimeUtils.date2StrDateTime(taskDetail.getEndTime()));
-				data.put("usedTime",taskDetail.getUsedTime() == null ? "" : taskDetail.getUsedTime());
-				data.put("unloadingTonnage",taskDetail.getActualUnloading() == null ? "" : taskDetail.getActualUnloading());
-				data.put("efficiency",taskDetail.getEfficiency() == null ? "" : taskDetail.getEfficiency());
+				data.put("total", taskDetail.getPreunloading() == null ? "" : taskDetail.getPreunloading());
+				data.put("finish", taskDetail.getActualUnloading() == null ? "" : taskDetail.getActualUnloading());
+				data.put("remainder", taskDetail.getRemainder() == null ? "" : taskDetail.getRemainder());
+				data.put("clearance", taskDetail.getClearance() == null ? "" : taskDetail.getClearance());
+				data.put("status", taskDetail.getStatus() == null ? "" : taskDetail.getStatus());
+				data.put("startTime", taskDetail.getStartTime() == null ? ""
+						: DateTimeUtils.date2StrDateTime(taskDetail.getStartTime()));
+				data.put("endTime",
+						taskDetail.getEndTime() == null ? "" : DateTimeUtils.date2StrDateTime(taskDetail.getEndTime()));
+				data.put("usedTime", taskDetail.getUsedTime() == null ? "" : taskDetail.getUsedTime());
+				data.put("unloadingTonnage",
+						taskDetail.getActualUnloading() == null ? "" : taskDetail.getActualUnloading());
+				data.put("efficiency", taskDetail.getEfficiency() == null ? "" : taskDetail.getEfficiency());
 				map.put("msg", "查询成功!");
 				map.put("code", "1");
 				map.put("data", data);
@@ -393,10 +399,10 @@ public class AppHttpInterface {
 	 * 
 	 * @param json
 	 * @return
-	 */	
+	 */
 	@RequestMapping(value = "/ship/doGetCargoDetail")
 	public Map<?, ?> doGetCargoDetail(@RequestParam("json") String json) {
-		
+
 		JSONObject data = new JSONObject();
 		Map<String, Object> map = new HashMap<>();
 		String detailId;
@@ -417,12 +423,12 @@ public class AppHttpInterface {
 			if (taskDetail != null) {
 				data.put("detailId", taskDetail.getId());
 				data.put("cargoType", taskDetail.getCargoType() == null ? "" : taskDetail.getCargoType());
-				data.put("cargoCategory",taskDetail.getCargoCategory() == null ? "" : taskDetail.getCargoCategory());
-				data.put("loadingPort",taskDetail.getLoadingPort() == null ? "" : taskDetail.getLoadingPort());
-				data.put("quality",taskDetail.getQuality() == null ? "" : taskDetail.getQuality());
-				data.put("moisture",taskDetail.getMoisture() == null ? "" : taskDetail.getMoisture());
-				data.put("cargoOwner",taskDetail.getCargoOwner()== null ? "" : taskDetail.getCargoOwner());
-				data.put("stowageTonnage",taskDetail.getStowage()== null ? "" : taskDetail.getStowage());
+				data.put("cargoCategory", taskDetail.getCargoCategory() == null ? "" : taskDetail.getCargoCategory());
+				data.put("loadingPort", taskDetail.getLoadingPort() == null ? "" : taskDetail.getLoadingPort());
+				data.put("quality", taskDetail.getQuality() == null ? "" : taskDetail.getQuality());
+				data.put("moisture", taskDetail.getMoisture() == null ? "" : taskDetail.getMoisture());
+				data.put("cargoOwner", taskDetail.getCargoOwner() == null ? "" : taskDetail.getCargoOwner());
+				data.put("stowageTonnage", taskDetail.getStowage() == null ? "" : taskDetail.getStowage());
 				map.put("msg", "查询成功!");
 				map.put("code", "1");
 				map.put("data", data);
@@ -434,16 +440,16 @@ public class AppHttpInterface {
 		}
 		return map;
 	}
-	
+
 	/**
 	 * 修改船舱状态
 	 * 
 	 * @param json
 	 * @return
-	 */	
+	 */
 	@RequestMapping(value = "/ship/doSetCabinStatus")
 	public Map<?, ?> doSetCabinStatus(@RequestParam("json") String json) {
-		
+
 		Map<String, Object> map = new HashMap<>();
 		String detailId;
 		String status;
@@ -480,10 +486,10 @@ public class AppHttpInterface {
 	 * 
 	 * @param json
 	 * @return
-	 */	
+	 */
 	@RequestMapping(value = "/ship/doSetShipStatus")
 	public Map<?, ?> doSetShipStatus(@RequestParam("json") String json) {
-		
+
 		Map<String, Object> map = new HashMap<>();
 		String taskId;
 		String status;
@@ -520,10 +526,10 @@ public class AppHttpInterface {
 	 * 
 	 * @param json
 	 * @return
-	 */	
+	 */
 	@RequestMapping(value = "/ship/doAlterShipPosition")
 	public Map<?, ?> doAlterShipPosition(@RequestParam("json") String json) {
-		
+
 		Map<String, Object> map = new HashMap<>();
 		String userId;
 		JSONObject jsonObject = null;
@@ -551,8 +557,10 @@ public class AppHttpInterface {
 					if (object instanceof JSONObject) {
 						JSONObject jsonObj = (JSONObject) object;
 						Object detailId = jsonObj.getString("detailId");
-						Object startPosition = jsonObj.getString("startPosition") == null ? 0 : jsonObj.getString("startPosition");
-						Object endPosition = jsonObj.getString("endPosition") == null ? 0 : jsonObj.getString("endPosition");
+						Object startPosition = jsonObj.getString("startPosition") == null ? 0
+								: jsonObj.getString("startPosition");
+						Object endPosition = jsonObj.getString("endPosition") == null ? 0
+								: jsonObj.getString("endPosition");
 						taskDetail.setId(Integer.parseInt((String) detailId));
 						taskDetail.setStartPosition(Double.valueOf((String) startPosition));
 						taskDetail.setEndPosition(Double.valueOf((String) endPosition));

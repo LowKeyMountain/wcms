@@ -80,7 +80,7 @@ License: You must have a valid license purchased only from themeforest(the above
 			</div>
 			<div class="col-md-6 login-container bs-reset">
 				<div class="login-content">
-					<h1>京唐港|智能生产管理系统</h1>
+					<h1>京唐港  | 智能生产管理系统</h1>
 					<!-- <p>Lorem ipsum dolor sit amet, coectetuer adipiscing elit sed
 						diam nonummy et nibh euismod aliquam erat volutpat. Lorem ipsum
 						dolor sit amet, coectetuer adipiscing.</p> -->
@@ -208,9 +208,10 @@ License: You must have a valid license purchased only from themeforest(the above
 		var IncPath = '${IncPath}';
 	</script>
 	<!-- BEGIN PAGE LEVEL SCRIPTS -->
-	<script src="${IncPath}/cl.js"
+	<script src="${IncPath}/scripts/utils/md5.js?v=${jsVersion}" type="text/javascript"></script>
+	<script src="${IncPath}/cl.js?v=${jsVersion}"
 		type="text/javascript"></script>
-	<script src="${IncPath}/login.js"
+	<script src="${IncPath}/login.js?v=${jsVersion}"
 		type="text/javascript"></script>
 	<!-- END PAGE LEVEL SCRIPTS -->
 	<!-- BEGIN THEME LAYOUT SCRIPTS -->

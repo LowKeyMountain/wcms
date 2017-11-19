@@ -112,13 +112,13 @@ public interface IUserService {
 	Integer deleteUserById(Integer id, User operator);
 
 	/**
-	 * 用户赋予角色
+	 * 用户分配资源
 	 * 
 	 * @param id
 	 * @param selectedStr
 	 * @return
 	 */
-	String assignRole(Integer id, String selectedStr);
+	String assignResource(Integer id, String selectedStr);
 
 	/**
 	 * 根据查询条件，返回DataTables控件需要的Json数据格式

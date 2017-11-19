@@ -16,31 +16,27 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import net.itw.wcms.x27.entity.Role;
+import net.itw.wcms.x27.entity.Resource;
 import net.itw.wcms.x27.entity.User;
-import net.itw.wcms.x27.service.IRoleService;
-import net.itw.wcms.x27.service.IUserService;
+import net.itw.wcms.x27.service.IResourceService;
 import net.itw.wcms.x27.utils.ConstantUtil;
 import net.itw.wcms.x27.utils.PageUtils;
 import net.itw.wcms.x27.utils.SessionUtil;
-import net.itw.wcms.x27.utils.StringUtil;
 
 @RestController
-@RequestMapping(value = "/role")
-public class RoleController {
-	
+@RequestMapping(value = "/resource")
+public class ResourceController {
+
 	@Autowired
-	private IUserService userService;
-	@Autowired
-	private IRoleService roleService;
+	private IResourceService resourceService;
 
 	protected HttpServletRequest req;
 	protected HttpServletResponse res;
 	protected HttpSession session;
 	protected ModelMap modelMap;
 
-	private static final String PagePath = "./x27/role/";
-	
+	private static final String PATH = "./x27/resource/";
+
 	/**
 	 * 初始化全局资源
 	 * 
@@ -58,38 +54,35 @@ public class RoleController {
 		modelMap.put("BasePath", req.getContextPath());
 		modelMap.put("jsVersion", System.currentTimeMillis());
 	}
-
+	
 	/**
-	 * 跳转到角色管理页面
+	 * 跳转到资源管理页面
 	 * 
 	 * @return
 	 */
 	@RequestMapping(value = "/list")
 	public ModelAndView main() {
-		return new ModelAndView(PagePath + "list");
+		return new ModelAndView(PATH + "list");
 	}
 
 	@RequestMapping("/addform")
 	public ModelAndView addform() {
-		// List<Department> departments =
-		// departmentService.getDepartmentListForOption();
-//		modelMap.put("departments", new ArrayList<>());
-		return new ModelAndView(PagePath + "addform");
+		return new ModelAndView(PATH + "addform");
 	}
 
 	/**
-	 * 新增角色信息
+	 * 新增资源信息
 	 * 
-	 * @param role
+	 * @param resource
 	 * @return
 	 */
 	@RequestMapping(value = "/add")
-	public Map<String, Object> add(@ModelAttribute("role") Role role) {
+	public Map<String, Object> add(@ModelAttribute("resource") Resource resource) {
 		User operator = SessionUtil.getSessionUser(req);
 		int successInt = 1;
 		String msg = "数据保存成功！";
 		try {
-			successInt = roleService.createRole(role, operator);
+			successInt = resourceService.createResource(resource, operator);
 		} catch (Exception e) {
 			e.printStackTrace();
 			msg = e.getMessage();
@@ -101,51 +94,53 @@ public class RoleController {
 	}
 	
 	/**
-	 * 返回角色信息列表
+	 * 返回资源信息列表
 	 * @param params
 	 * @param map
 	 * @return
 	 */
-	@RequestMapping(value = "/getRoleDataTables", produces = "text/json;charset=UTF-8")
-	public String getRoleDataTables(@RequestParam Map<String, String> params, ModelMap map) {
+	@RequestMapping(value = "/getResourceDataTables", produces = "text/json;charset=UTF-8")
+	public String getResourceDataTables(@RequestParam Map<String, String> params, ModelMap map) {
 		Pageable pageable = PageUtils.buildPageRequest(params);
-		return roleService.getRoleDataTables(pageable, params);
+		return resourceService.getResourceDataTables(pageable, params);
 	}
 	
 	@RequestMapping("/updateform")
 	public ModelAndView updateform(Integer id) {
 		modelMap.put("id", id);
-		return new ModelAndView(PagePath + "/updateform");
+		Resource resource = resourceService.getResourceById(id);
+		modelMap.put("resource", resource);
+		return new ModelAndView(PATH + "/updateform");
 	}
 	
 	/**
-	 * 修改角色信息
+	 * 修改资源信息
 	 * 
-	 * @param role
+	 * @param resource
 	 * @return
 	 */
 	@RequestMapping(value = "/update")
-	public Map<String, Object> update(@ModelAttribute("role") Role role) {
+	public Map<String, Object> update(@ModelAttribute("resource") Resource resource) {
 		// 从session取出User对象
 		User operator = SessionUtil.getSessionUser(req);
 		int successInt = 1;
 		String msg = "数据修改成功！";
 		try {
-			successInt = roleService.updateRoleById(role, operator);
+			successInt = resourceService.updateResourceById(resource, operator);
 		} catch (Exception e) {
 			e.printStackTrace();
 			msg = e.getMessage();
 		}
 		Map<String, Object> map = new HashMap<>();
 		map.put("msg", msg);
-		map.put("id", role.getId());
+		map.put("id", resource.getId());
 		map.put(ConstantUtil.Success, successInt == 1 ? ConstantUtil.Success : ConstantUtil.Fail);
 		return map;
 	}
 
 	@RequestMapping(value = "/getUserDataRow", produces = "text/json;charset=UTF-8")
 	public String getUserDataRow(@RequestParam("id") Integer id) throws Exception {
-		return userService.getUserDataRow(id);
+		return resourceService.getResourceDataRow(id);
 	}
 
 	@RequestMapping("/delete")
@@ -153,74 +148,9 @@ public class RoleController {
 		// 从session取出User对象
 		User operator = SessionUtil.getSessionUser(req);
 
-		User user = new User();
-		user.setId(id);
-		user.setIsDelete(true);
-
-		userService.updateIsDeleteById(user, operator);
+		resourceService.deleteById(id);
 
 		return ConstantUtil.Success;
 	}
 
-	@RequestMapping("/resetpass")
-	public String resetpass(@RequestParam("id") Integer id) {
-
-		// 从session取出User对象
-		User operator = SessionUtil.getSessionUser(req);
-
-		User user = new User();
-		user.setId(id);
-		user.setPassword(ConstantUtil.DefaultMd5Password);
-
-		userService.updatePasswordById(user, operator);
-
-		return ConstantUtil.Success;
-	}
-
-	@RequestMapping("/lock")
-	public String lock(@RequestParam("id") Integer id) {
-
-		// 从session取出User对象
-		User operator = SessionUtil.getSessionUser(req);
-
-		User user = new User();
-		user.setId(id);
-		user.setIsLock(true);
-
-		userService.updateIsLockById(user, operator);
-
-		return ConstantUtil.Success;
-	}
-
-	@RequestMapping("/unlock")
-	public String unlock(@RequestParam("id") Integer id) {
-
-		// 从session取出User对象
-		User operator = SessionUtil.getSessionUser(req);
-
-		User user = new User();
-		user.setId(id);
-		user.setIsLock(false);
-
-		userService.updateIsLockById(user, operator);
-
-		return ConstantUtil.Success;
-	}
-
-	@RequestMapping("/assignform")
-	public String assignform(Integer id, ModelMap map) {
-		map.put("options", roleService.getRoleForOptions(id));
-		map.put("id", id);
-		return PagePath + "/assignform.ftl";
-	}
-
-	@RequestMapping("/assign")
-	public String assign(Integer id, String selectedStr) {
-		if (id == null || StringUtil.isStrEmpty(id.toString()) || StringUtil.isStrEmpty(selectedStr)) {
-			return ConstantUtil.Fail;
-		}
-		userService.assignResource(id, selectedStr);
-		return ConstantUtil.Success;
-	}
-	
 }
