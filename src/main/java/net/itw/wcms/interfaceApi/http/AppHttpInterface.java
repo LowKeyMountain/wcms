@@ -20,6 +20,7 @@ import net.itw.wcms.ship.entity.Task;
 import net.itw.wcms.ship.entity.TaskDetail;
 import net.itw.wcms.ship.service.TaskDetailService;
 import net.itw.wcms.ship.service.TaskService;
+import net.itw.wcms.toolkit.DateTimeUtils;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
 import net.itw.wcms.x27.service.IUserService;
@@ -39,6 +40,7 @@ public class AppHttpInterface {
 	private TaskService taskService;
 	@Autowired
 	private TaskDetailService taskDetailService;
+	
 	/**
 	 * 登录验证
 	 * 
@@ -161,7 +163,7 @@ public class AppHttpInterface {
 			map.put("code", "0");
 		} else {
 			List<Task> taskList = taskService.getTaskByStatus(status);
-			if (taskList != null) {
+			if (taskList.size() > 0) {
 		        JSONArray  jsonArray = new JSONArray();
 		        for(Task task: taskList){
 	                JSONObject jo = new JSONObject();
@@ -214,15 +216,15 @@ public class AppHttpInterface {
 				data.put("shipName", task.getShip().getShipName());
 				data.put("shipEname", task.getShip().getShipEnName() == null ? "" : task.getShip().getShipEnName());
 				data.put("imoNo", task.getShip().getImoNo() == null ? "" :task.getShip().getImoNo());
-				data.put("buildDate", task.getShip().getBuildDate() == null ? "" : task.getShip().getBuildDate());
+				data.put("buildDate", task.getShip().getBuildDate() == null ? "" : DateTimeUtils.date2StrDate(task.getShip().getBuildDate()));
 				data.put("length", task.getShip().getLength() == null ? "" : task.getShip().getLength());
 				data.put("width", task.getShip().getBreadth() == null ? "" : task.getShip().getBreadth());
 				data.put("depth", task.getShip().getMouldedDepth() == null ? "" : task.getShip().getMouldedDepth());
 				data.put("cabinNum", task.getShip().getCabinNum() == null ? "" : task.getShip().getCabinNum());
-				data.put("berthingTime", task.getBerthingTime() == null ? "" : task.getBerthingTime());
-				data.put("departureTime", task.getDepartureTime() == null ? "" : task.getDepartureTime());
-				data.put("beginTime", task.getBeginTime() == null ? "" : task.getBeginTime());
-				data.put("endTime", task.getEndTime() == null ? "" : task.getEndTime());
+				data.put("berthingTime", task.getBerthingTime() == null ? "" : DateTimeUtils.date2StrDateTime(task.getBerthingTime()));
+				data.put("departureTime", task.getDepartureTime() == null ? "" : DateTimeUtils.date2StrDateTime(task.getDepartureTime()));
+				data.put("beginTime", task.getBeginTime() == null ? "" : DateTimeUtils.date2StrDateTime(task.getBeginTime()));
+				data.put("endTime", task.getEndTime() == null ? "" : DateTimeUtils.date2StrDateTime(task.getEndTime()));
 				map.put("msg", "查询成功!");
 				map.put("code", "1");
 				map.put("data", data);
@@ -296,7 +298,6 @@ public class AppHttpInterface {
 	@RequestMapping(value = "/ship/doGetShipPosition")
 	public Map<?, ?> doGetShipPosition(@RequestParam("json") String json) {
 		
-		new JSONObject();
 		Map<String, Object> map = new HashMap<>();
 		String taskId;
 		try {
@@ -370,9 +371,9 @@ public class AppHttpInterface {
 				data.put("remainder",taskDetail.getRemainder() == null ? "" : taskDetail.getRemainder());
 				data.put("clearance",taskDetail.getClearance() == null ? "" : taskDetail.getClearance());
 				data.put("status",taskDetail.getStatus()== null ? "" : taskDetail.getStatus());
-				data.put("startTime",taskDetail.getStartTime()== null ? "" : taskDetail.getStartTime());
-				data.put("endTime",taskDetail.getEndTime()== null ? "" : taskDetail.getEndTime());
-				data.put("uesdTime",taskDetail.getUsedTime() == null ? "" : taskDetail.getUsedTime());
+				data.put("startTime",taskDetail.getStartTime()== null ? "" : DateTimeUtils.date2StrDateTime(taskDetail.getStartTime()));
+				data.put("endTime",taskDetail.getEndTime()== null ? "" : DateTimeUtils.date2StrDateTime(taskDetail.getEndTime()));
+				data.put("usedTime",taskDetail.getUsedTime() == null ? "" : taskDetail.getUsedTime());
 				data.put("unloadingTonnage",taskDetail.getActualUnloading() == null ? "" : taskDetail.getActualUnloading());
 				data.put("efficiency",taskDetail.getEfficiency() == null ? "" : taskDetail.getEfficiency());
 				map.put("msg", "查询成功!");
@@ -549,9 +550,9 @@ public class AppHttpInterface {
 					TaskDetail taskDetail = new TaskDetail();
 					if (object instanceof JSONObject) {
 						JSONObject jsonObj = (JSONObject) object;
-						Object detailId = jsonObj.get("detailId");
-						Object startPosition = jsonObj.get("startPosition") == null ? 0 : jsonObj.get("startPosition");
-						Object endPosition = jsonObj.get("endPosition") == null ? 0 : jsonObj.get("endPosition");
+						Object detailId = jsonObj.getString("detailId");
+						Object startPosition = jsonObj.getString("startPosition") == null ? 0 : jsonObj.getString("startPosition");
+						Object endPosition = jsonObj.getString("endPosition") == null ? 0 : jsonObj.getString("endPosition");
 						taskDetail.setId(Integer.parseInt((String) detailId));
 						taskDetail.setStartPosition(Double.valueOf((String) startPosition));
 						taskDetail.setEndPosition(Double.valueOf((String) endPosition));

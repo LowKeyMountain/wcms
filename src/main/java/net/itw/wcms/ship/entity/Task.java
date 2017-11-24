@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import net.itw.wcms.toolkit.hibernate.Entityable;
 
@@ -75,7 +77,7 @@ public class Task implements Entityable {
 		this.load = load;
 	}
 
-	@Column(name = "carto_type")	
+	@Column(name = "cargo_type")	
 	public String getCargoType() {
 		return cargoType;
 	}
@@ -130,6 +132,7 @@ public class Task implements Entityable {
 	}
 	
 	@Column(name = "end_time")
+	@Temporal(TemporalType.TIMESTAMP)	
 	public Date getEndTime() {
 		return endTime;
 	}
@@ -139,6 +142,7 @@ public class Task implements Entityable {
 	}
 
 	@Column(name = "berthing_time")
+	@Temporal(TemporalType.TIMESTAMP)	
 	public Date getBerthingTime() {
 		return berthingTime;
 	}
@@ -148,6 +152,7 @@ public class Task implements Entityable {
 	}
 
 	@Column(name = "departure_time")
+	@Temporal(TemporalType.TIMESTAMP)
 	public Date getDepartureTime() {
 		return departureTime;
 	}
@@ -165,7 +170,8 @@ public class Task implements Entityable {
 		this.updateUser = updateUser;
 	}
 
-	@Column(name = "update_time")		
+	@Column(name = "update_time")
+	@Temporal(TemporalType.TIMESTAMP)	
 	public Date getUpdateTime() {
 		return updateTime;
 	}
@@ -184,7 +190,6 @@ public class Task implements Entityable {
 	}
 
 	@OneToMany(mappedBy="task", cascade=CascadeType.ALL)
-//	@JoinColumn(name="task_id")
 	public Set<TaskDetail> getTaskDetail() {
 		return taskDetail;
 	}

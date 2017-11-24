@@ -37,7 +37,7 @@ import net.itw.wcms.x27.utils.StringUtil;
 import net.itw.wcms.x27.utils.WebUtil;
 
 @RestController
-@RequestMapping(value = "/task")
+@RequestMapping(value = "/detail")
 public class TaskDetailController {
 
 	@Autowired

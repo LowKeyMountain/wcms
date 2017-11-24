@@ -23,13 +23,11 @@ public class TaskDetailServiceImpl implements TaskDetailService {
 
 	@Override
 	public TaskDetail getTaskDetailById(Integer detailId) {
-		// TODO Auto-generated method stub
 		return taskDetailRepository.getTaskDetailById(detailId);
 	}
 
 	@Override
 	public List<TaskDetail> getTaskDetailByTaskId(Integer taskId) {
-		// TODO Auto-generated method stub
 		return taskDetailRepository.getTaskDetailByTaskId(taskId);
 	}
 	
@@ -37,7 +35,6 @@ public class TaskDetailServiceImpl implements TaskDetailService {
 	public Integer updateCabinStatusByid(Integer detailId, String userId, String status) {
 		String dateStr=DateTimeUtils.now2StrDateTime();
 		Date date = DateTimeUtils.strDateTime2Date(dateStr);
-		// TODO Auto-generated method stub
 		taskDetailRepository.updateStatusById(detailId, status, date, userId);
 		return ConstantUtil.SuccessInt;
 	}
