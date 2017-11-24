@@ -54,7 +54,7 @@
                     </a>
                     <ul class="sub-menu">
                         <li class="nav-item  ">
-                            <a href="${IncPath}/ship/shiplist" class="nav-link ">
+                            <a href="${IncPath}/task/tasklist" class="nav-link ">
                             	<i class="leaf"></i>
                                 <span class="title">船舶管理</span>
                             </a>
