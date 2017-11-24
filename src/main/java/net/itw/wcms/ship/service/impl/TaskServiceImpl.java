@@ -61,24 +61,26 @@ public class TaskServiceImpl implements TaskService {
 	public String getTaskList(Task task, Pageable pageable, String status) {
 
 		Page<Task> page = findAllByStatus(pageable, status);
-		Map<String, Object> map = new HashMap<>();
+		JSONObject jo=null;
 		if (page == null || page.getTotalPages() == 0) {
 			return "{\"total\":0,\"rows\":[],}";
 		}
-
 		int total = page.getTotalPages();
 		JSONArray jsonArray = new JSONArray();
 		for (Task t : page) {
-			JSONObject jo = new JSONObject();
-			jo.put("id", task.getId());
-			jo.put("shipName", "");
-			jo.put("updateUser", task.getUpdateUser());
-			jo.put("updateTime", task.getUpdateTime());
+			jo = new JSONObject();
+			jo.put("id", t.getId());
+			jo.put("shipName", t.getShip().getShipName());
+			jo.put("berthingTime", t.getBerthingTime() == null ? "" : DateTimeUtils.date2StrDateTime(t.getBerthingTime()));
+			jo.put("beginTime", t.getBeginTime() == null ? "" : DateTimeUtils.date2StrDateTime(t.getBeginTime()));
+			jo.put("updateUser", t.getUpdateUser());
+			jo.put("updateTime", t.getUpdateTime() == null ? "" : DateTimeUtils.date2StrDateTime(t.getUpdateTime()));
 			jsonArray.add(jo);
 		}
-		map.put("total", total);
-		map.put("rows", JSONObject.toJSON(jsonArray));
-		return map.toString();
+		JSONObject jsonObject=new JSONObject();
+		jsonObject.put("total", total);
+		jsonObject.put("rows", jsonArray);
+		return jsonObject.toString();
 	}
 
 	private void addDataRow(StringBuilder sb, Task task) {

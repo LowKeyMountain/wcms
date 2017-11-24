@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 
 import net.itw.wcms.ship.entity.Ship;
 import net.itw.wcms.ship.entity.Task;
+import net.itw.wcms.x27.entity.User;
 
 /**
  * Description: 船舶作业表相关操作
@@ -13,14 +14,14 @@ import net.itw.wcms.ship.entity.Task;
  *
  */
 public interface TaskService {
-
+	
 	/**
 	 * 根据船舶状态，返回船舶Json数据格式
 	 * 
 	 * @param pageable
 	 * @return
 	 */
-	String doGetShipList(Ship ship, Pageable pageable, String status);
+	String getTaskList(Task task, Pageable pageable, String status);
 
 	/**
 	 * 根据船舶状态，返回船舶列表
@@ -47,4 +48,12 @@ public interface TaskService {
 	
 	Integer updateShipStatusByid(Integer taskId, String userId,  String status);
 	
+	/**
+	 * 新增船舶作业
+	 * 
+	 * @param task
+	 * @param operator
+	 * @return
+	 */
+	Integer createTask(Task task, User operator);
 }
