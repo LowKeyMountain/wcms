@@ -1,5 +1,6 @@
 package net.itw.wcms.x27.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,7 @@ import net.itw.wcms.x27.entity.Role;
 import net.itw.wcms.x27.entity.User;
 import net.itw.wcms.x27.repository.ResourceRepository;
 import net.itw.wcms.x27.service.IResourceService;
+import net.itw.wcms.x27.service.IUserService;
 import net.itw.wcms.x27.utils.ConstantUtil;
 import net.itw.wcms.x27.utils.StringUtil;
 
@@ -25,12 +27,28 @@ import net.itw.wcms.x27.utils.StringUtil;
 public class ResourceServiceImpl implements IResourceService {
 
 	@Autowired
+	private IUserService userService;
+	@Autowired
 	private ResourceRepository resourceRepository;
 
 	public List<Resource> getResourceListByUserId(Integer userId) {
 		return resourceRepository.getResourceListByUserId(userId);
 	}
-
+	
+	public List<String> getResourcesByUserName(String userName) {
+		User user = userService.getUserByUserName(userName);
+		List<String> ids = new ArrayList<>();
+		if (user != null) {
+			List<Resource> list = this.getResourceListByUserId(user.getId());
+			if (list != null) {
+				for (Resource resource : list) {
+					ids.add(resource.getId()+"");
+				}
+			}
+		}
+		return ids;
+	}
+	
 	public List<Resource> getResourceList() {
 		return resourceRepository.findAll();
 	}

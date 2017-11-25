@@ -1,7 +1,6 @@
 package net.itw.wcms.interfaceApi.http;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -23,6 +22,7 @@ import net.itw.wcms.ship.service.TaskService;
 import net.itw.wcms.toolkit.DateTimeUtils;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
+import net.itw.wcms.x27.service.IResourceService;
 import net.itw.wcms.x27.service.IUserService;
 import net.itw.wcms.x27.utils.ConstantUtil;
 
@@ -37,6 +37,8 @@ public class AppHttpInterface {
 
 	@Autowired
 	private IUserService userService;
+	@Autowired
+	private IResourceService resourceService;
 	@Autowired
 	private TaskService taskService;
 	@Autowired
@@ -125,12 +127,7 @@ public class AppHttpInterface {
 			return map;
 		}
 
-		List<String> list = new ArrayList<>();
-		if (StringUtils.equalsIgnoreCase("admin", userName)) {
-			list = Arrays.asList("12,56,78,21,7".split(","));
-		} else if (StringUtils.equalsIgnoreCase("zhangsan", userName)) {
-			list = Arrays.asList("12,56,78,21".split(","));
-		}
+		List<String> list = resourceService.getResourcesByUserName(userName);
 
 		map.put("msg", msg);
 		map.put("data", list);

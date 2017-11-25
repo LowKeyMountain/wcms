@@ -46,6 +46,13 @@ public interface IResourceService {
 	 * @return
 	 */
 	List<Resource> getResourceListByUserId(Integer userId);
+	
+	/**
+	 * 根据userName获取权限ID列表
+	 * @param userName
+	 * @return
+	 */
+	List<String> getResourcesByUserName(String userName);
 
 	/**
 	 * 获取资源列表
