@@ -60,6 +60,12 @@
                             </a>
                         </li>
                         <li class="nav-item  ">
+                            <a href="${IncPath}/task/addform" class="nav-link ">
+                            	<i class="leaf"></i>
+                                <span class="title">新增船舶</span>
+                            </a>
+                        </li>
+                        <li class="nav-item  ">
                             <a href="#" class="nav-link ">
                                 <span class="title">船舱管理</span>
                             </a>

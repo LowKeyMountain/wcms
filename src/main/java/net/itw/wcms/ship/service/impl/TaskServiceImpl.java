@@ -1,5 +1,7 @@
 package net.itw.wcms.ship.service.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -16,10 +18,10 @@ import com.alibaba.fastjson.JSONObject;
 
 import net.itw.wcms.ship.entity.Ship;
 import net.itw.wcms.ship.entity.Task;
-import net.itw.wcms.ship.entity.TaskDetail;
 import net.itw.wcms.ship.repository.TaskRepository;
 import net.itw.wcms.ship.service.TaskService;
 import net.itw.wcms.toolkit.DateTimeUtils;
+import net.itw.wcms.x27.entity.Resource;
 import net.itw.wcms.x27.entity.User;
 import net.itw.wcms.x27.utils.ConstantUtil;
 
@@ -35,28 +37,6 @@ public class TaskServiceImpl implements TaskService {
 		return taskRepository.findAllByStatus(pageable, status);
 	}
 
-/*	@Override
-	public String getTaskList(Task task, Pageable pageable, String status) {
-
-		Page<Task> page = findAllByStatus(pageable, status);
-		if (page == null || page.getTotalPages() == 0) {
-			return "{\"total\":0,\"rows\":0,\"aaData\":[]}";
-		}
-
-		int total = page.getTotalPages();
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append(String.format("{\"total\":%d,\"rows\":[", total, total));
-		int i = 0;
-		for (Task sp : page) {
-			if (i != 0)
-				sb.append(",");
-			addDataRow(sb, sp);
-			i++;
-		}
-		sb.append("]}");
-		return sb.toString();
-	}*/
 	@Override
 	public String getTaskList(Task task, Pageable pageable, String status) {
 
@@ -82,17 +62,31 @@ public class TaskServiceImpl implements TaskService {
 		jsonObject.put("rows", jsonArray);
 		return jsonObject.toString();
 	}
-
-	private void addDataRow(StringBuilder sb, Task task) {
-		sb.append("{\"id\":");
-		sb.append(task.getId()).append(",\"shipName\":\"").append(task.getShip().getShipName()).append("\"")
-				.append(",\"updateUser\":\"").append(task.getUpdateUser()).append("\"").append(",\"updateTime\":\"")
-				.append(task.getUpdateTime()).append("\"");
-		// .append(",operation:\"").append("&nbsp;&nbsp;")
-		// .append("\"");
-		sb.append("}");
+	
+	public Page<Task> findAll(Pageable pageable, Map<String , String > params)
+	{
+		return taskRepository.findAll(pageable, params);
 	}
-    
+	
+	@Override
+	public Map<String, ?> getTaskList(Pageable pageable, Map<String, String> params) {
+		Map<String, Object> map = new HashMap<>();
+		Page<Task> page = findAll( pageable, params);
+		if (page == null || page.getTotalPages() == 0) {
+			map.put("total", 0);
+			map.put("rows", new ArrayList<String>());
+			return map;
+		}
+		int total = page.getTotalPages();
+		List<Task> list = new ArrayList<>();
+		for (Task t : page) {
+			list.add(t);
+		}
+		map.put("total", total);
+		map.put("rows", list);
+		return map;
+	}
+	
 	@Override
 	public List<Task> getTaskByStatus(String status) {
 		return taskRepository.getTaskByStatus(status);
@@ -107,15 +101,13 @@ public class TaskServiceImpl implements TaskService {
 	public Integer updateShipStatusByid(Integer taskId, String userId, String status) {
 		String dateStr = DateTimeUtils.now2StrDateTime();
 		Date date = DateTimeUtils.strDateTime2Date(dateStr);
-		// TODO Auto-generated method stub
 		taskRepository.updateStatusById(taskId, status, date, userId);
 		return ConstantUtil.SuccessInt;
 	}
 
 	@Override
 	public Integer createTask(Task task, User operator) {
-		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
 }

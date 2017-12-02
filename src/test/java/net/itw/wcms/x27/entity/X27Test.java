@@ -55,7 +55,7 @@ public class X27Test {
 		user.setCreateDate(new Date());
 		user.setRealName("三傻");
 
-		user.getOrgs().add(org);
+//		user.getOrgs().add(org);
 		
 		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();

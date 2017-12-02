@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import net.itw.wcms.x27.entity.Resource;
 import net.itw.wcms.x27.entity.Role;
 import net.itw.wcms.x27.entity.User;
+import net.itw.wcms.x27.exception.X27Exception;
 import net.itw.wcms.x27.repository.ResourceRepository;
 import net.itw.wcms.x27.service.IResourceService;
 import net.itw.wcms.x27.service.IUserService;
@@ -184,7 +185,11 @@ public class ResourceServiceImpl implements IResourceService {
 	}
 	
 	@Override
-	public void deleteById(Integer id) {
-		resourceRepository.delete(id);
+	public void deleteById(Integer id) throws Exception{
+		Resource resource = this.resourceRepository.getResourceById(id);
+		if (!resource.getUsers().isEmpty()) {
+			throw new X27Exception("被用户使用的资源不允许删除！");
+		}
+		resourceRepository.delete(resource);
 	}
 }

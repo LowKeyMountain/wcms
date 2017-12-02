@@ -13,7 +13,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import net.itw.wcms.ship.entity.Ship;
-import net.itw.wcms.ship.entity.TaskDetail;
 
 public interface ShipRepository extends JpaRepository<Ship, Integer>, JpaSpecificationExecutor<Ship>, PagingAndSortingRepository<Ship, Integer> {
 

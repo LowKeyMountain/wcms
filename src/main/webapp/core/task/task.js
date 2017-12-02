@@ -237,4 +237,8 @@ $(function(){
 		function tableHeight() {
 		    return $(window).height() - 140;
 		}
+		
+		function add_click(){
+			window.location.href = BasePath + "/task/addform"
+		}
 })

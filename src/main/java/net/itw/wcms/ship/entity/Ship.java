@@ -7,14 +7,10 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import net.itw.wcms.toolkit.hibernate.Entityable;
 
@@ -25,39 +21,28 @@ import net.itw.wcms.toolkit.hibernate.Entityable;
  *
  */
 @Entity
-@Table(name = "wcms_ship")
+@Table(name = "tab_ship")
 public class Ship implements Entityable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Integer id;
-	private String shipName;
-	private String shipEnName;
-	private String imoNo;
-	private Date buildDate;
-	private String length;
-	private String breadth;
-	private String mouldedDepth;
-	private String cabinNum;
-	private String hatch;
-//	private Double load;
-	private String specialCabinType;
-//	private String status;
-	
-//	private Boolean wireCable;
-//	private Integer wireNum;
-//	private String beginTime;
-//	private String endTime;
-//	private String berthingTime;
-//	private String departureTime;
+	private Integer id; // 编号
+	private String shipName; // 船名
+	private String shipEnName; // 船英文名
+	private String imoNo; // IMO 编号
+	private Date buildDate; // 建造时间
+	private Float length; // 船长（单位：米）
+	private Float breadth; // 船宽 （单位：米）
+	private Integer cabinNum; // 船舱数据
+
 	private String createUser;
 	private Date createTime;
 	private String updateUser;
 	private Date updateTime;
 	private String remarks;
 
-	private Set<Task> task = new HashSet<>();
-	
+	private Set<Task> tasks = new HashSet<>();
+
 	@GeneratedValue
 	@Id
 	public Integer getId() {
@@ -67,7 +52,7 @@ public class Ship implements Entityable {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	
+
 	@Column(name = "ship_cname")
 	public String getShipName() {
 		return shipName;
@@ -103,134 +88,35 @@ public class Ship implements Entityable {
 	public void setBuildDate(Date buildDate) {
 		this.buildDate = buildDate;
 	}
-	
+
 	@Column(name = "length")
-	public String getLength() {
+	public Float getLength() {
 		return length;
 	}
 
-	public void setLength(String length) {
+	public void setLength(Float length) {
 		this.length = length;
 	}
-	
+
 	@Column(name = "breadth")
-	public String getBreadth() {
+	public Float getBreadth() {
 		return breadth;
 	}
 
-	public void setBreadth(String breadth) {
+	public void setBreadth(Float breadth) {
 		this.breadth = breadth;
 	}
 
-	@Column(name = "moulded_depth")
-	public String getMouldedDepth() {
-		return mouldedDepth;
-	}
-
-	public void setMouldedDepth(String mouldedDepth) {
-		this.mouldedDepth = mouldedDepth;
-	}
-	
 	@Column(name = "cabin_num")
-	public String getCabinNum() {
+	public Integer getCabinNum() {
 		return cabinNum;
 	}
 
-	public void setCabinNum(String cabinNum) {
+	public void setCabinNum(Integer cabinNum) {
 		this.cabinNum = cabinNum;
 	}
 
-	@Column(name = "hatch")
-	public String getHatch() {
-		return hatch;
-	}
-
-	public void setHatch(String hatch) {
-		this.hatch = hatch;
-	}
-
-/*	@Column(name = "load")	
-	public Double getLoad() {
-		return load;
-	}
-
-	public void setLoad(Double load) {
-		this.load = load;
-	}
-	
-	@Column(name = "status")	
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	@Column(name = "wirecable")
-	public Boolean getWireCable() {
-		return wireCable;
-	}
-
-	public void setWireCable(Boolean wireCable) {
-		this.wireCable = wireCable;
-	}
-
-	@Column(name = "wire_num")
-	public Integer getWireNum() {
-		return wireNum;
-	}
-
-	public void setWireNum(Integer wireNum) {
-		this.wireNum = wireNum;
-	}*/
-
-	@Column(name = "special_cabintype")
-	public String getSpecialCabinType() {
-		return specialCabinType;
-	}
-
-	public void setSpecialCabinType(String specialCabinType) {
-		this.specialCabinType = specialCabinType;
-	}
-	
-/*	@Column(name = "begin_time")
-	public String getBeginTime() {
-		return beginTime;
-	}
-
-	public void setBeginTime(String beginTime) {
-		this.beginTime = beginTime;
-	}
-	
-	@Column(name = "end_time")
-	public String getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(String endTime) {
-		this.endTime = endTime;
-	}
-
-	@Column(name = "berthing_time")
-	public String getBerthingTime() {
-		return berthingTime;
-	}
-
-	public void setBerthingTime(String berthingTime) {
-		this.berthingTime = berthingTime;
-	}
-
-	@Column(name = "departure_time")
-	public String getDepartureTime() {
-		return departureTime;
-	}
-
-	public void setDepartureTime(String departureTime) {
-		this.departureTime = departureTime;
-	}
-*/
-	@Column(name = "create_user")	
+	@Column(name = "create_user")
 	public String getCreateUser() {
 		return createUser;
 	}
@@ -240,7 +126,7 @@ public class Ship implements Entityable {
 	}
 
 	@Column(name = "create_time")
-//    @Temporal(TemporalType.TIMESTAMP)
+	// @Temporal(TemporalType.TIMESTAMP)
 	public Date getCreateTime() {
 		return createTime;
 	}
@@ -248,7 +134,7 @@ public class Ship implements Entityable {
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
-	
+
 	@Column(name = "update_user")
 	public String getUpdateUser() {
 		return updateUser;
@@ -259,7 +145,7 @@ public class Ship implements Entityable {
 	}
 
 	@Column(name = "update_time")
-//    @Temporal(TemporalType.TIMESTAMP)
+	// @Temporal(TemporalType.TIMESTAMP)
 	public Date getUpdateTime() {
 		return updateTime;
 	}
@@ -276,15 +162,14 @@ public class Ship implements Entityable {
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
 	}
-
-	@OneToMany(mappedBy="ship",cascade=(CascadeType.ALL))
-	public Set<Task> getTask() {
-		return task;
+	
+	@OneToMany(mappedBy = "ship", cascade = (CascadeType.ALL))
+	public Set<Task> getTasks() {
+		return tasks;
 	}
 
-	public void setTask(Set<Task> task) {
-		this.task = task;
+	public void setTasks(Set<Task> tasks) {
+		this.tasks = tasks;
 	}
 
 }
-

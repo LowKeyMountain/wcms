@@ -144,13 +144,20 @@ public class ResourceController {
 	}
 
 	@RequestMapping("/delete")
-	public String delete(@RequestParam("id") Integer id) {
-		// 从session取出User对象
-		User operator = SessionUtil.getSessionUser(req);
-
-		resourceService.deleteById(id);
-
-		return ConstantUtil.Success;
+	public Map<String, ?> delete(@RequestParam("id") Integer id) {
+		String msg = "删除成功";
+		Integer code = ConstantUtil.SuccessInt;
+		try {
+			resourceService.deleteById(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+			msg = e.getMessage();
+			code = ConstantUtil.FailInt;
+		}
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("code", code);
+		map.put("msg", msg);
+		return map;
 	}
 
 }

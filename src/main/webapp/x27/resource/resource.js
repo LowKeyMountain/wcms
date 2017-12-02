@@ -339,12 +339,13 @@ var Resource = function(){
 			};
 			Cl.ajaxRequest(url,data,function(result){
 				if(!result) return ;		
-				result = result.replace(/(^\s*)|(\s*$)/g,'');
-				if(result == "success"){
+//				result = result.replace(/(^\s*)|(\s*$)/g,'');
+				var code = result.code;
+				if(code == 1){
 					Cl.refreshDataTable(DataTableCl.tableName);
 					alert("删除成功");
 				} else {
-					alert("被用户使用的资源不允许删除");
+					alert(result.msg);
 					return ;			
 				}
 			});

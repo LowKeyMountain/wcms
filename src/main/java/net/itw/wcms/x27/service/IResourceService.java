@@ -80,6 +80,6 @@ public interface IResourceService {
 
 	String getResourceDataRow(Integer id);
 
-	void deleteById(Integer id);
+	void deleteById(Integer id)  throws Exception;
 	
 }

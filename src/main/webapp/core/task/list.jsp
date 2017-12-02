@@ -59,7 +59,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <body
 	class="page-header-fixed page-sidebar-closed-hide-logo page-content-white">
 
-	<jsp:include page="../header.jsp" />
+	<jsp:include page="./../../header.jsp" />
 
 	<!-- BEGIN HEADER & CONTENT DIVIDER -->
 	<div class="clearfix"></div>
@@ -67,7 +67,7 @@ License: You must have a valid license purchased only from themeforest(the above
 	<!-- BEGIN CONTAINER -->
 	<div class="page-container">
 
-		<jsp:include page="../sidebar.jsp" />
+		<jsp:include page="./../../sidebar.jsp" />
 
 		<!-- BEGIN CONTENT -->
 		<div class="page-content-wrapper">
@@ -77,12 +77,12 @@ License: You must have a valid license purchased only from themeforest(the above
 				<div class="row">
 					<div class="col-md-12">
 						<!-- BEGIN PAGE TITLE & BREADCRUMB-->
-						<h3 class="page-title">船舶管理</h3>
+						<!-- <h3 class="page-title">船舶管理</h3> -->
 						<ul class="page-breadcrumb breadcrumb">
 							<li><i class="fa fa-home"></i> <a
 								href="${BasePath}/web/main"> 主页 </a> <i
 								class="fa fa-angle-right"></i></li>
-							<li>配置中心 <i class="fa fa-angle-right"></i>
+							<li>工作中心 <i class="fa fa-angle-right"></i>
 							</li>
 							<li>船舶管理</li>
 						</ul>
@@ -112,14 +112,16 @@ License: You must have a valid license purchased only from themeforest(the above
 							<div class="portlet-body">
 								<div class="table-toolbar">
 									<div class="row">
+										
 										<div class="col-md-6">
 											<div class="btn-group">
 												<button id="sample_editable_1_new" class="btn sbold green"
-													onclick="javascript:User.add_click();">
+													onclick="javascript:;">
 													新增 <i class="fa fa-plus"></i>
 												</button>
 											</div>
 										</div>
+										<!-- 
 										<div class="col-md-6">
 											<div class="btn-group pull-right">
 												<button class="btn green  btn-outline dropdown-toggle"
@@ -139,6 +141,7 @@ License: You must have a valid license purchased only from themeforest(the above
 												</ul>
 											</div>
 										</div>
+										 -->
 									</div>
 						                <div class="col-md-12 col-sm-6">
 						                    <div class="panel panel-default">
@@ -150,7 +153,6 @@ License: You must have a valid license purchased only from themeforest(the above
 						                                </li>
 						                                <li class=""><a href="#lgcb" data-toggle="tab">离港船舶</a>
 						                            </ul>
-						
 						                            <div class="tab-content">
 						                                <div class="tab-pane fade" id="ykcb">
 															<table id="ykcbship" class="table table-striped table-bordered table-hover table-checkable order-column"></table>
@@ -179,7 +181,7 @@ License: You must have a valid license purchased only from themeforest(the above
 		</div>
 	</div>
 	<!-- END CONTAINER -->
-	<jsp:include page="../footer.jsp" />
+	<jsp:include page="./../../footer.jsp" />
 	<!--[if lt IE 9]>
 <script src="${IncPath}/assets/global/plugins/respond.min.js"></script>
 <script src="${IncPath}/assets/global/plugins/excanvas.min.js"></script> 
@@ -223,10 +225,8 @@ License: You must have a valid license purchased only from themeforest(the above
 			var IncPath = '${IncPath}';
 			var BasePath = '${BasePath}';
 		</script>
-		<script src="${IncPath}/cl.js?v=111"
-			type="text/javascript"></script>
-		<script src="${IncPath}/task/task.js?v=112"
-			type="text/javascript"></script>
+		<script src="${IncPath}/cl.js?v=${jsVersion}" type="text/javascript"></script>
+		<script src="${IncPath}/task/task.js?v=${jsVersion}" type="text/javascript"></script>
 		<!-- BEGIN THEME LAYOUT SCRIPTS -->
         <!-- END THEME LAYOUT SCRIPTS -->
 
