@@ -98,7 +98,7 @@ public class TaskUnloadShipDetail implements Entityable {
 	}
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = (CascadeType.ALL))
-	@JoinColumn(name = "ship_id")
+	@JoinColumn(name = "berth_id")
 	public TaskBerth getTaskBerth() {
 		return taskBerth;
 	}

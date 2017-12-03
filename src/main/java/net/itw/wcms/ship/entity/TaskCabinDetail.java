@@ -31,6 +31,11 @@ public class TaskCabinDetail implements Entityable {
 	private String cargoType; // 货物种类
 	private Double preunloading; // 装载量（单位：吨）
 	private Boolean isFinish; // 是否清舱（即，是否完成）
+	
+	private String loadingPort;// 装货港
+	private String moisture;// 水分
+	private String quality;// 品质
+	private Double stowage;// 配载吨位（单位：吨）
 
 	private String updateUser;
 	private Date updateTime;
@@ -118,6 +123,42 @@ public class TaskCabinDetail implements Entityable {
 
 	public void setIsFinish(Boolean isFinish) {
 		this.isFinish = isFinish;
+	}
+	
+	@Column(name="loading_port")
+	public String getLoadingPort() {
+		return loadingPort;
+	}
+
+	public void setLoadingPort(String loadingPort) {
+		this.loadingPort = loadingPort;
+	}
+	
+	@Column(name="moisture")
+	public String getMoisture() {
+		return moisture;
+	}
+
+	public void setMoisture(String moisture) {
+		this.moisture = moisture;
+	}
+	
+	@Column(name="quality")
+	public String getQuality() {
+		return quality;
+	}
+
+	public void setQuality(String quality) {
+		this.quality = quality;
+	}
+
+	@Column(name="stowage")
+	public Double getStowage() {
+		return stowage;
+	}
+
+	public void setStowage(Double stowage) {
+		this.stowage = stowage;
 	}
 
 }
