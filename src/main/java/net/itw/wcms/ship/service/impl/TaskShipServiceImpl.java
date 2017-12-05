@@ -201,9 +201,9 @@ public class TaskShipServiceImpl implements ITaskShipService {
 		/**
 		需求：作业船舶开始卸船功能。
 		前置条件：
-			a. 检查作业船舶是否有绑定泊位；
-			b. 检查作业船舶是否设置舱位；
-			c. 检查当前作业船舶状态，只有"预卸货|1、 卸货中|2"状态才能开始卸船，其他状态不接受开始卸船请求；
+			1. 检查当前作业船舶状态，只有"预卸货|1、 卸货中|2"状态才能开始卸船，其他状态不接受开始卸船请求；
+			2. 检查作业船舶是否有绑定泊位；
+			3. 检查作业船舶是否设置舱位；
 		处理流程：
 		    [作业船舶状态  : 预卸货|1]
 		      	1. 将作业船舶状态改为 : 卸货中|2；
@@ -223,45 +223,74 @@ public class TaskShipServiceImpl implements ITaskShipService {
 				throw new X27Exception("操作失败：[taskId]未找到指定作业船舶 ！");
 			}
 
-			// 检查开始卸货前置条件
-			// ??
+			// 前置条件验证
+			// 1. 检查当前作业船舶状态，只有"预卸货|1、 卸货中|2"状态才能开始卸船，其他状态不接受开始卸船请求；
+			Integer taskStatus = task.getStatus();
+			if (!(Task.TaskStatus_PreDischarge == taskStatus || Task.TaskStatus_InDischarge == taskStatus)) {
+				throw new X27Exception("操作失败： 作业船舶只在预卸货、 卸货中状态时才可以进行开始卸船！");
+			}
+			// 2. 检查作业船舶是否有绑定泊位；
+			boolean isBind = false;
+			Set<TaskBerth> taskBerths = task.getTaskBerths();
+			if (taskBerths != null) {
+				for (TaskBerth e : taskBerths) {
+					if (Berth.BerthStatus_Occupied == e.getBerth().getStatus()) {
+						isBind = true;
+					}
+				}
+			}
+			if (!isBind) {
+				throw new X27Exception("操作失败： 作业船舶未绑定泊位！");
+			}
+			// 3.检查作业船舶是否设置舱位；
+			boolean isSet = false;
+			if (taskBerths != null) {
+				for (TaskBerth e : taskBerths) {
+					if (Berth.BerthStatus_Occupied == e.getBerth().getStatus()) {
+						Set<TaskCabinPositionDetail> taskCabinPositionDetails = e.getTaskCabinPositionDetails();
+						if (taskCabinPositionDetails != null
+								&& taskCabinPositionDetails.size() == task.getShip().getCabinNum()) {
+							isSet = true;
+						}
+					}
+				}
+			}
+			if (!isSet) {
+				throw new X27Exception("操作失败： 当前作业船舶未设置舱位！");
+			}
 
-			// 作业状态 （已入港|0、 预卸货|1、 卸货中|2、 完成卸船|3、 已离港|4）
-			Integer status = task.getStatus();
-			switch (status) {
-			case 0:
-				mo.msg = "操作失败: 当前船舶为绑定泊位或设置舱位！";
-				mo.code = ConstantUtil.FailInt;
-				break;
+			switch (taskStatus) {
 			case 1:
-//				if (task.getBeginTime() == null) {
-//					task.setBeginTime(new Date());
-//				}
-//				task.setStatus(2);
-//				for (TaskBerth tb: task.getTaskBerths()) {
-//					if (tb.getBerth().getStatus() == 1) { // 操作当前停靠的船舶 
-//						tb.getTaskUnloadShipDetails();
-//					}
-//				}
+				// [作业船舶状态 : 预卸货|1]
+				// 1. 将作业船舶状态改为 : 卸货中|2；
+				// 2. 设置作业船舶开始卸货时间；
+				// 3. 设置作业船舶关联的卸船机开始作业时间；
 				task.setStatus(2);
-				if (task.getBeginTime() == null) {
-					task.setBeginTime(new Date());
+				task.setBeginTime(new Date());
+				// 设置作业船舶关联的卸船机开始作业时间；
+				for (TaskBerth tb : task.getTaskBerths()) {
+					for (TaskUnloadShipDetail e : tb.getTaskUnloadShipDetails()) {
+						e.setStartTime(new Date());
+					}
 				}
 				task.setUpdateTime(new Date());
 				task.setUpdateUser(operator.getUserName());
 				taskRepository.saveAndFlush(task);
 				break;
 			case 2:
-				mo.msg = "操作失败: 当前船舶正在卸货中！";
-				mo.code = ConstantUtil.FailInt;
-				break;
-			case 3:
-				mo.msg = "操作失败: 当前船舶已完成卸船！";
-				mo.code = ConstantUtil.FailInt;
-				break;
-			case 4:
-				mo.msg = "操作失败: 当前船舶已离港！";
-				mo.code = ConstantUtil.FailInt;
+				// [作业船舶状态 : 卸货中|2]
+				// 1. 设置作业船舶开始卸货时间；
+				// 2. 设置作业船舶关联的卸船机开始作业时间；
+				task.setBeginTime(new Date());
+				// 设置作业船舶关联的卸船机开始作业时间；
+				for (TaskBerth tb : task.getTaskBerths()) {
+					for (TaskUnloadShipDetail e : tb.getTaskUnloadShipDetails()) {
+						e.setStartTime(new Date());
+					}
+				}
+				task.setUpdateTime(new Date());
+				task.setUpdateUser(operator.getUserName());
+				taskRepository.saveAndFlush(task);
 				break;
 			default:
 				break;
@@ -287,8 +316,8 @@ public class TaskShipServiceImpl implements ITaskShipService {
 		/**
 		需求：作业船舶设置清舱功能。
 		前置条件：
-			a. 检查该船舱货物是否快卸完；
-			b. 检查当前作业船舶状态，只有"卸货中|2"状态才能清舱，其他状态不接受清舱请求；
+			1. 检查该船舱货物是否快卸完；
+			2. 检查当前作业船舶状态，只有"卸货中|2"状态才能清舱，其他状态不接受清舱请求；
 		处理流程：
 		     [作业船舶状态  : 卸货中|2]
 		     	1. 设置作业船舶指定舱位状态为：清舱状态；
@@ -303,14 +332,21 @@ public class TaskShipServiceImpl implements ITaskShipService {
 				throw new X27Exception("操作失败：[taskId]未找到指定作业船舶 ！");
 			}
 
-			// 检查设置清舱前置条件
-			// ??
+			// 前置条件验证
+			// 1. 检查该船舱货物是否快卸完；
+			// TODO:??
+			// 2. 检查当前作业船舶状态，只有"卸货中|2"状态才能清舱，其他状态不接受清舱请求；
+			Integer taskStatus = task.getStatus();
+			if (!(Task.TaskStatus_InDischarge == taskStatus)) {
+				throw new X27Exception("操作失败： 作业船舶只卸货中状态时才可以设置清舱状态！");
+			}
 
+			// [作业船舶状态 : 卸货中|2]
+			// 1. 设置作业船舶指定舱位状态为：清舱状态；
 			for (TaskCabinDetail cabin : task.getTaskCabinDetails()) {
-				if (!StringUtils.equalsIgnoreCase(cabin.getCabinNo(), cabinNo)) {
-					continue;
+				if (StringUtils.equalsIgnoreCase(cabin.getCabinNo(), cabinNo)) {
+					cabin.setIsFinish(true);
 				}
-				cabin.setIsFinish(true);
 			}
 			task.setUpdateTime(new Date());
 			task.setUpdateUser(operator.getUserName());
@@ -321,7 +357,15 @@ public class TaskShipServiceImpl implements ITaskShipService {
 		}
 		return mo;
 	}
-
+	
+	/**
+	 * 设置清舱
+	 * 
+	 * @param taskId
+	 * @param cabinNo
+	 * @param userName
+	 * @return
+	 */
 	@Override
 	public MessageOption finishedShipUnload(String taskId, String userName) {
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
