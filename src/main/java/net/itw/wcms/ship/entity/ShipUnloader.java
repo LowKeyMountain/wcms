@@ -32,6 +32,10 @@ public class ShipUnloader implements Entityable {
 	private Date updateTime;
 	private String remarks;
 
+	/** 卸船机状态：未作业 */
+	public static Integer ShipUnloaderStatus_Leisure = 0;
+	/** 卸船机状态：作业中 */
+	public static Integer ShipUnloaderStatus_Occupied = 1;
 
 	@GeneratedValue
 	@Id
@@ -80,7 +84,7 @@ public class ShipUnloader implements Entityable {
 		this.remarks = remarks;
 	}
 
-	@Column(name="ship_unloader_name")
+	@Column(name = "ship_unloader_name")
 	public String getShipUnloaderName() {
 		return shipUnloaderName;
 	}
@@ -88,5 +92,5 @@ public class ShipUnloader implements Entityable {
 	public void setShipUnloaderName(String shipUnloaderName) {
 		this.shipUnloaderName = shipUnloaderName;
 	}
-	
+
 }

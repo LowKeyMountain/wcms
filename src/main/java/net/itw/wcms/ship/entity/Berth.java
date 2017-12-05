@@ -26,13 +26,17 @@ public class Berth implements Entityable {
 
 	private Integer id; // 编号
 	private String berthName;
-	private Integer status; // 当前状态 （可使用|0、已占用|1）
-
+	private Integer status; // 当前状态 （空闲|0、已占用|1）
+	
 	private String updateUser;
 	private Date updateTime;
 	private String remarks;
-
-
+	
+	/**泊位状态：空闲*/
+	public static Integer BerthStatus_Leisure = 0; 
+	/**泊位状态：已占用*/
+	public static Integer BerthStatus_Occupied = 1; 
+	
 	@GeneratedValue
 	@Id
 	public Integer getId() {

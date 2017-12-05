@@ -47,6 +47,17 @@ public class Task implements Entityable {
 	private Set<TaskCabinDetail> taskCabinDetails = new HashSet<>(); // 作业船舱信息
 	private Set<TaskBerth> taskBerths = new HashSet<>(); // 作业船舶与泊位关系
 
+	/** 船舶状态：已入港|0 */
+	public static Integer TaskStatus_HaveEntry = 0;
+	/** 船舶状态：预卸货|1 */
+	public static Integer TaskStatus_PreDischarge = 1;
+	/** 船舶状态：卸货中|2 */
+	public static Integer TaskStatus_InDischarge = 2;
+	/** 船舶状态：完成卸船|3 */
+	public static Integer TaskStatus_Leave = 3;
+	/** 船舶状态：已离港|4 */
+	public static Integer TaskStatus_Finished = 4;
+
 	@GeneratedValue
 	@Id
 	public Integer getId() {
@@ -141,7 +152,7 @@ public class Task implements Entityable {
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
 	}
-	
+
 	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
 	public Set<TaskCabinDetail> getTaskCabinDetails() {
 		return taskCabinDetails;
@@ -169,5 +180,5 @@ public class Task implements Entityable {
 	public void setShip(Ship ship) {
 		this.ship = ship;
 	}
-	
+
 }
