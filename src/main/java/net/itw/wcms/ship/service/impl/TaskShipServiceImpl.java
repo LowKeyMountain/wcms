@@ -356,10 +356,9 @@ public class TaskShipServiceImpl implements ITaskShipService {
 	}
 
 	/**
-	 * 设置清舱
+	 * 完成卸船
 	 * 
 	 * @param taskId
-	 * @param cabinNo
 	 * @param userName
 	 * @return
 	 */
