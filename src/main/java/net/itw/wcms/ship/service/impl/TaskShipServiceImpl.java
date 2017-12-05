@@ -12,10 +12,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import net.itw.wcms.ship.entity.Berth;
+import net.itw.wcms.ship.entity.ShipUnloader;
 import net.itw.wcms.ship.entity.Task;
 import net.itw.wcms.ship.entity.TaskBerth;
 import net.itw.wcms.ship.entity.TaskCabinDetail;
 import net.itw.wcms.ship.entity.TaskCabinPositionDetail;
+import net.itw.wcms.ship.entity.TaskUnloadShipDetail;
 import net.itw.wcms.ship.repository.BerthRepository;
 import net.itw.wcms.ship.repository.ShipRepository;
 import net.itw.wcms.ship.repository.ShipUnloaderRepository;
@@ -59,8 +61,35 @@ public class TaskShipServiceImpl implements ITaskShipService {
 	private TaskCabinPositionDetailRepository taskCabinPositionDetailRepository;
 	@Autowired
 	private TaskUnloadShipDetailRepository taskUnloadShipDetailRepository;
-
+	
+	/**
+	 * 绑定泊位
+	 * @param taskId
+	 * @param berthId
+	 * @param userName
+	 * @return
+	 */
 	public MessageOption bindBerth(String taskId, String berthId, String userName) {
+		/**
+			需求：作业船舶绑定泊位功能。
+			前置条件：
+				a. 检查待绑定泊位是否为空闲状态；
+				b. 检查当前作业船舶状态，只有"已入港|0、 预卸货|1、 卸货中|2"状态才能绑定泊位，"完成卸船|3、 已离港|4"状态不能绑定泊位；
+			处理流程：
+				[作业船舶状态  : 已入港|0]
+				  	分析：该状态下进行泊位绑定通常为第一次绑定；
+			        1. 将作业船舶与待绑定泊位进行关联，该泊位状态改为：使用中；
+			        2. 将作业船舶状态改为： 预卸货|1；
+			    [作业船舶状态  : 预卸货|1]
+			      	分析：该状态下进行泊位绑定通常是进行变更泊位，需要将已绑定的泊位进行解绑；
+			      	1. 查询已绑定泊位，进行解除绑定操作；也就是将已绑定的泊位状态改为：未使用；
+			      	2. 将作业船舶与待绑定泊位进行关联，该泊位状态改为：使用中；
+			     [作业船舶状态  : 卸货中|2]
+			     	分析：该状态下进行泊位绑定通常是进行变更泊位，需要将已绑定的泊位进行解绑；
+			     	1. 查询已绑定泊位，进行解除绑定操作；也就是将已绑定的泊位状态改为：未使用；
+			     	2. 查询与已绑定泊位关联的卸船机，设置卸船机作业结束时间；			     
+			     	3. 将作业船舶与待绑定泊位进行关联，该泊位状态改为：使用中；
+		*/
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
 		try {
 
@@ -74,19 +103,84 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			if (berth == null) {
 				throw new X27Exception("操作失败：[berthId]未找到指定泊位 ！");
 			}
-			if (berth.getStatus() == 1) {
-				throw new X27Exception("操作失败：当前泊位已被占用 ！");
+
+			// 1、前置条件验证
+
+			// 1.1 检查待绑定泊位是否为空闲状态；
+			if (Berth.BerthStatus_Occupied == berth.getStatus()) {
+				throw new X27Exception("操作失败：待绑定泊位已被占用 ！");
+			}
+			// 1.2 检查当前作业船舶状态，只有"已入港|0、 预卸货|1、 卸货中|2"状态才能绑定泊位，"完成卸船|3、
+			// 已离港|4"状态不能绑定泊位；
+			Integer taskStatus = task.getStatus();
+			if (Task.TaskStatus_Leave == taskStatus || Task.TaskStatus_Finished == taskStatus) {
+				throw new X27Exception("操作失败：作业船舶已完成卸船、已离港 ！");
 			}
 
-			TaskBerth taskBerth = new TaskBerth();
-			taskBerth.setTask(task);
-			berth.setStatus(1); 
-			taskBerth.setBerth(berth);
-			taskBerth.setIsSetPosition(false);
-			taskBerth.setUpdateTime(new Date());
-			taskBerth.setUpdateUser(operator.getUserName());
-			taskBerth.setRemarks(berth.getBerthName());
-			taskBerthRepository.save(taskBerth);
+			// 2、处理流程：
+			switch (taskStatus) {
+			case 0:
+				// 2.1 [作业船舶状态 : 已入港|0]
+				// 分析：该状态下进行泊位绑定通常为第一次绑定；
+				// 1. 将作业船舶与待绑定泊位进行关联，该泊位状态改为：使用中；
+				// 2. 将作业船舶状态改为： 预卸货|1；
+				TaskBerth taskBerth = new TaskBerth();
+				taskBerth.setTask(task);
+				berth.setStatus(Berth.BerthStatus_Occupied);
+				taskBerth.setBerth(berth);
+				taskBerth.setIsSetPosition(false);
+				taskBerth.setUpdateTime(new Date());
+				taskBerth.setUpdateUser(operator.getUserName());
+				taskBerth.setRemarks(berth.getBerthName());
+				taskBerthRepository.save(taskBerth);
+				break;
+			case 1:
+				// 2.2 [作业船舶状态 : 预卸货|1]
+				// 分析：该状态下进行泊位绑定通常是进行变更泊位，需要将已绑定的泊位进行解绑；
+				// 1. 查询已绑定泊位，进行解除绑定操作；也就是将已绑定的泊位状态改为：未使用；
+				// 2. 将作业船舶与待绑定泊位进行关联，该泊位状态改为：使用中；
+			case 2:
+				// [作业船舶状态 : 卸货中|2]
+				// 分析：该状态下进行泊位绑定通常是进行变更泊位，需要将已绑定的泊位进行解绑；
+				// 1. 将解绑泊位上的卸船机，状态、作业完成时间进行设置；
+				// 2. 查询已绑定泊位，进行解除绑定操作；也就是将已绑定的泊位状态改为：未使用；
+				// 3. 将作业船舶与待绑定泊位进行关联，该泊位状态改为：使用中；
+				Set<TaskBerth> taskBerths = task.getTaskBerths();
+				if (taskBerths != null && !taskBerths.isEmpty()) {
+					for (TaskBerth tb : taskBerths) {
+						// 1. 将解绑泊位上的卸船机，状态、作业完成时间进行设置；
+						Set<TaskUnloadShipDetail> taskUnloadShipDetails = tb.getTaskUnloadShipDetails();
+						if (taskUnloadShipDetails != null) {
+							for (TaskUnloadShipDetail e : taskUnloadShipDetails) {
+								ShipUnloader shipUnloader = e.getShipUnloader();
+								if (shipUnloader != null) {
+									shipUnloader.setStatus(ShipUnloader.ShipUnloaderStatus_Leisure);
+								}
+								e.setEndTime(new Date());
+							}
+						}
+						// 2. 查询已绑定泊位，进行解除绑定操作；也就是将已绑定的泊位状态改为：未使用；
+						Berth b = tb.getBerth();
+						if (b != null) {
+							b.setStatus(Berth.BerthStatus_Leisure);
+						}
+						taskBerthRepository.save(tb);
+					}
+				}
+				// 3. 将作业船舶与待绑定泊位进行关联，该泊位状态改为：使用中；
+				taskBerth = new TaskBerth();
+				taskBerth.setTask(task);
+				berth.setStatus(Berth.BerthStatus_Occupied);
+				taskBerth.setBerth(berth);
+				taskBerth.setIsSetPosition(false);
+				taskBerth.setUpdateTime(new Date());
+				taskBerth.setUpdateUser(operator.getUserName());
+				taskBerth.setRemarks(berth.getBerthName());
+				taskBerthRepository.save(taskBerth);
+				break;
+			default:
+				break;
+			}
 
 		} catch (Exception e) {
 			mo.msg = e.getMessage();
@@ -94,9 +188,31 @@ public class TaskShipServiceImpl implements ITaskShipService {
 		}
 		return mo;
 	}
-
+	
+	/**
+	 * 开始卸船
+	 * 
+	 * @param taskId
+	 * @param userName
+	 * @return
+	 */
 	@Override
 	public MessageOption beginShipUnload(String taskId, String userName) {
+		/**
+		需求：作业船舶开始卸船功能。
+		前置条件：
+			a. 检查作业船舶是否有绑定泊位；
+			b. 检查作业船舶是否设置舱位；
+			c. 检查当前作业船舶状态，只有"预卸货|1、 卸货中|2"状态才能开始卸船，其他状态不接受开始卸船请求；
+		处理流程：
+		    [作业船舶状态  : 预卸货|1]
+		      	1. 将作业船舶状态改为 : 卸货中|2；
+		      	2. 设置作业船舶开始卸货时间；
+		      	3. 设置作业船舶关联的卸船机开始作业时间；
+		     [作业船舶状态  : 卸货中|2]
+		      	1. 设置作业船舶开始卸货时间；
+		      	2. 设置作业船舶关联的卸船机开始作业时间；
+		 */
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
 		try {
 
@@ -157,9 +273,26 @@ public class TaskShipServiceImpl implements ITaskShipService {
 		}
 		return mo;
 	}
-
+	
+	/**
+	 * 设置清舱
+	 * 
+	 * @param taskId
+	 * @param cabinNo
+	 * @param userName
+	 * @return
+	 */
 	@Override
 	public MessageOption setClearCabin(String taskId, String cabinNo, String userName) {
+		/**
+		需求：作业船舶设置清舱功能。
+		前置条件：
+			a. 检查该船舱货物是否快卸完；
+			b. 检查当前作业船舶状态，只有"卸货中|2"状态才能清舱，其他状态不接受清舱请求；
+		处理流程：
+		     [作业船舶状态  : 卸货中|2]
+		     	1. 设置作业船舶指定舱位状态为：清舱状态；
+		 */
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
 		try {
 
