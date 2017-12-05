@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.itw.wcms.ship.entity.Ship;
 import net.itw.wcms.ship.repository.ShipRepository;
-import net.itw.wcms.ship.service.ShipService;
+import net.itw.wcms.ship.service.IShipService;
 import net.itw.wcms.toolkit.security.PasswordUtils;
 import net.itw.wcms.x27.entity.User;
 import net.itw.wcms.x27.repository.UserRepository;
@@ -32,7 +32,7 @@ import net.itw.wcms.x27.utils.StringUtil;
 
 @Service
 @Transactional
-public class ShipServiceImpl implements ShipService {
+public class ShipServiceImpl implements IShipService {
 	
     @Autowired
     private ShipRepository shipRepository;

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import net.itw.wcms.ship.service.TaskService;
+import net.itw.wcms.ship.service.ITaskService;
 import net.itw.wcms.x27.utils.PageUtils;
 
 @RestController
@@ -23,7 +23,7 @@ import net.itw.wcms.x27.utils.PageUtils;
 public class TaskController {
 
 	@Autowired
-	private TaskService taskService;
+	private ITaskService taskService;
 
 	protected HttpServletRequest req;
 	protected HttpServletResponse res;

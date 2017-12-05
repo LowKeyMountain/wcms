@@ -15,7 +15,7 @@ import net.itw.wcms.x27.entity.User;
  * @author sparking 2017-11-17 下午10:20:35
  *
  */
-public interface TaskService {
+public interface ITaskService {
 	
 	/**
 	 * 根据船舶状态，返回船舶Json数据格式

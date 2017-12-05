@@ -19,7 +19,7 @@ import com.alibaba.fastjson.JSONObject;
 import net.itw.wcms.ship.entity.Ship;
 import net.itw.wcms.ship.entity.Task;
 import net.itw.wcms.ship.repository.TaskRepository;
-import net.itw.wcms.ship.service.TaskService;
+import net.itw.wcms.ship.service.ITaskService;
 import net.itw.wcms.toolkit.DateTimeUtils;
 import net.itw.wcms.x27.entity.Resource;
 import net.itw.wcms.x27.entity.User;
@@ -28,7 +28,7 @@ import net.itw.wcms.x27.utils.ConstantUtil;
 
 @Service
 @Transactional
-public class TaskServiceImpl implements TaskService {
+public class TaskServiceImpl implements ITaskService {
 	
 	@Autowired
 	private TaskRepository taskRepository;

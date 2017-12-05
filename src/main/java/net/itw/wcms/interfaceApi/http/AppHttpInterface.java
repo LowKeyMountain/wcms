@@ -1,6 +1,8 @@
 package net.itw.wcms.interfaceApi.http;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -11,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import net.itw.wcms.ship.service.ITaskShipService;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
 import net.itw.wcms.x27.exception.X27Exception;
@@ -33,6 +37,8 @@ public class AppHttpInterface {
 	private IUserService userService;
 	@Autowired
 	private IResourceService resourceService;
+	@Autowired
+	private ITaskShipService taskShipService;
 
 	private InfoQueryHelper infoQueryHelper = new InfoQueryHelper();
 
@@ -296,6 +302,213 @@ public class AppHttpInterface {
 			jsonObject.put("criteria", JSONObject
 					.parseObject("{'$task_id':'" + (String) taskId + "','$cabin_no':" + (Integer) cabinNo + "}"));
 			return infoQueryHelper.doQueryInfo(jsonObject);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", "0");
+			result.put("msg", e.getMessage());
+			return result;
+		}
+	}
+
+	/**
+	 * 绑定泊位 <br>
+	 * 提供绑定泊位服务接口
+	 * 
+	 * @param json
+	 * @return
+	 */
+	@RequestMapping(value = "/ship/doSetBerthBind")
+	public Map<String, Object> doSetBerthBind(@RequestParam("json") String json) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			JSONObject jsonObject = JSONObject.parseObject(json);
+
+			if (jsonObject.containsKey("userId")) {
+				throw new X27Exception("操作失败：参数[userId]不能为空！");
+			}
+			if (jsonObject.containsKey("taskId")) {
+				throw new X27Exception("操作失败：参数[taskId]不能为空！");
+			}
+			if (jsonObject.containsKey("berthId")) {
+				throw new X27Exception("操作失败：参数[berthId]不能为空！");
+			}
+
+			checkUser(jsonObject); // 验证用户是否存在
+
+			String userName = jsonObject.getString("userId");
+			String taskId = jsonObject.getString("taskId");
+			String berthId = jsonObject.getString("berthId");
+
+			MessageOption mo = taskShipService.bindBerth(taskId, berthId, userName);
+
+			result.put("msg", mo.msg);
+			result.put("code", mo.isSuccess() ? "1" : "0");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", "0");
+			result.put("msg", e.getMessage());
+			return result;
+		}
+	}
+
+	/**
+	 * 设置舱位 <br>
+	 * 提供设置舱位服务，支持新增、修改舱位功能
+	 * 
+	 * @param json
+	 * @return
+	 */
+	@RequestMapping(value = "/ship/doSetCabinPosition")
+	public Map<String, Object> doSetCabinPosition(@RequestParam("json") String json) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			JSONObject jsonObject = JSONObject.parseObject(json);
+
+			if (jsonObject.containsKey("userId")) {
+				throw new X27Exception("操作失败：参数[userId]不能为空！");
+			}
+			if (jsonObject.containsKey("taskId")) {
+				throw new X27Exception("操作失败：参数[taskId]不能为空！");
+			}
+			if (jsonObject.containsKey("data")) {
+				throw new X27Exception("操作失败：参数[data]不能为空！");
+			}
+
+			checkUser(jsonObject); // 验证用户是否存在
+			String userName = jsonObject.getString("userId");
+			String taskId = jsonObject.getString("taskId");
+
+			List<Map<String, Object>> list = new ArrayList<>();
+			JSONArray jsonArray = jsonObject.getJSONArray("data");
+			Iterator<Object> iterator = jsonArray.iterator();
+			while (iterator.hasNext()) {
+				JSONObject jo = (JSONObject) iterator.next();
+				Map<String, Object> map = new HashMap<>();
+				for (String key : jo.keySet()) {
+					map.put(key, jo.get(key));
+				}
+				list.add(map);
+			}
+
+			MessageOption mo = taskShipService.setCabinPosition(taskId, userName, list);
+			result.put("msg", mo.msg);
+			result.put("code", mo.isSuccess() ? "1" : "0");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", "0");
+			result.put("msg", e.getMessage());
+			return result;
+		}
+	}
+
+	/**
+	 * 开始卸船 <br>
+	 * 供开始卸船服务接口
+	 * 
+	 * @param json
+	 * @return
+	 */
+	@RequestMapping(value = "/ship/doSetShipUnload")
+	public Map<String, Object> doBeginShipUnload(@RequestParam("json") String json) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			JSONObject jsonObject = JSONObject.parseObject(json);
+
+			if (jsonObject.containsKey("userId")) {
+				throw new X27Exception("操作失败：参数[userId]不能为空！");
+			}
+			if (jsonObject.containsKey("taskId")) {
+				throw new X27Exception("操作失败：参数[taskId]不能为空！");
+			}
+
+			checkUser(jsonObject); // 验证用户是否存在
+			String userName = jsonObject.getString("userId");
+			String taskId = jsonObject.getString("taskId");
+
+			MessageOption mo = taskShipService.beginShipUnload(taskId, userName);
+			result.put("msg", mo.msg);
+			result.put("code", mo.isSuccess() ? "1" : "0");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", "0");
+			result.put("msg", e.getMessage());
+			return result;
+		}
+	}
+
+	/**
+	 * 设置清舱 <br>
+	 * 设置船舱清舱状态
+	 * 
+	 * @param json
+	 * @return
+	 */
+	@RequestMapping(value = "/ship/doSetCabinClear")
+	public Map<String, Object> doSetClearCabin(@RequestParam("json") String json) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			JSONObject jsonObject = JSONObject.parseObject(json);
+
+			if (jsonObject.containsKey("userId")) {
+				throw new X27Exception("操作失败：参数[userId]不能为空！");
+			}
+			if (jsonObject.containsKey("taskId")) {
+				throw new X27Exception("操作失败：参数[taskId]不能为空！");
+			}
+			if (jsonObject.containsKey("cabinNo")) {
+				throw new X27Exception("操作失败：参数[cabinNo]不能为空！");
+			}
+
+			checkUser(jsonObject); // 验证用户是否存在
+
+			String userName = jsonObject.getString("userId");
+			String taskId = jsonObject.getString("taskId");
+			String cabinNo = jsonObject.getString("cabinNo");
+
+			MessageOption mo = taskShipService.setClearCabin(taskId, cabinNo, userName);
+			result.put("msg", mo.msg);
+			result.put("code", mo.isSuccess() ? "1" : "0");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", "0");
+			result.put("msg", e.getMessage());
+			return result;
+		}
+	}
+
+	/**
+	 * 完成卸船 <br>
+	 * 设置船舶完成卸货状态
+	 * 
+	 * @param json
+	 * @return
+	 */
+	@RequestMapping(value = "/ship/doSetShipFinished")
+	public Map<String, Object> doSetShipFinished(@RequestParam("json") String json) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			JSONObject jsonObject = JSONObject.parseObject(json);
+
+			if (jsonObject.containsKey("userId")) {
+				throw new X27Exception("操作失败：参数[userId]不能为空！");
+			}
+			if (jsonObject.containsKey("taskId")) {
+				throw new X27Exception("操作失败：参数[taskId]不能为空！");
+			}
+
+			checkUser(jsonObject); // 验证用户是否存在
+
+			String userName = jsonObject.getString("userId");
+			String taskId = jsonObject.getString("taskId");
+
+			MessageOption mo = taskShipService.finishedShipUnload(taskId, userName);
+			result.put("msg", mo.msg);
+			result.put("code", mo.isSuccess() ? "1" : "0");
+			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.put("code", "0");

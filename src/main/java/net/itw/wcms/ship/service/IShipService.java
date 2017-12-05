@@ -14,7 +14,7 @@ import net.itw.wcms.ship.entity.Ship;
  * @author sparking 2017-11-17 下午7:40:10
  *
  */
-public interface ShipService {
+public interface IShipService {
 
 
 	/**
