@@ -323,13 +323,13 @@ public class AppHttpInterface {
 		try {
 			JSONObject jsonObject = JSONObject.parseObject(json);
 
-			if (jsonObject.containsKey("userId")) {
+			if (!jsonObject.containsKey("userId")) {
 				throw new X27Exception("操作失败：参数[userId]不能为空！");
 			}
-			if (jsonObject.containsKey("taskId")) {
+			if (!jsonObject.containsKey("taskId")) {
 				throw new X27Exception("操作失败：参数[taskId]不能为空！");
 			}
-			if (jsonObject.containsKey("berthId")) {
+			if (!jsonObject.containsKey("berthId")) {
 				throw new X27Exception("操作失败：参数[berthId]不能为空！");
 			}
 
@@ -416,10 +416,10 @@ public class AppHttpInterface {
 		try {
 			JSONObject jsonObject = JSONObject.parseObject(json);
 
-			if (jsonObject.containsKey("userId")) {
+			if (!jsonObject.containsKey("userId")) {
 				throw new X27Exception("操作失败：参数[userId]不能为空！");
 			}
-			if (jsonObject.containsKey("taskId")) {
+			if (!jsonObject.containsKey("taskId")) {
 				throw new X27Exception("操作失败：参数[taskId]不能为空！");
 			}
 
@@ -452,13 +452,13 @@ public class AppHttpInterface {
 		try {
 			JSONObject jsonObject = JSONObject.parseObject(json);
 
-			if (jsonObject.containsKey("userId")) {
+			if (!jsonObject.containsKey("userId")) {
 				throw new X27Exception("操作失败：参数[userId]不能为空！");
 			}
-			if (jsonObject.containsKey("taskId")) {
+			if (!jsonObject.containsKey("taskId")) {
 				throw new X27Exception("操作失败：参数[taskId]不能为空！");
 			}
-			if (jsonObject.containsKey("cabinNo")) {
+			if (!jsonObject.containsKey("cabinNo")) {
 				throw new X27Exception("操作失败：参数[cabinNo]不能为空！");
 			}
 
