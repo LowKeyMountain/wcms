@@ -132,7 +132,7 @@ public class Cargo implements Entityable {
 		this.cargoCategory = cargoCategory;
 	}
 
-	@OneToMany(mappedBy = "cabin")
+	@OneToMany(mappedBy = "cargo")
 	public Set<Cabin> getCabins() {
 		return cabins;
 	}
