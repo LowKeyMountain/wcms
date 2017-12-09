@@ -4,10 +4,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import net.itw.wcms.ship.entity.TaskCabinDetail;
+import net.itw.wcms.ship.entity.Cabin;
 
 
-public interface TaskCabinDetailRepository extends JpaRepository<TaskCabinDetail, Integer>, JpaSpecificationExecutor<TaskCabinDetail>,
-		PagingAndSortingRepository<TaskCabinDetail, Integer> {
+public interface CabinRepository extends JpaRepository<Cabin, Integer>, JpaSpecificationExecutor<Cabin>,
+		PagingAndSortingRepository<Cabin, Integer> {
 
 }

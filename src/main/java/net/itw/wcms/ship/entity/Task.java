@@ -11,8 +11,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -21,7 +21,7 @@ import net.itw.wcms.toolkit.hibernate.Entityable;
 
 /**
  * 
- * Description: 船舶作业信息表
+ * Description: 作业信息表
  * 
  * @author Michael 25 Nov 2017 20:35:38
  */
@@ -36,27 +36,20 @@ public class Task implements Entityable {
 	private Date departureTime; // 离港时间
 	private Date beginTime; // 开始卸货时间
 	private Date endTime; // 结束卸货时间
-	private Integer status; // 作业状态 （已入港|0、 预卸货|1、 卸货中|2、 完成卸船|3、 已离港|4）
-	private Double cargoLoad; // 货物总重（单位：吨）
+	private Integer status; // 作业状态 （预靠船舶|0、作业船舶|1、 离港船舶|2）
+	private Float cargoLoad; // 货物总重（单位：吨）
+	private Integer berth; // 泊位（泊一|1、泊二|2）
+	private Float berthingDepth; // 入港吃水（单位：米）
+	private Float departureDepth; // 离港吃水（单位：米）
+	private Float berthingFreeboardDepth; // 入港干舷高度（单位：米）
+	private Float departureFreeboardDepth; // 离港干舷高度（单位：米）
 
 	private String updateUser;
 	private Date updateTime;
 	private String remarks;
 
 	private Ship ship; // 船舶信息
-	private Set<TaskCabinDetail> taskCabinDetails = new HashSet<>(); // 作业船舱信息
-	private Set<TaskBerth> taskBerths = new HashSet<>(); // 作业船舶与泊位关系
-
-	/** 船舶状态：已入港|0 */
-	public static Integer TaskStatus_HaveEntry = 0;
-	/** 船舶状态：预卸货|1 */
-	public static Integer TaskStatus_PreDischarge = 1;
-	/** 船舶状态：卸货中|2 */
-	public static Integer TaskStatus_InDischarge = 2;
-	/** 船舶状态：完成卸船|3 */
-	public static Integer TaskStatus_Leave = 3;
-	/** 船舶状态：已离港|4 */
-	public static Integer TaskStatus_Finished = 4;
+	private Set<Cabin> cabins = new HashSet<>(); // 船舱信息
 
 	@GeneratedValue
 	@Id
@@ -69,11 +62,11 @@ public class Task implements Entityable {
 	}
 
 	@Column(name = "cargo_load")
-	public Double getCargoLoad() {
+	public Float getCargoLoad() {
 		return cargoLoad;
 	}
 
-	public void setCargoLoad(Double cargoLoad) {
+	public void setCargoLoad(Float cargoLoad) {
 		this.cargoLoad = cargoLoad;
 	}
 
@@ -154,24 +147,15 @@ public class Task implements Entityable {
 	}
 
 	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
-	public Set<TaskCabinDetail> getTaskCabinDetails() {
-		return taskCabinDetails;
+	public Set<Cabin> getCabins() {
+		return cabins;
 	}
 
-	public void setTaskCabinDetails(Set<TaskCabinDetail> taskCabinDetails) {
-		this.taskCabinDetails = taskCabinDetails;
+	public void setCabins(Set<Cabin> cabins) {
+		this.cabins = cabins;
 	}
 
-	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
-	public Set<TaskBerth> getTaskBerths() {
-		return taskBerths;
-	}
-
-	public void setTaskBerths(Set<TaskBerth> taskBerths) {
-		this.taskBerths = taskBerths;
-	}
-
-	@ManyToOne(fetch = FetchType.LAZY, cascade = (CascadeType.ALL))
+	@OneToOne(fetch = FetchType.LAZY, cascade = (CascadeType.ALL))
 	@JoinColumn(name = "ship_id")
 	public Ship getShip() {
 		return ship;
@@ -179,6 +163,51 @@ public class Task implements Entityable {
 
 	public void setShip(Ship ship) {
 		this.ship = ship;
+	}
+
+	@Column(name = "berth")
+	public Integer getBerth() {
+		return berth;
+	}
+
+	public void setBerth(Integer berth) {
+		this.berth = berth;
+	}
+
+	@Column(name = "berthing_freeboard_depth")
+	public Float getBerthingFreeboardDepth() {
+		return berthingFreeboardDepth;
+	}
+
+	public void setBerthingFreeboardDepth(Float berthingFreeboardDepth) {
+		this.berthingFreeboardDepth = berthingFreeboardDepth;
+	}
+
+	@Column(name = "departure_freeboard_depth")
+	public Float getDepartureFreeboardDepth() {
+		return departureFreeboardDepth;
+	}
+
+	public void setDepartureFreeboardDepth(Float departureFreeboardDepth) {
+		this.departureFreeboardDepth = departureFreeboardDepth;
+	}
+
+	@Column(name = "berthing_depth")
+	public Float getBerthingDepth() {
+		return berthingDepth;
+	}
+
+	public void setBerthingDepth(Float berthingDepth) {
+		this.berthingDepth = berthingDepth;
+	}
+
+	@Column(name = "departure_depth")
+	public Float getDepartureDepth() {
+		return departureDepth;
+	}
+
+	public void setDepartureDepth(Float departureDepth) {
+		this.departureDepth = departureDepth;
 	}
 
 }

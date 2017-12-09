@@ -1,15 +1,11 @@
 package net.itw.wcms.ship.entity;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import net.itw.wcms.toolkit.hibernate.Entityable;
@@ -33,15 +29,19 @@ public class Ship implements Entityable {
 	private Date buildDate; // 建造时间
 	private Float length; // 船长（单位：米）
 	private Float breadth; // 船宽 （单位：米）
+	private String mouldedDepth; // 型深 （单位：米）
 	private Integer cabinNum; // 船舱数据
+	private String hatch; // 舱口
+
+	private Boolean wireCable; // 是否钢丝缆
+	private Integer wireNum; // 缆绳根数
+	private String specialCabinType; // 特殊舱型
 
 	private String createUser;
 	private Date createTime;
 	private String updateUser;
 	private Date updateTime;
 	private String remarks;
-
-	private Set<Task> tasks = new HashSet<>();
 
 	@GeneratedValue
 	@Id
@@ -162,14 +162,50 @@ public class Ship implements Entityable {
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
 	}
-	
-	@OneToMany(mappedBy = "ship", cascade = (CascadeType.ALL))
-	public Set<Task> getTasks() {
-		return tasks;
+
+	@Column(name = "moulded_depth")
+	public String getMouldedDepth() {
+		return mouldedDepth;
 	}
 
-	public void setTasks(Set<Task> tasks) {
-		this.tasks = tasks;
+	public void setMouldedDepth(String mouldedDepth) {
+		this.mouldedDepth = mouldedDepth;
+	}
+
+	@Column(name = "hatch")
+	public String getHatch() {
+		return hatch;
+	}
+
+	public void setHatch(String hatch) {
+		this.hatch = hatch;
+	}
+
+	@Column(name = "wire_cable")
+	public Boolean getWireCable() {
+		return wireCable;
+	}
+
+	public void setWireCable(Boolean wireCable) {
+		this.wireCable = wireCable;
+	}
+
+	@Column(name = "wire_num")
+	public Integer getWireNum() {
+		return wireNum;
+	}
+
+	public void setWireNum(Integer wireNum) {
+		this.wireNum = wireNum;
+	}
+
+	@Column(name = "special_cabin_type")
+	public String getSpecialCabinType() {
+		return specialCabinType;
+	}
+
+	public void setSpecialCabinType(String specialCabinType) {
+		this.specialCabinType = specialCabinType;
 	}
 
 }

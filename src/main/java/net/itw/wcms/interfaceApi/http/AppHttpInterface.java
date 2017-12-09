@@ -339,10 +339,10 @@ public class AppHttpInterface {
 			String taskId = jsonObject.getString("taskId");
 			String berthId = jsonObject.getString("berthId");
 
-			MessageOption mo = taskShipService.bindBerth(taskId, berthId, userName);
+//			MessageOption mo = taskShipService.bindBerth(taskId, berthId, userName);
 
-			result.put("msg", mo.msg);
-			result.put("code", mo.isSuccess() ? "1" : "0");
+//			result.put("msg", mo.msg);
+//			result.put("code", mo.isSuccess() ? "1" : "0");
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();

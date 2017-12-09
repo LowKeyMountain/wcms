@@ -3,9 +3,7 @@ package net.itw.wcms.ship.service;
 import java.util.List;
 import java.util.Map;
 
-import net.itw.wcms.ship.entity.TaskBerth;
 import net.itw.wcms.toolkit.MessageOption;
-import net.itw.wcms.x27.entity.User;
 
 /**
  * 
@@ -14,15 +12,16 @@ import net.itw.wcms.x27.entity.User;
  * @author Michael 4 Dec 2017 18:52:15
  */
 public interface ITaskShipService {
-
+	
 	/**
-	 * 绑定泊位
+	 * 设置舱位
+	 * 
 	 * @param taskId
-	 * @param berthId
 	 * @param userName
+	 * @param list
 	 * @return
 	 */
-	MessageOption bindBerth(String taskId, String berthId, String userName);
+	MessageOption setCabinPosition(String taskId, String userName, List<Map<String, Object>> list);
 
 	/**
 	 * 开始卸船
@@ -51,15 +50,5 @@ public interface ITaskShipService {
 	 * @return
 	 */
 	MessageOption finishedShipUnload(String taskId, String userName);
-
-	/**
-	 * 设置舱位
-	 * 
-	 * @param taskId
-	 * @param userName
-	 * @param list
-	 * @return
-	 */
-	MessageOption setCabinPosition(String taskId, String userName, List<Map<String, Object>> list);
 
 }

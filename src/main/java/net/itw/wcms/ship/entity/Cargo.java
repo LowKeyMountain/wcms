@@ -1,47 +1,45 @@
 package net.itw.wcms.ship.entity;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import net.itw.wcms.toolkit.hibernate.Entityable;
 
 /**
  * 
- * Description:作业船舱表
+ * Description:作业货物信息表
  * 
- * @author Michael 25 Nov 2017 20:54:44
+ * @author Michael 8 Dec 2017 22:49:44
  */
 @Entity
-@Table(name = "tab_task_cabin_detail")
-public class TaskCabinDetail implements Entityable {
+@Table(name = "tab_cargo")
+public class Cargo implements Entityable {
 
 	private static final long serialVersionUID = 1L;
 
 	private Integer id; // 编号
-	private String cabinNo; // 船舱编号
-	private String cargoType; // 货物种类
-	private Double preunloading; // 装载量（单位：吨）
-	private Boolean isFinish; // 是否清舱（即，是否完成）
-	
+
+	private String cargoCategory; // 货物种类
+	private String cargoType; // 货物类型
 	private String loadingPort;// 装货港
 	private String moisture;// 水分
 	private String quality;// 品质
-	private Double stowage;// 配载吨位（单位：吨）
+	private Float stowage;// 配载吨位（单位：吨）
+	private String cargoOwner; // 货主
 
 	private String updateUser;
 	private Date updateTime;
 	private String remarks;
-	
-	private Task task; // 作业船舶信息
+
+	private Set<Cabin> cabins = new HashSet<>(); // 货物所属船舱
 
 	@GeneratedValue
 	@Id
@@ -53,15 +51,6 @@ public class TaskCabinDetail implements Entityable {
 		this.id = id;
 	}
 
-	@Column(name = "cabin_no", nullable = false)
-	public String getCabinNo() {
-		return cabinNo;
-	}
-
-	public void setCabinNo(String cabinNo) {
-		this.cabinNo = cabinNo;
-	}
-
 	@Column(name = "cargo_type")
 	public String getCargoType() {
 		return cargoType;
@@ -69,15 +58,6 @@ public class TaskCabinDetail implements Entityable {
 
 	public void setCargoType(String cargoType) {
 		this.cargoType = cargoType;
-	}
-
-	@Column(name = "preunloading")
-	public Double getPreunloading() {
-		return preunloading;
-	}
-
-	public void setPreunloading(Double preunloading) {
-		this.preunloading = preunloading;
 	}
 
 	@Column(name = "update_user")
@@ -107,25 +87,7 @@ public class TaskCabinDetail implements Entityable {
 		this.remarks = remarks;
 	}
 
-	@ManyToOne(fetch=FetchType.LAZY,cascade=(CascadeType.ALL))
-	@JoinColumn(name="task_id")	
-	public Task getTask() {
-		return task;
-	}
-
-	public void setTask(Task task) {
-		this.task = task;
-	}
-
-	public Boolean getIsFinish() {
-		return isFinish;
-	}
-
-	public void setIsFinish(Boolean isFinish) {
-		this.isFinish = isFinish;
-	}
-	
-	@Column(name="loading_port")
+	@Column(name = "loading_port")
 	public String getLoadingPort() {
 		return loadingPort;
 	}
@@ -133,8 +95,8 @@ public class TaskCabinDetail implements Entityable {
 	public void setLoadingPort(String loadingPort) {
 		this.loadingPort = loadingPort;
 	}
-	
-	@Column(name="moisture")
+
+	@Column(name = "moisture")
 	public String getMoisture() {
 		return moisture;
 	}
@@ -142,8 +104,8 @@ public class TaskCabinDetail implements Entityable {
 	public void setMoisture(String moisture) {
 		this.moisture = moisture;
 	}
-	
-	@Column(name="quality")
+
+	@Column(name = "quality")
 	public String getQuality() {
 		return quality;
 	}
@@ -152,13 +114,40 @@ public class TaskCabinDetail implements Entityable {
 		this.quality = quality;
 	}
 
-	@Column(name="stowage")
-	public Double getStowage() {
+	@Column(name = "stowage")
+	public Float getStowage() {
 		return stowage;
 	}
 
-	public void setStowage(Double stowage) {
+	public void setStowage(Float stowage) {
 		this.stowage = stowage;
+	}
+
+	@Column(name = "cargo_category")
+	public String getCargoCategory() {
+		return cargoCategory;
+	}
+
+	public void setCargoCategory(String cargoCategory) {
+		this.cargoCategory = cargoCategory;
+	}
+
+	@OneToMany(mappedBy = "cabin")
+	public Set<Cabin> getCabins() {
+		return cabins;
+	}
+
+	public void setCabins(Set<Cabin> cabins) {
+		this.cabins = cabins;
+	}
+
+	@Column(name = "cargo_owner")
+	public String getCargoOwner() {
+		return cargoOwner;
+	}
+
+	public void setCargoOwner(String cargoOwner) {
+		this.cargoOwner = cargoOwner;
 	}
 
 }
