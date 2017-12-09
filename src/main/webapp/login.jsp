@@ -74,7 +74,7 @@ License: You must have a valid license purchased only from themeforest(the above
 		<div class="row bs-reset">
 			<div class="col-md-6 bs-reset">
 				<div class="login-bg"
-					style="background-image: url(${IncPath}/assets/pages/img/login/bg1.jpg)">
+					style="background-image: url(${IncPath}/img/login/bg1.jpg)">
 					<!-- <img class="login-logo" src="${IncPath}/assets/pages/img/login/logo.png" /> -->
 				</div>
 			</div>
@@ -105,18 +105,22 @@ License: You must have a valid license purchased only from themeforest(the above
 						</div>
 						<div class="row">
 							<div class="col-sm-4">
+							<!-- 
 								<div class="rem-password">
 									<p>
 										Remember Me <input type="checkbox" class="rem-checkbox" />
 									</p>
 								</div>
+								 -->
 							</div>
 							<div class="col-sm-8 text-right">
 								<div class="forgot-password">
+								<!-- 
 									<a href="javascript:;" id="forget-password"
 										class="forget-password">Forgot Password?</a>
+								 -->
 								</div>
-								<button class="btn blue" type="submit">Sign In</button>
+								<button class="btn blue" type="submit">登 录</button>
 							</div>
 						</div>
 					</form>
@@ -139,6 +143,7 @@ License: You must have a valid license purchased only from themeforest(the above
 				<div class="login-footer">
 					<div class="row bs-reset">
 						<div class="col-xs-4 bs-reset">
+						<!-- 
 							<ul class="login-social">
 								<li><a href="javascript:;"> <i
 										class="icon-social-facebook"></i>
@@ -150,6 +155,7 @@ License: You must have a valid license purchased only from themeforest(the above
 										class="icon-social-dribbble"></i>
 								</a></li>
 							</ul>
+						 -->
 						</div>
 						<div class="col-xs-8 bs-reset">
 							<div class="login-copyright text-right">

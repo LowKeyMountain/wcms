@@ -77,28 +77,28 @@ License: You must have a valid license purchased only from themeforest(the above
 				<div class="row">
 					<div class="col-md-12">
 						<!-- BEGIN PAGE TITLE & BREADCRUMB-->
-						<h3 class="page-title">船舶管理</h3>
+						<h3 class="page-title">工作管理</h3>
 						<ul class="page-breadcrumb breadcrumb">
 							<li><i class="fa fa-home"></i> <a
 								href="${BasePath}/web/main"> 主页 </a> <i
 								class="fa fa-angle-right"></i></li>
-							<li>配置中心 <i class="fa fa-angle-right"></i>
+							<li>工作中心 <i class="fa fa-angle-right"></i>
 							</li>
-							<li>船舶管理</li>
+							<li>工作管理</li>
 						</ul>
 						<!-- END PAGE TITLE & BREADCRUMB-->
 					</div>
 				</div>
 				<!-- END PAGE HEADER-->
 				<!-- 
-	                    <div class="m-heading-1 border-green m-bordered">
-	                        <h3>注意事项</h3>
-	                        <p> DataTables is a plug-in for the jQuery Javascript library. It is a highly flexible tool, based upon the foundations of progressive enhancement, and will add advanced interaction controls to any HTML table. </p>
-	                        <p> For more info please check out
-	                            <a class="btn red btn-outline" href="#" target="_blank">the official documentation</a>
-	                        </p>
-	                    </div>
-                    	-->
+                    <div class="m-heading-1 border-green m-bordered">
+                        <h3>注意事项</h3>
+                        <p> DataTables is a plug-in for the jQuery Javascript library. It is a highly flexible tool, based upon the foundations of progressive enhancement, and will add advanced interaction controls to any HTML table. </p>
+                        <p> For more info please check out
+                            <a class="btn red btn-outline" href="#" target="_blank">the official documentation</a>
+                        </p>
+                    </div>
+                 	-->
 				<div class="row">
 					<div class="col-md-12">
 						<!-- BEGIN EXAMPLE TABLE PORTLET-->
@@ -106,7 +106,7 @@ License: You must have a valid license purchased only from themeforest(the above
 							<div class="portlet-title">
 								<div class="caption font-dark">
 									<i class="icon-settings font-dark"></i> <span
-										class="caption-subject bold uppercase"> 船舶列表</span>
+										class="caption-subject bold uppercase"> 工作列表  </span>
 								</div>
 							</div>
 							<div class="portlet-body">

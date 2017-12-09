@@ -15,17 +15,17 @@
          <!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
          <ul class="page-sidebar-menu  page-header-fixed " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" style="padding-top: 20px">
              <!-- DOC: To remove the sidebar toggler from the sidebar you just need to completely remove the below "sidebar-toggler-wrapper" LI element -->
-             <li class="sidebar-toggler-wrapper hide">
+             <!-- <li class="sidebar-toggler-wrapper hide"> -->
                  <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
-                 <div class="sidebar-toggler"> </div>
+                 <!-- <div class="sidebar-toggler"> </div> -->
                  <!-- END SIDEBAR TOGGLER BUTTON -->
-             </li>
+             <!-- </li> -->
              <!-- DOC: To remove the search box from the sidebar you just need to completely remove the below "sidebar-search-wrapper" LI element -->
              <li class="sidebar-search-wrapper">
                  <!-- BEGIN RESPONSIVE QUICK SEARCH FORM -->
                  <!-- DOC: Apply "sidebar-search-bordered" class the below search form to have bordered search box -->
                  <!-- DOC: Apply "sidebar-search-bordered sidebar-search-solid" class the below search form to have bordered & solid search box -->
-                 <form class="sidebar-search  " action="page_general_search_3.html" method="POST">
+                 <form class="sidebar-search  " action="#" method="POST">
                      <a href="javascript:;" class="remove">
                          <i class="icon-close"></i>
                      </a>
@@ -44,6 +44,7 @@
                     <a href="${BasePath}/web/main" class="nav-link nav-toggle">
                         <i class="icon-home"></i>
                         <span class="title">主页</span>
+                        
                     </a>
                 </li>
                 <li class="nav-item  ">
@@ -55,24 +56,14 @@
                     <ul class="sub-menu">
                         <li class="nav-item  ">
                             <a href="${IncPath}/task/tasklist" class="nav-link ">
-                            	<i class="leaf"></i>
-                                <span class="title">船舶管理</span>
+                            	<i class="icon-bar-chart"></i>
+                                <span class="title">工作管理</span>
                             </a>
                         </li>
-                        <li class="nav-item  ">
-                            <a href="${IncPath}/task/addform" class="nav-link ">
-                            	<i class="leaf"></i>
-                                <span class="title">新增船舶</span>
-                            </a>
-                        </li>
-                        <li class="nav-item  ">
+                         <li class="nav-item start ">
                             <a href="#" class="nav-link ">
-                                <span class="title">船舱管理</span>
-                            </a>
-                        </li>
-						<li class="nav-item  ">
-                            <a href="#" class="nav-link ">
-                                <span class="title">货物管理</span>
+                                <i class="icon-bulb"></i>
+                                <span class="title">统计报表</span>
                             </a>
                         </li>
                         <li class="nav-item start active open">
@@ -80,13 +71,6 @@
                                 <i class="icon-bar-chart"></i>
                                 <span class="title">控制面板</span>
                                 <span class="selected"></span>
-                            </a>
-                        </li>
-                        <li class="nav-item start ">
-                            <a href="#" class="nav-link ">
-                                <i class="icon-bulb"></i>
-                                <span class="title">驾驶舱</span>
-                                <span class="badge badge-success">1</span>
                             </a>
                         </li>
                     </ul>
