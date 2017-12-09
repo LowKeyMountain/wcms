@@ -311,48 +311,6 @@ public class AppHttpInterface {
 	}
 
 	/**
-	 * 绑定泊位 <br>
-	 * 提供绑定泊位服务接口
-	 * 
-	 * @param json
-	 * @return
-	 */
-	@RequestMapping(value = "/ship/doSetBerthBind")
-	public Map<String, Object> doSetBerthBind(@RequestParam("json") String json) {
-		Map<String, Object> result = new HashMap<String, Object>();
-		try {
-			JSONObject jsonObject = JSONObject.parseObject(json);
-
-			if (!jsonObject.containsKey("userId")) {
-				throw new X27Exception("操作失败：参数[userId]不能为空！");
-			}
-			if (!jsonObject.containsKey("taskId")) {
-				throw new X27Exception("操作失败：参数[taskId]不能为空！");
-			}
-			if (!jsonObject.containsKey("berthId")) {
-				throw new X27Exception("操作失败：参数[berthId]不能为空！");
-			}
-
-			checkUser(jsonObject); // 验证用户是否存在
-
-			String userName = jsonObject.getString("userId");
-			String taskId = jsonObject.getString("taskId");
-			String berthId = jsonObject.getString("berthId");
-
-//			MessageOption mo = taskShipService.bindBerth(taskId, berthId, userName);
-
-//			result.put("msg", mo.msg);
-//			result.put("code", mo.isSuccess() ? "1" : "0");
-			return result;
-		} catch (Exception e) {
-			e.printStackTrace();
-			result.put("code", "0");
-			result.put("msg", e.getMessage());
-			return result;
-		}
-	}
-
-	/**
 	 * 设置舱位 <br>
 	 * 提供设置舱位服务，支持新增、修改舱位功能
 	 * 
