@@ -33,8 +33,7 @@ public class Ship implements Entityable {
 	private Integer cabinNum; // 船舱数据
 	private String hatch; // 舱口
 
-	private Boolean wireCable; // 是否钢丝缆
-	private Integer wireNum; // 缆绳根数
+	private String wire; // 缆绳
 	private String specialCabinType; // 特殊舱型
 
 	private String createUser;
@@ -181,22 +180,13 @@ public class Ship implements Entityable {
 		this.hatch = hatch;
 	}
 
-	@Column(name = "wire_cable")
-	public Boolean getWireCable() {
-		return wireCable;
+	@Column(name="wire")
+	public String getWire() {
+		return wire;
 	}
 
-	public void setWireCable(Boolean wireCable) {
-		this.wireCable = wireCable;
-	}
-
-	@Column(name = "wire_num")
-	public Integer getWireNum() {
-		return wireNum;
-	}
-
-	public void setWireNum(Integer wireNum) {
-		this.wireNum = wireNum;
+	public void setWire(String wire) {
+		this.wire = wire;
 	}
 
 	@Column(name = "special_cabin_type")

@@ -39,10 +39,8 @@ public class Task implements Entityable {
 	private Integer status; // 作业状态 （预靠船舶|0、作业船舶|1、 离港船舶|2）
 	private Float cargoLoad; // 货物总重（单位：吨）
 	private Integer berth; // 泊位（泊一|1、泊二|2）
-	private Float berthingDepth; // 入港吃水（单位：米）
-	private Float departureDepth; // 离港吃水（单位：米）
-	private Float berthingFreeboardDepth; // 入港干舷高度（单位：米）
-	private Float departureFreeboardDepth; // 离港干舷高度（单位：米）
+	private String depth; // 吃水
+	private String freeboardDepth; // 干舷高度
 
 	private String updateUser;
 	private Date updateTime;
@@ -183,41 +181,23 @@ public class Task implements Entityable {
 	public void setBerth(Integer berth) {
 		this.berth = berth;
 	}
-
-	@Column(name = "berthing_freeboard_depth")
-	public Float getBerthingFreeboardDepth() {
-		return berthingFreeboardDepth;
+	
+	@Column(name = "depth")
+	public String getDepth() {
+		return depth;
 	}
 
-	public void setBerthingFreeboardDepth(Float berthingFreeboardDepth) {
-		this.berthingFreeboardDepth = berthingFreeboardDepth;
+	public void setDepth(String depth) {
+		this.depth = depth;
+	}
+	
+	@Column(name = "freeboard_depth")
+	public String getFreeboardDepth() {
+		return freeboardDepth;
 	}
 
-	@Column(name = "departure_freeboard_depth")
-	public Float getDepartureFreeboardDepth() {
-		return departureFreeboardDepth;
-	}
-
-	public void setDepartureFreeboardDepth(Float departureFreeboardDepth) {
-		this.departureFreeboardDepth = departureFreeboardDepth;
-	}
-
-	@Column(name = "berthing_depth")
-	public Float getBerthingDepth() {
-		return berthingDepth;
-	}
-
-	public void setBerthingDepth(Float berthingDepth) {
-		this.berthingDepth = berthingDepth;
-	}
-
-	@Column(name = "departure_depth")
-	public Float getDepartureDepth() {
-		return departureDepth;
-	}
-
-	public void setDepartureDepth(Float departureDepth) {
-		this.departureDepth = departureDepth;
+	public void setFreeboardDepth(String freeboardDepth) {
+		this.freeboardDepth = freeboardDepth;
 	}
 
 }
