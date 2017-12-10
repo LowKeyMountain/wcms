@@ -28,6 +28,7 @@ public class Cabin implements Entityable {
 
 	private Integer id; // 编号
 	private String cabinNo; // 船舱编号
+	private String cargoCategory; // 货物种类
 	private Float startPosition; // 开始位置
 	private Float endPosition; // 结束位置
 	private Float preunloading; // 装载量（单位：吨）
@@ -38,7 +39,6 @@ public class Cabin implements Entityable {
 	private String remarks;
 
 	private Task task; // 作业任务信息
-	private Cargo cargo; // 货物信息
 
 	@GeneratedValue
 	@Id
@@ -132,14 +132,14 @@ public class Cabin implements Entityable {
 		this.status = status;
 	}
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = (CascadeType.ALL))
-	@JoinColumn(name = "cabins")
-	public Cargo getCargo() {
-		return cargo;
+	@Column(name = "cargo_category")
+	public String getCargoCategory() {
+		return cargoCategory;
 	}
 
-	public void setCargo(Cargo cargo) {
-		this.cargo = cargo;
+	public void setCargoCategory(String cargoCategory) {
+		this.cargoCategory = cargoCategory;
 	}
-
+	
+	
 }

@@ -1,14 +1,15 @@
 package net.itw.wcms.ship.entity;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import net.itw.wcms.toolkit.hibernate.Entityable;
@@ -38,9 +39,9 @@ public class Cargo implements Entityable {
 	private String updateUser;
 	private Date updateTime;
 	private String remarks;
-
-	private Set<Cabin> cabins = new HashSet<>(); // 货物所属船舱
-
+	
+	private Task task; // 作业任务信息
+	
 	@GeneratedValue
 	@Id
 	public Integer getId() {
@@ -132,15 +133,6 @@ public class Cargo implements Entityable {
 		this.cargoCategory = cargoCategory;
 	}
 
-	@OneToMany(mappedBy = "cargo")
-	public Set<Cabin> getCabins() {
-		return cabins;
-	}
-
-	public void setCabins(Set<Cabin> cabins) {
-		this.cabins = cabins;
-	}
-
 	@Column(name = "cargo_owner")
 	public String getCargoOwner() {
 		return cargoOwner;
@@ -148,6 +140,16 @@ public class Cargo implements Entityable {
 
 	public void setCargoOwner(String cargoOwner) {
 		this.cargoOwner = cargoOwner;
+	}
+	
+	@ManyToOne(fetch = FetchType.LAZY, cascade = (CascadeType.ALL))
+	@JoinColumn(name = "task_id")
+	public Task getTask() {
+		return task;
+	}
+
+	public void setTask(Task task) {
+		this.task = task;
 	}
 
 }

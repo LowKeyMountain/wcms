@@ -50,6 +50,7 @@ public class Task implements Entityable {
 
 	private Ship ship; // 船舶信息
 	private Set<Cabin> cabins = new HashSet<>(); // 船舱信息
+	private Set<Cargo> cargos = new HashSet<>(); // 货物信息
 
 	@GeneratedValue
 	@Id
@@ -153,6 +154,15 @@ public class Task implements Entityable {
 
 	public void setCabins(Set<Cabin> cabins) {
 		this.cabins = cabins;
+	}
+	
+	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
+	public Set<Cargo> getCargos() {
+		return cargos;
+	}
+
+	public void setCargos(Set<Cargo> cargos) {
+		this.cargos = cargos;
 	}
 
 	@OneToOne(fetch = FetchType.LAZY, cascade = (CascadeType.ALL))

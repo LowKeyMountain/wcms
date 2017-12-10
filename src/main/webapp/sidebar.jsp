@@ -50,7 +50,7 @@
                 <li class="nav-item  ">
                     <a href="javascript:;" class="nav-link nav-toggle">
                         <i class="icon-diamond"></i>
-                        <span class="title">工作中心</span>
+                        <span class="title">管理中心</span>
                         <span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
