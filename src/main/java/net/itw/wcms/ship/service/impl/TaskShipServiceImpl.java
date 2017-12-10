@@ -4,18 +4,16 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import net.itw.wcms.ship.entity.Task;
 import net.itw.wcms.ship.entity.Cabin;
-import net.itw.wcms.ship.repository.ShipRepository;
+import net.itw.wcms.ship.entity.Task;
 import net.itw.wcms.ship.repository.CabinRepository;
 import net.itw.wcms.ship.repository.CargoRepository;
+import net.itw.wcms.ship.repository.ShipRepository;
 import net.itw.wcms.ship.repository.TaskRepository;
 import net.itw.wcms.ship.service.ITaskShipService;
 import net.itw.wcms.toolkit.MessageOption;
@@ -61,97 +59,56 @@ public class TaskShipServiceImpl implements ITaskShipService {
 		// 处理流程：
 		// 修改船舱位置；
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
-		// try {
-		//
-		// User operator = userService.getUserByUserName(userName);
-		// Task task = taskRepository.findOne(Integer.parseInt(taskId));
-		//
-		// if (task == null) {
-		// throw new X27Exception("操作失败：[taskId]未找到指定作业船舶 ！");
-		// }
-		//
-		// // 前置条件验证
-		// // 1. 检查该船舱货物是否快卸完；
-		// // TODO:??
-		// // 2. 检查当前作业船舶状态，只有"卸货中|2"状态才能清舱，其他状态不接受清舱请求；
-		// Integer taskStatus = task.getStatus();
-		// if (!(Task.TaskStatus_InDischarge == taskStatus)) {
-		// throw new X27Exception("操作失败： 作业船舶只卸货中状态时才可以设置清舱状态！");
-		// }
-		//
-		// // 作业状态 （已入港|0、 预卸货|1、 卸货中|2、 完成卸船|3、 已离港|4）
-		// // 1. 检查当前作业船舶状态，只有"预卸货|1"状态才能设置船舱位置，其他状态均不允许设置；
-		// Integer status = task.getStatus();
-		// switch (status) {
-		// case 0:
-		// mo.msg = "操作失败: 当前船舶还未绑定泊位！";
-		// mo.code = ConstantUtil.FailInt;
-		// break;
-		// case 1:
-		// // 2.检查作业船舶是否有绑定泊位；
-		// Set<TaskBerth> set = task.getTaskBerths();
-		// if (set == null || set.isEmpty()) {
-		// mo.msg = "操作失败: 当前船舶还未绑定泊位！";
-		// mo.code = ConstantUtil.FailInt;
-		// break;
-		// }
-		//
-		// TaskBerth taskBerth = null;
-		// for (TaskBerth tb : task.getTaskBerths()) {
-		// taskBerth = tb;
-		// break;
-		// }
-		//
-		// Map<Integer, TaskCabinPositionDetail> maps = new HashMap<>();
-		// for (TaskCabinPositionDetail position :
-		// taskBerth.getTaskCabinPositionDetails()) {
-		// maps.put(position.getId(), position);
-		// }
-		//
-		// // 修改船舱位置
-		// for (Map<String, Object> map : list) {
-		// int cabinNo = Integer.parseInt(map.get("cabinNo").toString());
-		// Double endPosition =
-		// Double.parseDouble(map.get("endPosition").toString());
-		// Double startPosition =
-		// Double.parseDouble(map.get("startPosition").toString());
-		// TaskCabinPositionDetail position = maps.get(cabinNo);
-		// position.setEndPosition(endPosition);
-		// position.setStartPosition(startPosition);
-		// position.setUpdateTime(new Date());
-		// position.setUpdateUser(operator.getUserName());
-		// }
-		//
-		// // 设置船舱状态为已设置舱位
-		// if (!taskBerth.getIsSetPosition()) {
-		// taskBerth.setIsSetPosition(true);
-		// }
-		// taskBerthRepository.saveAndFlush(taskBerth);
-		//
-		// task.setStatus(1);// 设置预卸货状态
-		// taskRepository.saveAndFlush(task);
-		//
-		// break;
-		// case 2:
-		// mo.msg = "操作失败: 当前船舶正在卸货中！";
-		// mo.code = ConstantUtil.FailInt;
-		// break;
-		// case 3:
-		// mo.msg = "操作失败: 当前船舶已完成卸船！";
-		// mo.code = ConstantUtil.FailInt;
-		// break;
-		// case 4:
-		// mo.msg = "操作失败: 当前船舶已离港！";
-		// mo.code = ConstantUtil.FailInt;
-		// break;
-		// default:
-		// break;
-		// }
-		//
-		// } catch (Exception e) {
-		// mo.msg = e.getMessage();
-		// mo.code = ConstantUtil.FailInt;
-		// }
+		try {
+
+			User operator = userService.getUserByUserName(userName);
+			Task task = taskRepository.findOne(Integer.parseInt(taskId));
+
+			if (task == null) {
+				throw new X27Exception("操作失败：[taskId]未找到指定作业船舶 ！");
+			}
+
+			// 前置条件验证
+			// 1. "离港船舶|2"不能设置舱位；
+			Integer status = task.getStatus();
+			if (!(2 == status)) {
+				throw new X27Exception("操作失败： 离港船舶不能设置舱位！");
+			}
+
+			Map<String, Cabin> cabins = new HashMap<>();
+			if (task.getCabins() != null) {
+				for (Cabin e : task.getCabins()) {
+					cabins.put(e.getCabinNo(), e);
+				}
+			} else {
+				Integer num = task.getShip().getCabinNum();
+				while (num > 0) {
+					Cabin c = new Cabin();
+					c.setCabinNo(num+"");
+					cabins.put(c.getCabinNo(), c);
+					num--;
+				}
+			}
+
+			// 修改船舱位置
+			for (Map<String, Object> map : list) {
+				String cabinNo = (String) map.get("cabinNo");
+				Cabin cabin = cabins.get(cabinNo);
+				if (cabin == null) {
+					continue;
+				}
+				cabin.setUpdateTime(new Date());
+				cabin.setUpdateUser(operator.getUserName());
+				cabin.setEndPosition(Float.parseFloat((String) map.get("endPosition")));
+				cabin.setStartPosition(Float.parseFloat((String) map.get("startPosition")));
+			}
+
+			cabinRepository.save(cabins.values());
+
+		} catch (Exception e) {
+			mo.msg = e.getMessage();
+			mo.code = ConstantUtil.FailInt;
+		}
 		return mo;
 	}
 

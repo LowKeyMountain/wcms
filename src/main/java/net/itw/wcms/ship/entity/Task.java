@@ -17,6 +17,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import net.itw.wcms.toolkit.hibernate.Entityable;
 
 /**
@@ -32,9 +34,14 @@ public class Task implements Entityable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer id; // 编号
+	
+	@DateTimeFormat( pattern = "yyyy-MM-dd" )
 	private Date berthingTime; // 入港时间
+	@DateTimeFormat( pattern = "yyyy-MM-dd" )
 	private Date departureTime; // 离港时间
+	@DateTimeFormat( pattern = "yyyy-MM-dd" )
 	private Date beginTime; // 开始卸货时间
+	@DateTimeFormat( pattern = "yyyy-MM-dd" )
 	private Date endTime; // 结束卸货时间
 	private Integer status; // 作业状态 （预靠船舶|0、作业船舶|1、 离港船舶|2）
 	private Float cargoLoad; // 货物总重（单位：吨）

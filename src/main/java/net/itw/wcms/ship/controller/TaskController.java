@@ -1,5 +1,6 @@
 package net.itw.wcms.ship.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,8 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import net.itw.wcms.ship.entity.Task;
 import net.itw.wcms.ship.service.ITaskService;
+import net.itw.wcms.x27.entity.User;
+import net.itw.wcms.x27.utils.ConstantUtil;
 import net.itw.wcms.x27.utils.PageUtils;
+import net.itw.wcms.x27.utils.SessionUtil;
 
 @RestController
 @RequestMapping(value = "/task")
@@ -61,7 +66,7 @@ public class TaskController {
 	}
 	
 	@RequestMapping("/addform")
-	public ModelAndView addform() {
+	public ModelAndView newTask() {
 		return new ModelAndView(PATH + "addform");
 	}
 	
@@ -77,5 +82,26 @@ public class TaskController {
 		Pageable pageable = PageUtils.buildPageRequest(params);
 		return taskService.getTaskList(pageable, params);
 	}
-
+	
+	/**
+	 * 新增船舶信息
+	 * @param task
+	 * @return
+	 */
+	@RequestMapping(value = "/add")
+	public Map<String, Object> add(@ModelAttribute("task") Task task) {
+		User operator = SessionUtil.getSessionUser(req);
+		int successInt = 1;
+		String msg = "数据保存成功！";
+		try {
+			successInt = taskService.createTask(task, operator);
+		} catch (Exception e) {
+			e.printStackTrace();
+			msg = e.getMessage();
+		}
+		Map<String, Object> map = new HashMap<>();
+		map.put("msg", msg);
+		map.put(ConstantUtil.Success, successInt == 1 ? ConstantUtil.Success : ConstantUtil.Fail);
+		return map;
+	}
 }

@@ -136,7 +136,7 @@ License: You must have a valid license purchased only from themeforest(the above
 								<div class="col-md-6">
 									<div class="btn-group">
 										<button id="sample_editable_1_new" class="btn sbold green"
-											onclick="javascript:;">
+											onclick="javascript:Task.add_click();">
 											新增 <i class="fa fa-plus"></i>
 										</button>
 									</div>
@@ -284,7 +284,20 @@ License: You must have a valid license purchased only from themeforest(the above
 		type="text/javascript"></script>
 	<!-- BEGIN THEME LAYOUT SCRIPTS -->
 	<!-- END THEME LAYOUT SCRIPTS -->
+	<script>
+		jQuery(document).ready(function() {
+			// initiate layout and plugins
+			App.init();
+			Cl.initModal();
+			
+			$('#ykcbship').bootstrapTable("refresh").bootstrapTable(Task.options('0'));
 
+			$('#zycbship').bootstrapTable("refresh").bootstrapTable(Task.options('1'));
+
+			$('#lgcbship').bootstrapTable("destroy").bootstrapTable(Task.options('2'));
+			
+		});
+	</script>
 </body>
 
 </html>

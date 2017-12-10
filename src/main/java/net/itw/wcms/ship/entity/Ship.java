@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import net.itw.wcms.toolkit.hibernate.Entityable;
 
 /**
@@ -26,6 +28,7 @@ public class Ship implements Entityable {
 	private String shipName; // 船名
 	private String shipEnName; // 船英文名
 	private String imoNo; // IMO 编号
+	@DateTimeFormat( pattern = "yyyy-MM-dd" )
 	private Date buildDate; // 建造时间
 	private Float length; // 船长（单位：米）
 	private Float breadth; // 船宽 （单位：米）
@@ -36,8 +39,6 @@ public class Ship implements Entityable {
 	private String wire; // 缆绳
 	private String specialCabinType; // 特殊舱型
 
-	private String createUser;
-	private Date createTime;
 	private String updateUser;
 	private Date updateTime;
 	private String remarks;
@@ -113,25 +114,6 @@ public class Ship implements Entityable {
 
 	public void setCabinNum(Integer cabinNum) {
 		this.cabinNum = cabinNum;
-	}
-
-	@Column(name = "create_user")
-	public String getCreateUser() {
-		return createUser;
-	}
-
-	public void setCreateUser(String createUser) {
-		this.createUser = createUser;
-	}
-
-	@Column(name = "create_time")
-	// @Temporal(TemporalType.TIMESTAMP)
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
 	}
 
 	@Column(name = "update_user")

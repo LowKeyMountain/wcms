@@ -104,7 +104,14 @@ public class TaskServiceImpl implements ITaskService {
 
 	@Override
 	public Integer createTask(Task task, User operator) {
-		return null;
+		
+		task.setUpdateUser(operator.getUserName());
+		task.setUpdateTime(new Date());
+		
+		taskRepository.saveAndFlush(task);
+		
+		return ConstantUtil.SuccessInt;
+
 	}
 	
 }
