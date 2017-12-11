@@ -27,8 +27,8 @@ public class Cabin implements Entityable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer id; // 编号
-	private String cabinNo; // 船舱编号
-	private String cargoCategory; // 货物种类
+	private Integer cabinNo; // 船舱编号
+	private Integer cargoId; // 货物编号
 	private Float startPosition; // 开始位置
 	private Float endPosition; // 结束位置
 	private Float preunloading; // 装载量（单位：吨）
@@ -51,11 +51,11 @@ public class Cabin implements Entityable {
 	}
 
 	@Column(name = "cabin_no", nullable = false)
-	public String getCabinNo() {
+	public Integer getCabinNo() {
 		return cabinNo;
 	}
 
-	public void setCabinNo(String cabinNo) {
+	public void setCabinNo(Integer cabinNo) {
 		this.cabinNo = cabinNo;
 	}
 
@@ -131,14 +131,14 @@ public class Cabin implements Entityable {
 	public void setStatus(Integer status) {
 		this.status = status;
 	}
-	
-	@Column(name = "cargo_category")
-	public String getCargoCategory() {
-		return cargoCategory;
+
+	@Column(name="cargo_id")
+	public Integer getCargoId() {
+		return cargoId;
 	}
 
-	public void setCargoCategory(String cargoCategory) {
-		this.cargoCategory = cargoCategory;
+	public void setCargoId(Integer cargoId) {
+		this.cargoId = cargoId;
 	}
 	
 	

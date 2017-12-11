@@ -78,15 +78,15 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			Map<String, Cabin> cabins = new HashMap<>();
 			if (task.getCabins() != null && task.getCabins().size() > 0) {
 				for (Cabin e : task.getCabins()) {
-					cabins.put(e.getCabinNo(), e);
+					cabins.put(e.getCabinNo() + "", e);
 				}
 			} else {
 				Integer num = task.getShip().getCabinNum();
 				while (num > 0) {
 					Cabin c = new Cabin();
-					c.setCabinNo(num+"");
+					c.setCabinNo(num);
 					c.setTask(task);
-					cabins.put(c.getCabinNo(), c);
+					cabins.put(c.getCabinNo() + "", c);
 					num--;
 				}
 			}
@@ -395,7 +395,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			if (Integer.parseInt(status) == 1 || Integer.parseInt(status) == 2) {
 				// 1. 设置作业船舶指定舱位状态为：清舱或完成状态；
 				for (Cabin cabin : task.getCabins()) {
-					if (Integer.parseInt(cabin.getCabinNo()) == Integer.parseInt(cabinNo)) {
+					if (cabin.getCabinNo() == Integer.parseInt(cabinNo)) {
 						cabin.setStatus(Integer.parseInt(status));
 						cabin.setUpdateTime(new Date());
 						cabin.setUpdateUser(operator.getUserName());
