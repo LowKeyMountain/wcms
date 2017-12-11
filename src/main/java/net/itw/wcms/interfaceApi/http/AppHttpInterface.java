@@ -321,9 +321,8 @@ public class AppHttpInterface {
 				throw new X27Exception("操作失败：参数[cabinNo]不能为空！");
 			}
 
-			jsonObject.put("criteria", JSONObject
-					.parseObject("{'$task_id':'" + (String) taskId + "','$cabin_no':" + (Integer) cabinNo + "}"));
-			return infoQueryHelper.doQueryInfo(jsonObject);
+			return taskShipService.doGetCargoDetail(Integer.parseInt(taskId.toString()), (Integer) cabinNo);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.put("code", "0");

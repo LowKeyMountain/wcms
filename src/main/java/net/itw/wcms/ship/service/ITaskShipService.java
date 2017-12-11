@@ -69,5 +69,14 @@ public interface ITaskShipService {
 	 * @param status
 	 * @return
 	 */
-	MessageOption updateCabinStatus(String taskId, String userName, String cabinNo, String status);	
+	MessageOption updateCabinStatus(String taskId, String userName, String cabinNo, String status);
+	
+	/**
+	 * 货物信息查询
+	 * 
+	 * @param taskId
+	 * @param cabinNo
+	 * @return
+	 */
+	Map<String, Object> doGetCargoDetail(Integer taskId, Integer cabinNo);
 }

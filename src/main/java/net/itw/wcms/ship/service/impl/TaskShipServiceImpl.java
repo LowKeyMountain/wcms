@@ -5,11 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import net.itw.wcms.ship.entity.Cabin;
+import net.itw.wcms.ship.entity.Cargo;
 import net.itw.wcms.ship.entity.Task;
 import net.itw.wcms.ship.repository.CabinRepository;
 import net.itw.wcms.ship.repository.CargoRepository;
@@ -498,5 +500,43 @@ public class TaskShipServiceImpl implements ITaskShipService {
 		}
 
 		return mo;
+	}
+
+	@Override
+	public Map<String, Object> doGetCargoDetail(Integer taskId, Integer cabinNo) {
+		String msg = "操作成功！";
+		boolean isSuccess = true;
+
+		Map<String, Object> result = new HashMap<>();
+		try {
+			
+			Cargo cargo = cargoRepository.getCargoByTaskIdAndCabinNo(taskId, cabinNo);
+			if (cargo == null) {
+				result.put("code", "0");
+				result.put("msg", "货物信息未找到！");
+				return result;
+			}
+
+			Map<String, Object> data = new HashMap<>();
+			data.put("cargoType", cargo.getCargoType());
+			data.put("cargoCategory", cargo.getCargoCategory());
+			data.put("loadingPort", cargo.getLoadingPort());
+			data.put("quality", cargo.getQuality());
+			data.put("moisture", cargo.getMoisture());
+			data.put("owner", cargo.getCargoOwner());
+			data.put("owner", cargo.getStowage());
+			String warehouse = cargoRepository.getCargoWarehouse(cargo.getId());
+			data.put("warehouse", warehouse);
+			
+			result.put("msg", msg);
+			result.put("data", data);
+			result.put("code", isSuccess);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", "0");
+			result.put("msg", e.getMessage());
+			return result;
+		}
+		return result;
 	}
 }
