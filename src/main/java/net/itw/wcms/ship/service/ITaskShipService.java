@@ -51,4 +51,23 @@ public interface ITaskShipService {
 	 */
 	MessageOption finishedShipUnload(String taskId, String userName);
 
+	/**
+	 * 修改船舶状态
+	 * 
+	 * @param taskId
+	 * @param userName
+	 * @param status
+	 * @return
+	 */
+	MessageOption updateShipStatus(String taskId, String userName, String status);
+	
+	/**
+	 * 修改船舱状态
+	 * 
+	 * @param taskId
+	 * @param cabinNo
+	 * @param status
+	 * @return
+	 */
+	MessageOption updateCabinStatus(String taskId, String userName, String cabinNo, String status);	
 }
