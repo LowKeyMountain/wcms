@@ -71,12 +71,12 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			// 前置条件验证
 			// 1. "离港船舶|2"不能设置舱位；
 			Integer status = task.getStatus();
-			if (!(2 == status)) {
+			if (2 == status) {
 				throw new X27Exception("操作失败： 离港船舶不能设置舱位！");
 			}
 
 			Map<String, Cabin> cabins = new HashMap<>();
-			if (task.getCabins() != null) {
+			if (task.getCabins() != null && task.getCabins().size() > 0) {
 				for (Cabin e : task.getCabins()) {
 					cabins.put(e.getCabinNo(), e);
 				}
@@ -85,6 +85,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 				while (num > 0) {
 					Cabin c = new Cabin();
 					c.setCabinNo(num+"");
+					c.setTask(task);
 					cabins.put(c.getCabinNo(), c);
 					num--;
 				}
@@ -92,15 +93,15 @@ public class TaskShipServiceImpl implements ITaskShipService {
 
 			// 修改船舱位置
 			for (Map<String, Object> map : list) {
-				String cabinNo = (String) map.get("cabinNo");
+				String cabinNo = map.get("cabinNo").toString();
 				Cabin cabin = cabins.get(cabinNo);
 				if (cabin == null) {
 					continue;
 				}
 				cabin.setUpdateTime(new Date());
 				cabin.setUpdateUser(operator.getUserName());
-				cabin.setEndPosition(Float.parseFloat((String) map.get("endPosition")));
-				cabin.setStartPosition(Float.parseFloat((String) map.get("startPosition")));
+				cabin.setEndPosition(Float.parseFloat(map.get("endPosition").toString()));
+				cabin.setStartPosition(Float.parseFloat(map.get("startPosition").toString()));
 			}
 
 			cabinRepository.save(cabins.values());
@@ -353,6 +354,148 @@ public class TaskShipServiceImpl implements ITaskShipService {
 		// mo.msg = e.getMessage();
 		// mo.code = ConstantUtil.FailInt;
 		// }
+
+		return mo;
+	}
+	
+	/**
+	 * 修改船舱状态
+	 * 
+	 * @param taskId
+	 * @param cabinNo
+	 * @param userName
+	 * @return
+	 */
+	@Override
+	public MessageOption updateCabinStatus(String taskId, String userName, String cabinNo, String status) {
+		// 需求：作业船舶设置船舱状态（0|卸货;1|清舱;2|完成）
+		// 前置条件：
+		// 1. 检查该船舱货物是否快卸完；
+		// 2. 检查当前作业船舶状态，只有"作业船舶|1"状态才能清舱，其他状态不接受清舱请求；
+		// 处理流程：
+		// 作业船舶|1
+		// 1. 设置作业船舶指定舱位状态为：清舱或完成状态；
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
+		try {
+			User operator = userService.getUserByUserName(userName);
+			Task task = taskRepository.findOne(Integer.parseInt(taskId));
+
+			if (task == null) {
+				throw new X27Exception("操作失败：[taskId]未找到指定作业船舶 ！");
+			}
+
+			// 前置条件验证
+			// 1. 检查该船舱货物是否快卸完；
+			// TODO:??
+			// 2. 检查当前作业船舶状态，只有"作业船舶|1"状态才能设置清舱或完成，其他状态不允许设置；
+			Integer taskStatus = task.getStatus();
+			if (taskStatus != 1) {
+				throw new X27Exception("操作失败： 船舶只有在作业时才能修改船舱状态！");
+			}
+			if (Integer.parseInt(status) == 1 || Integer.parseInt(status) == 2) {
+				// 1. 设置作业船舶指定舱位状态为：清舱或完成状态；
+				for (Cabin cabin : task.getCabins()) {
+					if (Integer.parseInt(cabin.getCabinNo()) == Integer.parseInt(cabinNo)) {
+						cabin.setStatus(Integer.parseInt(status));
+						cabin.setUpdateTime(new Date());
+						cabin.setUpdateUser(operator.getUserName());
+					}
+				}
+			} else {
+				throw new X27Exception("操作失败： 船舱状态参数异常！");
+			}
+			task.setUpdateTime(new Date());
+			task.setUpdateUser(operator.getUserName());
+			taskRepository.saveAndFlush(task);
+		}catch (Exception e) {
+			mo.msg = e.getMessage();
+			mo.code = ConstantUtil.FailInt;
+		}
+		
+		return mo;
+	}
+
+	
+	/**
+	 * 设置船舶状态
+	 * 
+	 * @param taskId
+	 * @param userName
+	 * @param status(0|开始卸船、1|结束卸船)
+	 * @return
+	 */
+	@Override
+	@Transactional
+	public MessageOption updateShipStatus(String taskId, String userName, String status) {
+
+		// 需求：设置船舶状态
+		// 前置条件：
+		// 【开始卸船】
+		// 1.检查当前船舶状态，只有“预靠船舶|0”状态才能设置“开始卸船”，其它状态不能进行设定；
+		// 【结束卸船】
+		// 1.检查当前船舶状态，只有“作业船舶|1”状态才能设置“结束卸船”，其它状态不能进行设定；
+		// 2.检查各船舱是否为完成状态,各舱均为完成状态时才可设置"结束卸船"；
+
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
+		try {
+			User operator = userService.getUserByUserName(userName);
+			Task task = taskRepository.findOne(Integer.parseInt(taskId));
+			if (task == null) {
+				throw new X27Exception("操作失败：[taskId]未找到指定作业船舶 ！");
+			}
+
+			// 作业状态 （预靠船舶|0、 作业船舶|1、离港船舶|2）
+			// 1.检查当前船舶状态，只有“作业船舶|1”状态才能设置“结束卸船”，其它状态不能进行设定；
+			Integer shipStatus = task.getStatus();
+			switch (shipStatus) {
+			case 0:
+				if ("0".equals(status)) {
+					// 开始卸船
+					task.setStatus(1);
+					task.setBeginTime(new Date());
+					task.setUpdateTime(new Date());
+					task.setUpdateUser(operator.getUserName());
+					taskRepository.saveAndFlush(task);
+					// TODO:更新所有船舱状态为卸货|0
+
+				} else if ("1".equals(status)) {
+					throw new X27Exception("操作失败: 当前船舶为预靠状态！");
+				} else {
+					throw new X27Exception("操作失败: 船舶状态参数有误！");
+				}
+				break;
+			case 1:
+				if ("0".equals(status)) {
+					throw new X27Exception("操作失败: 当前船舶为作业状态！");
+				} else if ("1".equals(status)) {
+					// 检查各船舱是否为完成状态,各舱均为完成状态时才可设置结束卸船；
+					for (Cabin cabin : task.getCabins()) {
+						if (cabin.getStatus() == 2) {
+							continue;
+						} else {
+							throw new X27Exception("操作失败：当前船舶存在未完成卸货的船舱!");
+						}
+					}
+					// 结束卸船
+					task.setStatus(2);
+					task.setEndTime(new Date());
+					task.setUpdateTime(new Date());
+					task.setUpdateUser(operator.getUserName());
+					taskRepository.saveAndFlush(task);
+				} else {
+					throw new X27Exception("操作失败: 船舶状态参数有误！");
+				}
+				break;
+			case 2:
+				throw new X27Exception("操作失败: 当前船舶已进入离港状态！");
+			default:
+				break;
+			}
+
+		} catch (Exception e) {
+			mo.msg = e.getMessage();
+			mo.code = ConstantUtil.FailInt;
+		}
 
 		return mo;
 	}

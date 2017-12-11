@@ -139,7 +139,7 @@ public class AppHttpInterface {
 	 * @param jsonObject
 	 */
 	private void checkUser(JSONObject jsonObject) throws Exception {
-		String userName = (String) jsonObject.get("userId");
+		String userName = jsonObject.getString("userId");
 		// 验证用户是否存在
 		User user = userService.getUserByUserName(userName);
 		if (user == null) {
@@ -158,7 +158,13 @@ public class AppHttpInterface {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			JSONObject jsonObject = JSONObject.parseObject(json);
-
+			
+			if (!jsonObject.containsKey("userId")) {
+				throw new X27Exception("操作失败：参数[userId]不能为空！");
+			}
+			if (!jsonObject.containsKey("shipStatus")) {
+				throw new X27Exception("操作失败：参数[shipStatus]不能为空！");
+			}
 			checkUser(jsonObject); // 验证用户是否存在
 
 			Integer shipStatus = (Integer) jsonObject.get("shipStatus");
@@ -184,22 +190,30 @@ public class AppHttpInterface {
 	 * @param json
 	 * @return
 	 */
-	@RequestMapping(value = "/ship/doGetShipPosition")
-	public Map<String, Object> doGetShipPosition(@RequestParam("json") String json) {
+	@RequestMapping(value = "/ship/doGetCabinDetail")
+	public Map<String, Object> doGetCabinDetail(@RequestParam("json") String json) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			JSONObject jsonObject = JSONObject.parseObject(json);
-
-			checkUser(jsonObject); // 验证用户是否存在
-
+			
+			if (!jsonObject.containsKey("userId")) {
+				throw new X27Exception("操作失败：参数[userId]不能为空！");
+			}
+			if (!jsonObject.containsKey("taskId")) {
+				throw new X27Exception("操作失败：参数[taskId]不能为空！");
+			}
+			if (!jsonObject.containsKey("cabinNo")) {
+				throw new X27Exception("操作失败：参数[cabinNo]不能为空！");
+			}
+			
+			checkUser(jsonObject); // 验证用户是否存在			
 			jsonObject.put("fuctionType", "FN_002");
 
-			String taskId = (String) jsonObject.get("taskId");
-			if (StringUtils.isBlank(taskId)) {
-				throw new X27Exception("操作失败：作业船舶[taskId]不能为空！");
-			}
+			String taskId = jsonObject.getString("taskId");
+			String cabinNo = jsonObject.getString("cabinNo");
 
-			jsonObject.put("criteria", JSONObject.parseObject("{'$task_id':'" + taskId + "'}"));
+			jsonObject.put("criteria", JSONObject.parseObject("{'$task_id':'" + taskId + "','$cabin_no':'" + cabinNo + "'}"));
+			
 			return infoQueryHelper.doQueryInfo(jsonObject);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -220,17 +234,20 @@ public class AppHttpInterface {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			JSONObject jsonObject = JSONObject.parseObject(json);
-
+			
+			if (!jsonObject.containsKey("userId")) {
+				throw new X27Exception("操作失败：参数[userId]不能为空！");
+			}
+			if (!jsonObject.containsKey("taskId")) {
+				throw new X27Exception("操作失败：参数[taskId]不能为空！");
+			}
+			
 			checkUser(jsonObject); // 验证用户是否存在
-
 			jsonObject.put("fuctionType", "FN_003");
 
-			String taskId = (String) jsonObject.get("taskId");
-			if (StringUtils.isBlank(taskId)) {
-				throw new X27Exception("操作失败：作业船舶[taskId]不能为空！");
-			}
+			String taskId = jsonObject.getString("taskId");
 
-			jsonObject.put("criteria", JSONObject.parseObject("{'$task_id':'" + taskId + "'}"));
+			jsonObject.put("criteria", JSONObject.parseObject("{'$t.id':'" + taskId + "'}"));
 			return infoQueryHelper.doQueryInfo(jsonObject);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -252,12 +269,17 @@ public class AppHttpInterface {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			JSONObject jsonObject = JSONObject.parseObject(json);
-
+			if (!jsonObject.containsKey("userId")) {
+				throw new X27Exception("操作失败：参数[userId]不能为空！");
+			}
+			if (!jsonObject.containsKey("taskId")) {
+				throw new X27Exception("操作失败：参数[taskId]不能为空！");
+			}
 			checkUser(jsonObject); // 验证用户是否存在
 
 			jsonObject.put("fuctionType", "FN_004");
 
-			String taskId = (String) jsonObject.get("taskId");
+			String taskId = jsonObject.getString("taskId");
 			if (StringUtils.isBlank(taskId)) {
 				throw new X27Exception("操作失败：作业船舶[taskId]不能为空！");
 			}
@@ -362,50 +384,14 @@ public class AppHttpInterface {
 	}
 
 	/**
-	 * 开始卸船 <br>
-	 * 供开始卸船服务接口
-	 * 
-	 * @param json
-	 * @return
-	 */
-	@RequestMapping(value = "/ship/doSetShipUnload")
-	public Map<String, Object> doBeginShipUnload(@RequestParam("json") String json) {
-		Map<String, Object> result = new HashMap<String, Object>();
-		try {
-			JSONObject jsonObject = JSONObject.parseObject(json);
-
-			if (!jsonObject.containsKey("userId")) {
-				throw new X27Exception("操作失败：参数[userId]不能为空！");
-			}
-			if (!jsonObject.containsKey("taskId")) {
-				throw new X27Exception("操作失败：参数[taskId]不能为空！");
-			}
-
-			checkUser(jsonObject); // 验证用户是否存在
-			String userName = jsonObject.getString("userId");
-			String taskId = jsonObject.getString("taskId");
-
-			MessageOption mo = taskShipService.beginShipUnload(taskId, userName);
-			result.put("msg", mo.msg);
-			result.put("code", mo.isSuccess() ? "1" : "0");
-			return result;
-		} catch (Exception e) {
-			e.printStackTrace();
-			result.put("code", "0");
-			result.put("msg", e.getMessage());
-			return result;
-		}
-	}
-
-	/**
 	 * 设置清舱 <br>
 	 * 设置船舱清舱状态
 	 * 
 	 * @param json
 	 * @return
 	 */
-	@RequestMapping(value = "/ship/doSetCabinClear")
-	public Map<String, Object> doSetClearCabin(@RequestParam("json") String json) {
+	@RequestMapping(value = "/ship/doSetCabinStatus")
+	public Map<String, Object> doSetCabinStatus(@RequestParam("json") String json) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			JSONObject jsonObject = JSONObject.parseObject(json);
@@ -419,14 +405,18 @@ public class AppHttpInterface {
 			if (!jsonObject.containsKey("cabinNo")) {
 				throw new X27Exception("操作失败：参数[cabinNo]不能为空！");
 			}
-
+			if (!jsonObject.containsKey("status")) {
+				throw new X27Exception("操作失败：参数[status]不能为空！");
+			}
+			
 			checkUser(jsonObject); // 验证用户是否存在
 
 			String userName = jsonObject.getString("userId");
 			String taskId = jsonObject.getString("taskId");
 			String cabinNo = jsonObject.getString("cabinNo");
+			String status = jsonObject.getString("status");
 
-			MessageOption mo = taskShipService.setClearCabin(taskId, cabinNo, userName);
+			MessageOption mo = taskShipService.updateCabinStatus(taskId, userName, cabinNo, status);
 			result.put("msg", mo.msg);
 			result.put("code", mo.isSuccess() ? "1" : "0");
 			return result;
@@ -439,14 +429,13 @@ public class AppHttpInterface {
 	}
 
 	/**
-	 * 完成卸船 <br>
 	 * 设置船舶完成卸货状态
 	 * 
 	 * @param json
 	 * @return
 	 */
-	@RequestMapping(value = "/ship/doSetShipFinished")
-	public Map<String, Object> doSetShipFinished(@RequestParam("json") String json) {
+	@RequestMapping(value = "/ship/doSetShipStatus")
+	public Map<String, Object> doSetShipStatus(@RequestParam("json") String json) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			JSONObject jsonObject = JSONObject.parseObject(json);
@@ -457,13 +446,16 @@ public class AppHttpInterface {
 			if (!jsonObject.containsKey("taskId")) {
 				throw new X27Exception("操作失败：参数[taskId]不能为空！");
 			}
-
+			if (!jsonObject.containsKey("status")) {
+				throw new X27Exception("操作失败：参数[status]不能为空！");
+			}
 			checkUser(jsonObject); // 验证用户是否存在
 
 			String userName = jsonObject.getString("userId");
 			String taskId = jsonObject.getString("taskId");
+			String status = jsonObject.getString("status");
 
-			MessageOption mo = taskShipService.finishedShipUnload(taskId, userName);
+			MessageOption mo = taskShipService.updateShipStatus(taskId, userName, status);
 			result.put("msg", mo.msg);
 			result.put("code", mo.isSuccess() ? "1" : "0");
 			return result;
