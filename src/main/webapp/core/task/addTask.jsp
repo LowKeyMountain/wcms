@@ -112,15 +112,15 @@ License: You must have a valid license purchased only from themeforest(the above
 													href="#ship" data-toggle="tab">船舶信息</a></li>
 												<li class=""
 													style="border-style: solid; border-width: 1.4px; border-color: #2f353b;"><a
-													href="#cargo" data-toggle="tab">货物信息</a></li>
+													href="#cargo" onclick="javascript:Cargo.list();" data-toggle="tab">货物信息</a></li>
 												<li class=""
 													style="border-style: solid; border-width: 1.4px; border-color: #2f353b;"><a
-													href="#cabin" data-toggle="tab">船舱信息</a>
+													href="#cabin"  onclick="javascript:Cabin.list();" data-toggle="tab">船舱信息</a>
 											</ul>
 												<div class="tab-content">
-													<jsp:include page="./addform_ship.jsp" />
-													<jsp:include page="./addform_cargo.jsp" />
-													<jsp:include page="./addform_cabin.jsp" />
+													<jsp:include page="../ship/addform.jsp" />
+													<jsp:include page="../cargo/list.jsp" />
+													<jsp:include page="../cabin/list.jsp" />
 												</div>
 										</div>
 										
@@ -188,14 +188,18 @@ License: You must have a valid license purchased only from themeforest(the above
 	<script type="text/javascript">
 		var IncPath = '${IncPath}';
 		var BasePath = '${BasePath}';
+		var taskId;
 	</script>
 	<script src="${IncPath}/cl.js?v=${jsVersion}" type="text/javascript"></script>
-	<script src="${IncPath}/core/task/task.js?v=${jsVersion}"
-		type="text/javascript"></script>
+	<script src="${IncPath}/core/task/task.js?v=${jsVersion}" type="text/javascript"></script>
+	<script src="${IncPath}/core/cargo/cargo.js?v=${jsVersion}" type="text/javascript"></script>
+	<script src="${IncPath}/core/cabin/cabin.js?v=${jsVersion}" type="text/javascript"></script>
 	<!-- BEGIN THEME LAYOUT SCRIPTS -->
 	<!-- END THEME LAYOUT SCRIPTS -->
 	<script>
 		jQuery(document).ready(function() {
+			App.init();
+			Cl.initModal();
 			FormCl.init();
 			FormValidation.init();
 		});

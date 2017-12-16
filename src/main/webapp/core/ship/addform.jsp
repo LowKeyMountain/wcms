@@ -215,7 +215,7 @@
 			</div>
 		</div>
 		<div class="modal-footer">
-			<button type="button" class="btn default" data-dismiss="modal">ÖØÖÃ</button>
+			<!-- <button type="button" class="btn default" data-dismiss="modal">ÖØÖÃ</button> -->
 			<button type="submit" class="btn blue" onclick="javascript:;">±£´æ</button>
 		</div>
 

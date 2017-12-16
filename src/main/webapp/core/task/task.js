@@ -199,11 +199,11 @@ var Task = function() {
 					align : 'center',
 					sortable : true
 				}, {
-					field : 'updateUser',
+					field : 'endTime',
 					title : '完工时间',
 					align : 'center'
 				}, {
-					field : 'updateTime',
+					field : 'departureTime',
 					title : '离泊时间',
 					align : 'center'
 				}, {
@@ -265,6 +265,7 @@ var Task = function() {
 					if (!result)
 						return;
 					if (result.success == "success") {
+						taskId = result.taskId;
 						alert("增加成功");
 					} else {
 						alert("增加失败");
@@ -273,10 +274,11 @@ var Task = function() {
 				},
 				error : function(result) {
 					alert("系统异常，增加失败！");
-				},
-				clearForm : true,
-				resetForm : true,
-				timeout : 3000
+				}
+//				,
+//				clearForm : true,
+//				resetForm : true,
+//				timeout : 3000
 			};
 			$("#form_cl").ajaxSubmit(options);
 		},
@@ -335,3 +337,15 @@ var Task = function() {
 
 	};
 }();
+
+function loadList(status){
+	if (status == '0') {
+		$('#ykcbship').bootstrapTable("refresh").bootstrapTable(Task.options('0'));
+	} else if (status == '1') {
+		$('#zycbship').bootstrapTable("refresh").bootstrapTable(Task.options('1'));
+	} else if (status == '2') {
+		$('#lgcbship').bootstrapTable("refresh").bootstrapTable(Task.options('2'));
+	}
+}
+
+

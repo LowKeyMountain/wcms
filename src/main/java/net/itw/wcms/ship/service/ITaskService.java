@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.springframework.data.domain.Pageable;
 
-import net.itw.wcms.ship.entity.Ship;
 import net.itw.wcms.ship.entity.Task;
 import net.itw.wcms.x27.entity.User;
 
@@ -18,20 +17,13 @@ import net.itw.wcms.x27.entity.User;
 public interface ITaskService {
 	
 	/**
-	 * 根据船舶状态，返回船舶Json数据格式
-	 * 
-	 * @param pageable
-	 * @return
-	 */
-	String getTaskList(Task task, Pageable pageable, String status);
-	
-	/**
 	 * 获取船舶列表信息
 	 * @param pageable
+	 * @param status
 	 * @param params
 	 * @return
 	 */
-	Map<String, ?> getTaskList(Pageable pageable, Map<String, String> params);
+	Map<String, Object> getTaskList(Pageable pageable, Integer status, Map<String, String> params);
 	
 	/**
 	 * 根据船舶状态，返回船舶列表

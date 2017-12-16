@@ -67,7 +67,7 @@ public class TaskController {
 	
 	@RequestMapping("/addform")
 	public ModelAndView newTask() {
-		return new ModelAndView(PATH + "addform");
+		return new ModelAndView(PATH + "addTask");
 	}
 	
 	/**
@@ -78,9 +78,9 @@ public class TaskController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getTaskList", produces = "text/json;charset=UTF-8")
-	public Map<String, ?> getTaskDataTables(@RequestParam Map<String, String> params, ModelMap map) {
+	public Map<String, Object> getTaskDataTables(@RequestParam Map<String, String> params, @RequestParam("status") Integer status, ModelMap map) {
 		Pageable pageable = PageUtils.buildPageRequest(params);
-		return taskService.getTaskList(pageable, params);
+		return taskService.getTaskList(pageable, status, params);
 	}
 	
 	/**
@@ -101,6 +101,7 @@ public class TaskController {
 		}
 		Map<String, Object> map = new HashMap<>();
 		map.put("msg", msg);
+		map.put("taskId", task.getId());
 		map.put(ConstantUtil.Success, successInt == 1 ? ConstantUtil.Success : ConstantUtil.Fail);
 		return map;
 	}

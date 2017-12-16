@@ -177,15 +177,15 @@ License: You must have a valid license purchased only from themeforest(the above
 																aria-hidden="true"></span>删除
 														</button>
 													</div>
-													<div class="tab-pane fade" id="ykcb">
+													<div class="tab-pane fade" id="ykcb"  onclick="javascript:loadList('0');">
 														<table id="ykcbship"
 															class="table table-striped table-bordered table-hover table-checkable order-column"></table>
 													</div>
-													<div class="tab-pane fade active in" id="zycb">
+													<div class="tab-pane fade active in" id="zycb" onclick="javascript:loadList('1');">
 														<table id="zycbship"
 															class="table table-striped table-bordered table-hover table-checkable order-column"></table>
 													</div>
-													<div class="tab-pane fade" id="lgcb">
+													<div class="tab-pane fade" id="lgcb" onclick="javascript:loadList('2');">
 														<table id="lgcbship"
 															class="table table-striped table-bordered table-hover table-checkable order-column"></table>
 													</div>
@@ -280,8 +280,7 @@ License: You must have a valid license purchased only from themeforest(the above
 		var BasePath = '${BasePath}';
 	</script>
 	<script src="${IncPath}/cl.js?v=${jsVersion}" type="text/javascript"></script>
-	<script src="${IncPath}/core/task/task.js?v=${jsVersion}"
-		type="text/javascript"></script>
+	<script src="${IncPath}/core/task/task.js?v=${jsVersion}" type="text/javascript"></script>
 	<!-- BEGIN THEME LAYOUT SCRIPTS -->
 	<!-- END THEME LAYOUT SCRIPTS -->
 	<script>
@@ -289,13 +288,9 @@ License: You must have a valid license purchased only from themeforest(the above
 			// initiate layout and plugins
 			App.init();
 			Cl.initModal();
-			
-			$('#ykcbship').bootstrapTable("refresh").bootstrapTable(Task.options('0'));
-
+			$('#ykcbship').bootstrapTable("destroy").bootstrapTable(Task.options('0'));
 			$('#zycbship').bootstrapTable("refresh").bootstrapTable(Task.options('1'));
-
-			$('#lgcbship').bootstrapTable("destroy").bootstrapTable(Task.options('2'));
-			
+			$('#lgcbship').bootstrapTable("refresh").bootstrapTable(Task.options('2'));
 		});
 	</script>
 </body>
