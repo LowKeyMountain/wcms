@@ -1,4 +1,3 @@
-
 var FormCl = function () {
     // validation using icons
     var handleValidation = function() {
@@ -117,57 +116,35 @@ var Task = function() {
 				contentType : "application/x-www-form-urlencoded",
 				url : BasePath + "/task/getTaskList?status=" + status,
 				dataType : 'json',
-				// // dataField: 'res',//bootstrap table 可以前端分页也可以后端分页
-				// striped : true, // 是否显示行间隔色
-				// pageNumber : 1, // 初始化加载第一页，默认第一页
-				// pagination : true,// 是否分页
-				// queryParamsType : 'limit',
-				// sidePagination : 'server',
-				// pageSize : 10,// 单页记录数
-				// pageList : [ 5, 10, 20, 30 ],// 分页步进值
-				// // showPaginationSwitch : true,// 是否显示选择分页数按钮
-				// // showHeader : true,
-				// showRefresh : true,// 刷新按钮
-				// // showToggle : true,// 是否显示 切换试图（table/card）按钮
-				// // showColumns : true,// 是否显示 内容列下拉框
-				// // queryParams: getPageMessage,
-				// search : true, // 显示搜索框
-				// paginationPreText : '‹',// 指定分页条中上一页按钮的图标或文字,这里是<
-				// paginationNextText : '›',// 指定分页条中下一页按钮的图标或文字,这里是>
-				// // singleSelect: false,
-				// // clickToSelect : true,// 是否启用点击选中行
-				// toolbarAlign : 'right',
-				// buttonsAlign : 'right',// 按钮对齐方式
-				// showExport : true, // 是否显示导出
-				// exportDataType : "basic", // basic', 'all', 'selected'.
+				 // dataField: 'res',//bootstrap table 可以前端分页也可以后端分页
+				 striped : true, // 是否显示行间隔色
+				 pageNumber : 1, // 初始化加载第一页，默认第一页
+				 pagination : true,// 是否分页
+				 queryParamsType : 'limit',
+				 sidePagination : 'server',
+				 pageSize : 10,// 单页记录数
+				 pageList : [ 5, 10, 20, 30 ],// 分页步进值
+				 // showPaginationSwitch : true,// 是否显示选择分页数按钮
+				 // showHeader : true,
+				 showRefresh : true,// 刷新按钮
+				 // showToggle : true,// 是否显示 切换试图（table/card）按钮
+				 // showColumns : true,// 是否显示 内容列下拉框
+				 // queryParams: getPageMessage,
+				 search : true, // 显示搜索框
+				 paginationPreText : '‹',// 指定分页条中上一页按钮的图标或文字,这里是<
+				 paginationNextText : '›',// 指定分页条中下一页按钮的图标或文字,这里是>
+				 // singleSelect: false,
+				 // clickToSelect : true,// 是否启用点击选中行
+//				 toolbarAlign : 'right',
+//				 buttonsAlign : 'right',// 按钮对齐方式
+				 showExport : true, // 是否显示导出
+				 exportDataType : "basic", // basic', 'all', 'selected'.
 				/*
 				 * queryParams: function queryParams(params)
 				 * {//自定义参数，这里的参数是传给后台的，分页使用 var param = { pageNumber:
 				 * params.pageNumber, pageSize: params.pageSize, orderNum :
 				 * $("#orderNum").val() }; return param; },
 				 */
-
-				striped : true, // 是否显示行间隔色
-				cache : false, // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
-				pagination : true, // 是否显示分页（*）
-				sortable : false, // 是否启用排序
-				sortOrder : "asc", // 排序方式
-				// queryParams : oTableInit.queryParams,// 传递参数（*）
-				// sidePagination : "server", // 分页方式：client客户端分页，server服务端分页（*）
-				pageNumber : 1, // 初始化加载第一页，默认第一页
-				pageSize : 10, // 每页的记录行数（*）
-				pageList : [ 10, 25, 50, 100 ], // 可供选择的每页的行数（*）
-				search : true, // 是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
-				// strictSearch : true,
-				// showColumns : true, // 是否显示所有的列
-				showRefresh : true, // 是否显示刷新按钮
-				// minimumCountColumns : 2, // 最少允许的列数
-				// clickToSelect : true, // 是否启用点击选中行
-				// height : 500, // 行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
-				// uniqueId : "ID", // 每一行的唯一标识，一般为主键列
-				// showToggle : true, // 是否显示详细视图和列表视图的切换按钮
-				// cardView : false, // 是否显示详细视图
-				// detailView : false, // 是否显示父子表
 
 				idField : "id",// 指定主键列
 				columns : [ {
@@ -236,8 +213,7 @@ var Task = function() {
 		 */
 		update_click : function(id) {
 			Cl.action = 'update';
-			Cl.showModalWindow(Cl.modalName, BasePath + "/user/updateform?id="
-					+ id);
+			window.location.href = BasePath + "/task/updateform?id=" + id;
 		},
 		/**
 		 * 增加
@@ -290,7 +266,7 @@ var Task = function() {
 				target : '#form_cl',
 				type : 'post',
 				dataType : 'json',
-				url : BasePath + "/task/update.do",
+				url : BasePath + "/task/update",
 				success : function(result) {
 					if (!result)
 						return;
@@ -303,10 +279,11 @@ var Task = function() {
 				},
 				error : function(result) {
 					alert("系统异常，修改失败！");
-				},
-				clearForm : true,
-				resetForm : true,
-				timeout : 3000
+				}
+//				,
+//				clearForm : true,
+//				resetForm : true,
+//				timeout : 3000
 			};
 			$("#form_cl").ajaxSubmit(options);
 		},

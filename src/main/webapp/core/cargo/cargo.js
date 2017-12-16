@@ -149,6 +149,10 @@ var Cargo = function() {
 		 * 点击增加按钮
 		 */
 		add_click : function() {
+			if (taskId == null || taskId == undefined) {
+				alert("请先录入船舶信息！");
+				return;
+			}
 			Cl.action = 'create';
 			Cl.showModalWindow(Cl.modalName, BasePath + "/cargo/addform");
 		},

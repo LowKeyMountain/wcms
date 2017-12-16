@@ -66,7 +66,7 @@
 						</div>
 
 						<div class="form-group  margin-top-20">
-							<label class="control-label col-md-3">货物总重（单位：吨）<span
+							<label class="control-label col-md-3">货物总重（T）<span
 								class="required"> *</span>
 							</label>
 							<div class="col-md-8">
@@ -102,7 +102,7 @@
 						</div>
  						
 						<div class="form-group  margin-top-20">
-							<label class="control-label col-md-3">船长（单位：米）<span
+							<label class="control-label col-md-3">船长（m）<span
 								class="required"> * </span>
 							</label>
 							<div class="col-md-8">
@@ -114,7 +114,7 @@
 						</div>
 
 						<div class="form-group  margin-top-20">
-							<label class="control-label col-md-3">船宽 （单位：米）<span
+							<label class="control-label col-md-3">船宽 （m）<span
 								class="required"> * </span>
 							</label>
 							<div class="col-md-8">
@@ -126,7 +126,7 @@
 						</div>
 
 						<div class="form-group  margin-top-20">
-							<label class="control-label col-md-3">型深 （单位：米） <span
+							<label class="control-label col-md-3">型深 （m） <span
 								class="required"> * </span>
 							</label>
 							<div class="col-md-8">
@@ -138,7 +138,7 @@
 						</div>
 
 						<div class="form-group  margin-top-20">
-							<label class="control-label col-md-3">船舱数据 <span
+							<label class="control-label col-md-3">船舱数(个) <span
 								class="required"> * </span>
 							</label>
 							<div class="col-md-8">

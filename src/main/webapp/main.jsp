@@ -75,7 +75,7 @@ License: You must have a valid license purchased only from themeforest(the above
 							<div class="col-md-12">
 								<!-- BEGIN PAGE TITLE & BREADCRUMB-->
 								<h3 class="page-title">
-								配置中心
+								  管理中心
 								</h3>
 								<ul class="page-breadcrumb breadcrumb">
 									<li>
@@ -86,7 +86,7 @@ License: You must have a valid license purchased only from themeforest(the above
 										<i class="fa fa-angle-right"></i>
 									</li>
 									<li>
-										配置中心
+										管理中心
 									</li>
 								</ul>
 								<!-- END PAGE TITLE & BREADCRUMB-->

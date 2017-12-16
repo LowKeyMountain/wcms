@@ -23,7 +23,7 @@ public interface ITaskService {
 	 * @param params
 	 * @return
 	 */
-	Map<String, Object> getTaskList(Pageable pageable, Integer status, Map<String, String> params);
+	String getTaskList(Pageable pageable, Integer status, Map<String, String> params);
 	
 	/**
 	 * 根据船舶状态，返回船舶列表
@@ -58,5 +58,7 @@ public interface ITaskService {
 	 * @return
 	 */
 	Integer createTask(Task task, User operator);
-	
+
+	Integer updateTask(Task task, User operator);
+
 }

@@ -56,8 +56,8 @@ public class CabinServiceImpl implements ICabinService {
 			Map<String, Object> data = new HashMap<>();
 			data.put("cabinNo", cabin.getCabinNo());
 			data.put("cargoId", cabin.getCargoId());
-			data.put("startPosition", cabin.getStartPosition());
-			data.put("endPosition", cabin.getEndPosition());
+			data.put("startPosition", cabin.getStartPosition() != null ? cabin.getStartPosition() : "");
+			data.put("endPosition", cabin.getEndPosition() != null ? cabin.getEndPosition() : "");
 			data.put("preunloading", cabin.getPreunloading());
 			data.put("id", cabin.getId());
 			list.add(data);

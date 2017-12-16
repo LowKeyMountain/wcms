@@ -165,7 +165,7 @@ License: You must have a valid license purchased only from themeforest(the above
 														<button id="btn_add" type="button" class="btn btn-default">
 															<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
 														</button>
-														 -->
+														
 														<button id="btn_edit" type="button"
 															class="btn btn-default">
 															<span class="glyphicon glyphicon-pencil"
@@ -176,6 +176,7 @@ License: You must have a valid license purchased only from themeforest(the above
 															<span class="glyphicon glyphicon-remove"
 																aria-hidden="true"></span>删除
 														</button>
+														 -->
 													</div>
 													<div class="tab-pane fade" id="ykcb"  onclick="javascript:loadList('0');">
 														<table id="ykcbship"
