@@ -9,17 +9,10 @@
 				<i class="fa fa-cogs"></i>
 			</div>
 			<div class="tools">
-				<!-- 
-				<a href="javascript:;" class="collapse" data-original-title=""
-					title=""> </a>
-					 -->
 				<a href="javascript:Cargo.add_click();" data-toggle="modal"
 					class="config" data-original-title="" title=""> </a> <a
 					href="javascript:Cargo.list();;" class="reload" data-original-title="" title="">
 				</a>
-				<!-- <a href="javascript:Cargo.list();" class="remove" data-original-title=""
-					title=""> </a>
-					 -->
 			</div>
 		</div>
 		<div class="portlet-body" style="display: block;">
