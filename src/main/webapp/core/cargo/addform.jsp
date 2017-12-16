@@ -48,7 +48,7 @@
 					</div>
 					<div class="form-group  margin-top-20">
 						<label class="control-label col-md-3">装货港 <span
-							class="required"> * </span>
+							class="required">  </span>
 						</label>
 						<div class="col-md-8">
 	                      	<div class="input-icon right">
@@ -60,7 +60,7 @@
 					</div>
 					<div class="form-group  margin-top-20">
 						<label class="control-label col-md-3">水分 <span
-							class="required"> * </span>
+							class="required">  </span>
 						</label>
 						<div class="col-md-8">
                             <div class="input-icon right">
@@ -72,7 +72,7 @@
 					</div>
 					<div class="form-group  margin-top-20">
 						<label class="control-label col-md-3">品质 <span
-							class="required"> * </span>
+							class="required">  </span>
 						</label>
 						<div class="col-md-8">
                             <div class="input-icon right">
@@ -98,7 +98,7 @@
 					
 					<div class="form-group  margin-top-20">
 						<label class="control-label col-md-3">货主 <span
-							class="required"> * </span>
+							class="required">  </span>
 						</label>
 						<div class="col-md-8">
                             <div class="input-icon right">

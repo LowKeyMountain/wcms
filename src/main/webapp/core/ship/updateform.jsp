@@ -27,7 +27,7 @@
 								<div class="input-icon right">
 									<i class="fa"></i> <input type="hidden" id="id" name="id" value="${task.id}"/> <input
 										type="text" id="ship.shipName" name="ship.shipName" value="${task.ship.shipName}" data-required="1"
-										class="form-control" />
+										class="form-control" readonly="readonly" />
 								</div>
 							</div>
 						</div>

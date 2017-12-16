@@ -15,7 +15,6 @@ var FormCl = function () {
             ignore: "",  // validate all fields including form hidden input
             rules: {
             	'ship.shipName': {
-                    minlength: 5,
                     required: true
                 },
                 'ship.length': {
