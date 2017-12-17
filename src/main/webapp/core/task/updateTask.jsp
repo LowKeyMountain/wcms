@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix='fmt' uri="http://java.sun.com/jsp/jstl/fmt"%>  
+
 <!DOCTYPE html>
 <!-- 
 Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.3.5
@@ -43,6 +45,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <link href="${IncPath}/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet" type="text/css" />
 <link href="${IncPath}/assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.css" rel="stylesheet" type="text/css" />
 <link href="${IncPath}/assets/global/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css" rel="stylesheet" type="text/css" />
+<link href="${IncPath}/assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" type="text/css" />
 <!-- END PAGE LEVEL PLUGINS -->
 <!-- BEGIN THEME GLOBAL STYLES -->
 <link href="${IncPath}/assets/global/css/components.min.css" rel="stylesheet" id="style_components" type="text/css" />
@@ -163,6 +166,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <script src="${IncPath}/assets/global/scripts/app.min.js" type="text/javascript"></script>
 <script src="${IncPath}/assets/global/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>
 <script src="${IncPath}/assets/global/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>
+<script src="${IncPath}/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
 <!-- END THEME GLOBAL SCRIPTS -->
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="${IncPath}/assets/pages/scripts/table-datatables-managed.min.js" type="text/javascript"></script>
@@ -202,6 +206,20 @@ License: You must have a valid license purchased only from themeforest(the above
 			Cl.initModal();
 			FormCl.init();
 			FormValidation.init();
+			$(".yyyy_mm_dd").datetimepicker({
+			    minView: "month", //选择日期后，不会再跳转去选择时分秒 
+			    language:  'zh-CN',
+			    format: 'yyyy-mm-dd',
+			    todayBtn:  1,
+			    autoclose: 1,
+			});
+			$(".form_datetime").datetimepicker({
+			    minView: "hour",
+			    language:  'zh-CN',
+			    format: 'yyyy-mm-dd hh:ii:ss',
+			    todayBtn:  1,
+			    autoclose: 1,
+			});
 		});
 	</script>
 </body>

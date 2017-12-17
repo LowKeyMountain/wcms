@@ -25,13 +25,13 @@
 					</div>
 					<div class="form-group  margin-top-20">
 						<label class="control-label col-md-3">船舱号 <span
-							class="required"> * </span>
+							class="required">  </span>
 						</label>
 						<div class="col-md-8">
 							<div class="input-icon right">
 								<i class="fa"></i> <input type="hidden" id="id" name="id" value="${cabin.id}"/> <input
 									type="text" id="cabinNo" name="cabinNo" value="${cabin.cabinNo}" data-required="1"
-									class="form-control" />
+									class="form-control" readonly/>
 							</div>
 						</div>
 					</div>
@@ -39,11 +39,23 @@
 						<label class="control-label col-md-3">货物类型 <span
 							class="required"> * </span>
 						</label>
+						<!-- 
 						<div class="col-md-8">
 							<div class="input-icon right">
 								<i class="fa"></i> <input type="text" id="cargoId"
 									name="cargoId" data-required="1" value="${cabin.cargoId}" class="form-control" />
 							</div>
+						</div>
+						 -->
+						<div class="col-md-8">
+							<select id="cargoId" name="cargoId" class="form-control select2me">
+								<option value="">请选择...</option>
+					   			<c:if test="${!(cargos == null || fn:length(cargos) == 0)}">
+					   				<c:forEach var="cargo" items="${cargos}">
+					   					<option value="${cargo.id}">${cargo.cargoType}</option>
+					   				</c:forEach>
+					   			</c:if>
+							</select>
 						</div>
 					</div>
 					<div class="form-group  margin-top-20">

@@ -115,5 +115,10 @@ public class CargoServiceImpl implements ICargoService {
 		}
 		return mo;
 	}
+
+	@Override
+	public List<Cargo> getCargosByTaskId(Integer taskId) {
+		return findAllByTaskId(taskId);
+	}
 	
 }

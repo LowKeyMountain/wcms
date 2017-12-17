@@ -13,29 +13,50 @@ var FormCl = function () {
             errorClass: 'help-block help-block-error', // default input error message class
             focusInvalid: false, // do not focus the last invalid input
             ignore: "",  // validate all fields including form hidden input
-            rules: {
-            	'ship.shipName': {
-                    required: true
-                },
-                'ship.length': {
-                    required: true
-                },
-                'ship.breadth': {
-                    required: true
-                },
-                'ship.mouldedDepth': {
-                    required: true
-                },
-                cargoLoad: {
-                    required: true
-                },
-                berth: {
-                    required: true
-                },
-                'ship.cabinNum': {
-                    required: true
-                }
-            },
+            rules : {
+				'ship.shipName' : {
+					required : true
+				},
+				'ship.shipEnName' : {
+					required : true
+				},
+				'berthingTime' : {
+					required : true,
+					date:true
+				},
+				berth : {
+					required : true,
+					range:[1,2]
+				},
+				cargoLoad : {
+					required : true,
+					number : true
+				},
+				'ship.imoNo' : {
+				},
+				'ship.buildDate' : {
+					date:true
+				},
+				'ship.length' : {
+					required : true,
+					number : true
+				},
+				'ship.breadth' : {
+					required : true,
+					number : true
+				},
+				'ship.mouldedDepth' : {
+					required : true,
+					number : true
+				},
+				'ship.cabinNum' : {
+					required : true,
+					range:[1,20]
+				},
+				'ship.hatch' : {
+					
+				}
+			},
             invalidHandler: function (event, validator) { // display error
 															// alert on form
 															// submit
@@ -118,18 +139,18 @@ var Task = function() {
 				 // dataField: 'res',//bootstrap table 可以前端分页也可以后端分页
 				 striped : true, // 是否显示行间隔色
 				 pageNumber : 1, // 初始化加载第一页，默认第一页
-				 pagination : true,// 是否分页
+//				 pagination : true,// 是否分页
 				 queryParamsType : 'limit',
 				 sidePagination : 'server',
 				 pageSize : 10,// 单页记录数
 				 pageList : [ 5, 10, 20, 30 ],// 分页步进值
 				 // showPaginationSwitch : true,// 是否显示选择分页数按钮
 				 // showHeader : true,
-				 showRefresh : true,// 刷新按钮
+//				 showRefresh : true,// 刷新按钮
 				 // showToggle : true,// 是否显示 切换试图（table/card）按钮
 				 // showColumns : true,// 是否显示 内容列下拉框
 				 // queryParams: getPageMessage,
-				 search : true, // 显示搜索框
+//				 search : true, // 显示搜索框
 				 paginationPreText : '‹',// 指定分页条中上一页按钮的图标或文字,这里是<
 				 paginationNextText : '›',// 指定分页条中下一页按钮的图标或文字,这里是>
 				 // singleSelect: false,
@@ -144,9 +165,126 @@ var Task = function() {
 				 * params.pageNumber, pageSize: params.pageSize, orderNum :
 				 * $("#orderNum").val() }; return param; },
 				 */
-
+				
 				idField : "id",// 指定主键列
-				columns : [ {
+//				columns : [ {
+//					title : '全选',
+//					field : 'select',
+//					// 复选框
+//					checkbox : true,
+//					width : 25,
+//					align : 'center'
+//				}, {
+//					field : 'id',
+//					title : 'ID',
+//					align : 'center'
+//				}, {
+//					field : 'berth',
+//					title : '泊位',
+//					align : 'center'
+//				}, {
+//					field : 'shipName',
+//					title : '船名',
+//					align : 'center'
+//				}, {
+//					field : 'berthingTime',
+//					title : '停靠时间',
+//					align : 'center'
+//				}, {
+//					field : 'beginTime',
+//					title : '开工时间',
+//					align : 'center',
+//					sortable : true
+//				}, {
+//					field : 'endTime',
+//					title : '完工时间',
+//					align : 'center'
+//				}, {
+//					field : 'departureTime',
+//					title : '离泊时间',
+//					align : 'center'
+//				}, {
+//					field : 'operation',
+//					title : '操作'
+//				} ],
+				locale : 'zh-CN',// 中文支持,
+				responseHandler : function(res) {
+					// 在ajax获取到数据，渲染表格之前，修改数据源
+					return res;
+				}
+			}
+
+			var columns = [];
+
+			if (status == '0') {
+				columns = [ {
+					title : '全选',
+					field : 'select',
+					// 复选框
+					checkbox : true,
+					width : 25,
+					align : 'center'
+				}, {
+					field : 'id',
+					title : 'ID',
+					align : 'center'
+				}, {
+					field : 'berth',
+					title : '泊位',
+					align : 'center'
+				}, {
+					field : 'shipName',
+					title : '船名',
+					align : 'center'
+				}, {
+					field : 'berthingTime',
+					title : '停靠时间',
+					align : 'center'
+				}, {
+					field : 'operation',
+					title : '操作'
+				} ];
+
+			} else if (status == '1') {
+				columns = [ {
+					title : '全选',
+					field : 'select',
+					// 复选框
+					checkbox : true,
+					width : 25,
+					align : 'center'
+				}, {
+					field : 'id',
+					title : 'ID',
+					align : 'center'
+				}, {
+					field : 'berth',
+					title : '泊位',
+					align : 'center'
+				}, {
+					field : 'shipName',
+					title : '船名',
+					align : 'center'
+				}, {
+					field : 'berthingTime',
+					title : '停靠时间',
+					align : 'center'
+				}, {
+					field : 'beginTime',
+					title : '开工时间',
+					align : 'center',
+					sortable : true
+				}, {
+					field : 'endTime',
+					title : '完工时间',
+					align : 'center'
+				}, {
+					field : 'operation',
+					title : '操作'
+				} ];
+
+			} else if (status == '2') {
+				columns = [ {
 					title : '全选',
 					field : 'select',
 					// 复选框
@@ -182,20 +320,14 @@ var Task = function() {
 					field : 'departureTime',
 					title : '离泊时间',
 					align : 'center'
-				}, {
-					field : 'operation',
-					title : '操作'
-				} ],
-				locale : 'zh-CN',// 中文支持,
-				responseHandler : function(res) {
-					// 在ajax获取到数据，渲染表格之前，修改数据源
-					return res;
-				}
-			}
+				} ];
 
-			if (status == '0') {
-				options.toolbar = '#toolbar';// 指定工作栏
 			}
+			options.columns = columns;
+			
+//			if (status == '0') {
+//				options.toolbar = '#toolbar';// 指定工作栏
+//			}
 
 			return options;
 		},
@@ -309,6 +441,9 @@ var Task = function() {
 					return;
 				}
 			});
+		},
+		returnList:function(){
+			window.location.href = BasePath + "/task/tasklist";
 		}
 
 	};

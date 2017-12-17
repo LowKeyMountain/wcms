@@ -33,7 +33,7 @@
 						</div>
 						<div class="form-group  margin-top-20">
 							<label class="control-label col-md-3">船英文名 <span
-								class="required"> </span>
+								class="required"> *</span>
 							</label>
 							<div class="col-md-8">
 								<div class="input-icon right">
@@ -44,12 +44,25 @@
 						</div>
 						<div class="form-group  margin-top-20">
 							<label class="control-label col-md-3">入港时间 <span
+								class="required"> *</span>
+							</label>
+							<div class="col-md-8">
+								<div class="input-icon right">
+									<i class="fa"></i> 
+									<!-- <input type="text" id="berthingTime" name="berthingTime" data-required="1" class="form-control" /> -->
+									<input size="16" type="text" id="berthingTime" name="berthingTime" readonly class="form_datetime form-control">
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group  margin-top-20">
+							<label class="control-label col-md-3">离港时间 <span
 								class="required"> </span>
 							</label>
 							<div class="col-md-8">
 								<div class="input-icon right">
-									<i class="fa"></i> <input type="text" id="berthingTime"
-										name="berthingTime" data-required="1" class="form-control" />
+									<i class="fa"></i> 
+									<input size="16" type="text" id="departureTime" name="departureTime" readonly class="form_datetime form-control">
 								</div>
 							</div>
 						</div>
@@ -95,8 +108,9 @@
 							</label>
 							<div class="col-md-8">
 								<div class="input-icon right">
-									<i class="fa"></i> <input type="text" id="ship.buildDate"
-										name="ship.buildDate" data-required="1" class="form-control" />
+									<i class="fa"></i> 
+									<!-- <input type="text" id="ship.buildDate" name="ship.buildDate" data-required="1" class="form-control" /> -->
+									<input size="16" type="text" id="ship.buildDate" name="ship.buildDate" readonly class="form_datetime_yyyy_mm_dd form-control">
 								</div>
 							</div>
 						</div>
@@ -215,7 +229,7 @@
 			</div>
 		</div>
 		<div class="modal-footer">
-			<!-- <button type="button" class="btn default" data-dismiss="modal">重置</button> -->
+			<button type="button" class="btn default" data-dismiss="modal" onclick="javascript:Task.returnList();">返回</button>
 			<button type="submit" class="btn blue" onclick="javascript:;">保存</button>
 		</div>
 

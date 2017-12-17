@@ -29,6 +29,7 @@
                      <a href="javascript:;" class="remove">
                          <i class="icon-close"></i>
                      </a>
+                     <!-- 
                      <div class="input-group">
                          <input type="text" class="form-control" placeholder="Search${IncPath}.">
                          <span class="input-group-btn">
@@ -37,6 +38,7 @@
                              </a>
                          </span>
                      </div>
+                      -->
                  </form>
                  <!-- END RESPONSIVE QUICK SEARCH FORM -->
                 </li>

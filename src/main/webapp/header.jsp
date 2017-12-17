@@ -7,8 +7,8 @@
         <!-- BEGIN LOGO -->
         <div class="page-logo">
             <a href="${BasePath}/web/main">
-                <img src="${IncPath}/assets/layouts/layout/img/logo.png" alt="logo" class="logo-default" /> </a>
-            <!-- <div class="menu-toggler sidebar-toggler"> </div> -->
+                <img src="${IncPath}/assets/layouts/layout/img/logo.png" alt="logo" /> </a>
+            <div class="menu-toggler sidebar-toggler"> </div>
         </div>
         <!-- END LOGO --> 
         <!-- BEGIN RESPONSIVE MENU TOGGLER -->

@@ -212,7 +212,7 @@ public class AppHttpInterface {
 			String taskId = jsonObject.getString("taskId");
 			String cabinNo = jsonObject.getString("cabinNo");
 
-			jsonObject.put("criteria", JSONObject.parseObject("{'$task_id':'" + taskId + "','$cabin_no':'" + cabinNo + "'}"));
+			jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "','$cabinNo':'" + cabinNo + "'}"));
 			
 			return infoQueryHelper.doQueryInfo(jsonObject);
 		} catch (Exception e) {
@@ -284,7 +284,7 @@ public class AppHttpInterface {
 				throw new X27Exception("操作失败：作业船舶[taskId]不能为空！");
 			}
 
-			jsonObject.put("criteria", JSONObject.parseObject("{'$task_id':'" + taskId + "'}"));
+			jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "'}"));
 			return infoQueryHelper.doQueryInfo(jsonObject);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -507,7 +507,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 	@Override
 	public Map<String, Object> doGetCargoDetail(Integer taskId, Integer cabinNo) {
 		String msg = "操作成功！";
-		boolean isSuccess = true;
+		String isSuccess = "1";
 
 		Map<String, Object> result = new HashMap<>();
 		try {
@@ -526,7 +526,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			data.put("quality", cargo.getQuality());
 			data.put("moisture", cargo.getMoisture());
 			data.put("owner", cargo.getCargoOwner());
-			data.put("owner", cargo.getStowage());
+			data.put("stowage", cargo.getStowage());
 			String warehouse = cargoRepository.getCargoWarehouse(cargo.getId());
 			data.put("warehouse", warehouse);
 			

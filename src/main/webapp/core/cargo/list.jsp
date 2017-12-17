@@ -6,12 +6,12 @@
 	<div class="portlet box yellow">
 		<div class="portlet-title">
 			<div class="caption">
-				<i class="fa fa-cogs"></i>
+				<!-- <i class="fa fa-cogs"></i> -->
 			</div>
 			<div class="tools">
 				<a href="javascript:Cargo.add_click();" data-toggle="modal"
-					class="config" data-original-title="" title=""> </a> <a
-					href="javascript:Cargo.list();;" class="reload" data-original-title="" title="">
+					class="config" title="新增" title=""> </a> <a
+					href="javascript:Cargo.list();;" class="reload" data-original-title="刷新" title="">
 				</a>
 			</div>
 		</div>
@@ -20,7 +20,7 @@
 				<table class="table table-striped table-bordered table-hover">
 					<thead>
 						<tr>
-							<th>#</th>
+							<!-- <th>#</th> -->
 							<th>货物种类</th>
 							<th>货物类型</th>
 							<th>装货港</th>

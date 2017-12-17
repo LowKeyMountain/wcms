@@ -16,11 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import net.itw.wcms.ship.entity.Cargo;
 import net.itw.wcms.ship.entity.Task;
 import net.itw.wcms.ship.service.ITaskService;
 import net.itw.wcms.x27.entity.User;
-import net.itw.wcms.x27.exception.X27Exception;
 import net.itw.wcms.x27.utils.ConstantUtil;
 import net.itw.wcms.x27.utils.PageUtils;
 import net.itw.wcms.x27.utils.SessionUtil;

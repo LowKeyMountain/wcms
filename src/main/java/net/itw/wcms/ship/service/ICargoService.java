@@ -1,5 +1,6 @@
 package net.itw.wcms.ship.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.Pageable;
@@ -41,6 +42,13 @@ public interface ICargoService {
 	 * @return
 	 */
 	Map<String, Object> getCargoList(Pageable pageable, Integer taskId, Map<String, String> params);
+	
+	/**
+	 * 获取货物列表
+	 * @param taskId
+	 * @return
+	 */
+	List<Cargo> getCargosByTaskId(Integer taskId);
 	
 	/**
 	 * 更新货物

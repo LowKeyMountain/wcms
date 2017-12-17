@@ -1,6 +1,7 @@
 package net.itw.wcms.ship.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,8 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import net.itw.wcms.ship.entity.Cabin;
+import net.itw.wcms.ship.entity.Cargo;
 import net.itw.wcms.ship.entity.Task;
 import net.itw.wcms.ship.service.ICabinService;
+import net.itw.wcms.ship.service.ICargoService;
 import net.itw.wcms.ship.service.ITaskService;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
@@ -35,6 +38,9 @@ public class CabinController {
 	private ITaskService taskService;
 	@Autowired
 	private ICabinService cabinService;
+	
+	@Autowired
+	private ICargoService cargoService;
 
 	protected HttpServletRequest req;
 	protected HttpServletResponse res;
@@ -72,7 +78,12 @@ public class CabinController {
 	}
 
 	@RequestMapping("/addform")
-	public ModelAndView addform() {
+	public ModelAndView addform(@RequestParam("taskId") Integer taskId) {
+		 Task task = taskService.getTaskById(taskId);
+		 List<Cargo> cargos = cargoService.getCargosByTaskId(taskId);
+		 modelMap.put("cargos", cargos);
+		 int cabinNo = task.getCabins() != null ? task.getCabins().size() : 0;
+		 modelMap.put("cabinNo", cabinNo + 1);
 		return new ModelAndView(PATH + "addform");
 	}
 
@@ -135,13 +146,17 @@ public class CabinController {
 	/**
 	 * 修改信息
 	 * 
-	 * @param taskId
+	 * @param id
 	 * @return
 	 */
 	@RequestMapping("/updateform")
-	public ModelAndView updateform(Integer taskId) {
-		Cabin cabin = cabinService.findOne(taskId);
+	public ModelAndView updateform(Integer id) {
+		Cabin cabin = cabinService.findOne(id);
 		modelMap.put("cabin", cabin);
+		if (cabin != null) {
+			List<Cargo> cargos = cargoService.getCargosByTaskId(cabin.getTask().getId());
+			modelMap.put("cargos", cargos);
+		}
 		return new ModelAndView(PATH + "updateform");
 	}
 

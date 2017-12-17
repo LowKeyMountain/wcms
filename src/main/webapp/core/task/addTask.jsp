@@ -43,6 +43,8 @@ License: You must have a valid license purchased only from themeforest(the above
 <link href="${IncPath}/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet" type="text/css" />
 <link href="${IncPath}/assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.css" rel="stylesheet" type="text/css" />
 <link href="${IncPath}/assets/global/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css" rel="stylesheet" type="text/css" />
+<link href="${IncPath}/assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" type="text/css" />
+
 <!-- END PAGE LEVEL PLUGINS -->
 <!-- BEGIN THEME GLOBAL STYLES -->
 <link href="${IncPath}/assets/global/css/components.min.css" rel="stylesheet" id="style_components" type="text/css" />
@@ -163,6 +165,8 @@ License: You must have a valid license purchased only from themeforest(the above
 <script src="${IncPath}/assets/global/scripts/app.min.js" type="text/javascript"></script>
 <script src="${IncPath}/assets/global/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>
 <script src="${IncPath}/assets/global/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>
+<script src="${IncPath}/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
+
 <!-- END THEME GLOBAL SCRIPTS -->
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="${IncPath}/assets/pages/scripts/table-datatables-managed.min.js" type="text/javascript"></script>
@@ -202,6 +206,8 @@ License: You must have a valid license purchased only from themeforest(the above
 			Cl.initModal();
 			FormCl.init();
 			FormValidation.init();
+			$(".form_datetime").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
+			$(".form_datetime_yyyy_mm_dd").datetimepicker({format: 'yyyy-mm-dd'});
 		});
 	</script>
 </body>

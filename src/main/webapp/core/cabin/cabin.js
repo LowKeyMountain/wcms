@@ -13,17 +13,21 @@ var CabinFormCl = function () {
             errorClass: 'help-block help-block-error', // default input error message class
             focusInvalid: false, // do not focus the last invalid input
             ignore: "",  // validate all fields including form hidden input
-            rules: {
-            	cargoId: {
-                    required: true
-                },
-                preunloading: {
-                    required: true
-                },
-                cabinNo: {
-                    required: true
-                }
-            },
+            rules : {
+				cargoId : {
+					required : true
+				},
+				preunloading : {
+					required : true,
+					number : true
+				},
+				startPosition : {
+					number : true
+				},
+				endPosition : {
+					number : true
+				}
+			},
             invalidHandler: function (event, validator) { // display error
 															// alert on form
 															// submit
@@ -149,7 +153,7 @@ var Cabin = function() {
 				return;
 			}
 			Cl.action = 'create';
-			Cl.showModalWindow(Cl.modalName, BasePath + "/cabin/addform");
+			Cl.showModalWindow(Cl.modalName, BasePath + "/cabin/addform?taskId=" + taskId);
 		},
 		
 		/**
@@ -157,7 +161,7 @@ var Cabin = function() {
 		 */
 		update_click : function(id) {
 			Cl.action = 'update';
-			Cl.showModalWindow(Cl.modalName, BasePath + "/cabin/updateform?taskId="
+			Cl.showModalWindow(Cl.modalName, BasePath + "/cabin/updateform?id="
 					+ id);
 		},
 		/**

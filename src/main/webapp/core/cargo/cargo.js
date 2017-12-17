@@ -21,7 +21,8 @@ var CargoFormCl = function () {
                     required: true
                 },
                 stowage: {
-                    required: true
+                    required: true,
+                    number : true
                 }
             },
             invalidHandler: function (event, validator) { // display error
@@ -125,7 +126,7 @@ var Cargo = function() {
 						var id = i + 1;
 						var tr = ""
 								+ "<tr>"
-								+ "<td>"+res.id+"</td>"
+//								+ "<td>"+res.id+"</td>"
 								+ "<td>"+res.cargoCategory+"</td>"
 								+ "<td>"+res.cargoType+"</td>"
 								+ "<td>"+res.loadingPort+"</td>"

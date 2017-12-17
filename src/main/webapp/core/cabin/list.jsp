@@ -6,12 +6,12 @@
 	<div class="portlet box yellow">
 		<div class="portlet-title">
 			<div class="caption">
-				<i class="fa fa-cogs"></i>
+				<!-- <i class="fa fa-cogs"></i> -->
 			</div>
 			<div class="tools">
 				<a href="javascript:Cabin.add_click();" data-toggle="modal"
-					class="config" data-original-title="" title=""> </a> <a
-					href="javascript:Cabin.list();;" class="reload" data-original-title="" title="">
+					class="config" data-original-title="新增" title="新增"> </a> <a
+					href="javascript:Cabin.list();;" class="reload" data-original-title="刷新" title="刷新">
 				</a>
 			</div>
 		</div>
