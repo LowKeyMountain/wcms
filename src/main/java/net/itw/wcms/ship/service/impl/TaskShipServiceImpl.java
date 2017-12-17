@@ -456,8 +456,11 @@ public class TaskShipServiceImpl implements ITaskShipService {
 					task.setBeginTime(new Date());
 					task.setUpdateTime(new Date());
 					task.setUpdateUser(operator.getUserName());
+					// 更新所有船舱状态为卸货|0
+					for (Cabin cabin : task.getCabins()) {
+						cabin.setStatus(0);
+					}
 					taskRepository.saveAndFlush(task);
-					// TODO:更新所有船舱状态为卸货|0
 
 				} else if ("1".equals(status)) {
 					throw new X27Exception("操作失败: 当前船舶为预靠状态！");
