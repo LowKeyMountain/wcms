@@ -1,8 +1,6 @@
 package net.itw.wcms.ship.service.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
-import net.itw.wcms.ship.entity.Cargo;
 import net.itw.wcms.ship.entity.Task;
 import net.itw.wcms.ship.repository.TaskRepository;
 import net.itw.wcms.ship.service.ITaskService;
