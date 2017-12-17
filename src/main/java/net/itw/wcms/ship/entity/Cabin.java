@@ -132,7 +132,7 @@ public class Cabin implements Entityable {
 		this.status = status;
 	}
 
-	@Column(name="cargoId")
+	@Column(name="cargo_id")
 	public Integer getCargoId() {
 		return cargoId;
 	}
