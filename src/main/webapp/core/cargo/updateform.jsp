@@ -36,7 +36,7 @@
 						</div>
 					</div>
 					<div class="form-group  margin-top-20">
-						<label class="control-label col-md-3">货物类型 <span
+						<label class="control-label col-md-3">货物名称<span
 							class="required"> * </span>
 						</label>
 						<div class="col-md-8">
