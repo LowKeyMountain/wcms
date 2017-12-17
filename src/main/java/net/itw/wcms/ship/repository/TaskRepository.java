@@ -32,7 +32,7 @@ import net.itw.wcms.x27.utils.StringUtil;
 public interface TaskRepository extends JpaRepository<Task, Integer>, JpaSpecificationExecutor<Task>,
 		PagingAndSortingRepository<Task, Integer> {
 
-	List<Task> getTaskByStatus(String status);
+	List<Task> getTaskByStatus(Integer status);
 
 	Task getTaskById(Integer id);
 

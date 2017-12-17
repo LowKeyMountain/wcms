@@ -49,11 +49,17 @@
 						 -->
 						<div class="col-md-8">
 							<select id="cargoId" name="cargoId" class="form-control select2me">
-								<option value="">«Î—°‘Ò...</option>
 					   			<c:if test="${!(cargos == null || fn:length(cargos) == 0)}">
 					   				<c:forEach var="cargo" items="${cargos}">
-					   					<option value="${cargo.id}">${cargo.cargoType}</option>
-					   				</c:forEach>
+										<c:choose>
+											<c:when test="${cargo.id == cabin.cargoId}">
+												<option value="${cargo.id}" selected>${cargo.cargoType}</option>
+											</c:when>
+											<c:otherwise>
+												<option value="${cargo.id}">${cargo.cargoType}</option>
+											</c:otherwise>
+										</c:choose>
+									</c:forEach>
 					   			</c:if>
 							</select>
 						</div>

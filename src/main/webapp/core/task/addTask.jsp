@@ -206,8 +206,20 @@ License: You must have a valid license purchased only from themeforest(the above
 			Cl.initModal();
 			FormCl.init();
 			FormValidation.init();
-			$(".form_datetime").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
-			$(".form_datetime_yyyy_mm_dd").datetimepicker({format: 'yyyy-mm-dd'});
+			$(".form_datetime_yyyy_mm_dd").datetimepicker({
+			    minView: "month", //选择日期后，不会再跳转去选择时分秒 
+			    language:  'zh-CN',
+			    format: 'yyyy-mm-dd',
+			    todayBtn:  1,
+			    autoclose: 1,
+			});
+			$(".form_datetime").datetimepicker({
+			    minView: "hour",
+			    language:  'zh-CN',
+			    format: 'yyyy-mm-dd hh:ii:ss',
+			    todayBtn:  1,
+			    autoclose: 1,
+			});
 		});
 	</script>
 </body>

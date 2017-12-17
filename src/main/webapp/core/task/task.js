@@ -21,8 +21,8 @@ var FormCl = function () {
 					required : true
 				},
 				'berthingTime' : {
-					required : true,
-					date:true
+//					required : true,
+//					date:true
 				},
 				berth : {
 					required : true,
@@ -35,7 +35,7 @@ var FormCl = function () {
 				'ship.imoNo' : {
 				},
 				'ship.buildDate' : {
-					date:true
+//					date:true
 				},
 				'ship.length' : {
 					required : true,
@@ -331,13 +331,19 @@ var Task = function() {
 
 			return options;
 		},
-
 		/**
 		 * 点击增加按钮
 		 */
 		add_click : function() {
-			Cl.action = 'create';
-			window.location.href = BasePath + "/task/addform";
+			var url = BasePath + "/task/newCalibration";
+			$.post(url, null, function(result) {
+				if (result && result.success == 'success') {
+					Cl.action = 'create';
+					window.location.href = BasePath + "/task/addform";
+				} else {
+					alert(result.msg);
+				}
+			});
 		},
 		/**
 		 * 点击修改按钮

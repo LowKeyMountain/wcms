@@ -44,7 +44,7 @@
 						</div>
 						<div class="form-group  margin-top-20">
 							<label class="control-label col-md-3">入港时间 <span
-								class="required"> *</span>
+								class="required"> </span>
 							</label>
 							<div class="col-md-8">
 								<div class="input-icon right">
@@ -71,10 +71,11 @@
 								class="required"> *</span>
 							</label>
 							<div class="col-md-8">
-								<div class="input-icon right">
-									<i class="fa"></i> <input type="text" id="berth" name="berth"
-										data-required="1" class="form-control" />
-								</div>
+								<select id="berth" name="berth" class="form-control select2me">
+									<option value="">请选择...</option>
+				   					<option value="1" >泊位一</option>
+				   					<option value="2" >泊位二</option>
+								</select>
 							</div>
 						</div>
 

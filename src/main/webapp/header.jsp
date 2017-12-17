@@ -38,7 +38,6 @@
 							</a>
                         </li>
                         <li>
-                            <a href="javascript:;">
                                 <i class="fa fa-key"></i> 退出
                         </li>
                     </ul>

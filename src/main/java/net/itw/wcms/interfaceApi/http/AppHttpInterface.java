@@ -284,7 +284,10 @@ public class AppHttpInterface {
 				throw new X27Exception("操作失败：作业船舶[taskId]不能为空！");
 			}
 
+			jsonObject.put("order", "asc");
+			jsonObject.put("sort", "cabinNo");
 			jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "'}"));
+			
 			return infoQueryHelper.doQueryInfo(jsonObject);
 		} catch (Exception e) {
 			e.printStackTrace();

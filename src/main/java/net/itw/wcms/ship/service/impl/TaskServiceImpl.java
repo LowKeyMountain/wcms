@@ -70,7 +70,7 @@ public class TaskServiceImpl implements ITaskService {
 	}
 	
 	@Override
-	public List<Task> getTaskByStatus(String status) {
+	public List<Task> getTaskByStatus(Integer status) {
 		return taskRepository.getTaskByStatus(status);
 	}
 

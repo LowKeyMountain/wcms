@@ -1,6 +1,7 @@
 package net.itw.wcms.ship.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -68,6 +69,15 @@ public class TaskController {
 	@RequestMapping("/addform")
 	public ModelAndView newTask() {
 		return new ModelAndView(PATH + "addTask");
+	}
+	
+	@RequestMapping("/newCalibration")
+	public Map<String, Object> newCalibration() {
+		Map<String, Object> result = new HashMap<>();
+		List<Task> tasks = taskService.getTaskByStatus(0);
+		result.put("msg", tasks.size() < 2  ? "" : "系统提示：泊位已满，不能进行新增船舶！");
+		result.put(ConstantUtil.Success, tasks.size() < 2 ? ConstantUtil.Success : ConstantUtil.Fail);
+		return result;
 	}
 	
 	@RequestMapping("/updateform")

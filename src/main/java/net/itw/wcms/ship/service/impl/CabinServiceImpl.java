@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import net.itw.wcms.ship.entity.Cabin;
+import net.itw.wcms.ship.entity.Cargo;
 import net.itw.wcms.ship.repository.CabinRepository;
+import net.itw.wcms.ship.repository.CargoRepository;
 import net.itw.wcms.ship.service.ICabinService;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
@@ -30,6 +32,8 @@ public class CabinServiceImpl implements ICabinService {
 
 	@Autowired
 	private IUserService userService;
+	@Autowired
+	private CargoRepository cargoRepository;
 	@Autowired
 	private CabinRepository cabinRepository;
 	@Override
@@ -51,11 +55,17 @@ public class CabinServiceImpl implements ICabinService {
 		}
 		int total = page.size();
 		
+		Map<Integer, String> cargoMap = new HashMap<>();
+		List<Cargo> cargos = cargoRepository.findAllByTaskId(taskId);
+		for (Cargo cargo : cargos) {
+			cargoMap.put(cargo.getId(), cargo.getCargoType());
+		}
+		
 		List<Map<String, Object>> list = new ArrayList<>();
 		for (Cabin cabin : page) {
 			Map<String, Object> data = new HashMap<>();
 			data.put("cabinNo", cabin.getCabinNo());
-			data.put("cargoId", cabin.getCargoId());
+			data.put("cargoId", cargoMap.get(cabin.getCargoId()));
 			data.put("startPosition", cabin.getStartPosition() != null ? cabin.getStartPosition() : "");
 			data.put("endPosition", cabin.getEndPosition() != null ? cabin.getEndPosition() : "");
 			data.put("preunloading", cabin.getPreunloading());

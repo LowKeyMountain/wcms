@@ -28,10 +28,10 @@ public interface ITaskService {
 	/**
 	 * 根据船舶状态，返回船舶列表
 	 * 
-	 * @param pageable
+	 * @param status
 	 * @return
 	 */
-	List<Task> getTaskByStatus(String status);
+	List<Task> getTaskByStatus(Integer status);
 	
 	/**
 	 * 根据船舶id，返回船舶作业信息

@@ -157,11 +157,12 @@ License: You must have a valid license purchased only from themeforest(the above
 							</ul>
 						 -->
 						</div>
-						<div class="col-xs-8 bs-reset">
+						<!-- <div class="col-xs-8 bs-reset">
 							<div class="login-copyright text-right">
 								<p>Copyright &copy; Keenthemes 2015</p>
 							</div>
 						</div>
+						 -->
 					</div>
 				</div>
 			</div>
