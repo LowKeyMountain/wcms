@@ -65,6 +65,6 @@ public interface ICargoService {
 	 * @param operator
 	 * @return
 	 */
-	MessageOption delete(Cargo cargo, User operator);
+	MessageOption delete(Cargo cargo, User operator) throws Exception;
 
 }

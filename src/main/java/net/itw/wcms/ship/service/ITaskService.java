@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.data.domain.Pageable;
 
 import net.itw.wcms.ship.entity.Task;
+import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
 
 /**
@@ -60,5 +61,7 @@ public interface ITaskService {
 	Integer createTask(Task task, User operator);
 
 	Integer updateTask(Task task, User operator);
+	
+	MessageOption delete(Task task);
 
 }

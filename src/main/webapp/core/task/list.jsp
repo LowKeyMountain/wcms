@@ -290,8 +290,8 @@ License: You must have a valid license purchased only from themeforest(the above
 			App.init();
 			Cl.initModal();
 			$('#ykcbship').bootstrapTable("destroy").bootstrapTable(Task.options('0'));
-			$('#zycbship').bootstrapTable("refresh").bootstrapTable(Task.options('1'));
-			$('#lgcbship').bootstrapTable("refresh").bootstrapTable(Task.options('2'));
+			$('#zycbship').bootstrapTable("destroy").bootstrapTable(Task.options('1'));
+			$('#lgcbship').bootstrapTable("destroy").bootstrapTable(Task.options('2'));
 		});
 	</script>
 </body>

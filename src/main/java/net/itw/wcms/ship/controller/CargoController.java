@@ -83,23 +83,22 @@ public class CargoController {
 	 * @param map
 	 * @return
 	 */
-	@RequestMapping(value = "/getCargoList") //, produces = "text/json;charset=UTF-8"
+	@RequestMapping(value = "/getCargoList")
 	public Map<String, Object> getDataTables(@RequestParam Map<String, String> params,
 			@RequestParam("taskId") Integer taskId, ModelMap map) {
 		// 从session取出User对象
-		int successInt = 1;
-		String msg = "数据修改成功！";
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
 		Map<String, Object> result = null;
 		try {
 			Pageable pageable = PageUtils.buildPageRequest(params);
 			result = cargoService.getCargoList(pageable, taskId, params);
 		} catch (Exception e) {
 			e.printStackTrace();
-			msg = e.getMessage();
-			successInt = ConstantUtil.FailInt;
+			mo.msg = e.getMessage();
+			mo.code = ConstantUtil.FailInt;
 		}
-		result.put("msg", msg);
-		result.put(ConstantUtil.Success, successInt == 1 ? ConstantUtil.Success : ConstantUtil.Fail);
+		result.put("msg", mo.msg);
+		result.put("code", mo.code);
 		return result;
 	}
 	
@@ -113,22 +112,22 @@ public class CargoController {
 	@RequestMapping(value = "/add")
 	public Map<String, Object> add(@ModelAttribute("cargo") Cargo cargo, @RequestParam("taskId") Integer taskId) {
 		User operator = SessionUtil.getSessionUser(req);
-		int successInt = 1;
-		String msg = "数据保存成功！";
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "数据保存成功！");
 		try {
 			Task task = taskService.getTaskById(taskId);
 			if (task == null) {
 				throw new X27Exception("操作失败：船舶信息未找到！");
 			}
 			cargo.setTask(task);
-			successInt = cargoService.createCargo(cargo, operator);
+			mo.code = cargoService.createCargo(cargo, operator);
 		} catch (Exception e) {
 			e.printStackTrace();
-			msg = e.getMessage();
+			mo.msg = e.getMessage();
+			mo.code = ConstantUtil.FailInt;
 		}
 		Map<String, Object> map = new HashMap<>();
-		map.put("msg", msg);
-		map.put(ConstantUtil.Success, successInt == 1 ? ConstantUtil.Success : ConstantUtil.Fail);
+		map.put("msg", mo.msg);
+		map.put("code", mo.code);
 		return map;
 	}
 
@@ -155,32 +154,39 @@ public class CargoController {
 	public Map<String, Object> update(@ModelAttribute("cargo") Cargo cargo, @RequestParam("taskId") Integer taskId) {
 		// 从session取出User对象
 		User operator = SessionUtil.getSessionUser(req);
-		int successInt = 1;
-		String msg = "数据修改成功！";
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "数据修改成功！");
 		try {
 			Task task = taskService.getTaskById(taskId);
 			if (task == null) {
 				throw new X27Exception("操作失败：船舶信息未找到！");
 			}
 			cargo.setTask(task);
-			successInt = cargoService.updateCargo(cargo, operator);
+			mo.code = cargoService.updateCargo(cargo, operator);
 		} catch (Exception e) {
 			e.printStackTrace();
-			msg = e.getMessage();
+			mo.msg = e.getMessage();
+			mo.code = ConstantUtil.FailInt;
 		}
 		Map<String, Object> map = new HashMap<>();
-		map.put("msg", msg);
+		map.put("msg", mo.msg);
 		map.put("id", cargo.getId());
-		map.put(ConstantUtil.Success, successInt == 1 ? ConstantUtil.Success : ConstantUtil.Fail);
+		map.put("code", mo.code);
 		return map;
 	}
 	
 	@RequestMapping("/delete")
 	public MessageOption delete(@RequestParam("id") Integer id) {
-		// 从session取出User对象
-		User operator = SessionUtil.getSessionUser(req);
-		Cargo cargo = cargoService.findOne(id);
-		MessageOption mo = cargoService.delete(cargo, operator);
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
+		try {
+			// 从session取出User对象
+			User operator = SessionUtil.getSessionUser(req);
+			Cargo cargo = cargoService.findOne(id);
+			mo = cargoService.delete(cargo, operator);
+		} catch (Exception e) {
+			mo.msg = e.getMessage();
+			mo.code = ConstantUtil.FailInt;
+			e.printStackTrace();
+		}
 		return mo;
 	}
 	

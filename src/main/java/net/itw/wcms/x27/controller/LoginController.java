@@ -84,7 +84,7 @@ public class LoginController {
 	public Map<?, ?> login(@RequestParam("username") String userName, @RequestParam("password") String password)
 			throws ServletException, IOException {
 		String msg = "登录成功!";
-		int success = 0; // 0|是、1|否
+		int code = ConstantUtil.SuccessInt;
 		String url = "";
 
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -94,7 +94,7 @@ public class LoginController {
 		try {
 			MessageOption option = userService.verifyLogin(userName, password, ConstantUtil.DefaultToken);
 			if (!option.isSuccess()) { 
-				success = option.isSuccess() ? 0 : 1;
+				code = option.code;
 				msg = option.msg;
 			} else {
 				url = "/web/main";
@@ -104,13 +104,13 @@ public class LoginController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			success = 1;
+			code = ConstantUtil.FailInt;
 			msg = "登录失败：" + e.getMessage();
 		}
 		
 		map.put("msg", msg);
 		map.put("url", url);
-		map.put("success", success);
+		map.put("code", code);
 		return map;
 	}
 
@@ -121,7 +121,8 @@ public class LoginController {
 	 */
 	@RequestMapping(value = "/main")
 	public ModelAndView main() {
-		modelMap.put("user", "管理员");
+		User operator = SessionUtil.getSessionUser(req);
+		modelMap.put("user", operator.getRealName());
 		modelMap.put("hours", Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
 		return new ModelAndView("./main");
 	}

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.Role;
 import net.itw.wcms.x27.entity.User;
 import net.itw.wcms.x27.service.IRoleService;
@@ -84,20 +85,17 @@ public class RoleController {
 	 * @return
 	 */
 	@RequestMapping(value = "/add")
-	public Map<String, Object> add(@ModelAttribute("role") Role role) {
+	public MessageOption add(@ModelAttribute("role") Role role) {
 		User operator = SessionUtil.getSessionUser(req);
-		int successInt = 1;
-		String msg = "数据保存成功！";
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "数据保存成功！");
 		try {
-			successInt = roleService.createRole(role, operator);
+			mo.code = roleService.createRole(role, operator);
 		} catch (Exception e) {
 			e.printStackTrace();
-			msg = e.getMessage();
+			mo.msg = e.getMessage();
+			mo.code = ConstantUtil.FailInt;
 		}
-		Map<String, Object> map = new HashMap<>();
-		map.put("msg", msg);
-		map.put(ConstantUtil.Success, successInt == 1 ? ConstantUtil.Success : ConstantUtil.Fail);
-		return map;
+		return mo;
 	}
 	
 	/**
@@ -128,18 +126,18 @@ public class RoleController {
 	public Map<String, Object> update(@ModelAttribute("role") Role role) {
 		// 从session取出User对象
 		User operator = SessionUtil.getSessionUser(req);
-		int successInt = 1;
-		String msg = "数据修改成功！";
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "数据保存成功！");
 		try {
-			successInt = roleService.updateRoleById(role, operator);
+			mo.code = roleService.updateRoleById(role, operator);
 		} catch (Exception e) {
 			e.printStackTrace();
-			msg = e.getMessage();
+			mo.msg = e.getMessage();
+			mo.code = ConstantUtil.FailInt;
 		}
 		Map<String, Object> map = new HashMap<>();
-		map.put("msg", msg);
+		map.put("msg", mo.msg);
 		map.put("id", role.getId());
-		map.put(ConstantUtil.Success, successInt == 1 ? ConstantUtil.Success : ConstantUtil.Fail);
+		map.put("code", mo.code);
 		return map;
 	}
 
@@ -149,17 +147,22 @@ public class RoleController {
 	}
 
 	@RequestMapping("/delete")
-	public String delete(@RequestParam("id") Integer id) {
+	public MessageOption delete(@RequestParam("id") Integer id) {
 		// 从session取出User对象
 		User operator = SessionUtil.getSessionUser(req);
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, " 操作成功！");
+		try {
+			User user = new User();
+			user.setId(id);
+			user.setIsDelete(true);
 
-		User user = new User();
-		user.setId(id);
-		user.setIsDelete(true);
-
-		userService.updateIsDeleteById(user, operator);
-
-		return ConstantUtil.Success;
+			userService.updateIsDeleteById(user, operator);
+		} catch (Exception e) {
+			e.printStackTrace();
+			mo.msg = e.getMessage();
+			mo.code = ConstantUtil.FailInt;
+		}
+		return mo;
 	}
 
 	@RequestMapping("/resetpass")

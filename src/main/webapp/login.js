@@ -62,10 +62,10 @@ var Login = function() {
 				if (result == undefined && result == null) {
 					return;
 				}
-				var success = result.success;
-				if (success == 0) {
+				var code = result.code;
+				if (Cl.successInt == code) {
 					location = IncPath + result.url;
-				} else if (success == 1) {
+				} else if (Cl.failInt == code) {
 					$('.alert-danger-span').text(result.msg);
 					$('.alert-danger', $('.login-form')).show();
 				}

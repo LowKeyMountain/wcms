@@ -38,22 +38,20 @@
 						<label class="control-label col-md-3">货物名称 <span
 							class="required"> * </span>
 						</label>
-						<!-- 
 						<div class="col-md-8">
-							<div class="input-icon right">
-								<i class="fa"></i><input type="text" id="cargoId"
-									name="cargoId" data-required="1" class="form-control" />
-							</div>
-						</div>
-						 -->
-						<div class="col-md-8">
-							<select id="cargoId" name="cargoId" class="form-control select2me">
+							<select id="cargoId" name="cargoId"
+								class="form-control select2me">
 								<option value="">请选择...</option>
-					   			<c:if test="${!(cargos == null || fn:length(cargos) == 0)}">
-					   				<c:forEach var="cargo" items="${cargos}">
-					   					<option value="${cargo.id}">${cargo.cargoType}</option>
-					   				</c:forEach>
-					   			</c:if>
+								<c:if test="${!(cargos == null || fn:length(cargos) == 0)}">
+									<c:forEach var="cargo" items="${cargos}">
+										<c:choose>
+											<c:when test="${cargo.cargoType == null}"></c:when>
+											<c:otherwise>
+												<option value="${cargo.id}">${cargo.cargoType}</option>
+											</c:otherwise>
+										</c:choose>
+									</c:forEach>
+								</c:if>
 							</select>
 						</div>
 					</div>

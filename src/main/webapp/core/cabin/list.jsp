@@ -9,21 +9,23 @@
 				<!-- <i class="fa fa-cogs"></i> -->
 			</div>
 			<div class="tools">
-				<a href="javascript:Cabin.add_click();" data-toggle="modal"
-					class="config" data-original-title="新增" title="新增"> </a> <a
-					href="javascript:Cabin.list();;" class="reload" data-original-title="刷新" title="刷新">
+				<!-- <a href="javascript:Cabin.add_click();" data-toggle="modal"
+					class="config" data-original-title="新增" title="新增"> </a>  --><a
+					onclick="javascript:Cabin.list();" class="reload" data-original-title="刷新" title="刷新">
 				</a>
 			</div>
 		</div>
 		<div class="portlet-body" style="display: block;">
 			<div class="table-responsive">
-				<table class="table table-striped table-bordered table-hover">
+				<table class="table table-striped table-bordered table-hover editable">
 					<thead>
-						<tr>
+						<tr ignore = "true">
 							<th>船舱编号</th>
 							<th>货物名称</th>
+							<!-- 
 							<th>开始位置</th>
 							<th>结束位置</th>
+							 -->
 							<th>装载量</th>
 							<th>操作</th>
 						</tr>

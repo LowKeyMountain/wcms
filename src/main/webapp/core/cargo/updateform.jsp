@@ -43,7 +43,7 @@
 						    <div class="input-icon right">
                             <i class="fa"></i>
 							<input type="text" id="cargoType" name="cargoType"
-								data-required="1" value="${cargo.cargoType}" class="form-control" />
+								data-required="1" value="${cargo.cargoType}" class="form-control" readonly="readonly" />
 							</div>
 						</div>
 					</div>

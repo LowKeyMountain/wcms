@@ -199,6 +199,7 @@ License: You must have a valid license purchased only from themeforest(the above
         <!-- BEGIN PAGE LEVEL SCRIPTS -->
         <script src="${IncPath}/assets/pages/scripts/table-datatables-managed.min.js" type="text/javascript"></script>
         <script src="${IncPath}/scripts/jquery-validation/jquery.form.js" type="text/javascript"></script>
+        <script src="${IncPath}/assets/global/plugins/jquery-validation/js/localization/messages_zh.js?" type="text/javascript"></script>
         <!-- END PAGE LEVEL SCRIPTS -->
         <!-- BEGIN THEME LAYOUT SCRIPTS -->
         <script src="${IncPath}/assets/layouts/layout/scripts/layout.min.js" type="text/javascript"></script>

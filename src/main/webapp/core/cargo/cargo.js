@@ -103,7 +103,7 @@ var Cargo = function() {
 			pageParam.taskId = taskId;
 			var url = BasePath + "/cargo/getCargoList";
 			$.post(url, pageParam, function(result) {
-				if (result && result.success) {
+				if (result && Cl.successInt == result.code) {
 					
 					// <tr>
 					// <td>#</td>
@@ -135,8 +135,8 @@ var Cargo = function() {
 								+ "<td>"+res.stowage+"</td>"
 								+ "<td>"
 								+ "<a href='javascript:Cargo.update_click(" + res.id + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i> 修改</a>"
-//								+ "&nbsp;&nbsp;"
-//								+ "<a href='javascript:Cargo.remove(" + res.id + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i> 删除</a>"
+								+ "&nbsp;&nbsp;"
+								+ "<a href='javascript:Cargo.remove(" + res.id + ");' class='btn btn-xs default btn-editable'><i class='fa fa-times'></i> 删除</a>"
 								+ "</td>" + "</tr>";
 
 						$("#cargo_tbody").append(tr);
@@ -191,7 +191,8 @@ var Cargo = function() {
 				success : function(result) {
 					if (!result)
 						return;
-					if (result.success == "success") {
+					 var code = result.code;
+					 if(Cl.successInt == code){
 						Cl.hideModalWindow(Cl.modalName);
 						Cargo.list();
 						alert("增加成功");
@@ -221,7 +222,8 @@ var Cargo = function() {
 				success : function(result) {
 					if (!result)
 						return;
-					if (result.success == "success") {
+					 var code = result.code;
+					 if(Cl.successInt == code){
 						alert("修改成功");
 						Cl.hideModalWindow(Cl.modalName);
 						Cargo.list();
@@ -253,12 +255,12 @@ var Cargo = function() {
 			Cl.ajaxRequest(url, data, function(result) {
 				if (!result)
 					return;
-				result = result.replace(/(^\s*)|(\s*$)/g, '');
-				if (result == "success") {
-					Cl.deleteDataRow(DataTableCl.tableName, data.id, 1);
+				 var code = result.code;
+				 if(Cl.successInt == code){
 					alert("删除成功");
+					Cargo.list();
 				} else {
-					alert("删除失败");
+					alert(result.msg);
 					return;
 				}
 			});

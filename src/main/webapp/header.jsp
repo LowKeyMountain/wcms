@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" import="java.io.IOException,net.itw.wcms.x27.entity.*,net.itw.wcms.x27.utils.SessionUtil"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!-- BEGIN HEADER -->
 <div class="page-header navbar navbar-fixed-top">
@@ -27,20 +27,14 @@
                         <i class="fa fa-angle-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-default">
-                        <li>
-							<a href="javascript:;" id="trigger_fullscreen">
-								<i class="fa fa-arrows"></i> 全屏
-							</a>
-                        </li>
-                        <li>
-							<a href="javascript:;" id="modify_password">
-								<i class="fa fa-arrows"></i> 修改密码
-							</a>
-                        </li>
-                        <li>
-                                <i class="fa fa-key"></i> 退出
-                        </li>
-                    </ul>
+						<li><a href="javascript:;" id="modify_password"> <i
+								class="fa fa-arrows"></i> 修改密码
+						</a></li>
+
+						<li><a href="${IncPath}/web/gotoLoginPage"
+							id="modify_password"> <i class="fa fa-key"></i> 退出
+						</a></li>
+					</ul>
                 </li>
                 <!-- END USER LOGIN DROPDOWN -->
             </ul>

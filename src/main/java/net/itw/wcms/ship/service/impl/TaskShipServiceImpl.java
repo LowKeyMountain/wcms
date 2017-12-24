@@ -1,5 +1,6 @@
 package net.itw.wcms.ship.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -77,16 +78,18 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			}
 
 			Map<String, Cabin> cabins = new HashMap<>();
-			if (task.getCabins() != null && task.getCabins().size() > 0) {
-				for (Cabin e : task.getCabins()) {
-					cabins.put(e.getCabinNo() + "", e);
+			
+			if (task.getCargos() != null) {
+				for (Cargo cargo : task.getCargos()) {
+					for (Cabin e : cargo.getCabins()) {
+						cabins.put(e.getCabinNo() + "", e);
+					}
 				}
 			} else {
 				Integer num = task.getShip().getCabinNum();
 				while (num > 0) {
 					Cabin c = new Cabin();
 					c.setCabinNo(num);
-					c.setTask(task);
 					cabins.put(c.getCabinNo() + "", c);
 					num--;
 				}
@@ -393,13 +396,19 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			if (taskStatus != 1) {
 				throw new X27Exception("操作失败： 船舶只有在作业时才能修改船舱状态！");
 			}
-			if (Integer.parseInt(status) == 1 || Integer.parseInt(status) == 2) {
+			int statusCode = Integer.parseInt(status);
+			if (statusCode == 1 || statusCode == 2) {
 				// 1. 设置作业船舶指定舱位状态为：清舱或完成状态；
-				for (Cabin cabin : task.getCabins()) {
-					if (cabin.getCabinNo() == Integer.parseInt(cabinNo)) {
-						cabin.setStatus(Integer.parseInt(status));
-						cabin.setUpdateTime(new Date());
-						cabin.setUpdateUser(operator.getUserName());
+				for (Cargo cargo : task.getCargos()) {
+					for (Cabin cabin : cargo.getCabins()) {
+						if (cabin.getCabinNo() == Integer.parseInt(cabinNo)) {
+							cabin.setStatus(statusCode);
+							if (statusCode == 1) { // 设置清舱时间
+								cabin.setClearTime(new Date());
+							}
+							cabin.setUpdateTime(new Date());
+							cabin.setUpdateUser(operator.getUserName());
+						}
 					}
 				}
 			} else {
@@ -457,8 +466,10 @@ public class TaskShipServiceImpl implements ITaskShipService {
 					task.setUpdateTime(new Date());
 					task.setUpdateUser(operator.getUserName());
 					// 更新所有船舱状态为卸货|0
-					for (Cabin cabin : task.getCabins()) {
-						cabin.setStatus(0);
+					for (Cargo cargo : task.getCargos()) {
+						for (Cabin cabin : cargo.getCabins()) {
+							cabin.setStatus(0);
+						}
 					}
 					taskRepository.saveAndFlush(task);
 
@@ -473,7 +484,13 @@ public class TaskShipServiceImpl implements ITaskShipService {
 					throw new X27Exception("操作失败: 当前船舶为作业状态！");
 				} else if ("1".equals(status)) {
 					// 检查各船舱是否为完成状态,各舱均为完成状态时才可设置结束卸船；
-					for (Cabin cabin : task.getCabins()) {
+					List<Cabin> cabins = new ArrayList<>();
+					for (Cargo cargo : task.getCargos()) {
+						for (Cabin cabin : cargo.getCabins()) {
+							cabins.add(cabin);
+						}
+					}
+					for (Cabin cabin : cabins) {
 						if (cabin.getStatus() == 2) {
 							continue;
 						} else {
@@ -507,14 +524,14 @@ public class TaskShipServiceImpl implements ITaskShipService {
 	@Override
 	public Map<String, Object> doGetCargoDetail(Integer taskId, Integer cabinNo) {
 		String msg = "操作成功！";
-		String isSuccess = "1";
+		Integer isSuccess = ConstantUtil.SuccessInt;
 
 		Map<String, Object> result = new HashMap<>();
 		try {
 			
 			Cargo cargo = cargoRepository.getCargoByTaskIdAndCabinNo(taskId, cabinNo);
 			if (cargo == null) {
-				result.put("code", "0");
+				result.put("code", ConstantUtil.FailInt);
 				result.put("msg", "货物信息未找到！");
 				return result;
 			}
@@ -535,7 +552,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			result.put("code", isSuccess);
 		} catch (Exception e) {
 			e.printStackTrace();
-			result.put("code", "0");
+			result.put("code", ConstantUtil.FailInt);
 			result.put("msg", e.getMessage());
 			return result;
 		}

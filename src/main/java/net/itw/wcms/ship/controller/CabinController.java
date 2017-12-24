@@ -1,8 +1,10 @@
 package net.itw.wcms.ship.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,13 +21,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import net.itw.wcms.ship.entity.Cabin;
 import net.itw.wcms.ship.entity.Cargo;
-import net.itw.wcms.ship.entity.Task;
 import net.itw.wcms.ship.service.ICabinService;
 import net.itw.wcms.ship.service.ICargoService;
 import net.itw.wcms.ship.service.ITaskService;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
-import net.itw.wcms.x27.exception.X27Exception;
 import net.itw.wcms.x27.utils.ConstantUtil;
 import net.itw.wcms.x27.utils.PageUtils;
 import net.itw.wcms.x27.utils.SessionUtil;
@@ -79,67 +79,64 @@ public class CabinController {
 
 	@RequestMapping("/addform")
 	public ModelAndView addform(@RequestParam("taskId") Integer taskId) {
-		 Task task = taskService.getTaskById(taskId);
 		 List<Cargo> cargos = cargoService.getCargosByTaskId(taskId);
 		 modelMap.put("cargos", cargos);
-		 int cabinNo = task.getCabins() != null ? task.getCabins().size() : 0;
-		 modelMap.put("cabinNo", cabinNo + 1);
+		 List<Cabin> cabins = new ArrayList<>();
+		 for (Cargo cargo : cargos) {
+			 for (Cabin cabin : cargo.getCabins()) {
+				 cabins.add(cabin);
+			 }
+		 }
+		 modelMap.put("cabinNo", cabins.size() + 1);
 		return new ModelAndView(PATH + "addform");
 	}
 
 	/**
 	 * 返回信息列表
-	 * 
 	 * @param params
+	 * @param taskId
 	 * @param map
 	 * @return
 	 */
-	@RequestMapping(value = "/getCabinList") //, produces = "text/json;charset=UTF-8"
+	@RequestMapping(value = "/getCabinList")
 	public Map<String, Object> getDataTables(@RequestParam Map<String, String> params,
 			@RequestParam("taskId") Integer taskId, ModelMap map) {
 		// 从session取出User对象
-		int successInt = 1;
-		String msg = "数据修改成功！";
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
 		Map<String, Object> result = null;
 		try {
 			Pageable pageable = PageUtils.buildPageRequest(params);
 			result = cabinService.getCabinList(pageable, taskId, params);
 		} catch (Exception e) {
 			e.printStackTrace();
-			msg = e.getMessage();
-			successInt = ConstantUtil.FailInt;
+			mo.msg = e.getMessage();
+			mo.code = ConstantUtil.FailInt;
 		}
-		result.put("msg", msg);
-		result.put(ConstantUtil.Success, successInt == 1 ? ConstantUtil.Success : ConstantUtil.Fail);
+		result.put("msg", mo.msg);
+		result.put("code", mo.code);
 		return result;
 	}
 	
 
 	/**
 	 * 新增信息
-	 * 
-	 * @param task
+	 * @param cabin
 	 * @return
 	 */
 	@RequestMapping(value = "/add")
-	public Map<String, Object> add(@ModelAttribute("cabin") Cabin cabin, @RequestParam("taskId") Integer taskId) {
+	public Map<String, Object> add(@ModelAttribute("cabin") Cabin cabin) {
 		User operator = SessionUtil.getSessionUser(req);
-		int successInt = 1;
-		String msg = "数据保存成功！";
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "数据保存成功！");
 		try {
-			Task task = taskService.getTaskById(taskId);
-			if (task == null) {
-				throw new X27Exception("操作失败：船舶信息未找到！");
-			}
-			cabin.setTask(task);
-			successInt = cabinService.createCabin(cabin, operator);
+			mo.code = cabinService.createCabin(cabin, operator);
 		} catch (Exception e) {
 			e.printStackTrace();
-			msg = e.getMessage();
+			mo.msg = e.getMessage();
+			mo.code = ConstantUtil.FailInt;
 		}
 		Map<String, Object> map = new HashMap<>();
-		map.put("msg", msg);
-		map.put(ConstantUtil.Success, successInt == 1 ? ConstantUtil.Success : ConstantUtil.Fail);
+		map.put("msg", mo.msg);
+		map.put("code", mo.code);
 		return map;
 	}
 
@@ -153,49 +150,48 @@ public class CabinController {
 	public ModelAndView updateform(Integer id) {
 		Cabin cabin = cabinService.findOne(id);
 		modelMap.put("cabin", cabin);
-		if (cabin != null) {
-			List<Cargo> cargos = cargoService.getCargosByTaskId(cabin.getTask().getId());
-			modelMap.put("cargos", cargos);
-		}
+		Set<Cargo> cargos = cabin.getCargo().getTask().getCargos();
+		modelMap.put("cargos", cargos);
 		return new ModelAndView(PATH + "updateform");
 	}
 
 	/**
-	 * 修改货物信息
-	 * 
-	 * @param cargo
+	 * 修改信息
+	 * @param cabin
 	 * @return
 	 */
 	@RequestMapping(value = "/update")
-	public Map<String, Object> update(@ModelAttribute("cabin") Cabin cabin, @RequestParam("taskId") Integer taskId) {
+	public Map<String, Object> update(@ModelAttribute("cabin") Cabin cabin) {
 		// 从session取出User对象
 		User operator = SessionUtil.getSessionUser(req);
-		int successInt = 1;
-		String msg = "数据修改成功！";
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "数据修改成功！");
 		try {
-			Task task = taskService.getTaskById(taskId);
-			if (task == null) {
-				throw new X27Exception("操作失败：船舶信息未找到！");
-			}
-			cabin.setTask(task);
-			successInt = cabinService.updateCabin(cabin, operator);
+			mo.code = cabinService.updateCabin(cabin, operator);
 		} catch (Exception e) {
 			e.printStackTrace();
-			msg = e.getMessage();
+			mo.code = ConstantUtil.FailInt;
+			mo.msg = e.getMessage();
 		}
 		Map<String, Object> map = new HashMap<>();
-		map.put("msg", msg);
+		map.put("msg", mo.msg);
 		map.put("id", cabin.getId());
-		map.put(ConstantUtil.Success, successInt == 1 ? ConstantUtil.Success : ConstantUtil.Fail);
+		map.put("code", mo.code);
 		return map;
 	}
 	
 	@RequestMapping("/delete")
 	public MessageOption delete(@RequestParam("id") Integer id) {
-		// 从session取出User对象
-		User operator = SessionUtil.getSessionUser(req);
-		Cabin cabin = cabinService.findOne(id);
-		MessageOption mo = cabinService.delete(cabin, operator);
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
+		try {
+			// 从session取出User对象
+			User operator = SessionUtil.getSessionUser(req);
+			Cabin cabin = cabinService.findOne(id);
+			mo = cabinService.delete(cabin, operator);
+		} catch (Exception e) {
+			e.printStackTrace();
+			mo.code = ConstantUtil.FailInt;
+			mo.msg = e.getMessage();
+		}
 		return mo;
 	}
 	

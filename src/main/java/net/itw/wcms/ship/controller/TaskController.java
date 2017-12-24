@@ -17,8 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSONObject;
+
 import net.itw.wcms.ship.entity.Task;
 import net.itw.wcms.ship.service.ITaskService;
+import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
 import net.itw.wcms.x27.utils.ConstantUtil;
 import net.itw.wcms.x27.utils.PageUtils;
@@ -80,6 +83,25 @@ public class TaskController {
 		return result;
 	}
 	
+	@RequestMapping(value = "/berthCheckout", produces = "text/json;charset=UTF-8")
+	public String berthCheckout(@RequestParam("id") Integer taskId, @RequestParam("berth") Integer berth) {
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "校验成功！");
+		List<Task> tasks = taskService.getTaskByStatus(0);
+		for (Task task : tasks) {
+			if (task.getId() == taskId) {
+				continue;
+			}
+			if (task.getBerth() == berth) {
+				mo.msg = "矿" + (berth == 1 ? "一" : (berth == 2 ? "二" : "其他")) + "已被占用！";
+				mo.code = ConstantUtil.FailInt;
+			}
+		}
+		Map<String, Object> map = new HashMap<>();
+		map.put("msg", mo.msg);
+		map.put("code", mo.code);
+ 		return JSONObject.toJSON(map).toString();
+	}
+	
 	@RequestMapping("/updateform")
 	public ModelAndView updateform(Integer id) {
 		Task user = taskService.getTaskById(id);
@@ -108,18 +130,18 @@ public class TaskController {
 	@RequestMapping(value = "/add")
 	public Map<String, Object> add(@ModelAttribute("task") Task task) {
 		User operator = SessionUtil.getSessionUser(req);
-		int successInt = 1;
-		String msg = "数据保存成功！";
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "数据保存成功！");
 		try {
-			successInt = taskService.createTask(task, operator);
+			mo.code = taskService.createTask(task, operator);
 		} catch (Exception e) {
 			e.printStackTrace();
-			msg = e.getMessage();
+			mo.msg = e.getMessage();
+			mo.code = ConstantUtil.FailInt;
 		}
 		Map<String, Object> map = new HashMap<>();
-		map.put("msg", msg);
+		map.put("msg", mo.msg);
 		map.put("taskId", task.getId());
-		map.put(ConstantUtil.Success, successInt == 1 ? ConstantUtil.Success : ConstantUtil.Fail);
+		map.put("code", mo.code);
 		return map;
 	}
 	
@@ -132,19 +154,39 @@ public class TaskController {
 	@RequestMapping(value = "/update")
 	public Map<String, Object> update(@ModelAttribute("task") Task task) {
 		User operator = SessionUtil.getSessionUser(req);
-		int successInt = 1;
-		String msg = "数据修改成功！";
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "数据修改成功！");
 		try {
-			successInt = taskService.updateTask(task, operator);
+			mo.code = taskService.updateTask(task, operator);
 		} catch (Exception e) {
 			e.printStackTrace();
-			msg = e.getMessage();
+			mo.msg = e.getMessage();
+			mo.code = ConstantUtil.FailInt;
 		}
 		Map<String, Object> map = new HashMap<>();
-		map.put("msg", msg);
+		map.put("msg", mo.msg);
 		map.put("taskId", task.getId());
-		map.put(ConstantUtil.Success, successInt == 1 ? ConstantUtil.Success : ConstantUtil.Fail);
+		map.put("code", mo.code);
 		return map;
+	}
+	
+	/**
+	 * 删除
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("/delete")
+	public MessageOption delete(@RequestParam("id") Integer id) {
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
+		try {
+			Task task = taskService.getTaskById(id);
+			mo = taskService.delete(task);
+		} catch (Exception e) {
+			mo.msg = e.getMessage();
+			mo.code = ConstantUtil.FailInt;
+			e.printStackTrace();
+		}
+		return mo;
 	}
 	
 }

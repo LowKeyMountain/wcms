@@ -7,7 +7,7 @@ var FormCl = function () {
         var form2 = $('#form_cl');
         var error2 = $('.alert-danger', form2);
         var success2 = $('.alert-success', form2);
-
+        
         form2.validate({
             errorElement: 'span', //default input error message container
             errorClass: 'help-block help-block-error', // default input error message class
@@ -24,18 +24,40 @@ var FormCl = function () {
 //					required : true,
 //					date:true
 				},
-				berth : {
+				'berth' : {
 					required : true,
-					range:[1,2]
+					range : [ 1, 2 ],
+					remote : {
+						type : "post",
+						url : BasePath + "/task/berthCheckout",
+						data : {
+							id : function() {
+								return $("#id").val();
+							},
+							berth:function() {
+								return $("#berth").val();
+							}
+						},
+						dataType : "json",
+						dataFilter : function(data, type) {
+							var data = jQuery.parseJSON(data);
+							 if(Cl.successInt == data.code){
+								return true;
+							} else {
+								alert(data.msg);
+								return false;
+							}
+						}
+					}
 				},
-				cargoLoad : {
+				'cargoLoad' : {
 					required : true,
 					number : true
 				},
 				'ship.imoNo' : {
 				},
 				'ship.buildDate' : {
-//					date:true
+					// date:true
 				},
 				'ship.length' : {
 					required : true,
@@ -56,7 +78,7 @@ var FormCl = function () {
 				'ship.hatch' : {
 					
 				}
-			},
+			}, 
             invalidHandler: function (event, validator) { // display error
 															// alert on form
 															// submit
@@ -369,6 +391,12 @@ var Task = function() {
 			 * submit // $.ajax options can be used here too, for example:
 			 * //timeout: 3000 };
 			 */
+			
+			if (taskId != null && taskId != '' ) {
+				Task.update();
+				return;
+			}
+			
 			var options = {
 				target : '#form_cl',
 				type : 'post',
@@ -377,8 +405,10 @@ var Task = function() {
 				success : function(result) {
 					if (!result)
 						return;
-					if (result.success == "success") {
+					 var code = result.code;
+					 if(Cl.successInt == code){
 						taskId = result.taskId;
+						$("#id").attr('value', result.taskId);
 						alert("增加成功");
 					} else {
 						alert("增加失败");
@@ -407,8 +437,11 @@ var Task = function() {
 				success : function(result) {
 					if (!result)
 						return;
-					if (result.success == "success") {
+					 var code = result.code;
+					 if(Cl.successInt == code){
 						alert("修改成功");
+						taskId = result.taskId;
+						$("#id").attr('value', result.taskId);
 					} else {
 						alert("修改失败");
 						return;
@@ -428,22 +461,22 @@ var Task = function() {
 		 * 删除
 		 */
 		remove : function(id) {
-			if (!confirm("确定要删除该用户?")) {
+			if (!confirm("确定要删除该船舶?")) {
 				return;
 			}
-			var url = BasePath + "/user/delete.do";
+			var url = BasePath + "/task/delete";
 			var data = {
 				"id" : id
 			};
 			Cl.ajaxRequest(url, data, function(result) {
 				if (!result)
 					return;
-				result = result.replace(/(^\s*)|(\s*$)/g, '');
-				if (result == "success") {
-					Cl.deleteDataRow(DataTableCl.tableName, data.id, 1);
+				 var code = result.code;
+				 if(Cl.successInt == code){
 					alert("删除成功");
+					loadList('0');
 				} else {
-					alert("被用户使用的角色不允许删除");
+					alert(result.msg);
 					return;
 				}
 			});
@@ -457,11 +490,11 @@ var Task = function() {
 
 function loadList(status){
 	if (status == '0') {
-		$('#ykcbship').bootstrapTable("refresh").bootstrapTable(Task.options('0'));
+		$('#ykcbship').bootstrapTable("destroy").bootstrapTable(Task.options('0'));
 	} else if (status == '1') {
-		$('#zycbship').bootstrapTable("refresh").bootstrapTable(Task.options('1'));
+		$('#zycbship').bootstrapTable("destroy").bootstrapTable(Task.options('1'));
 	} else if (status == '2') {
-		$('#lgcbship').bootstrapTable("refresh").bootstrapTable(Task.options('2'));
+		$('#lgcbship').bootstrapTable("destroy").bootstrapTable(Task.options('2'));
 	}
 }
 

@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+import org.eclipse.jdt.internal.compiler.codegen.ExceptionLabel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.itw.wcms.ship.entity.Cabin;
 import net.itw.wcms.ship.entity.Cargo;
+import net.itw.wcms.ship.exception.TaskException;
 import net.itw.wcms.ship.repository.CabinRepository;
 import net.itw.wcms.ship.repository.CargoRepository;
 import net.itw.wcms.ship.service.ICargoService;
@@ -56,13 +59,12 @@ public class CargoServiceImpl implements ICargoService {
 			return map;
 		}
 		int total = page.size();
-//		List<Cargo> list = new ArrayList<>();
-//		for (Cargo t : page) {
-//			list.add(t);
-//		}
 		
 		List<Map<String, Object>> list = new ArrayList<>();
 		for (Cargo cargo : page) {
+			if (StringUtils.isEmpty(cargo.getCargoCategory())){ // 不展示自动生成的货物（信息都是空的）
+				continue;
+			}
 			Map<String, Object> data = new HashMap<>();
 			data.put("cargoType", cargo.getCargoType());
 			data.put("cargoCategory", cargo.getCargoCategory());
@@ -101,16 +103,21 @@ public class CargoServiceImpl implements ICargoService {
 	}
 
 	@Override
-	public MessageOption delete(Cargo cargo, User operator) {
+	public MessageOption delete(Cargo cargo, User operator) throws Exception {
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
 		try {
 			// 检查货物是否关联船舱
 			List<Cabin> cabins = cabinRepository.getCabinByCargoId(cargo.getId());
 			if (cabins != null && cabins.size() > 0) {
-				throw new X27Exception("操作失败：该货物已被船舱关联，不能删除！");
+				mo.code = ConstantUtil.FailInt;
+				mo.msg = "操作失败：该货物已被船舱关联，不能删除！";
+				return mo;
 			}
+			cargo.setTask(null);
 			cargoRepository.delete(cargo);
 		} catch (Exception e) {
+			mo.code = ConstantUtil.FailInt;
+			mo.msg = e.getMessage();
 			e.printStackTrace();
 		}
 		return mo;

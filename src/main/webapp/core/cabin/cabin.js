@@ -7,7 +7,17 @@ var CabinFormCl = function () {
         var form2 = $('#form_cl_cabin');
         var error2 = $('.alert-danger', form2);
         var success2 = $('.alert-success', form2);
-
+        
+        jQuery.validator.addMethod("compareCabinPosition", function(value, element) {   
+        	var startPosition = $("#startPosition").val();
+        	var endPosition = $("#endPosition").val();
+        	if (startPosition == '0.0' && endPosition == '0.0') {
+        		return true;
+        	}
+        	var number = parseInt(endPosition) - parseInt(startPosition);
+            return number >= 0;
+        }, "开始位置不能大于结束位置！");
+        
         form2.validate({
             errorElement: 'span', //default input error message container
             errorClass: 'help-block help-block-error', // default input error message class
@@ -20,13 +30,17 @@ var CabinFormCl = function () {
 				preunloading : {
 					required : true,
 					number : true
-				},
-				startPosition : {
-					number : true
-				},
-				endPosition : {
-					number : true
 				}
+//				,
+//				startPosition : {
+//					number : true,
+//					range:[0,855]
+//				},
+//				endPosition : {
+//					number : true,
+//					range:[0,855],
+//					compareCabinPosition:true
+//				}
 			},
             invalidHandler: function (event, validator) { // display error
 															// alert on form
@@ -102,11 +116,12 @@ var Cabin = function() {
 			if (taskId == null || taskId == undefined) {
 				return;
 			}
+			var mapping = {};
 			var pageParam = {};
 			pageParam.taskId = taskId;
 			var url = BasePath + "/cabin/getCabinList";
 			$.post(url, pageParam, function(result) {
-				if (result && result.success) {
+				if (result && Cl.successInt == result.code) {
 					
 					// <tr>
 					// <td>船舱编号</td>
@@ -121,24 +136,80 @@ var Cabin = function() {
 					$("#cabin_tbody").children().empty();
 					// 加载列表数据
 					var obj = result.rows;
+					mapping = result.mapping;
+
 					for (var i = 0; i < obj.length; i++) {
 						var res = obj[i];
 						var id = i + 1;
 						var tr = ""
 								+ "<tr>"
 								+ "<td>"+res.cabinNo+"</td>"
-								+ "<td>"+res.cargoId+"</td>"
-								+ "<td>"+res.startPosition+"</td>"
-								+ "<td>"+res.endPosition+"</td>"
+								+ "<td type='select'>" + res.cargoName + "</td>"
+//								+ "<td>"+res.startPosition+"</td>"
+//								+ "<td>"+res.endPosition+"</td>"
 								+ "<td>"+res.preunloading+"</td>"
 								+ "<td>"
 								+ "<a href='javascript:Cabin.update_click(" + res.id + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i> 修改</a>"
-//								+ "&nbsp;&nbsp;"
+								+ "&nbsp;&nbsp;"
 //								+ "<a href='javascript:Cabin.remove(" + res.id + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i> 删除</a>"
-								+ "</td>" + "</tr>";
+								+ "</td>" 
+								+ "</tr>";
 
 						$("#cabin_tbody").append(tr);
 					}
+					
+//				    $('.editable').handleTable({
+//				        "handleFirst" : true,
+//				        "cancel" : "&nbsp;<span class='glyphicon glyphicon-remove'></span>&nbsp;",
+//				        "edit" : "&nbsp;<span class='glyphicon glyphicon-edit'></span>&nbsp;",
+//				        "add" : "&nbsp;<span class='glyphicon glyphicon-plus'></span>&nbsp;",
+//				        "save" : "&nbsp;<span class='glyphicon glyphicon-saved'></span>&nbsp;",
+//				        "confirm" : "&nbsp;<span class='glyphicon glyphicon-ok'></span>&nbsp;",
+//				        "operatePos" : -1,
+//				        "editableCols" : [1,2,3,4],
+//						"order": ["edit"],
+//				        "saveCallback" : function(data, isSuccess) { //这里可以写ajax内容，用于保存编辑后的内容
+//				        	//data: 返回的数据
+//				        	//isSucess: 方法，用于保存数据成功后，将可编辑状态变为不可编辑状态
+//							var url = BasePath + "/cabin/update";
+//							
+//							var params = mapping[data[0]];
+//							params['cargo.id'] = data[1];
+//							params['startPosition'] = data[2];
+//							params['endPosition'] = data[3];
+//							params['preunloading'] = data[4];
+//							Cl.ajaxRequest(url, params, function(result) {
+//								if (!result)
+//									return;
+//					            if(result.success == "success") { //ajax请求成功（保存数据成功），才回调isSuccess函数（修改保存状态为编辑状态）
+//					                isSuccess();
+//					                alert(data + " 保存成功");
+//					            } else {
+//					                alert("保存失败");
+//					            }
+//							});
+//				            return true;
+//				        },
+//				        "addCallback" : function(data,isSuccess) {
+//				            var flag = true;
+//				            if(flag) {
+//				                isSuccess();
+//				                alert(data + " 增加成功");
+//				            } else {
+//				                alert(data + " 增加失败");
+//				            }
+//				        },
+//				        "delCallback" : function(isSuccess) {
+//				            var flag = true;
+//				            if(flag) {
+//				                isSuccess();
+//				                alert("删除成功");
+//				            } else {
+//				                alert("删除失败");
+//				            }
+//				        }
+//				    });
+					
 				} else {
 					alert(result.msg);
 				}
@@ -189,7 +260,8 @@ var Cabin = function() {
 				success : function(result) {
 					if (!result)
 						return;
-					if (result.success == "success") {
+					 var code = result.code;
+					 if(Cl.successInt == code){
 						Cl.hideModalWindow(Cl.modalName);
 						Cabin.list();
 						alert("增加成功");
@@ -219,7 +291,8 @@ var Cabin = function() {
 				success : function(result) {
 					if (!result)
 						return;
-					if (result.success == "success") {
+					 var code = result.code;
+					 if(Cl.successInt == code){
 						alert("修改成功");
 						Cl.hideModalWindow(Cl.modalName);
 						Cabin.list();
@@ -251,8 +324,8 @@ var Cabin = function() {
 			Cl.ajaxRequest(url, data, function(result) {
 				if (!result)
 					return;
-				result = result.replace(/(^\s*)|(\s*$)/g, '');
-				if (result == "success") {
+				 var code = result.code;
+				 if(Cl.successInt == code){
 					Cl.deleteDataRow(DataTableCl.tableName, data.id, 1);
 					alert("删除成功");
 				} else {

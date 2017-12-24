@@ -43,18 +43,22 @@
 						<div class="col-md-8">
 							<div class="input-icon right">
 								<i class="fa"></i> <input type="text" id="cargoId"
-									name="cargoId" data-required="1" value="${cabin.cargoId}" class="form-control" />
+									name="cargoId" data-required="1" value="${cabin.cargo.id}" class="form-control" />
 							</div>
 						</div>
 						 -->
 						<div class="col-md-8">
-							<select id="cargoId" name="cargoId" class="form-control select2me">
+							<select id="cargo.id" name="cargo.id" class="form-control select2me">
 					   			<c:if test="${!(cargos == null || fn:length(cargos) == 0)}">
 					   				<c:forEach var="cargo" items="${cargos}">
 										<c:choose>
-											<c:when test="${cargo.id == cabin.cargoId}">
+											<c:when test="${cargo.cargoType == null}">
+												<option value="${cargo.id}">请选择...</option>
+											</c:when>
+											<c:when test="${cargo.id == cabin.cargo.id}">
 												<option value="${cargo.id}" selected>${cargo.cargoType}</option>
 											</c:when>
+											
 											<c:otherwise>
 												<option value="${cargo.id}">${cargo.cargoType}</option>
 											</c:otherwise>
@@ -75,6 +79,7 @@
 							</div>
 						</div>
 					</div>
+					<!--  
 					<div class="form-group  margin-top-20">
 						<label class="control-label col-md-3">开始位置 <span
 							class="required"></span>
@@ -82,7 +87,11 @@
 						<div class="col-md-8">
 							<div class="input-icon right">
 								<i class="fa"></i> <input type="text" id="startPosition"
-									name="startPosition" data-required="1" value="${cabin.startPosition}" class="form-control" />
+									name="startPosition" data-required="1" value="${cabin.startPosition}" class="form-control"
+									<c:if test="${!(cabin.cabinNo == 1)}">
+									readonly="true"
+									</c:if>
+									 />
 							</div>
 						</div>
 					</div>
@@ -97,6 +106,7 @@
 							</div>
 						</div>
 					</div>
+					-->
 				</div>
 			</div>
 		</div>

@@ -73,8 +73,8 @@
 							<div class="col-md-8">
 								<select id="berth" name="berth" class="form-control select2me">
 									<option value="">请选择...</option>
-				   					<option value="1" >泊位一</option>
-				   					<option value="2" >泊位二</option>
+				   					<option value="1" >矿一</option>
+				   					<option value="2" >矿二</option>
 								</select>
 							</div>
 						</div>

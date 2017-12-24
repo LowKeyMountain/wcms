@@ -28,7 +28,7 @@ public interface CargoRepository extends JpaRepository<Cargo, Integer>, JpaSpeci
 	 * @param cabinNo
 	 * @return
 	 */
-	@Query(value = " select cargo.* from tab_cargo cargo , tab_cabin cabin where cargo.task_id = cabin.task_id and cargo.id = cabin.cargo_id and cabin.task_id =?1 and cabin.cabin_no =?2 ", nativeQuery = true)
+	@Query(value = "  SELECT *  FROM ( SELECT cargo.* FROM ( SELECT cargo.*, cabin.cabin_no FROM tab_cabin cabin LEFT JOIN tab_cargo cargo ON cabin.cargo_id = cargo.id ) cargo LEFT JOIN tab_task task ON cargo.task_id = task.id ) t WHERE t.task_id =?1 and t.cabin_no =?2 ", nativeQuery = true)
 	Cargo getCargoByTaskIdAndCabinNo(Integer taskId, Integer cabinNo);
 
 	/**

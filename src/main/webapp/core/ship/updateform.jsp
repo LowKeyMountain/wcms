@@ -81,12 +81,12 @@
 								<select id="berth" name="berth" class="form-control select2me">
 									<c:choose>
 										<c:when test="${task.berth == 1}">
-											<option value="1" selected>泊位一</option>
-											<option value="2" >泊位二</option>
+											<option value="1" selected>矿一</option>
+											<option value="2" >矿二</option>
 										</c:when>
 										<c:when test="${task.berth == 2}">
-											<option value="1" >泊位一</option>
-											<option value="2" selected>泊位二</option>
+											<option value="1" >矿一</option>
+											<option value="2" selected>矿二</option>
 										</c:when>
 									</c:choose>
 								</select>

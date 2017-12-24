@@ -24,6 +24,14 @@ public interface ICabinService {
 	Cabin findOne(Integer id);
 	
 	/**
+	 * 查询
+	 * @param cargoId
+	 * @param cabinNo
+	 * @return
+	 */
+	Cabin getCabinByCargoIdAndCabinNo(Integer cargoId, Integer cabinNo);
+	
+	/**
 	 * 新增
 	 * @param cabin
 	 * @param operator
@@ -46,8 +54,9 @@ public interface ICabinService {
 	 * @param cabin
 	 * @param operator
 	 * @return
+	 * @throws Exception 
 	 */
-	int updateCabin(Cabin cabin, User operator);
+	int updateCabin(Cabin cabin, User operator) throws Exception;
 	
 	/**
 	 * 删除

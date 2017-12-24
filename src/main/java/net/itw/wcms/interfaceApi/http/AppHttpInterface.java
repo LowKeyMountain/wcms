@@ -449,7 +449,7 @@ public class AppHttpInterface {
 				throw new X27Exception("操作失败：参数[taskId]不能为空！");
 			}
 			if (!jsonObject.containsKey("status")) {
-				throw new X27Exception("操作失败：参数[status]不能为空！");
+				throw new    X27Exception("操作失败：参数[status]不能为空！");
 			}
 			checkUser(jsonObject); // 验证用户是否存在
 

@@ -261,7 +261,8 @@ var User = function(){
 				url : BasePath + "/user/add.do",
 				success : function(result) {
 					 if(!result) return ;
-					 if(result.success == "success"){
+					 var code = result.code;
+					 if(Cl.successInt == code){
 						 Cl.hideModalWindow(Cl.modalName);
 						 Cl.refreshDataTable(DataTableCl.tableName);
 						 alert("增加成功");
@@ -292,7 +293,8 @@ var User = function(){
 				url : BasePath + "/user/update.do",
 				success : function(result) {
 					 if(!result) return ;
-					 if(result.success == "success"){
+					 var code = result.code;
+					 if(Cl.successInt == code){
 						Cl.hideModalWindow(Cl.modalName);
 						Cl.updateDataRow(DataTableCl.tableName,result.id,1,BasePath + '/user/getUserDataRow.do');
 						 alert("修改成功");
@@ -325,8 +327,8 @@ var User = function(){
 			};
 			Cl.ajaxRequest(url,data,function(result){
 				if(!result) return ;		
-				result = result.replace(/(^\s*)|(\s*$)/g,'');
-				if(result == "success"){
+				 var code = result.code;
+				 if(Cl.successInt == code){
 					Cl.deleteDataRow(DataTableCl.tableName,data.id,1);
 					alert("删除成功");
 				} else {
@@ -362,8 +364,8 @@ var User = function(){
 			};	
 			Cl.ajaxRequest(url,data,function(result){
 				if(!result) return ;		
-				result = result.replace(/(^\s*)|(\s*$)/g,'');
-				if(result == "success"){
+				 var code = result.code;
+				 if(Cl.successInt == code){
 					Cl.hideModalWindow(Cl.modalName);
 					alert("分配权限成功!");			
 				} else {
@@ -385,8 +387,8 @@ var User = function(){
 			};
 			Cl.ajaxRequest(url,data,function(result){
 				if(!result) return ;		
-				result = result.replace(/(^\s*)|(\s*$)/g,'');
-				if(result == "success"){
+				 var code = result.code;
+				 if(Cl.successInt == code){
 					alert("重置成功");
 				} else {
 					alert("重置失败");
@@ -407,8 +409,8 @@ var User = function(){
 			};
 			Cl.ajaxRequest(url,data,function(result){
 				if(!result) return ;		
-				result = result.replace(/(^\s*)|(\s*$)/g,'');
-				if(result == "success"){
+				 var code = result.code;
+				 if(Cl.successInt == code){
 					Cl.updateDataRow(DataTableCl.tableName,data.id,1,BasePath + '/user/getUserDataRow.do');
 					alert("锁定成功");
 				} else {
@@ -430,8 +432,8 @@ var User = function(){
 			};
 			Cl.ajaxRequest(url,data,function(result){
 				if(!result) return ;		
-				result = result.replace(/(^\s*)|(\s*$)/g,'');
-				if(result == "success"){
+				 var code = result.code;
+				 if(Cl.successInt == code){
 					Cl.updateDataRow(DataTableCl.tableName,data.id,1,BasePath + '/user/getUserDataRow.do');
 					alert("解锁成功");
 				} else {
