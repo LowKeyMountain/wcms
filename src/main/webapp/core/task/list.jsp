@@ -151,13 +151,13 @@ License: You must have a valid license purchased only from themeforest(the above
 
 													<li class=""
 														style="border-style: solid; border-width: 1.4px; border-color: #2f353b;"><a
-														href="#ykcb" data-toggle="tab">预靠船舶</a></li>
+														href="#ykcb" onclick="javascript:loadList('0');" data-toggle="tab">预靠船舶</a></li>
 													<li class="active"
 														style="border-style: solid; border-width: 1.4px; border-color: #2f353b;"><a
-														href="#zycb" data-toggle="tab">作业船舶</a></li>
+														href="#zycb" onclick="javascript:loadList('1');" data-toggle="tab">作业船舶</a></li>
 													<li class=""
 														style="border-style: solid; border-width: 1.4px; border-color: #2f353b;"><a
-														href="#lgcb" data-toggle="tab">离港船舶</a>
+														href="#lgcb" onclick="javascript:loadList('2');" data-toggle="tab">离港船舶</a>
 												</ul>
 												<div class="tab-content">
 													<div id="toolbar" class="btn-group">
@@ -178,15 +178,15 @@ License: You must have a valid license purchased only from themeforest(the above
 														</button>
 														 -->
 													</div>
-													<div class="tab-pane fade" id="ykcb"  onclick="javascript:loadList('0');">
+													<div class="tab-pane fade" id="ykcb" >
 														<table id="ykcbship"
 															class="table table-striped table-bordered table-hover table-checkable order-column"></table>
 													</div>
-													<div class="tab-pane fade active in" id="zycb" onclick="javascript:loadList('1');">
+													<div class="tab-pane fade active in" id="zycb" >
 														<table id="zycbship"
 															class="table table-striped table-bordered table-hover table-checkable order-column"></table>
 													</div>
-													<div class="tab-pane fade" id="lgcb" onclick="javascript:loadList('2');">
+													<div class="tab-pane fade" id="lgcb" >
 														<table id="lgcbship"
 															class="table table-striped table-bordered table-hover table-checkable order-column"></table>
 													</div>

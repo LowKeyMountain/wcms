@@ -61,10 +61,10 @@ public class TaskServiceImpl implements ITaskService {
 		for (Task t : page) {
 			jo = new JSONObject();
 			jo.put("berth", t.getBerth() == 1 ? "矿一":(t.getBerth() == 2 ? "矿二" :""));
-			jo.put("endTime", t.getEndTime() != null ? StringUtil.formatDate(t.getEndTime(), "yyyy-MM-dd") : "");
-			jo.put("departureTime", t.getDepartureTime() != null ? StringUtil.formatDate(t.getDepartureTime(), "yyyy-MM-dd") : "");
+			jo.put("endTime", t.getEndTime() == null ? "" : DateTimeUtils.date2StrDateTime(t.getEndTime()));
+			jo.put("departureTime", t.getDepartureTime() == null ? "" : DateTimeUtils.date2StrDateTime(t.getDepartureTime()));
 			
-			jo.put("id", t.getId());
+//			jo.put("id", t.getId());
 			jo.put("shipName", t.getShip().getShipName());
 			jo.put("berthingTime", t.getBerthingTime() == null ? "" : DateTimeUtils.date2StrDateTime(t.getBerthingTime()));
 			jo.put("beginTime", t.getBeginTime() == null ? "" : DateTimeUtils.date2StrDateTime(t.getBeginTime()));
