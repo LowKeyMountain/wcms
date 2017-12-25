@@ -217,6 +217,7 @@ License: You must have a valid license purchased only from themeforest(the above
         <script src="${IncPath}/assets/global/plugins/bootstrap-markdown/lib/markdown.js" type="text/javascript"></script>
         <script src="${IncPath}/assets/global/plugins/bootstrap-markdown/js/bootstrap-markdown.js" type="text/javascript"></script>
         <script src="${IncPath}/scripts/jquery-validation/jquery.form.js" type="text/javascript"></script>
+        <script src="${IncPath}/assets/global/plugins/jquery-validation/js/localization/messages_zh.js?" type="text/javascript"></script>
         <!-- END PAGE LEVEL SCRIPTS -->
         <script src="../assets/pages/scripts/form-validation.js" type="text/javascript"></script>
         <!-- BEGIN THEME LAYOUT SCRIPTS -->

@@ -275,7 +275,8 @@ var Resource = function(){
 				url : BasePath + "/resource/add.do",
 				success : function(result) {
 					 if(!result) return ;
-					 if(result.success == "success"){
+					 var code = result.code;
+					 if(Cl.successInt == code){
 						 Cl.hideModalWindow(Cl.modalName);
 						 Cl.refreshDataTable(DataTableCl.tableName);
 						 alert("增加成功");
@@ -306,7 +307,8 @@ var Resource = function(){
 				url : BasePath + "/resource/update.do",
 				success : function(result) {
 					 if(!result) return ;
-					 if(result.success == "success"){
+					 var code = result.code;
+					 if(Cl.successInt == code){
 						Cl.hideModalWindow(Cl.modalName);
 						Cl.refreshDataTable(DataTableCl.tableName);
 						 alert("修改成功");
@@ -340,8 +342,8 @@ var Resource = function(){
 			Cl.ajaxRequest(url,data,function(result){
 				if(!result) return ;		
 //				result = result.replace(/(^\s*)|(\s*$)/g,'');
-				var code = result.code;
-				if(code == 1){
+				 var code = result.code;
+				 if(Cl.successInt == code){
 					Cl.refreshDataTable(DataTableCl.tableName);
 					alert("删除成功");
 				} else {
@@ -369,7 +371,8 @@ var Resource = function(){
 			Cl.ajaxRequest(url,data,function(result){
 				if(!result) return ;		
 				result = result.replace(/(^\s*)|(\s*$)/g,'');
-				if(result == "success"){
+				 var code = result.code;
+				 if(Cl.successInt == code){
 					Cl.hideModalWindow(Cl.modalName);
 					alert("分配权限成功");			
 				} else {
