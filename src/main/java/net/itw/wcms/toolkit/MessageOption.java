@@ -9,7 +9,7 @@ import java.util.Map;
  */
 public class MessageOption {
 
-	// 状态码： 0|成功、1|失败
+	// 状态码： 1|成功;0|失败
 	public Integer code;
 	// 提示信息
 	public String msg;
@@ -20,12 +20,12 @@ public class MessageOption {
 		this.code = code;
 		this.msg = msg;
 	}
-	
+
 	public boolean isSuccess() {
 		if (1 == code) {
 			return true;
 		}
 		return false;
 	}
-	
+
 }

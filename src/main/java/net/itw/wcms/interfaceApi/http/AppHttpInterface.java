@@ -212,7 +212,7 @@ public class AppHttpInterface {
 			String taskId = jsonObject.getString("taskId");
 			String cabinNo = jsonObject.getString("cabinNo");
 
-			jsonObject.put("criteria", JSONObject.parseObject("{'$task_id':'" + taskId + "','$cabin_no':'" + cabinNo + "'}"));
+			jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "','$cabinNo':'" + cabinNo + "'}"));
 			
 			return infoQueryHelper.doQueryInfo(jsonObject);
 		} catch (Exception e) {
@@ -284,7 +284,10 @@ public class AppHttpInterface {
 				throw new X27Exception("操作失败：作业船舶[taskId]不能为空！");
 			}
 
-			jsonObject.put("criteria", JSONObject.parseObject("{'$task_id':'" + taskId + "'}"));
+			jsonObject.put("order", "asc");
+			jsonObject.put("sort", "cabinNo");
+			jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "'}"));
+			
 			return infoQueryHelper.doQueryInfo(jsonObject);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -446,7 +449,7 @@ public class AppHttpInterface {
 				throw new X27Exception("操作失败：参数[taskId]不能为空！");
 			}
 			if (!jsonObject.containsKey("status")) {
-				throw new X27Exception("操作失败：参数[status]不能为空！");
+				throw new    X27Exception("操作失败：参数[status]不能为空！");
 			}
 			checkUser(jsonObject); // 验证用户是否存在
 

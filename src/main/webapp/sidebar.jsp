@@ -29,6 +29,7 @@
                      <a href="javascript:;" class="remove">
                          <i class="icon-close"></i>
                      </a>
+                     <!-- 
                      <div class="input-group">
                          <input type="text" class="form-control" placeholder="Search${IncPath}.">
                          <span class="input-group-btn">
@@ -37,11 +38,12 @@
                              </a>
                          </span>
                      </div>
+                      -->
                  </form>
                  <!-- END RESPONSIVE QUICK SEARCH FORM -->
                 </li>
                 <li class="nav-item start active open">
-                    <a href="${BasePath}/web/main" class="nav-link nav-toggle">
+                    <a href="#" class="nav-link nav-toggle">
                         <i class="icon-home"></i>
                         <span class="title">主页</span>
                         
@@ -56,16 +58,23 @@
                     <ul class="sub-menu">
                         <li class="nav-item  ">
                             <a href="${IncPath}/task/tasklist" class="nav-link ">
-                            	<i class="icon-bar-chart"></i>
+                            	<i class="icon-bulb"></i>
                                 <span class="title">工作管理</span>
                             </a>
                         </li>
                          <li class="nav-item start ">
                             <a href="#" class="nav-link ">
-                                <i class="icon-bulb"></i>
+                                <i class="icon-bar-chart"></i>
                                 <span class="title">统计报表</span>
                             </a>
                         </li>
+                         <li class="nav-item start ">
+                            <a href="${IncPath}/unloader/list" class="nav-link ">
+                                <i class="icon-magnifier"></i>
+                                <span class="title">卸船机实时数据</span>
+                            </a>
+                        </li>                        
+                        <!-- 
                         <li class="nav-item start active open">
                             <a href="#" class="nav-link ">
                                 <i class="icon-bar-chart"></i>
@@ -73,6 +82,7 @@
                                 <span class="selected"></span>
                             </a>
                         </li>
+                         -->
                     </ul>
                 </li>
                 <li class="nav-item  ">
@@ -100,12 +110,13 @@
                              <span class="title">资源管理</span>
                          </a>
                      </li>
-                      
+                      <!-- 
                      <li class="nav-item  ">
                          <a href="#" class="nav-link ">
                              <span class="title">日志管理</span>
                          </a>
                      </li>
+                      -->
                  </ul>
              </li>
          </ul>

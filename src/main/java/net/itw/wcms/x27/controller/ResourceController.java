@@ -1,6 +1,5 @@
 package net.itw.wcms.x27.controller;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.Resource;
 import net.itw.wcms.x27.entity.User;
 import net.itw.wcms.x27.service.IResourceService;
@@ -77,20 +77,17 @@ public class ResourceController {
 	 * @return
 	 */
 	@RequestMapping(value = "/add")
-	public Map<String, Object> add(@ModelAttribute("resource") Resource resource) {
+	public MessageOption add(@ModelAttribute("resource") Resource resource) {
 		User operator = SessionUtil.getSessionUser(req);
-		int successInt = 1;
-		String msg = "数据保存成功！";
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "数据保存成功！");
 		try {
-			successInt = resourceService.createResource(resource, operator);
+			mo.code = resourceService.createResource(resource, operator);
 		} catch (Exception e) {
 			e.printStackTrace();
-			msg = e.getMessage();
+			mo.msg = e.getMessage();
+			mo.code = ConstantUtil.FailInt;
 		}
-		Map<String, Object> map = new HashMap<>();
-		map.put("msg", msg);
-		map.put(ConstantUtil.Success, successInt == 1 ? ConstantUtil.Success : ConstantUtil.Fail);
-		return map;
+		return mo;
 	}
 	
 	/**
@@ -120,22 +117,18 @@ public class ResourceController {
 	 * @return
 	 */
 	@RequestMapping(value = "/update")
-	public Map<String, Object> update(@ModelAttribute("resource") Resource resource) {
+	public MessageOption update(@ModelAttribute("resource") Resource resource) {
 		// 从session取出User对象
 		User operator = SessionUtil.getSessionUser(req);
-		int successInt = 1;
-		String msg = "数据修改成功！";
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "数据修改成功！");
 		try {
-			successInt = resourceService.updateResourceById(resource, operator);
+			mo.code = resourceService.updateResourceById(resource, operator);
 		} catch (Exception e) {
 			e.printStackTrace();
-			msg = e.getMessage();
+			mo.msg = e.getMessage();
+			mo.code = ConstantUtil.FailInt;
 		}
-		Map<String, Object> map = new HashMap<>();
-		map.put("msg", msg);
-		map.put("id", resource.getId());
-		map.put(ConstantUtil.Success, successInt == 1 ? ConstantUtil.Success : ConstantUtil.Fail);
-		return map;
+		return mo;
 	}
 
 	@RequestMapping(value = "/getUserDataRow", produces = "text/json;charset=UTF-8")
@@ -144,20 +137,16 @@ public class ResourceController {
 	}
 
 	@RequestMapping("/delete")
-	public Map<String, ?> delete(@RequestParam("id") Integer id) {
-		String msg = "删除成功";
-		Integer code = ConstantUtil.SuccessInt;
+	public MessageOption delete(@RequestParam("id") Integer id) {
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "删除成功");
 		try {
 			resourceService.deleteById(id);
 		} catch (Exception e) {
 			e.printStackTrace();
-			msg = e.getMessage();
-			code = ConstantUtil.FailInt;
+			mo.msg = e.getMessage();
+			mo.code = ConstantUtil.FailInt;
 		}
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("code", code);
-		map.put("msg", msg);
-		return map;
+		return mo;
 	}
 
 }

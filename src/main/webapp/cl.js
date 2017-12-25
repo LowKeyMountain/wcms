@@ -1,6 +1,8 @@
 var Cl = function() {	
     return {
     	action: "",
+    	failInt:0,
+    	successInt:1,
     	selected: {},
     	tableName: "datatable_cl",
     	modalName: "modal_cl",

@@ -35,17 +35,17 @@ public class Task implements Entityable {
 
 	private Integer id; // 编号
 	
-	@DateTimeFormat( pattern = "yyyy-MM-dd" )
+	@DateTimeFormat( pattern = "yyyy-MM-dd HH:mm:ss" )
 	private Date berthingTime; // 入港时间
-	@DateTimeFormat( pattern = "yyyy-MM-dd" )
+	@DateTimeFormat( pattern = "yyyy-MM-dd HH:mm:ss" )
 	private Date departureTime; // 离港时间
-	@DateTimeFormat( pattern = "yyyy-MM-dd" )
+	@DateTimeFormat( pattern = "yyyy-MM-dd HH:mm:ss" )
 	private Date beginTime; // 开始卸货时间
-	@DateTimeFormat( pattern = "yyyy-MM-dd" )
+	@DateTimeFormat( pattern = "yyyy-MM-dd HH:mm:ss" )
 	private Date endTime; // 结束卸货时间
 	private Integer status; // 作业状态 （预靠船舶|0、作业船舶|1、 离港船舶|2）
 	private Float cargoLoad; // 货物总重（单位：吨）
-	private Integer berth; // 泊位（泊一|1、泊二|2）
+	private Integer berth; // 泊位（矿一|1、矿二|2）
 	private String depth; // 吃水
 	private String freeboardDepth; // 干舷高度
 
@@ -54,7 +54,6 @@ public class Task implements Entityable {
 	private String remarks;
 
 	private Ship ship; // 船舶信息
-	private Set<Cabin> cabins = new HashSet<>(); // 船舱信息
 	private Set<Cargo> cargos = new HashSet<>(); // 货物信息
 
 	@GeneratedValue
@@ -150,15 +149,6 @@ public class Task implements Entityable {
 
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
-	}
-
-	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
-	public Set<Cabin> getCabins() {
-		return cabins;
-	}
-
-	public void setCabins(Set<Cabin> cabins) {
-		this.cabins = cabins;
 	}
 	
 	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL)

@@ -1,6 +1,8 @@
 package net.itw.wcms.ship.entity;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import net.itw.wcms.toolkit.hibernate.Entityable;
@@ -41,6 +44,7 @@ public class Cargo implements Entityable {
 	private String remarks;
 	
 	private Task task; // 作业任务信息
+	private Set<Cabin> cabins = new HashSet<>(); // 船舱信息
 	
 	@GeneratedValue
 	@Id
@@ -142,7 +146,7 @@ public class Cargo implements Entityable {
 		this.cargoOwner = cargoOwner;
 	}
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = (CascadeType.ALL))
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "task_id")
 	public Task getTask() {
 		return task;
@@ -151,5 +155,14 @@ public class Cargo implements Entityable {
 	public void setTask(Task task) {
 		this.task = task;
 	}
+	
+	@OneToMany(mappedBy = "cargo", cascade = CascadeType.ALL)
+	public Set<Cabin> getCabins() {
+		return cabins;
+	}
 
+	public void setCabins(Set<Cabin> cabins) {
+		this.cabins = cabins;
+	}
+	
 }

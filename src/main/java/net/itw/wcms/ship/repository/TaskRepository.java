@@ -32,7 +32,7 @@ import net.itw.wcms.x27.utils.StringUtil;
 public interface TaskRepository extends JpaRepository<Task, Integer>, JpaSpecificationExecutor<Task>,
 		PagingAndSortingRepository<Task, Integer> {
 
-	List<Task> getTaskByStatus(String status);
+	List<Task> getTaskByStatus(Integer status);
 
 	Task getTaskById(Integer id);
 
@@ -42,7 +42,7 @@ public interface TaskRepository extends JpaRepository<Task, Integer>, JpaSpecifi
 	void updateStatusById(@Param("id") Integer id, @Param("status") String status, @Param("updateTime") Date updateTime,
 			@Param("updateUser") String updateUser);
 
-	default Page<Task> findAllByStatus(Pageable pageable, String status) {
+	default Page<Task> findAllByStatus(Pageable pageable, Integer status) {
 		return this.findAll(new Specification<Task>() {
 			public Predicate toPredicate(Root<Task> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				Path<String> shipStatus = root.get("status");

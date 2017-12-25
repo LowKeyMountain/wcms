@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import net.itw.wcms.toolkit.hibernate.Entityable;
 
 /**
@@ -28,17 +30,18 @@ public class Cabin implements Entityable {
 
 	private Integer id; // 编号
 	private Integer cabinNo; // 船舱编号
-	private Integer cargoId; // 货物编号
 	private Float startPosition; // 开始位置
 	private Float endPosition; // 结束位置
 	private Float preunloading; // 装载量（单位：吨）
 	private Integer status; // 状态 （卸货|0、清舱|1、完成|2）
+	@DateTimeFormat( pattern = "yyyy-MM-dd HH:mm:ss" )
+	private Date clearTime; //  清舱时间
 
 	private String updateUser;
 	private Date updateTime;
 	private String remarks;
 
-	private Task task; // 作业任务信息
+	private Cargo cargo; // 货物信息
 
 	@GeneratedValue
 	@Id
@@ -95,14 +98,14 @@ public class Cabin implements Entityable {
 		this.remarks = remarks;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = (CascadeType.ALL))
-	@JoinColumn(name = "task_id")
-	public Task getTask() {
-		return task;
+	@ManyToOne(fetch = FetchType.LAZY)//, cascade = {CascadeType.PERSIST}
+	@JoinColumn(name = "cargo_id")
+	public Cargo getCargo() {
+		return cargo;
 	}
 
-	public void setTask(Task task) {
-		this.task = task;
+	public void setCargo(Cargo cargo) {
+		this.cargo = cargo;
 	}
 
 	@Column(name = "start_position")
@@ -131,15 +134,14 @@ public class Cabin implements Entityable {
 	public void setStatus(Integer status) {
 		this.status = status;
 	}
-
-	@Column(name="cargo_id")
-	public Integer getCargoId() {
-		return cargoId;
-	}
-
-	public void setCargoId(Integer cargoId) {
-		this.cargoId = cargoId;
-	}
 	
+	@Column(name="clear_time")
+	public Date getClearTime() {
+		return clearTime;
+	}
+
+	public void setClearTime(Date clearTime) {
+		this.clearTime = clearTime;
+	}
 	
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
 import net.itw.wcms.x27.service.IResourceService;
 import net.itw.wcms.x27.service.IUserService;
@@ -83,21 +84,18 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping(value = "/add")
-	public Map<String, Object> add(@ModelAttribute("user") User user) {
+	public MessageOption add(@ModelAttribute("user") User user) {
 		User operator = SessionUtil.getSessionUser(req);
 		user.setLastLoginIp(WebUtil.getRemoteHost(req));
-		int successInt = 1;
-		String msg = "数据保存成功！";
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "数据保存成功！");
 		try {
-			successInt = userService.createUser(user, operator);
+			mo.code = userService.createUser(user, operator);
 		} catch (Exception e) {
 			e.printStackTrace();
-			msg = e.getMessage();
+			mo.msg = e.getMessage();
+			mo.code = ConstantUtil.FailInt;
 		}
-		Map<String, Object> map = new HashMap<>();
-		map.put("msg", msg);
-		map.put(ConstantUtil.Success, successInt == 1 ? ConstantUtil.Success : ConstantUtil.Fail);
-		return map;
+		return mo;
 	}
 	
 	/**
@@ -133,18 +131,18 @@ public class UserController {
 		// 从session取出User对象
 		User operator = SessionUtil.getSessionUser(req);
 		user.setLastLoginIp(WebUtil.getRemoteHost(req));
-		int successInt = 1;
-		String msg = "数据修改成功！";
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "数据修改成功！");
 		try {
-			successInt = userService.updateRealNameAndGenderAndIsAdminById(user, operator);
+			mo.code = userService.updateRealNameAndGenderAndIsAdminById(user, operator);
 		} catch (Exception e) {
 			e.printStackTrace();
-			msg = e.getMessage();
+			mo.msg = e.getMessage();
+			mo.code = ConstantUtil.FailInt;
 		}
 		Map<String, Object> map = new HashMap<>();
-		map.put("msg", msg);
+		map.put("msg", mo.msg);
 		map.put("id", user.getId());
-		map.put(ConstantUtil.Success, successInt == 1 ? ConstantUtil.Success : ConstantUtil.Fail);
+		map.put("code", mo.code);
 		return map;
 	}
 
@@ -154,62 +152,83 @@ public class UserController {
 	}
 
 	@RequestMapping("/delete")
-	public String delete(@RequestParam("id") Integer id) {
+	public MessageOption delete(@RequestParam("id") Integer id) {
 		// 从session取出User对象
 		User operator = SessionUtil.getSessionUser(req);
-
-		User user = new User();
-		user.setId(id);
-		user.setIsDelete(true);
-
-		userService.updateIsDeleteById(user, operator);
-
-		return ConstantUtil.Success;
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "数据删除成功！");
+		try {
+			User user = new User();
+			user.setId(id);
+			user.setIsDelete(true);
+			userService.updateIsDeleteById(user, operator);
+		} catch (Exception e) {
+			e.printStackTrace();
+			mo.msg = e.getMessage();
+			mo.code = ConstantUtil.FailInt;
+		}
+		return mo;
 	}
 
 	@RequestMapping("/resetpass")
-	public String resetpass(@RequestParam("id") Integer id) {
+	public MessageOption resetpass(@RequestParam("id") Integer id) {
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
+		try {
+			// 从session取出User对象
+			User operator = SessionUtil.getSessionUser(req);
 
-		// 从session取出User对象
-		User operator = SessionUtil.getSessionUser(req);
+			User user = new User();
+			user.setId(id);
+			user.setPassword(ConstantUtil.DefaultMd5Password);
 
-		User user = new User();
-		user.setId(id);
-		user.setPassword(ConstantUtil.DefaultMd5Password);
-
-		userService.updatePasswordById(user, operator);
-
-		return ConstantUtil.Success;
+			userService.updatePasswordById(user, operator);
+		} catch (Exception e) {
+			e.printStackTrace();
+			mo.msg = e.getMessage();
+			mo.code = ConstantUtil.FailInt;
+		}
+		return mo;
 	}
 
 	@RequestMapping("/lock")
-	public String lock(@RequestParam("id") Integer id) {
+	public MessageOption lock(@RequestParam("id") Integer id) {
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
+		try {
+			// 从session取出User对象
+			User operator = SessionUtil.getSessionUser(req);
 
-		// 从session取出User对象
-		User operator = SessionUtil.getSessionUser(req);
+			User user = new User();
+			user.setId(id);
+			user.setIsLock(true);
 
-		User user = new User();
-		user.setId(id);
-		user.setIsLock(true);
+			userService.updateIsLockById(user, operator);
+		} catch (Exception e) {
+			e.printStackTrace();
+			mo.msg = e.getMessage();
+			mo.code = ConstantUtil.FailInt;
+		}
 
-		userService.updateIsLockById(user, operator);
-
-		return ConstantUtil.Success;
+		return mo;
 	}
 
 	@RequestMapping("/unlock")
-	public String unlock(@RequestParam("id") Integer id) {
+	public MessageOption unlock(@RequestParam("id") Integer id) {
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
+		try {
+			// 从session取出User对象
+			User operator = SessionUtil.getSessionUser(req);
 
-		// 从session取出User对象
-		User operator = SessionUtil.getSessionUser(req);
+			User user = new User();
+			user.setId(id);
+			user.setIsLock(false);
 
-		User user = new User();
-		user.setId(id);
-		user.setIsLock(false);
+			userService.updateIsLockById(user, operator);
+		} catch (Exception e) {
+			e.printStackTrace();
+			mo.msg = e.getMessage();
+			mo.code = ConstantUtil.FailInt;
+		}
 
-		userService.updateIsLockById(user, operator);
-
-		return ConstantUtil.Success;
+		return mo;
 	}
 
 	@RequestMapping("/assignform")
@@ -220,13 +239,15 @@ public class UserController {
 	}
 
 	@RequestMapping("/assign")
-	public String assign(Integer id, String selectedStr) {
-		if (id == null || StringUtil.isStrEmpty(id.toString()) || StringUtil.isStrEmpty(selectedStr)) {
-			return ConstantUtil.Fail;
+	public MessageOption assign(Integer id, String selectedStr) {
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
+		if (id == null || StringUtil.isStrEmpty(id.toString())) { // || StringUtil.isStrEmpty(selectedStr)
+			mo.code = ConstantUtil.FailInt;
+			mo.msg = "操作失败：用户信息未找到！";
+			return mo;
 		}
 		userService.assignResource(id, selectedStr);
-
-		return ConstantUtil.Success;
+		return mo;
 	}
 	
 }
