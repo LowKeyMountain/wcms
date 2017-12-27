@@ -210,7 +210,7 @@ var Task = function() {
 //					align : 'center'
 //				}, {
 //					field : 'berthingTime',
-//					title : '停靠时间',
+//					title : '入港时间',
 //					align : 'center'
 //				}, {
 //					field : 'beginTime',
@@ -239,18 +239,21 @@ var Task = function() {
 			var columns = [];
 
 			if (status == '0') {
-				columns = [ {
+				columns = [ 
+				            {
 					title : '全选',
 					field : 'select',
 					// 复选框
 					checkbox : true,
 					width : 25,
 					align : 'center'
-				}, {
-					field : 'id',
-					title : 'ID',
-					align : 'center'
-				}, {
+				}, 
+//				{
+//					field : 'id',
+//					title : 'ID',
+//					align : 'center'
+//				}, 
+				{
 					field : 'berth',
 					title : '泊位',
 					align : 'center'
@@ -260,7 +263,7 @@ var Task = function() {
 					align : 'center'
 				}, {
 					field : 'berthingTime',
-					title : '停靠时间',
+					title : '入港时间',
 					align : 'center'
 				}, {
 					field : 'operation',
@@ -268,18 +271,21 @@ var Task = function() {
 				} ];
 
 			} else if (status == '1') {
-				columns = [ {
+				columns = [ 
+				            {
 					title : '全选',
 					field : 'select',
 					// 复选框
 					checkbox : true,
 					width : 25,
 					align : 'center'
-				}, {
-					field : 'id',
-					title : 'ID',
-					align : 'center'
-				}, {
+				},
+//				             {
+//					field : 'id',
+//					title : 'ID',
+//					align : 'center'
+//				},
+				{
 					field : 'berth',
 					title : '泊位',
 					align : 'center'
@@ -289,7 +295,7 @@ var Task = function() {
 					align : 'center'
 				}, {
 					field : 'berthingTime',
-					title : '停靠时间',
+					title : '入港时间',
 					align : 'center'
 				}, {
 					field : 'beginTime',
@@ -306,18 +312,21 @@ var Task = function() {
 				} ];
 
 			} else if (status == '2') {
-				columns = [ {
+				columns = [
+				           {
 					title : '全选',
 					field : 'select',
 					// 复选框
 					checkbox : true,
 					width : 25,
 					align : 'center'
-				}, {
-					field : 'id',
-					title : 'ID',
-					align : 'center'
-				}, {
+				}, 
+//				{
+//					field : 'id',
+//					title : 'ID',
+//					align : 'center'
+//				}, 
+				{
 					field : 'berth',
 					title : '泊位',
 					align : 'center'
@@ -327,7 +336,7 @@ var Task = function() {
 					align : 'center'
 				}, {
 					field : 'berthingTime',
-					title : '停靠时间',
+					title : '入港时间',
 					align : 'center'
 				}, {
 					field : 'beginTime',
@@ -340,9 +349,12 @@ var Task = function() {
 					align : 'center'
 				}, {
 					field : 'departureTime',
-					title : '离泊时间',
+					title : '离港时间',
 					align : 'center'
-				} ];
+				}, {
+					field : 'operation',
+					title : '操作'
+				}  ];
 
 			}
 			options.columns = columns;
