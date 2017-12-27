@@ -364,8 +364,8 @@ public class AppHttpInterface {
 			String taskId = jsonObject.getString("taskId");
 			String cabinNo = jsonObject.getString("cabinNo");
 
-			jsonObject.put("order", "asc");
-			jsonObject.put("sort", "cabinNo");
+			jsonObject.put("order", "DESC");
+			jsonObject.put("sort", "startTime");
 			jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "','$cabinNo':'" + cabinNo + "'}"));
 			
 			return infoQueryHelper.doQueryInfo(jsonObject);

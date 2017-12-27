@@ -23,13 +23,13 @@ public class DBUtil {
 	private static Connection conn;
 
 	public static Connection openConnection() throws SQLException, ClassNotFoundException, IOException {
-		if (null == conn || conn.isClosed()) {
+//		if (null == conn || conn.isClosed()) {
 			Properties p = new Properties();
 			p.load(DBUtil.class.getResourceAsStream("/db.properties"));
 			Class.forName(p.getProperty("jdbc.driverClass"));
 			conn = DriverManager.getConnection(p.getProperty("jdbc.jdbcUrl"), p.getProperty("jdbc.username"),
 					p.getProperty("jdbc.password"));
-		}
+//		}
 		return conn;
 	}
 
