@@ -335,6 +335,49 @@ public class AppHttpInterface {
 	}
 
 	/**
+	 * 获取卸货进度信息[FN_006] <br>
+	 * 用于获取船舶所有舱位的相关信息
+	 * 
+	 * @param json
+	 * @return
+	 */
+	@RequestMapping(value = "/ship/doGetUnloaderDetail")
+	public Map<String, Object> doGetUnloaderDetail(@RequestParam("json") String json) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			JSONObject jsonObject = JSONObject.parseObject(json);
+			if (!jsonObject.containsKey("userId")) {
+				throw new X27Exception("操作失败：参数[userId]不能为空！");
+			}
+			
+			if (!jsonObject.containsKey("cabinNo")) {
+				throw new X27Exception("操作失败：参数[cabinNo]不能为空！");
+			}
+			
+			if (!jsonObject.containsKey("taskId")) {
+				throw new X27Exception("操作失败：参数[taskId]不能为空！");
+			}
+			checkUser(jsonObject); // 验证用户是否存在
+
+			jsonObject.put("fuctionType", "FN_006");
+
+			String taskId = jsonObject.getString("taskId");
+			String cabinNo = jsonObject.getString("cabinNo");
+
+			jsonObject.put("order", "asc");
+			jsonObject.put("sort", "cabinNo");
+			jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "','$cabinNo':'" + cabinNo + "'}"));
+			
+			return infoQueryHelper.doQueryInfo(jsonObject);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", "0");
+			result.put("msg", e.getMessage());
+			return result;
+		}
+	}	
+	
+	/**
 	 * 设置舱位 <br>
 	 * 提供设置舱位服务，支持新增、修改舱位功能
 	 * 

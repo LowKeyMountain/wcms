@@ -64,7 +64,6 @@ public class TaskServiceImpl implements ITaskService {
 			jo.put("endTime", t.getEndTime() == null ? "" : DateTimeUtils.date2StrDateTime(t.getEndTime()));
 			jo.put("departureTime", t.getDepartureTime() == null ? "" : DateTimeUtils.date2StrDateTime(t.getDepartureTime()));
 			
-//			jo.put("id", t.getId());
 			jo.put("shipName", t.getShip().getShipName());
 			jo.put("berthingTime", t.getBerthingTime() == null ? "" : DateTimeUtils.date2StrDateTime(t.getBerthingTime()));
 			jo.put("beginTime", t.getBeginTime() == null ? "" : DateTimeUtils.date2StrDateTime(t.getBeginTime()));

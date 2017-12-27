@@ -210,7 +210,7 @@ var Task = function() {
 //					align : 'center'
 //				}, {
 //					field : 'berthingTime',
-//					title : '停靠时间',
+//					title : '入港时间',
 //					align : 'center'
 //				}, {
 //					field : 'beginTime',

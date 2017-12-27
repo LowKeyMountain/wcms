@@ -5,15 +5,22 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:jpa="http://www.springframework.org/schema/data/jpa" xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:task="http://www.springframework.org/schema/task" 	
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
 		http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.3.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
 		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.1.xsd 
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd">
 
 	<mvc:annotation-driven />
-
+	<!-- 启用注解驱动的定时任务 -->
+	<task:annotation-driven scheduler="myScheduler"/> 	
+	<!-- 推荐配置线程池 -->
+	<task:scheduler id="myScheduler" pool-size="5"></task:scheduler>
+<!--     <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>  
+ -->	
 	<!-- 启动组件扫描，排除@Controller组件，该组件由SpringMVC配置文件扫描 -->
 	<context:component-scan base-package="net.itw.wcms">
 		<context:include-filter type="annotation"
@@ -22,11 +29,20 @@
 
 	<!-- 1.配置数据源 -->
 	<context:property-placeholder location="classpath:db.properties" />
-	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"  lazy-init="true" destroy-method="close">
 		<property name="user" value="${jdbc.username}"></property>
 		<property name="password" value="${jdbc.password}"></property>
 		<property name="driverClass" value="${jdbc.driverClass}"></property>
 		<property name="jdbcUrl" value="${jdbc.jdbcUrl}"></property>
+		<property name="minPoolSize" value="5"/>
+		<property name="acquireIncrement" value="2"/>
+		<property name="maxPoolSize" value="200"/>
+		<property name="maxIdleTime" value="600"/>
+		<property name="maxStatements" value="100"/>
+		<property name="testConnectionOnCheckin" value="false"/>
+		<property name="testConnectionOnCheckout" value="true"/>
+		<property name="preferredTestQuery" value="SELECT 1"/>
+		<property name="idleConnectionTestPeriod" value="60"/>		
 	</bean>
 
 	<!-- 2.配置JPA EntityManagerFactory -->

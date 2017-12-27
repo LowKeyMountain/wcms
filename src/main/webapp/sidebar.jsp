@@ -69,6 +69,14 @@
                             </a>
                         </li>
                         <!-- 
+                         <li class="nav-item start ">
+                            <a href="${IncPath}/unloader/list" class="nav-link ">
+                                <i class="icon-magnifier"></i>
+                                <span class="title">卸船机实时数据</span>
+                            </a>
+                        </li>      
+                         -->                  
+                        <!-- 
                         <li class="nav-item start active open">
                             <a href="#" class="nav-link ">
                                 <i class="icon-bar-chart"></i>
