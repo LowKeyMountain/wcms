@@ -258,6 +258,22 @@ public class DataSyncHelper extends JdbcDaoSupport {
 	}
 
 	/**
+	 * 更新组结束时间
+	 * 
+	 * @param taskId
+	 * @return
+	 */
+	public void updateGroupEndTime(Integer taskId) {
+		String sql = " select c2.id from tab_temp_c c2 LEFT JOIN v_cabin_info c1 ON c1.cabin_id = c2.cabinId where  c2.`status` = 0 AND c1.task_id = ? ";
+		List<Integer> list = this.getJdbcTemplate().queryForList(sql, Integer.class, taskId);
+		for (Integer groupId : list) {
+			sql = " UPDATE tab_temp_c t SET t.endTime = ?, t.status = ? WHERE t.id = ? ";
+			Object[] args = new Object[] { new Date(), 1, groupId };
+			this.getJdbcTemplate().update(sql, args);
+		}
+	}
+
+	/**
 	 * 计算卸船机推送数据组信息
 	 * 
 	 */
@@ -281,7 +297,6 @@ public class DataSyncHelper extends JdbcDaoSupport {
 				Date time = (Date) map.get("Time");
 				Integer id = (Integer) map.get("id");
 				String cmsid = (String) map.get("Cmsid");
-				Date pushTime = (Date) map.get("PushTime");
 				Double unloaderMove = (Double) map.get("unloaderMove");
 
 				// 查询船舱ID
@@ -299,6 +314,20 @@ public class DataSyncHelper extends JdbcDaoSupport {
 
 				if (cabinNums == null || cabinNums.isEmpty()) {
 					log.error("数据异常：数据编号[" + id + "]|卸船机编号[" + cmsid + "] 未找到船舱信息！");
+					sql = " select * from tab_temp_c t where t.`status` = 0 AND t.Cmsid = ? ";
+					List<Map<String, Object>> list2 = this.getJdbcTemplate().queryForList(sql, cmsid);
+					for (Map<String, Object> map2 : list2) {
+						Integer id2 = (Integer) map2.get("id");
+						if (0 == operationType) {
+							sql = " UPDATE tab_temp_c t SET t.endTime = ?, t.status = 1 WHERE t.id = ? ";
+							args = new Object[] { time, id2 };
+						} else if (1 == operationType) {
+							sql = " UPDATE tab_temp_c t SET t.endTime = ?, t.lastTime = ?, t.status = 1 WHERE t.id = ? ";
+							args = new Object[] { time, time, id2 };
+						}
+						this.getJdbcTemplate().update(sql, args);
+					}
+					continue;
 				} else {
 					if (cabinNums.size() > 1) {
 						log.error("数据异常：数据编号[" + id + "]|卸船机编号[" + cmsid + "] 匹配到多个船舱信息！");
@@ -308,7 +337,7 @@ public class DataSyncHelper extends JdbcDaoSupport {
 					if (offset == null) {
 						offset = 0.0;
 					}
-					groupId = createGroup(cabinId, cmsid, operationType, pushTime, unloaderMove);
+					groupId = createGroup(cabinId, cmsid, operationType, time, unloaderMove);
 				}
 
 				// 更新表b数据
@@ -335,29 +364,19 @@ public class DataSyncHelper extends JdbcDaoSupport {
 	/**
 	 * 修改舱位时，需重新计算相关数据组信息
 	 * 
-	 * @param start
-	 * @param end
+	 * @param taskId
 	 */
-	public void modifyCabinPosition(float start, float end) {
+	public void modifyCabinPosition(Integer taskId) {
 		this.stop();
 		try {
 			String sql = " UPDATE tab_temp_b b SET b.groupId = 0 where b.groupId in "
-					+ " ( SELECT c.id from tab_temp_c c "
-					+ " left join (SELECT cabin.id as 'cabin_id' FROM tab_cabin cabin"
-					+ "  LEFT JOIN ( SELECT c.*, task.id AS 'taskId', task.`status`,"
-					+ " task.begin_time, task.end_time FROM tab_cargo c LEFT JOIN "
-					+ " tab_task task ON c.task_id = task.id AND task.`status` = 1 ) "
-					+ " cargo ON cabin.cargo_id = cargo.id WHERE ? <= cabin.start_position AND "
-					+ " ? >= cabin.end_position) t on c.cabinId = t.cabin_id) ";
-			this.getJdbcTemplate().update(sql, start, end);
+					+ " ( select c2.id from tab_temp_c c2 LEFT JOIN v_cabin_info c1 "
+					+ "ON c1.cabin_id = c2.cabinId where c1.task_id = ? )";
+			this.getJdbcTemplate().update(sql, taskId);
 
-			sql = " DELETE FROM tab_temp_c t where t.id  in " + " (SELECT c.id from tab_temp_c c left join "
-					+ " (SELECT cabin.id as 'cabin_id' FROM tab_cabin "
-					+ " cabin LEFT JOIN ( SELECT c.*, task.id AS 'taskId', "
-					+ " task.`status`, task.begin_time, task.end_time FROM "
-					+ " tab_cargo c LEFT JOIN tab_task task ON c.task_id = task.id"
-					+ " AND task.`status` = 1 ) cargo ON cabin.cargo_id = cargo.id WHERE " + start
-					+ " <= cabin.start_position AND " + end + " >= cabin.end_position) t on c.cabinId = t.cabin_id) ";
+			sql = " DELETE FROM tab_temp_c t where t.id in "
+					+ "( select c2.id from tab_temp_c c2 LEFT JOIN v_cabin_info c1 ON "
+					+ " c1.cabin_id = c2.cabinId where c1.task_id = ?  )";
 			this.getJdbcTemplate().execute(sql);
 			calcGroup();
 		} catch (DataAccessException e) {
@@ -372,7 +391,6 @@ public class DataSyncHelper extends JdbcDaoSupport {
 			}
 		}
 	}
-	
 
 	/**
 	 * 程序入口

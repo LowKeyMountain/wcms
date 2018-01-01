@@ -166,7 +166,7 @@ public class CabinController {
 		User operator = SessionUtil.getSessionUser(req);
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "数据修改成功！");
 		try {
-			mo.code = cabinService.updateCabin(cabin, operator);
+			mo.code = cabinService.updatePreunloadingAndCargo(cabin, operator);
 		} catch (Exception e) {
 			e.printStackTrace();
 			mo.code = ConstantUtil.FailInt;

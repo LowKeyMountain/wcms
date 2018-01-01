@@ -262,7 +262,8 @@ public class InfoQueryHelper {
 					for (String param : queryFieldsJson.keySet()) {
 						String dataType = queryFieldsJson.getString(param);
 						if ("string".equalsIgnoreCase(dataType)) {
-							resultMap.put(param, rs.getString(param));
+							String str = rs.getString(param);
+							resultMap.put(param, StringUtils.isNotEmpty(str) ? str : "--");
 						} else if ("integer".equalsIgnoreCase(dataType) || "number".equalsIgnoreCase(dataType)) {
 							resultMap.put(param, rs.getInt(param));
 						} else if ("time".equalsIgnoreCase(dataType)) {
@@ -415,7 +416,8 @@ public class InfoQueryHelper {
 					for (String param : queryFieldsJson.keySet()) {
 						String dataType = queryFieldsJson.getString(param);
 						if ("string".equalsIgnoreCase(dataType)) {
-							resultMap.put(param, rs.getString(param));
+							String str = rs.getString(param);
+							resultMap.put(param, StringUtils.isNotEmpty(str) ? str : "--");
 						} else if ("integer".equalsIgnoreCase(dataType) || "number".equalsIgnoreCase(dataType)) {
 							resultMap.put(param, rs.getInt(param));
 						} else if ("time".equalsIgnoreCase(dataType)) {

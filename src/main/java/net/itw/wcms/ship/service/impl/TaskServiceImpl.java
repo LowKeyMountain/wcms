@@ -18,7 +18,6 @@ import com.alibaba.fastjson.JSONObject;
 
 import net.itw.wcms.ship.entity.Cabin;
 import net.itw.wcms.ship.entity.Cargo;
-import net.itw.wcms.ship.entity.Ship;
 import net.itw.wcms.ship.entity.Task;
 import net.itw.wcms.ship.repository.CabinRepository;
 import net.itw.wcms.ship.repository.TaskRepository;
@@ -27,7 +26,6 @@ import net.itw.wcms.toolkit.DateTimeUtils;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
 import net.itw.wcms.x27.utils.ConstantUtil;
-import net.itw.wcms.x27.utils.StringUtil;
 
 
 @Service
@@ -185,15 +183,14 @@ public class TaskServiceImpl implements ITaskService {
 	@Override
 	public Integer updateTask(Task task, User operator) {
 		
-		Task persisObj = taskRepository.getTaskById(task.getId());
+		Task persist = taskRepository.getTaskById(task.getId());
 		
 		task.setUpdateUser(operator.getUserName());
 		task.setUpdateTime(new Date());
-		task.setStatus(persisObj.getStatus());
-		Ship ship = task.getShip();
-		if (ship != null) {
-			ship.setId(persisObj.getShip().getId());
-		}
+		task.setStatus(persist.getStatus());
+		task.setBeginTime(persist.getBeginTime());
+		task.setEndTime(persist.getEndTime());
+		
 		autoCreateCargoCabinInfo(task, operator);
 		taskRepository.saveAndFlush(task);
 		
