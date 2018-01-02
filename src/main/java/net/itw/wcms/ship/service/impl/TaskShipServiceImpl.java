@@ -113,7 +113,8 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			}
 
 			cabinRepository.save(cabins.values());
-
+			// 重新计算作业船舶各舱组信息
+			dataSyncHelper.recomputationCabinGroup(Integer.parseInt(taskId));
 		} catch (Exception e) {
 			mo.msg = e.getMessage();
 			mo.code = ConstantUtil.FailInt;

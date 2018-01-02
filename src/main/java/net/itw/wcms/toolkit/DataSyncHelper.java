@@ -264,11 +264,15 @@ public class DataSyncHelper extends JdbcDaoSupport {
 	 * @return
 	 */
 	public void updateGroupEndTime(Integer taskId) {
-		String sql = " select c2.id from tab_temp_c c2 LEFT JOIN v_cabin_info c1 ON c1.cabin_id = c2.cabinId where  c2.`status` = 0 AND c1.task_id = ? ";
-		List<Integer> list = this.getJdbcTemplate().queryForList(sql, Integer.class, taskId);
-		for (Integer groupId : list) {
+		String sql = " select c2.* from tab_temp_c c2 LEFT JOIN v_cabin_info c1 ON c1.cabin_id = c2.cabinId where  c2.`status` = 0 AND c1.task_id = ? ";
+		List<Map<String, Object>> list = this.getJdbcTemplate().queryForList(sql, taskId);
+		for (Map<String, Object> m : list) {
+			Integer groupId = (Integer) m.get("id");
+			Date startTime = (Date) m.get("startTime");
+			Date lastTime = (Date) m.get("lastTime");
+			Date endTime = lastTime != null ? lastTime : (startTime != null ? startTime : new Date());
 			sql = " UPDATE tab_temp_c t SET t.endTime = ?, t.status = ? WHERE t.id = ? ";
-			Object[] args = new Object[] { new Date(), 1, groupId };
+			Object[] args = new Object[] { endTime, 1, groupId };
 			this.getJdbcTemplate().update(sql, args);
 		}
 	}
@@ -362,11 +366,11 @@ public class DataSyncHelper extends JdbcDaoSupport {
 	}
 
 	/**
-	 * 修改舱位时，需重新计算相关数据组信息
+	 * 重新计算作业船舶各舱组信息
 	 * 
 	 * @param taskId
 	 */
-	public void modifyCabinPosition(Integer taskId) {
+	public void recomputationCabinGroup(Integer taskId) throws Exception {
 		this.stop();
 		try {
 			String sql = " UPDATE tab_temp_b b SET b.groupId = 0 where b.groupId in "
@@ -380,15 +384,10 @@ public class DataSyncHelper extends JdbcDaoSupport {
 			this.getJdbcTemplate().execute(sql);
 			calcGroup();
 		} catch (DataAccessException e) {
-			e.printStackTrace();
 			log.error(e.getMessage());
+			throw e;
 		} finally {
-			try {
-				this.restart();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-				log.error(e.getMessage());
-			}
+			this.restart();
 		}
 	}
 
