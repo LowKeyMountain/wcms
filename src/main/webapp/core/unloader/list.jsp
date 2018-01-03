@@ -150,8 +150,11 @@ License: You must have a valid license purchased only from themeforest(the above
 													                        </div>													                        
 													                        											                        
 													                        <div class="col-sm-1" style="text-align:left;">
-													                            <button type="button" style="margin-left:20px" id="btn_query" class="btn btn-primary">查询</button>
+													                            <button type="button" style="margin-left:20px" id="btn_query" class="btn btn-primary btn-sm">查询</button>
 													                        </div>
+													                        <div class="col-sm-1" style="text-align:left;">
+													                            <button type="button" style="margin-left:20px" id="btn_reset" class="btn btn-sm">重置</button>
+													                        </div>													                        
 													                    </div>
 													                    	<table id="unloader" class="table table-striped table-bordered table-hover table-checkable order-column"></table>												            
 													                </form>
@@ -229,7 +232,6 @@ License: You must have a valid license purchased only from themeforest(the above
     			    todayBtn:  1,
     			    autoclose: 1,
     			});               
-                
             });  
         </script>			
 		<!-- BEGIN THEME LAYOUT SCRIPTS -->
