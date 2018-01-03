@@ -22,7 +22,7 @@ $(function(){
 			 showHeader : true,
 			 showRefresh : true,// 刷新按钮
 			 // showToggle : true,// 是否显示 切换试图（table/card）按钮
-			 // showColumns : true,// 是否显示 内容列下拉框
+			 showColumns : true,// 是否显示 内容列下拉框
 //			  queryParams: getPageMessage,
 //			 search : true, // 显示搜索框
 			 paginationPreText : '<',// 指定分页条中上一页按钮的图标或文字,这里是<
@@ -59,14 +59,14 @@ $(function(){
 			
 			idField : "id",// 指定主键列
 		    columns: [
-		    {
+		    /*{
 		    	title:'全选',
 		        field:'select',
 		        //复选框
 		        checkbox:true,
 		        width:25,
 		        align:'center'
-		    }, {
+		    }, */{
 		        field: 'id',
 		        title: 'id',
 		        align: 'center'
@@ -79,7 +79,7 @@ $(function(){
 		        title: '操作类型',
 		        align: 'center',
                 formatter: function (value, row, index) {//自定义显示，这三个参数分别是：value该行的属性，row该行记录，index该行下标  
-                    return row.operationType == 0 ? "大车位置" : row.operationType == 1 ? "作业量信息" : "数据异常";  
+                    return row.operationType == 0 ? "<font color=grey>位移</font>" : row.operationType == 1 ? "<font color=red>作业</font>" : "<font color=lightgreen>在线</font>";  
                 } 
 		    }, {
 		        field: 'time',
@@ -110,27 +110,17 @@ $(function(){
 				return res;
 			}
 	});
-
+		//查询按钮
         $("#btn_query").off().on(
-                "click",function(){
-/*                    var data = {
-   						 	limit:$("#pageSize").val(),
-   						 	offset:$("#pageNum").val(),
-                    		cmsid:$("#cmsid").val(),
-                    		startDate:$("#startDate").val(),
-                    		endDate:$("#endDate").val(),
-                    		startPosition:$("#startPosition").val(),
-                    		endPosition:$("#endPosition").val()
-                    };
-                     $.ajax({
-                         url:BasePath + "/unloader/getUnloaderList",
-                         data:data,
-                         dataType:"json",
-                         type:"post",
-                        success:function(){
-
-                        }
-                      })*/
-                    $('#unloader').bootstrapTable('refresh');                    
-            })
+        		"click",function(){
+        			$('#unloader').bootstrapTable('refresh');                    
+        })
+        //重置按钮事件  
+        $("#btn_reset").off().on("click",function(){  
+            $("#startDate").val("");
+            $("#endDate").val("");
+            $("#cmsid").val("");
+            $("#startPosition").val("");
+            $("#endPosition").val("");
+        });          
 });
