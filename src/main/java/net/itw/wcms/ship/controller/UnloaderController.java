@@ -76,7 +76,12 @@ public class UnloaderController {
 	 */
 	@RequestMapping(value = "/getUnloaderList", produces = "text/json;charset=UTF-8")
 	public String getUserDataTables(@RequestParam Map<String, String> params, ModelMap map) {
-		Pageable pageable = PageUtils.buildPageRequest(params);
+		int pageSize = Integer.parseInt(params.get("limit"));
+		int pageNum = Integer.parseInt(params.get("offset"));
+		String sortType = params.get("sortName");
+		String direction = params.get("sortOrder");
+		
+		Pageable pageable = PageUtils.buildPageRequest(pageNum, pageSize, sortType, direction);
 		return unloaderService.getUnloaderList(pageable, params);
 	}
 	

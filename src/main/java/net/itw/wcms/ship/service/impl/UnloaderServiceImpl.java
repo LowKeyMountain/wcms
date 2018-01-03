@@ -12,6 +12,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import net.itw.wcms.ship.entity.Unloader1;
+import net.itw.wcms.ship.entity.UnloaderAll;
 import net.itw.wcms.ship.repository.UnloaderRepository;
 import net.itw.wcms.ship.service.IUnloaderService;
 import net.itw.wcms.toolkit.DateTimeUtils;
@@ -24,27 +25,28 @@ public class UnloaderServiceImpl implements IUnloaderService {
 	@Autowired
 	private UnloaderRepository unloaderRepository;
 
-	public Page<Unloader1> findAll(Pageable pageable, Map<String , String > params)
+	public Page<UnloaderAll> findAll(Pageable pageable, Map<String , String > params)
 	{
-		return unloaderRepository.findAll(pageable, params);
+		return unloaderRepository.findAllByParams(pageable, params);
 	}
 	
 	@Override
 	public String getUnloaderList(Pageable pageable, Map<String, String> params) {
-		Page<Unloader1> page = findAll(pageable, params);
+		Page<UnloaderAll> page = findAll(pageable, params);
 		JSONObject jo=null;
 		if (page == null || page.getTotalPages() == 0) {
 			return "{\"total\":0,\"rows\":[],}";
 		}
-		int total = page.getTotalPages();
+		long total = page.getTotalElements();
 		JSONArray jsonArray = new JSONArray();
-		for (Unloader1 t : page) {
+		for (UnloaderAll t : page) {
 			jo = new JSONObject();
 			jo.put("id", t.getId());
 			jo.put("Cmsid", t.getCmsId());
 			jo.put("operationType", t.getOperationType());
 			
 			jo.put("time", t.getTime() == null ? "" : DateTimeUtils.date2StrDateTime(t.getTime()));
+			jo.put("pushTime", t.getPushTime() == null ? "" : DateTimeUtils.date2StrDateTime(t.getPushTime()));
 			jo.put("direction", t.getDirection());
 			jo.put("unloaderMove", t.getUnloaderMove());
 			jo.put("OneTask", t.getOneTask());

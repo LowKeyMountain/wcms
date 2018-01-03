@@ -51,6 +51,7 @@ License: You must have a valid license purchased only from themeforest(the above
         <link href="${IncPath}/assets/layouts/layout/css/layout.min.css" rel="stylesheet" type="text/css" />
         <link href="${IncPath}/assets/layouts/layout/css/themes/darkblue.min.css" rel="stylesheet" type="text/css" id="style_color" />
         <link href="${IncPath}/assets/layouts/layout/css/custom.min.css" rel="stylesheet" type="text/css" />
+        <link href="${IncPath}/assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" type="text/css" />
                 
         <!-- END THEME LAYOUT STYLES -->
         <link rel="shortcut icon" href="favicon.ico" /> </head>
@@ -118,37 +119,43 @@ License: You must have a valid license purchased only from themeforest(the above
 													            <div class="panel-body">
 													                <form id="formSearch" class="form-horizontal">
 													                    <div class="form-group" style="margin-top:5px;margin-bottom:5px">
-													                        <label class="control-label col-sm-1" for="unloadername">卸船机名称</label>
+													                        <label class="control-label col-sm-1" for="unloadername">卸船机编号: </label>
 													                        <div class="col-sm-2">
-													                            <input type="text" class="form-control" id="unloadername">
+																				<select id="cmsid" name="cmsid" class="form-control select2me">
+																					<option value="">请选择...</option>
+																   					<option value="1" >ABB_GSU_1</option>
+																   					<option value="2" >ABB_GSU_2</option>
+																   					<option value="3" >ABB_GSU_3</option>
+																   					<option value="4" >ABB_GSU_4</option>
+																   					<option value="5" >ABB_GSU_5</option>
+																   					<option value="6" >ABB_GSU_6</option>
+																				</select>
 													                        </div>
-                         <div class="col-sm-2 form-group pdate">
-                          <label for="date">位置：</label>
-                          <input type="text" class="form-control" id="startPosition" placeholder="请输入起始位置" name="startPosition" />
-                        </div>
-                        <div class="col-sm-2 form-group pdate">
-                          <label for="date">至</label>
-                          <input type="text" class="form-control" id="endPosition" placeholder="请输入结束位置" name="endPosition"/>
-                        </div>													                        
-													                        
-                         <div class="col-sm-2 form-group pdate">
-                          <label for="date">送达时间：</label>
-                          <input class="form-control layer-date" id="startdate" placeholder="请选择开始日期" name="startDate" />
-                          <i class="iconfont">&#xe613;</i>
-                        </div>
-                        <div class="col-sm-2 form-group pdate">
-                          <label for="date">至</label>
-                          <input class="form-control layer-date" id="enddate" placeholder="请选择结束日期" name="endDate"/>
-                          <i class="iconfont">&#xe613;</i>
-                        </div>
-													                        												                        
+													                         <div class="col-sm-2 form-group pdate">
+													                         <label for="pdate">查询时间：</label>
+													                          <input class="form_datetime form-control" id="startDate" placeholder="请选择开始日期" name="startDate" readonly/>
+													                        </div>
+													                        <div class="col-sm-2 form-group pdate">
+													                          <label for="pdate">至</label>
+													                          <input class="form_datetime form-control" id="endDate" placeholder="请选择结束日期" name="endDate" readonly/>
+													                        </div>													                        
+																										                        
+													                         <div class="col-sm-2 form-group position">
+													                          <label for="position">位置：</label>
+													                          <input type="text" class="form-control" id="startPosition" placeholder="请输入起始位置" name="startPosition" />
+													                        </div>
+													                        <div class="col-sm-2 form-group">
+													                          <label for="position">至</label>
+													                          <input type="text" class="form-control" id="endPosition" placeholder="请输入结束位置" name="endPosition"/>
+													                        </div>													                        
+													                        											                        
 													                        <div class="col-sm-1" style="text-align:left;">
 													                            <button type="button" style="margin-left:20px" id="btn_query" class="btn btn-primary">查询</button>
 													                        </div>
 													                    </div>
+													                    	<table id="unloader" class="table table-striped table-bordered table-hover table-checkable order-column"></table>												            
 													                </form>
 													            </div>
-													            <table id="unloader" class="table table-striped table-bordered table-hover table-checkable order-column"></table>												            
 													        </div>						                
 								</div>
 							</div>
@@ -202,6 +209,8 @@ License: You must have a valid license purchased only from themeforest(the above
         <script src="${IncPath}/assets/layouts/layout/scripts/layout.min.js" type="text/javascript"></script>
         <script src="${IncPath}/assets/layouts/layout/scripts/demo.min.js" type="text/javascript"></script>
         <script src="${IncPath}/assets/layouts/global/scripts/quick-sidebar.min.js" type="text/javascript"></script>
+		<script src="${IncPath}/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
+        
 		<script type="text/javascript">
 			var IncPath = '${IncPath}';
 			var BasePath = '${BasePath}';
@@ -210,6 +219,19 @@ License: You must have a valid license purchased only from themeforest(the above
 			type="text/javascript"></script>
 		<script src="${IncPath}/core/unloader/unloader.js?v=${jsVersion}"
 			type="text/javascript"></script>
+			
+        <script>  
+            $(document).ready(function(){
+    			$(".form_datetime").datetimepicker({
+    			    minView: "hour",
+    			    language:  'zh-CN',
+    			    format: 'yyyy-mm-dd hh:ii:ss',
+    			    todayBtn:  1,
+    			    autoclose: 1,
+    			});               
+                
+            });  
+        </script>			
 		<!-- BEGIN THEME LAYOUT SCRIPTS -->
         <!-- END THEME LAYOUT SCRIPTS -->
 
