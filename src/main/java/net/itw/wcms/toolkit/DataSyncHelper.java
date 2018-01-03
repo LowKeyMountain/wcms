@@ -50,8 +50,8 @@ public class DataSyncHelper extends JdbcDaoSupport {
 				sync(i);
 			}
 			calcGroup();
-			log.info("同步工具休眠5秒...");
-			Thread.sleep(5000);
+			log.info("同步工具休眠20秒...");
+			Thread.sleep(20000);
 		}
 	}
 

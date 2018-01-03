@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import net.itw.wcms.ship.entity.Task;
+import net.itw.wcms.ship.entity.Unloader;
 import net.itw.wcms.ship.service.ITaskService;
 import net.itw.wcms.ship.service.IUnloaderService;
+import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
 import net.itw.wcms.x27.utils.ConstantUtil;
 import net.itw.wcms.x27.utils.PageUtils;
@@ -80,7 +82,28 @@ public class UnloaderController {
 		return unloaderService.getUnloaderList(pageable, params);
 	}
 	
-
+	/**
+	 * 添加卸船机作业信息
+	 * 
+	 * @param unloader
+	 * @return
+	 */
+	@RequestMapping(value = "/add")
+	public Map<String, Object> add(@ModelAttribute("unloader") Unloader unloader) {
+		User operator = SessionUtil.getSessionUser(req);
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "数据保存成功！");
+		try {
+			unloaderService.createUnloader(unloader, operator);
+		} catch (Exception e) {
+			e.printStackTrace();
+			mo.msg = e.getMessage();
+			mo.code = ConstantUtil.FailInt;
+		}
+		Map<String, Object> map = new HashMap<>();
+		map.put("msg", mo.msg);
+		map.put("code", mo.code);
+		return map;
+	}
 
 	
 }

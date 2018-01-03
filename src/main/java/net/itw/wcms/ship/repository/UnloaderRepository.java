@@ -2,6 +2,7 @@ package net.itw.wcms.ship.repository;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +18,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
+
 import net.itw.wcms.ship.entity.Unloader1;
 import net.itw.wcms.toolkit.lang.Int32;
 import net.itw.wcms.x27.utils.StringUtil;
@@ -55,5 +60,5 @@ public interface UnloaderRepository extends JpaRepository<Unloader1, Integer>, J
 			}
 		}, pageable);
 	}
-
+	
 }

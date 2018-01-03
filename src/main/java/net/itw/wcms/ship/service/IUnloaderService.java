@@ -6,6 +6,8 @@ import java.util.Map;
 import org.springframework.data.domain.Pageable;
 
 import net.itw.wcms.ship.entity.Task;
+import net.itw.wcms.ship.entity.Unloader;
+import net.itw.wcms.ship.exception.TaskException;
 import net.itw.wcms.x27.entity.User;
 
 /**
@@ -26,4 +28,13 @@ public interface IUnloaderService {
 	 * @return
 	 */
 	String getUnloaderList(Pageable pageable, Map<String, String> params);
+	
+	/**
+	 * 添加卸船机作业信息
+	 * 
+	 * @param unloader
+	 * @param operator
+	 * @return
+	 */
+	void createUnloader(Unloader unloader, User operator) throws Exception;
 }
