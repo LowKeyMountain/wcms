@@ -43,7 +43,6 @@ public class DataSyncHelper extends JdbcDaoSupport {
 	 * @throws InterruptedException
 	 */
 	public void start() throws InterruptedException {
-		log.info("同步工具成功...");
 		while (!isBreakRun) {
 			log.info("同步工具运行中...");
 			for (int i = 1; i <= 6; i++) {
@@ -150,11 +149,9 @@ public class DataSyncHelper extends JdbcDaoSupport {
 	 *            数据类型
 	 * @param time
 	 *            操作时间
-	 * @param unloaderMove
-	 *            位置
 	 * @return
 	 */
-	private Integer createGroup(Integer cabinId, String cmsid, int operationType, Date time, Double unloaderMove) {
+	private Integer createGroup(Integer cabinId, String cmsid, int operationType, Date time) {
 		int groupId = 0;
 		Object[] args = null;
 		// 查询组信息，根据舱ID、 卸船机ID
@@ -302,7 +299,9 @@ public class DataSyncHelper extends JdbcDaoSupport {
 				Integer id = (Integer) map.get("id");
 				String cmsid = (String) map.get("Cmsid");
 				Double unloaderMove = (Double) map.get("unloaderMove");
-
+				
+				unloaderMove += 7; // 偏移量整体加7
+				
 				// 查询船舱ID
 				sql = " SELECT cabin.id, t.offset FROM tab_cabin cabin "
 						+ "LEFT JOIN ( SELECT c.*, task.`offset`, task.`status`, task.begin_time, "
@@ -311,43 +310,43 @@ public class DataSyncHelper extends JdbcDaoSupport {
 						+ "tab_task task ON c.task_id = task.id ) t ON cabin.cargo_id = t.id "
 						+ "WHERE t.`status` = 1 AND cabin.start_position <= ? "
 						+ "AND cabin.end_position >= ? AND t.begin_time <= ? AND t.end_time >= ? ";
-
+				
 				Object[] args = new Object[] { unloaderMove, unloaderMove, time, time };
 
 				List<Map<String, Object>> cabinNums = this.getJdbcTemplate().queryForList(sql, args);
 
 				if (cabinNums == null || cabinNums.isEmpty()) {
 					log.error("数据异常：数据编号[" + id + "]|卸船机编号[" + cmsid + "] 未找到船舱信息！");
-					sql = " select * from tab_temp_c t where t.`status` = 0 AND t.Cmsid = ? ";
-					List<Map<String, Object>> list2 = this.getJdbcTemplate().queryForList(sql, cmsid);
-					for (Map<String, Object> map2 : list2) {
-						Integer id2 = (Integer) map2.get("id");
-						if (0 == operationType) {
-							sql = " UPDATE tab_temp_c t SET t.endTime = ?, t.status = 1 WHERE t.id = ? ";
-							args = new Object[] { time, id2 };
-						} else if (1 == operationType) {
-							sql = " UPDATE tab_temp_c t SET t.endTime = ?, t.lastTime = ?, t.status = 1 WHERE t.id = ? ";
-							args = new Object[] { time, time, id2 };
-						}
-						this.getJdbcTemplate().update(sql, args);
-					}
+//					sql = " select * from tab_temp_c t where t.`status` = 0 AND t.Cmsid = ? ";
+//					List<Map<String, Object>> list2 = this.getJdbcTemplate().queryForList(sql, cmsid);
+//					for (Map<String, Object> map2 : list2) {
+//						Integer id2 = (Integer) map2.get("id");
+//						if (0 == operationType) {
+//							sql = " UPDATE tab_temp_c t SET t.endTime = ?, t.status = 1 WHERE t.id = ? ";
+//							args = new Object[] { time, id2 };
+//						} else if (1 == operationType) {
+//							sql = " UPDATE tab_temp_c t SET t.endTime = ?, t.lastTime = ?, t.status = 1 WHERE t.id = ? ";
+//							args = new Object[] { time, time, id2 };
+//						}
+//						this.getJdbcTemplate().update(sql, args);
+//					}
 					continue;
 				} else {
 					if (cabinNums.size() > 1) {
 						log.error("数据异常：数据编号[" + id + "]|卸船机编号[" + cmsid + "] 匹配到多个船舱信息！");
 					}
 					cabinId = (Integer) cabinNums.get(0).get("id");
-					offset = (Double) cabinNums.get(0).get("offset");
-					if (offset == null) {
-						offset = 0.0;
-					}
-					groupId = createGroup(cabinId, cmsid, operationType, time, unloaderMove);
+//					offset = (Double) cabinNums.get(0).get("offset");
+//					if (offset == null) {
+//						offset = 0.0;
+//					}
+					groupId = createGroup(cabinId, cmsid, operationType, time);
 				}
 
 				// 更新表b数据
 				try {
-					sql = " update tab_temp_b b set b.groupId = ?, b.offset = ? where b.id = ? and b.cmsid = ? ";
-					args = new Object[] { groupId, offset, id, cmsid };
+					sql = " update tab_temp_b b set b.groupId = ? where b.id = ? and b.cmsid = ? ";
+					args = new Object[] { groupId, id, cmsid };
 					this.getJdbcTemplate().update(sql, args);
 					num++;
 					log.info("数据编号[" + id + "]|卸船机编号[" + cmsid + "] 数据已计算组信息！");
