@@ -195,4 +195,28 @@ public class CabinController {
 		return mo;
 	}
 	
+	/**
+	 * 修改舱位
+	 * 
+	 * @param taskId
+	 * @param cabinNo
+	 * @return
+	 */
+	@RequestMapping(value = "/modifyCabinPosition")
+	public ModelAndView modifyCabinPosition(Integer taskId, Integer cabinNo) {
+		return new ModelAndView(PATH + "modifyCabinPosition");
+	}
+	
+	/**
+	 * 查看船舱信息
+	 * 
+	 * @param taskId
+	 * @param cabinNo
+	 * @return
+	 */
+	@RequestMapping(value = "/view")
+	public ModelAndView viewCabinInfo(Integer taskId, Integer cabinNo) {
+		return new ModelAndView(PATH + "view");
+	}
+	
 }

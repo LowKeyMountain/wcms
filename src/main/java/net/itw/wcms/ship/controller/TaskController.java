@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
 
+import net.itw.wcms.interfaceApi.http.InfoQueryHelper;
 import net.itw.wcms.ship.entity.Task;
 import net.itw.wcms.ship.service.ITaskService;
 import net.itw.wcms.toolkit.MessageOption;
@@ -33,6 +34,7 @@ public class TaskController {
 
 	@Autowired
 	private ITaskService taskService;
+	private InfoQueryHelper infoQueryHelper = new InfoQueryHelper();
 
 	protected HttpServletRequest req;
 	protected HttpServletResponse res;
@@ -40,6 +42,7 @@ public class TaskController {
 	protected ModelMap modelMap;
 
 	private static final String PATH = "./core/task/";
+	private static final String PATH_UNSHIPINFO = "./core/unshipInfo/";
 
 	/**
 	 * 初始化全局资源
@@ -187,6 +190,34 @@ public class TaskController {
 			e.printStackTrace();
 		}
 		return mo;
+	}
+	
+	/**
+	 * 卸船情况
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("/unshipInfo")
+	public ModelAndView unshipInfo(@RequestParam("id") Integer id) {
+		return new ModelAndView(PATH_UNSHIPINFO + "list");
+	}
+	
+	/**
+	 * 查看船舶信息
+	 * 
+	 * @param taskId
+	 * @return
+	 */
+	@RequestMapping("/view")
+	public ModelAndView shipInfoview(Integer taskId) {
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("fuctionType", "FN_003");
+		jsonObject.put("criteria", JSONObject.parseObject("{'$t.id':'" + taskId + "'}"));
+		Map<String, Object> map = infoQueryHelper.doQueryInfo(jsonObject);
+		Map<String, Object> data = (Map<String, Object>) map.get("data");
+		modelMap.put("task", data);
+		return new ModelAndView(PATH + "view");
 	}
 	
 }
