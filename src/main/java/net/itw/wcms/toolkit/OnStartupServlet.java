@@ -26,19 +26,19 @@ public class OnStartupServlet {
 		if (initialized)
 			return;
 		initialized = true;
-		
+
 		boolean isAllowStartup = false;
 		try {
 			Properties pro = new Properties();
 			pro.load(getClass().getResourceAsStream("/wcms.properties"));
-			String str = (String)pro.get("unloaderDataSyn.isAllowStartup");
+			String str = (String) pro.get("unloaderDataSyn.isAllowStartup");
 			isAllowStartup = StringUtils.isEmpty(str) ? true : Boolean.parseBoolean(str);
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		if (isAllowStartup) {
 			// 启动卸船机数据同步功能
 			dataSyncHelper.init();
@@ -54,6 +54,7 @@ public class OnStartupServlet {
 				}
 			}, 1000);
 		}
+
 	}
 
 	public void dispose() {

@@ -1,5 +1,6 @@
 package net.itw.wcms.ship.repository;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -64,8 +65,12 @@ public interface UnloaderRepository extends JpaRepository<UnloaderAll, Integer>,
 				}
 				else {
 				}
-				predicate = cb.and(predicates.toArray(new Predicate[predicates.size()]));
-				return predicate;
+				predicate = cb.and(predicates.toArray(new Predicate[predicates.size()]));				
+		        query.where(predicate);  
+		        //添加排序的功能  
+		        query.orderBy(cb.desc(root.get("time")));
+		        return query.getRestriction();  
+				//return predicate;
 			}
 		}, pageable);
 	}	

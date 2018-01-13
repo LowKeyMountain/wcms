@@ -1,7 +1,8 @@
 package net.itw.wcms.ship.controller;
 
+import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,9 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import net.itw.wcms.ship.entity.Task;
+import com.alibaba.fastjson.JSONObject;
+
 import net.itw.wcms.ship.entity.Unloader;
-import net.itw.wcms.ship.service.ITaskService;
+import net.itw.wcms.ship.entity.UnloaderAll;
 import net.itw.wcms.ship.service.IUnloaderService;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
@@ -85,6 +87,56 @@ public class UnloaderController {
 		
 		Pageable pageable = PageUtils.buildPageRequest(pageNum, pageSize, sortType, direction);
 		return unloaderService.getUnloaderList(pageable, params);
+	}
+
+	@RequestMapping(value = "/addUnloader", produces = "text/json;charset=UTF-8")
+	public void addUnloader(@RequestParam Map<String, String> params) throws IOException {
+		UnloaderAll unloader = new UnloaderAll();		
+		JSONObject jsonObject = new JSONObject();
+		String tableName="";
+		String cmsId= params.get("fcmsid");
+		if("1".equals(cmsId)) {
+			unloader.setCmsId("ABB_GSU_1");
+			tableName="tab_unloader_1";
+		} else if ("2".equals(cmsId)) {
+			unloader.setCmsId("ABB_GSU_2");
+			tableName="tab_unloader_2";
+		} else if ("3".equals(cmsId)) {
+			unloader.setCmsId("ABB_GSU_3");
+			tableName="tab_unloader_3";
+		} else if ("4".equals(cmsId)) {
+			unloader.setCmsId("ABB_GSU_4");
+			tableName="tab_unloader_4";
+		} else if ("5".equals(cmsId)) {
+			unloader.setCmsId("ABB_GSU_5");
+			tableName="tab_unloader_5";
+		} else if ("6".equals(cmsId)) {
+			unloader.setCmsId("ABB_GSU_6");
+			tableName="tab_unloader_6";
+		}
+		unloader.setTime(new Date());
+		unloader.setPushTime(new Date());
+		unloader.setOneTask(Float.parseFloat(params.get("onetask")));
+		unloader.setUnloaderMove(Float.parseFloat(params.get("move")));
+		unloader.setOperationType(params.get("operationtype"));
+		unloader.setDirection(params.get("direction"));
+		
+		try {
+			int val = unloaderService.addUnloader(unloader , tableName);
+			if (val > 0) {
+				jsonObject.put("success", true);
+				jsonObject.put("msg", "保存成功！");
+			} else {
+				jsonObject.put("failure", true);
+				jsonObject.put("msg", "保存失败！");				
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			jsonObject.put("failure", true);
+			jsonObject.put("msg", "保存失败！");
+		}
+		res.getWriter().write(jsonObject.toString());
+
 	}
 	
 	/**
