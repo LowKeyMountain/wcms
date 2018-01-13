@@ -62,23 +62,6 @@ public class UnloaderServiceImpl implements IUnloaderService {
 		jsonObject.put("rows", jsonArray);
 		return jsonObject.toString();
 	}
-
-	@Override
-	public void createUnloader(Unloader unloader, User operator) throws Exception {
-//		try {
-//			Integer id = -1;
-//			String tableName = "";
-//			String sql = "insert into " + tableName
-//					+ " (id, Time, Cmsid, PushTime, OneTask, direction, unloaderMove, "
-//					+ "operationType) values(?,?,?,?,?,?,?,?) ";
-//			Object[] args = new Object[] { id, unloader.getTime(), unloader.getCmsId(),
-//					unloader.getTime(),unloader.getOneTask(), unloader.getDirection(), 
-//					unloader.getUnloaderMove(), unloader.getOperationType() };
-//			this.getJdbcTemplate().update(sql, args);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-	}
 	
 	@Override
 	public int addUnloader(UnloaderAll unloader, String tablename) throws Exception {
@@ -96,6 +79,24 @@ public class UnloaderServiceImpl implements IUnloaderService {
 			return 0;
 		} 
 		return result;
+	}
+	
+	
+	@Override
+	public void createUnloader(Unloader unloader, User operator) throws Exception {
+//		try {
+//			Integer id = -1;
+//			String tableName = "";
+//			String sql = "insert into " + tableName
+//					+ " (id, Time, Cmsid, PushTime, OneTask, direction, unloaderMove, "
+//					+ "operationType) values(?,?,?,?,?,?,?,?) ";
+//			Object[] args = new Object[] { id, unloader.getTime(), unloader.getCmsId(),
+//					unloader.getTime(),unloader.getOneTask(), unloader.getDirection(), 
+//					unloader.getUnloaderMove(), unloader.getOperationType() };
+//			this.getJdbcTemplate().update(sql, args);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 	}
 	
 }
