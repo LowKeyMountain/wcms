@@ -88,7 +88,51 @@ public class CabinServiceImpl implements ICabinService {
 		map.put("rows", list);
 		return map;
 	}
-
+	
+	@Override
+	public Map<String, Object> getCabinPositionList(Pageable pageable, Integer taskId, Map<String, String> params) {
+		Map<String, Object> map = new HashMap<>();
+		List<Cabin> page = findAllByTaskId(taskId);
+		if (page == null || page.size() == 0) {
+			map.put("total", 0);
+			map.put("mapping", new HashMap<>());
+			map.put("rows", new ArrayList<String>());
+			return map;
+		}
+		int total = page.size();
+		
+		Map<Integer, String> cargoMap = new HashMap<>();
+		List<Cargo> cargos = cargoRepository.findAllByTaskId(taskId);
+		for (Cargo cargo : cargos) {
+			cargoMap.put(cargo.getId(), cargo.getCargoType());
+		}
+		
+		Map<Integer, Object> mapping = new HashMap<>(); 
+		List<Map<String, Object>> list = new ArrayList<>();
+		for (Cabin cabin : page) {
+			Map<String, Object> data = new HashMap<>();
+			data.put("cabinNo", cabin.getCabinNo());
+			String cargoName = cargoMap.get(cabin.getCargo().getId());
+			data.put("cargoName", StringUtils.isNotEmpty(cargoName)?cargoName:"");
+			data.put("startPosition", cabin.getStartPosition() != null ? cabin.getStartPosition() : "");
+			data.put("endPosition", cabin.getEndPosition() != null ? cabin.getEndPosition() : "");
+			data.put("preunloading", cabin.getPreunloading());
+			data.put("id", cabin.getId());
+			list.add(data);
+			
+			Map<String, Object> m = new HashMap<>();
+			m.put("id", cabin.getId());
+			m.put("cabinNo", cabin.getCabinNo());
+			mapping.put(cabin.getCabinNo(), m);
+		}
+		
+		map.put("cargos", cargoMap);
+		map.put("mapping", mapping);
+		map.put("total", total);
+		map.put("rows", list);
+		return map;
+	}
+	
 	public List<Cabin> findAllByTaskId(Integer taskId) {
 		return cabinRepository.findAllByTaskId(taskId);
 	}

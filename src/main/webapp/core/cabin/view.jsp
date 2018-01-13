@@ -112,7 +112,7 @@ License: You must have a valid license purchased only from themeforest(the above
 								<div class="tools">
 									<a onclick="javascript:history.back(-1);" class="fa fa-reply"
 										data-original-title="返回" title="返回"> </a> <a
-										onclick="javascript:;" class="reload" data-original-title="刷新"
+										onclick="javascript:CabinView.list();" class="reload" data-original-title="刷新"
 										title="刷新"> </a>
 								</div>
 							</div>
@@ -121,25 +121,25 @@ License: You must have a valid license purchased only from themeforest(the above
 
 									<table class="table table-striped">
 										<tr>
-											<td colspan="3"><b>1#舱</b></td>
+											<td colspan="3"><b>${cabin.cabinNo}#舱</b></td>
 											<td>货物种类</td>
-											<td>煤</td>
+											<td>${cabin.cargoName}</td>
 											<td>船舱状态</td>
-											<td>清舱</td>
+											<td>${cabin.status}</td>
 										</tr>
 										<tr>
 											<td colspan="3"></td>
 											<td>总量</td>
-											<td>1000</td>
+											<td>${cabin.total}</td>
 											<td>已卸载</td>
-											<td>500</td>
+											<td>${cabin.finished}</td>
 										</tr>
 										<tr>
 											<td colspan="3"></td>
 											<td>剩余量</td>
-											<td>500</td>
+											<td>${cabin.remainder}</td>
 											<td>清舱量</td>
-											<td>0.0</td>
+											<td>${cabin.clearance}</td>
 										</tr>
 									</table>
 
@@ -156,6 +156,7 @@ License: You must have a valid license purchased only from themeforest(the above
 											</tr>
 										</thead>
 										<tbody id="cabin_tbody">
+										<!-- 
 											<tr>
 												<td scope="row">#1</td>
 												<td>08:00</td>
@@ -180,6 +181,7 @@ License: You must have a valid license purchased only from themeforest(the above
 												<td>800</td>
 												<td>800</td>
 											</tr>
+											 -->
 										</tbody>
 									</table>
 
@@ -251,16 +253,14 @@ License: You must have a valid license purchased only from themeforest(the above
 		var taskId = ${task.id};
 	</script>
 	<script src="${IncPath}/cl.js?v=${jsVersion}" type="text/javascript"></script>
-	<script src="${IncPath}/core/task/task.js?v=${jsVersion}" type="text/javascript"></script>
-	<script src="${IncPath}/core/cargo/cargo.js?v=${jsVersion}" type="text/javascript"></script>
-	<script src="${IncPath}/scripts/jquery-editTable/editTable.js?v=${jsVersion}" type="text/javascript"></script>
-	<script src="${IncPath}/core/cabin/cabin.js?v=${jsVersion}" type="text/javascript"></script>
+	<script src="${IncPath}/core/cabin/view.js?v=${jsVersion}" type="text/javascript"></script>
 	<!-- BEGIN THEME LAYOUT SCRIPTS -->
 	<!-- END THEME LAYOUT SCRIPTS -->
 	<script>
 		jQuery(document).ready(function() {
 			App.init();
 			Cl.initModal();
+			CabinView.list();
 		});
 	</script>
 </body>

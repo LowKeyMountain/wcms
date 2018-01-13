@@ -107,17 +107,27 @@ License: You must have a valid license purchased only from themeforest(the above
 							<div class="portlet box yellow">
 								<div class="portlet-title">
 									<div class="caption">
-										<i><a href="javascript:UnshipInfo.view_ship_click(56)">货船A</a></i>
+										<i><a href="javascript:UnshipInfo.view_ship_click(${taskId})">${shipName}</a></i>
 									</div>
 									<div class="tools">
 										<button id="sample_editable_1_new" class="btn sbold green"
-											onclick="javascript:UnshipInfo.modifyCabinPosition_click(56,2);">
+											onclick="javascript:UnshipInfo.modifyCabinPosition_click(${taskId});">
 											修改锚点 <i class="fa"></i>
 										</button>
-										<button id="sample_editable_1_new" class="btn sbold green"
-											onclick="javascript:var con;con=confirm('请确认是否结束卸船！');if(con==true){alert('操作成功！');}">
-											完成卸船 <i class="fa"></i>
-										</button>
+										<c:choose>
+											<c:when test="${task.status == 0}">
+												<button id="sample_editable_1_new" class="btn sbold green"
+													onclick="javascript:UnshipInfo.setShipStatus_click('${taskId}','0');">
+													开始卸船 <i class="fa"></i>
+												</button>
+											</c:when>
+											<c:when test="${task.status == 1}">
+												<button id="sample_editable_1_new" class="btn sbold green"
+													onclick="javascript:UnshipInfo.setShipStatus_click('${taskId}','1');">
+													完成卸船 <i class="fa"></i>
+												</button>
+											</c:when>
+										</c:choose>
 									</div>
 								</div>
 								<div class="portlet-body" style="display: block;">
@@ -135,107 +145,7 @@ License: You must have a valid license purchased only from themeforest(the above
 													<th>操作</th>
 												</tr>
 											</thead>
-											<tbody id="cabin_tbody">
-												<tr>
-													<td><a href="javascript:UnshipInfo.view_unship_click(56,2)">1</a></td>
-													<td><a href="javascript:UnshipInfo.view_click(56,2)">煤粉</a></td>
-													<td>100.0</td>
-													<td>0.0</td>
-													<td>100.0</td>
-													<td>0.0</td>
-													<td>卸货</td>
-													<td><a href="#" onclick="javascript:var con;con=confirm('请确认是否清舱！');if(con==true){alert('操作成功！');}">清舱</a></td>
-												</tr>
-												<tr>
-													<td><a href="#">2</a></td>
-													<td><a href="javascript:UnshipInfo.view_click(56,2)">煤粉</a></td>
-													<td>100.0</td>
-													<td>0.0</td>
-													<td>100.0</td>
-													<td>0.0</td>
-													<td>卸货</td>
-													<td><a href="#" onclick="javascript:var con;con=confirm('请确认是否清舱！');if(con==true){alert('操作成功！');}">清舱</a></td>
-												</tr>
-												<tr>
-													<td><a href="#">3</a></td>
-													<td><a href="javascript:UnshipInfo.view_click(56,2)">煤粉</a></td>
-													<td>100.0</td>
-													<td>0.0</td>
-													<td>100.0</td>
-													<td>0.0</td>
-													<td>卸货</td>
-													<td><a href="#" onclick="javascript:var con;con=confirm('请确认是否清舱！');if(con==true){alert('操作成功！');}">清舱</a></td>
-												</tr>
-												<tr>
-													<td><a href="#">4</a></td>
-													<td><a href="javascript:UnshipInfo.view_click(56,2)">煤粉</a></td>
-													<td>100.0</td>
-													<td>0.0</td>
-													<td>100.0</td>
-													<td>0.0</td>
-													<td>卸货</td>
-					 								<td><a href="#" onclick="javascript:var con;con=confirm('请确认是否清舱！');if(con==true){alert('操作成功！');}">清舱</a></td>
-												</tr>
-												<tr>
-													<td><a href="#">5</a></td>
-													<td><a href="javascript:UnshipInfo.view_click(56,2)">煤粉</a></td>
-													<td>100.0</td>
-													<td>90.0</td>
-													<td>10.0</td>
-													<td>5.0</td>
-													<td>清舱</td>
-													<td><a href="#" onclick="javascript:var con;con=confirm('请确认是否完成！');if(con==true){alert('操作成功！');}">完成</a></td>
-												</tr>
-												<tr>
-													<td><a href="#">6</a></td>
-													<td><a href="javascript:UnshipInfo.view_click(56,2)">煤粉</a></td>
-													<td>100.0</td>
-													<td>90.0</td>
-													<td>10.0</td>
-													<td>5.0</td>
-													<td>清舱</td>
-													<td><a href="#" onclick="javascript:var con;con=confirm('请确认是否完成！');if(con==true){alert('操作成功！');}">完成</a></td>
-												</tr>
-												<tr>
-													<td><a href="#">7</a></td>
-													<td><a href="javascript:UnshipInfo.view_click(56,2)">煤粉</a></td>
-													<td>100.0</td>
-													<td>90.0</td>
-													<td>10.0</td>
-													<td>5.0</td>
-													<td>清舱</td>
-													<td><a href="#" onclick="javascript:var con;con=confirm('请确认是否完成！');if(con==true){alert('操作成功！');}" >完成</a></td>
-												</tr>
-												<tr>
-													<td><a href="#">8</a></td>
-													<td><a href="javascript:UnshipInfo.view_click(56,2)">煤粉</a></td>
-													<td>100.0</td>
-													<td>90.0</td>
-													<td>10.0</td>
-													<td>10.0</td>
-													<td>完成</td>
-													<td></td>
-												</tr>
-												<tr>
-													<td><a href="#">9</a></td>
-													<td><a href="javascript:UnshipInfo.view_click(56,2)">煤粉</a></td>
-													<td>100.0</td>
-													<td>90.0</td>
-													<td>10.0</td>
-													<td>10.0</td>
-													<td>完成</td>
-													<td></td>
-												</tr>
-												<tr>
-													<td><a href="#">10</a></td>
-													<td><a href="javascript:UnshipInfo.view_click(56,2)">煤粉</a></td>
-													<td>100.0</td>
-													<td>90.0</td>
-													<td>10.0</td>
-													<td>10.0</td>
-													<td>完成</td>
-													<td></td>
-												</tr>
+											<tbody id="unshipInfo_tbody">
 											</tbody>
 										</table>
 									</div>
@@ -304,7 +214,7 @@ License: You must have a valid license purchased only from themeforest(the above
 	<script type="text/javascript">
 		var IncPath = '${IncPath}';
 		var BasePath = '${BasePath}';
-		var taskId;
+		var taskId = '${taskId}';
 	</script>
 	
 	<script src="${IncPath}/cl.js?v=${jsVersion}" type="text/javascript"></script>
@@ -316,6 +226,7 @@ License: You must have a valid license purchased only from themeforest(the above
 		jQuery(document).ready(function() {
 			App.init();
 			Cl.initModal();
+			UnshipInfo.list();
 		});
 	</script>
 </body>

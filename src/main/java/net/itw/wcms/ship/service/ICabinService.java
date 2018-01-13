@@ -40,6 +40,16 @@ public interface ICabinService {
 	int createCabin(Cabin cabin, User operator);
 
 	/**
+	 * 返回舱位信息列表
+	 * 
+	 * @param pageable
+	 * @param taskId
+	 * @param params
+	 * @return
+	 */
+	Map<String, Object> getCabinPositionList(Pageable pageable, Integer taskId, Map<String, String> params);
+	
+	/**
 	 * 获取列表
 	 * 
 	 * @param pageable

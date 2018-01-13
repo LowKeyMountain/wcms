@@ -116,7 +116,7 @@ public class DataSyncHelper extends JdbcDaoSupport {
 							+ " (id, Time, Cmsid, PushTime, OneTask, direction, unloaderMove, operationType, offset, groupId) "
 							+ "values(?,?,?,?,?,?,?,?,?,?) ";
 
-					Object[] args = new Object[] { id, time, cmsid, pushTime, oneTask, direction, unloaderMove,
+					Object[] args = new Object[] { id, time, cmsid, pushTime, oneTask, direction, unloaderMove + 7,
 							operationType, 0, 0 };
 					this.getJdbcTemplate().update(sql, args);
 				} catch (Exception e) {
@@ -300,7 +300,7 @@ public class DataSyncHelper extends JdbcDaoSupport {
 				String cmsid = (String) map.get("Cmsid");
 				Double unloaderMove = (Double) map.get("unloaderMove");
 				
-				unloaderMove += 7; // 偏移量整体加7
+//				unloaderMove += 7; // 偏移量整体加7
 				
 				// 查询船舱ID
 				sql = " SELECT cabin.id, t.offset FROM tab_cabin cabin "

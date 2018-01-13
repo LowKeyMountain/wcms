@@ -22,8 +22,10 @@ import com.alibaba.fastjson.JSONObject;
 import net.itw.wcms.interfaceApi.http.InfoQueryHelper;
 import net.itw.wcms.ship.entity.Task;
 import net.itw.wcms.ship.service.ITaskService;
+import net.itw.wcms.ship.service.ITaskShipService;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
+import net.itw.wcms.x27.exception.X27Exception;
 import net.itw.wcms.x27.utils.ConstantUtil;
 import net.itw.wcms.x27.utils.PageUtils;
 import net.itw.wcms.x27.utils.SessionUtil;
@@ -34,6 +36,8 @@ public class TaskController {
 
 	@Autowired
 	private ITaskService taskService;
+	@Autowired
+	private ITaskShipService taskShipService;
 	private InfoQueryHelper infoQueryHelper = new InfoQueryHelper();
 
 	protected HttpServletRequest req;
@@ -200,7 +204,38 @@ public class TaskController {
 	 */
 	@RequestMapping("/unshipInfo")
 	public ModelAndView unshipInfo(@RequestParam("id") Integer id) {
+		Task task = taskService.getTaskById(id);
+		modelMap.put("taskId", id);
+		modelMap.put("task", task);
+		modelMap.put("shipName", task != null && task.getShip() != null ? task.getShip().getShipName() : "");
 		return new ModelAndView(PATH_UNSHIPINFO + "list");
+	}
+	
+	/**
+	 * 返回卸船情况列表
+	 * @param taskId
+	 * @return
+	 */
+	@RequestMapping(value = "/getUnshipInfoList")
+	public Map<String, Object> getUnshipInfoList(@RequestParam("taskId") Integer taskId) {
+		// 从session取出User对象
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
+		Map<String, Object> result = null;
+		try {
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("fuctionType", "FN_004");
+			jsonObject.put("order", "asc");
+			jsonObject.put("sort", "cabinNo");
+			jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "'}"));
+			result = infoQueryHelper.doQueryInfo(jsonObject);
+		} catch (Exception e) {
+			e.printStackTrace();
+			mo.msg = e.getMessage();
+			mo.code = ConstantUtil.FailInt;
+		}
+		result.put("msg", mo.msg);
+		result.put("code", mo.code);
+		return result;
 	}
 	
 	/**
@@ -218,6 +253,31 @@ public class TaskController {
 		Map<String, Object> data = (Map<String, Object>) map.get("data");
 		modelMap.put("task", data);
 		return new ModelAndView(PATH + "view");
+	}
+	
+	/**
+	 * 设置船舶状态
+	 * 
+	 * @param taskId
+	 * @param status
+	 * @return
+	 */
+	@RequestMapping(value = "/doSetShipStatus")
+	public Map<String, Object> doSetShipStatus(@RequestParam("taskId") String taskId,
+			@RequestParam("status") String status) {
+		User operator = SessionUtil.getSessionUser(req);
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			MessageOption mo = this.taskShipService.updateShipStatus(taskId, operator.getUserName(), status);
+			result.put("msg", mo.msg);
+			result.put("code", mo.isSuccess() ? "1" : "0");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", "0");
+			result.put("msg", e.getMessage());
+			return result;
+		}
 	}
 	
 }

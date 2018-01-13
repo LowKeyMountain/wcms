@@ -473,7 +473,7 @@ var Task = function() {
 		 * 卸船情况
 		 */
 		unshipInfo_click : function(id) {
-			window.location.href = BasePath + "/task/unshipInfo?id=56";
+			window.location.href = BasePath + "/task/unshipInfo?id=" + id;
 		},
 		/**
 		 * 删除

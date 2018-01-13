@@ -1,17 +1,17 @@
 var UnshipInfo = function() {
 	return {
 		/**
-		 * 加载列表
+		 * 加载卸船任务列表
 		 */
 		list : function() {
-//			alert('作业船舶任务ID' + taskId);
+//			alert('任务ID' + taskId);
 			if (taskId == null || taskId == undefined) {
 				return;
 			}
 			var mapping = {};
 			var pageParam = {};
 			pageParam.taskId = taskId;
-			var url = BasePath + "/cabin/getCabinList";
+			var url = BasePath + "/task/getUnshipInfoList";
 			$.post(url, pageParam, function(result) {
 				if (result && Cl.successInt == result.code) {
 					
@@ -25,82 +25,52 @@ var UnshipInfo = function() {
 					// </tr>
 					
 					// 清空列表数据
-					$("#cabin_tbody").children().empty();
+					$("#unshipInfo_tbody").children().empty();
 					// 加载列表数据
-					var obj = result.rows;
-					mapping = result.mapping;
-
+					var obj = result.data;
 					for (var i = 0; i < obj.length; i++) {
 						var res = obj[i];
-						var id = i + 1;
+						
+//						<td><a href="javascript:UnshipInfo.view_unship_click(56,2)">1</a></td>
+//						<td><a href="javascript:UnshipInfo.view_click(56,2)">煤粉</a></td>
+//						<td>100.0</td>
+//						<td>0.0</td>
+//						<td>100.0</td>
+//						<td>0.0</td>
+//						<td>卸货</td>
+//						<td><a href="#" onclick="javascript:var con;con=confirm('请确认是否清舱！');if(con==true){alert('操作成功！');}">清舱</a></td>
+						
+						//0|卸货;1|清舱;2|完成
+						var status = res.status==0?'卸货':(res.status==1?'清舱':(res.status == 2?'完成':''));
 						var tr = ""
-								+ "<tr>"
-								+ "<td>"+res.cabinNo+"</td>"
-								+ "<td type='select'>" + res.cargoName + "</td>"
-//								+ "<td>"+res.startPosition+"</td>"
-//								+ "<td>"+res.endPosition+"</td>"
-								+ "<td>"+res.preunloading+"</td>"
-								+ "<td>"
-								+ "<a href='javascript:Cabin.update_click(" + res.id + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i> 修改</a>"
-								+ "&nbsp;&nbsp;"
-//								+ "<a href='javascript:Cabin.remove(" + res.id + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i> 删除</a>"
-								+ "</td>" 
-								+ "</tr>";
+							+ "<tr>"
+							+ "<td><a href='javascript:UnshipInfo.view_unship_click(\""+taskId+"\",\""+res.cabinNo+"\")'>"+res.cabinNo+"</a></td>"
+							+ "<td><a href='javascript:UnshipInfo.view_click(\""+taskId+"\",\""+res.cabinNo+"\")'>"+res.cargoName+"</a></td>"
+							+ "<td>"+res.total+"</td>"
+							+ "<td>"+res.finished+"</td>"
+							+ "<td>"+res.remainder+"</td>"
+							+ "<td>"+res.clearance+"</td>"
+							+ "<td>"+status+"</td>"
+							+ "<td>";
+							if (res.status == 0) {
+								tr += "<a href='#' onclick='javascript:UnshipInfo.setCabinStatus_click(\""
+										+ taskId
+										+ "\",\""
+										+ res.cabinNo
+										+ "\",\"1\")'>清舱</a>";
+							} else if (res.status == 1) {
+								tr += "<a href='#' onclick='UnshipInfo.setCabinStatus_click(\""
+										+ taskId
+										+ "\",\""
+										+ res.cabinNo
+										+ "\",\"2\")'>完成</a>";
+							}
+							tr += "&nbsp;&nbsp;"
+							+ "</td>" 
+							+ "</tr>";
 
-						$("#cabin_tbody").append(tr);
+						$("#unshipInfo_tbody").append(tr);
 					}
-					
-//				    $('.editable').handleTable({
-//				        "handleFirst" : true,
-//				        "cancel" : "&nbsp;<span class='glyphicon glyphicon-remove'></span>&nbsp;",
-//				        "edit" : "&nbsp;<span class='glyphicon glyphicon-edit'></span>&nbsp;",
-//				        "add" : "&nbsp;<span class='glyphicon glyphicon-plus'></span>&nbsp;",
-//				        "save" : "&nbsp;<span class='glyphicon glyphicon-saved'></span>&nbsp;",
-//				        "confirm" : "&nbsp;<span class='glyphicon glyphicon-ok'></span>&nbsp;",
-//				        "operatePos" : -1,
-//				        "editableCols" : [1,2,3,4],
-//						"order": ["edit"],
-//				        "saveCallback" : function(data, isSuccess) { //这里可以写ajax内容，用于保存编辑后的内容
-//				        	//data: 返回的数据
-//				        	//isSucess: 方法，用于保存数据成功后，将可编辑状态变为不可编辑状态
-//							var url = BasePath + "/cabin/update";
-//							
-//							var params = mapping[data[0]];
-//							params['cargo.id'] = data[1];
-//							params['startPosition'] = data[2];
-//							params['endPosition'] = data[3];
-//							params['preunloading'] = data[4];
-//							Cl.ajaxRequest(url, params, function(result) {
-//								if (!result)
-//									return;
-//					            if(result.success == "success") { //ajax请求成功（保存数据成功），才回调isSuccess函数（修改保存状态为编辑状态）
-//					                isSuccess();
-//					                alert(data + " 保存成功");
-//					            } else {
-//					                alert("保存失败");
-//					            }
-//							});
-//				            return true;
-//				        },
-//				        "addCallback" : function(data,isSuccess) {
-//				            var flag = true;
-//				            if(flag) {
-//				                isSuccess();
-//				                alert(data + " 增加成功");
-//				            } else {
-//				                alert(data + " 增加失败");
-//				            }
-//				        },
-//				        "delCallback" : function(isSuccess) {
-//				            var flag = true;
-//				            if(flag) {
-//				                isSuccess();
-//				                alert("删除成功");
-//				            } else {
-//				                alert("删除失败");
-//				            }
-//				        }
-//				    });
 					
 				} else {
 					alert(result.msg);
@@ -137,11 +107,9 @@ var UnshipInfo = function() {
 		/**
 		 * 点击查看信息
 		 */
-		modifyCabinPosition_click : function(taskId, cabinNo) {
-//			Cl.showModalWindow(Cl.modalName, BasePath + "/cabin/modifyCabinPosition?taskId="
-//					+ taskId + '&cabinNo=' + cabinNo);
+		modifyCabinPosition_click : function(taskId) {
 			window.location.href = BasePath + "/cabin/modifyCabinPosition?taskId="
-					+ taskId + '&cabinNo=' + cabinNo;
+					+ taskId;
 		},
 		/**
 		 * 点击查看船舶信息
@@ -158,104 +126,46 @@ var UnshipInfo = function() {
 					+ taskId + '&cabinNo=' + cabinNo;
 		},
 		/**
-		 * 增加
+		 * 点击设置船舶状态
 		 */
-		add : function() {
-			/*
-			 * option的参数 var options = { target: '#output1', // target
-			 * element(s) to be updated with server response beforeSubmit:
-			 * showRequest, // pre-submit callback success: showResponse //
-			 * post-submit callback // other available options: //url: url //
-			 * override for form's 'action' attribute //type: type // 'get' or
-			 * 'post', override for form's 'method' attribute //dataType: null //
-			 * 'xml', 'script', or 'json' (expected server response type)
-			 * //clearForm: true // clear all form fields after successful
-			 * submit //resetForm: true // reset the form after successful
-			 * submit // $.ajax options can be used here too, for example:
-			 * //timeout: 3000 };
-			 */
-			var options = {
-				target : '#form_cl_cabin',
-				type : 'post',
-				dataType : 'json',
-				url : BasePath + "/cabin/add?taskId=" + taskId,
-				success : function(result) {
-					if (!result)
-						return;
-					 var code = result.code;
-					 if(Cl.successInt == code){
-						Cl.hideModalWindow(Cl.modalName);
-						Cabin.list();
-						alert("增加成功");
+		setShipStatus_click : function(taskId, status) {
+			var con = confirm(status == '0' ? '请确认是否开始卸船！' : (status == '1' ? '请确认是否完成卸船！' : ""));
+			if (con == true) {
+				var pageParam = {};
+				pageParam.taskId = taskId;
+				pageParam.status = status;
+				var url = BasePath + "/task/doSetShipStatus";
+				$.post(url, pageParam, function(result) {
+					if (result && Cl.successInt == result.code) {
+						alert(result.msg);
+						window.location.href = window.location.href;
 					} else {
-						alert("增加失败");
-						return;
+						alert(result.msg);
 					}
-				},
-				error : function(result) {
-					alert("系统异常，增加失败！");
-				},
-				clearForm : true,
-				resetForm : true,
-				timeout : 3000
-			};
-			$("#form_cl_cabin").ajaxSubmit(options);
-		},
-		/**
-		 * 修改
-		 */
-		update : function() {
-			var options = {
-				target : '#form_cl_cabin',
-				type : 'post',
-				dataType : 'json',
-				url : BasePath + "/cabin/update?taskId=" + taskId,
-				success : function(result) {
-					if (!result)
-						return;
-					 var code = result.code;
-					 if(Cl.successInt == code){
-						alert("修改成功");
-						Cl.hideModalWindow(Cl.modalName);
-						Cabin.list();
-					} else {
-						alert("修改失败");
-						return;
-					}
-				},
-				error : function(result) {
-					alert("系统异常，修改失败！");
-				},
-				clearForm : true,
-				resetForm : true,
-				timeout : 3000
-			};
-			$("#form_cl_cabin").ajaxSubmit(options);
-		},
-		/**
-		 * 删除
-		 */
-		remove : function(id) {
-			if (!confirm("确定要删除?")) {
-				return;
+				});
 			}
-			var url = BasePath + "/cabin/delete";
-			var data = {
-				"id" : id
-			};
-			Cl.ajaxRequest(url, data, function(result) {
-				if (!result)
-					return;
-				 var code = result.code;
-				 if(Cl.successInt == code){
-					Cl.deleteDataRow(DataTableCl.tableName, data.id, 1);
-					alert("删除成功");
-				} else {
-					alert("删除失败");
-					return;
-				}
-			});
+		},
+		/**
+		 * 点击设置船舱状态
+		 */
+		setCabinStatus_click : function(taskId, cabinNo, status) {
+			var con = confirm(status == '1' ? '请确认是否清舱！！' : (status == '2' ? '请确认是否完成！！' : ""));
+			if (con == true) {
+				//（0|卸货;1|清舱;2|完成）
+				var pageParam = {};
+				pageParam.taskId = taskId;
+				pageParam.status = status;
+				pageParam.cabinNo = cabinNo;
+				var url = BasePath + "/cabin/updateCabinStatus";
+				$.post(url, pageParam, function(result) {
+					if (result && Cl.successInt == result.code) {
+						alert(result.msg);
+						window.location.href = window.location.href;
+					} else {
+						alert(result.msg);
+					}
+				});
+			}
 		}
-
 	};
 }();

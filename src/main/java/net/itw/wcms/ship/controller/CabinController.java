@@ -2,6 +2,7 @@ package net.itw.wcms.ship.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,11 +20,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
+import net.itw.wcms.interfaceApi.http.InfoQueryHelper;
 import net.itw.wcms.ship.entity.Cabin;
 import net.itw.wcms.ship.entity.Cargo;
+import net.itw.wcms.ship.entity.Task;
 import net.itw.wcms.ship.service.ICabinService;
 import net.itw.wcms.ship.service.ICargoService;
 import net.itw.wcms.ship.service.ITaskService;
+import net.itw.wcms.ship.service.ITaskShipService;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
 import net.itw.wcms.x27.utils.ConstantUtil;
@@ -38,9 +45,13 @@ public class CabinController {
 	private ITaskService taskService;
 	@Autowired
 	private ICabinService cabinService;
+	@Autowired
+	private ITaskShipService taskShipService;
 	
 	@Autowired
 	private ICargoService cargoService;
+	
+	private InfoQueryHelper infoQueryHelper = new InfoQueryHelper();
 
 	protected HttpServletRequest req;
 	protected HttpServletResponse res;
@@ -107,6 +118,32 @@ public class CabinController {
 		try {
 			Pageable pageable = PageUtils.buildPageRequest(params);
 			result = cabinService.getCabinList(pageable, taskId, params);
+		} catch (Exception e) {
+			e.printStackTrace();
+			mo.msg = e.getMessage();
+			mo.code = ConstantUtil.FailInt;
+		}
+		result.put("msg", mo.msg);
+		result.put("code", mo.code);
+		return result;
+	}
+	
+	/**
+	 * 返回舱位信息列表
+	 * @param params
+	 * @param taskId
+	 * @param map
+	 * @return
+	 */
+	@RequestMapping(value = "/getCabinPositionList")
+	public Map<String, Object> getCabinPositionList(@RequestParam Map<String, String> params,
+			@RequestParam("taskId") Integer taskId, ModelMap map) {
+		// 从session取出User对象
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
+		Map<String, Object> result = null;
+		try {
+			Pageable pageable = PageUtils.buildPageRequest(params);
+			result = cabinService.getCabinPositionList(pageable, taskId, params);
 		} catch (Exception e) {
 			e.printStackTrace();
 			mo.msg = e.getMessage();
@@ -199,12 +236,55 @@ public class CabinController {
 	 * 修改舱位
 	 * 
 	 * @param taskId
-	 * @param cabinNo
 	 * @return
 	 */
 	@RequestMapping(value = "/modifyCabinPosition")
-	public ModelAndView modifyCabinPosition(Integer taskId, Integer cabinNo) {
+	public ModelAndView modifyCabinPosition(Integer taskId) {
+		modelMap.put("taskId", taskId);
+		Task task = taskService.getTaskById(taskId);
+		modelMap.put("cabinNum", task.getShip() != null ? task.getShip().getCabinNum() : 0);
+		modelMap.put("shipName", task != null && task.getShip() != null ? task.getShip().getShipName() : "");
 		return new ModelAndView(PATH + "modifyCabinPosition");
+	}
+	
+	/**
+	 * 设置舱位 <br>
+	 * 提供设置舱位服务，支持新增、修改舱位功能
+	 * @param taskId
+	 * @return
+	 */
+	@RequestMapping(value = "/doSetCabinPosition")
+	public Map<String, Object> doSetCabinPosition(@RequestParam("json") String json) {
+		// 从session取出User对象
+		User operator = SessionUtil.getSessionUser(req);
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			JSONObject jsonObject = JSONObject.parseObject(json);
+			String taskId = jsonObject.getString("taskId");
+			List<Map<String, Object>> list = new ArrayList<>();
+			JSONArray jsonArray = jsonObject.getJSONArray("data");
+			Iterator<Object> iterator = jsonArray.iterator();
+			while (iterator.hasNext()) {
+				JSONObject jo = (JSONObject) iterator.next();
+				if (jo == null) {
+					continue;
+				}
+				Map<String, Object> map = new HashMap<>();
+				for (String key : jo.keySet()) {
+					map.put(key, jo.get(key));
+				}
+				list.add(map);
+			}
+			MessageOption mo = taskShipService.setCabinPosition(taskId.toString(), operator.getUserName(), list);
+			result.put("msg", mo.msg);
+			result.put("code", mo.isSuccess() ? "1" : "0");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", "0");
+			result.put("msg", e.getMessage());
+			return result;
+		}
 	}
 	
 	/**
@@ -216,7 +296,66 @@ public class CabinController {
 	 */
 	@RequestMapping(value = "/view")
 	public ModelAndView viewCabinInfo(Integer taskId, Integer cabinNo) {
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("fuctionType", "FN_002");
+		jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "','$cabinNo':'" + cabinNo + "'}"));
+		Map<String, Object> result = infoQueryHelper.doQueryInfo(jsonObject);
+		modelMap.put("cabin", result.get("data"));
 		return new ModelAndView(PATH + "view");
+	}
+	
+	/**
+	 * 返回卸船情况列表
+	 * @param taskId
+	 * @return
+	 */
+	@RequestMapping(value = "/doGetUnloaderDetail")
+	public Map<String, Object> doGetUnloaderDetail(@RequestParam("taskId") Integer taskId, @RequestParam("cabinNo") Integer cabinNo) {
+		// 从session取出User对象
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
+		Map<String, Object> result = null;
+		try {
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("fuctionType", "FN_006");
+			jsonObject.put("order", "DESC");
+			jsonObject.put("sort", "startTime");
+			jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "','$cabinNo':'" + cabinNo + "'}"));
+			result = infoQueryHelper.doQueryInfo(jsonObject);
+		} catch (Exception e) {
+			e.printStackTrace();
+			mo.msg = e.getMessage();
+			mo.code = ConstantUtil.FailInt;
+		}
+		result.put("msg", mo.msg);
+		result.put("code", mo.code);
+		return result;
+	}
+	
+	/**
+	 * 设置船舶状态
+	 * 
+	 * @param taskId
+	 * @param cabinNo
+	 * @param status
+	 * @return
+	 */
+	@RequestMapping(value = "/updateCabinStatus")
+	public Map<String, Object> updateCabinStatus(@RequestParam("taskId") String taskId,
+			@RequestParam("cabinNo") String cabinNo, @RequestParam("status") String status) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			// 从session取出User对象
+			User operator = SessionUtil.getSessionUser(req);
+			MessageOption mo = this.taskShipService.updateCabinStatus(taskId, operator.getUserName(), cabinNo, status);
+			result.put("msg", mo.msg);
+			result.put("code", mo.isSuccess() ? "1" : "0");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", "0");
+			result.put("msg", e.getMessage());
+			return result;
+		}
 	}
 	
 }
