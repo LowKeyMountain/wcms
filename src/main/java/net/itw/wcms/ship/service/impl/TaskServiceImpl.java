@@ -18,7 +18,6 @@ import com.alibaba.fastjson.JSONObject;
 
 import net.itw.wcms.ship.entity.Cabin;
 import net.itw.wcms.ship.entity.Cargo;
-import net.itw.wcms.ship.entity.Ship;
 import net.itw.wcms.ship.entity.Task;
 import net.itw.wcms.ship.repository.CabinRepository;
 import net.itw.wcms.ship.repository.TaskRepository;
@@ -27,7 +26,6 @@ import net.itw.wcms.toolkit.DateTimeUtils;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
 import net.itw.wcms.x27.utils.ConstantUtil;
-import net.itw.wcms.x27.utils.StringUtil;
 
 
 @Service
@@ -70,8 +68,16 @@ public class TaskServiceImpl implements ITaskService {
 			jo.put("updateUser", t.getUpdateUser());
 			jo.put("updateTime", t.getUpdateTime() == null ? "" : DateTimeUtils.date2StrDateTime(t.getUpdateTime()));
 			String operation = "<a href='javascript:Task.update_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i> 修改</a>";
-			if (status == 0) {
+			switch (status) {
+			case 0:
+				operation += "<a href='javascript:Task.unshipInfo_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>卸船情况</a>";
 				operation += "<a href='javascript:Task.remove(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-times'></i> 删除</a>";
+				break;
+			case 1:
+				operation += "<a href='javascript:Task.unshipInfo_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>卸船情况</a>";
+				break;	
+			default:
+				break;
 			}
 			jo.put("operation", operation);
 			jsonArray.add(jo);
@@ -185,15 +191,14 @@ public class TaskServiceImpl implements ITaskService {
 	@Override
 	public Integer updateTask(Task task, User operator) {
 		
-		Task persisObj = taskRepository.getTaskById(task.getId());
+		Task persist = taskRepository.getTaskById(task.getId());
 		
 		task.setUpdateUser(operator.getUserName());
 		task.setUpdateTime(new Date());
-		task.setStatus(persisObj.getStatus());
-		Ship ship = task.getShip();
-		if (ship != null) {
-			ship.setId(persisObj.getShip().getId());
-		}
+		task.setStatus(persist.getStatus());
+		task.setBeginTime(persist.getBeginTime());
+		task.setEndTime(persist.getEndTime());
+		
 		autoCreateCargoCabinInfo(task, operator);
 		taskRepository.saveAndFlush(task);
 		

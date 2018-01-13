@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.itw.wcms.ship.entity.Cabin;
 import net.itw.wcms.ship.entity.Cargo;
-import net.itw.wcms.ship.exception.TaskException;
 import net.itw.wcms.ship.repository.CabinRepository;
 import net.itw.wcms.ship.repository.CargoRepository;
 import net.itw.wcms.ship.service.ICabinService;
@@ -99,25 +98,14 @@ public class CabinServiceImpl implements ICabinService {
 	}
 	
 	@Override
-	public int updateCabin(Cabin cabin, User operator) throws Exception {
+	public int updatePreunloadingAndCargo(Cabin cabin, User operator) throws Exception {
 		try {
-			cabin.setUpdateTime(new Date());
-			cabin.setUpdateUser(operator.getUserName());
-			Cabin po = cabinRepository.getOne(cabin.getId());
-			if (po != null) {
-				cabin.setStatus(po.getStatus());
-				cabin.setRemarks(po.getRemarks());
-				cabin.setClearTime(po.getClearTime());
-			}
-			List<Cabin> entities = new ArrayList<>();
-			Cabin nextCabin = getCabinByCargoIdAndCabinNo(cabin.getCargo().getId(), cabin.getCabinNo() + 1);
-			if (nextCabin != null) {
-				nextCabin.setStartPosition(cabin.getEndPosition());
-				entities.add(nextCabin);
-			}
-			entities.add(cabin);
-			cabinRepository.save(entities);
-//			cabinRepository.saveAndFlush(cabin);
+			Cabin persist = cabinRepository.getOne(cabin.getId());
+			persist.setUpdateTime(new Date());
+			persist.setUpdateUser(operator.getUserName());
+			persist.setPreunloading(cabin.getPreunloading());
+			persist.setCargo(cabin.getCargo());
+			cabinRepository.saveAndFlush(persist);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

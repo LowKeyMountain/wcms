@@ -56,7 +56,7 @@ public interface ICabinService {
 	 * @return
 	 * @throws Exception 
 	 */
-	int updateCabin(Cabin cabin, User operator) throws Exception;
+	int updatePreunloadingAndCargo(Cabin cabin, User operator) throws Exception;
 	
 	/**
 	 * 删除

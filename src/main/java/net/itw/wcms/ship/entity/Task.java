@@ -48,6 +48,7 @@ public class Task implements Entityable {
 	private Integer berth; // 泊位（矿一|1、矿二|2）
 	private String depth; // 吃水
 	private String freeboardDepth; // 干舷高度
+	private Float offset; // 船偏移量 
 
 	private String updateUser;
 	private Date updateTime;
@@ -197,4 +198,13 @@ public class Task implements Entityable {
 		this.freeboardDepth = freeboardDepth;
 	}
 
+	@Column(name="offset")
+	public Float getOffset() {
+		return offset;
+	}
+
+	public void setOffset(Float offset) {
+		this.offset = offset;
+	}
+	
 }

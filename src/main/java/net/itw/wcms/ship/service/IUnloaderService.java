@@ -1,11 +1,11 @@
 package net.itw.wcms.ship.service;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.Pageable;
 
-import net.itw.wcms.ship.entity.Task;
+import net.itw.wcms.ship.entity.Unloader;
+import net.itw.wcms.ship.entity.UnloaderAll;
 import net.itw.wcms.x27.entity.User;
 
 /**
@@ -26,4 +26,21 @@ public interface IUnloaderService {
 	 * @return
 	 */
 	String getUnloaderList(Pageable pageable, Map<String, String> params);
+	
+	/**
+	 * 添加卸船机作业信息
+	 * 
+	 * @param unloader
+	 * @param operator
+	 * @return
+	 */
+	void createUnloader(Unloader unloader, User operator) throws Exception;
+	
+	/**
+	 * 添加卸船机作业信息
+	 * 
+	 * @param unloader
+	 * @return
+	 */
+	int addUnloader(UnloaderAll unloader, String tablename) throws Exception;
 }

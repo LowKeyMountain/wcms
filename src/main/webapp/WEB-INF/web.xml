@@ -104,7 +104,16 @@
     <filter-mapping>    
         <filter-name>securityFilter</filter-name>    
         <url-pattern>/*</url-pattern>    
-    </filter-mapping> 
+    </filter-mapping>
+
+	<!-- 指定监听器加载的log4j配置文件 -->
+	<context-param>
+		<param-name>log4j</param-name>
+		<param-value>classpath:log4j.properties</param-value>
+	</context-param>
+	<listener>
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+	</listener>
 	
 	<!-- SpringMVC核心分发器 -->
 	<servlet>

@@ -262,16 +262,19 @@ public class InfoQueryHelper {
 					for (String param : queryFieldsJson.keySet()) {
 						String dataType = queryFieldsJson.getString(param);
 						if ("string".equalsIgnoreCase(dataType)) {
-							resultMap.put(param, rs.getString(param));
+							String str = rs.getString(param);
+							resultMap.put(param, StringUtils.isNotEmpty(str) ? str : "--");
 						} else if ("integer".equalsIgnoreCase(dataType) || "number".equalsIgnoreCase(dataType)) {
 							resultMap.put(param, rs.getInt(param));
 						} else if ("time".equalsIgnoreCase(dataType)) {
-							Date date = rs.getDate(param);
-							if (date != null) {
-								resultMap.put(param, Simple_Time_Format.format(date));
-							} else {
-								resultMap.put(param, "--");
-							}
+//							Date date = rs.getDate(param);
+//							if (date != null) {
+//								resultMap.put(param, Simple_Time_Format.format(date));
+//							} else {
+//								resultMap.put(param, "--");
+//							}
+							String str = rs.getString(param);
+							resultMap.put(param, StringUtils.isNotEmpty(str) ? str.substring(0, str.length() - 2) : "--");
 						} else if ("date".equalsIgnoreCase(dataType)) {
 							Date date = rs.getDate(param);
 							if (date != null) {
@@ -415,16 +418,19 @@ public class InfoQueryHelper {
 					for (String param : queryFieldsJson.keySet()) {
 						String dataType = queryFieldsJson.getString(param);
 						if ("string".equalsIgnoreCase(dataType)) {
-							resultMap.put(param, rs.getString(param));
+							String str = rs.getString(param);
+							resultMap.put(param, StringUtils.isNotEmpty(str) ? str : "--");
 						} else if ("integer".equalsIgnoreCase(dataType) || "number".equalsIgnoreCase(dataType)) {
 							resultMap.put(param, rs.getInt(param));
 						} else if ("time".equalsIgnoreCase(dataType)) {
-							Date date = rs.getDate(param);
-							if (date != null) {
-								resultMap.put(param, Simple_Time_Format.format(date));
-							} else {
-								resultMap.put(param, "--");
-							}
+//							Date date = rs.getDate(param);
+//							if (date != null) {
+//								resultMap.put(param, Simple_Time_Format.format(date));
+//							} else {
+//								resultMap.put(param, "--");
+//							}
+							String str = rs.getString(param);
+							resultMap.put(param, StringUtils.isNotEmpty(str) ? str.substring(0, str.length() - 2) : "--");
 						} else if ("date".equalsIgnoreCase(dataType)) {
 							Date date = rs.getDate(param);
 							if (date != null) {

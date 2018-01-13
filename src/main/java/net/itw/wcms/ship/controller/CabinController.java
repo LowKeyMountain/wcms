@@ -166,7 +166,7 @@ public class CabinController {
 		User operator = SessionUtil.getSessionUser(req);
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "数据修改成功！");
 		try {
-			mo.code = cabinService.updateCabin(cabin, operator);
+			mo.code = cabinService.updatePreunloadingAndCargo(cabin, operator);
 		} catch (Exception e) {
 			e.printStackTrace();
 			mo.code = ConstantUtil.FailInt;
@@ -193,6 +193,30 @@ public class CabinController {
 			mo.msg = e.getMessage();
 		}
 		return mo;
+	}
+	
+	/**
+	 * 修改舱位
+	 * 
+	 * @param taskId
+	 * @param cabinNo
+	 * @return
+	 */
+	@RequestMapping(value = "/modifyCabinPosition")
+	public ModelAndView modifyCabinPosition(Integer taskId, Integer cabinNo) {
+		return new ModelAndView(PATH + "modifyCabinPosition");
+	}
+	
+	/**
+	 * 查看船舱信息
+	 * 
+	 * @param taskId
+	 * @param cabinNo
+	 * @return
+	 */
+	@RequestMapping(value = "/view")
+	public ModelAndView viewCabinInfo(Integer taskId, Integer cabinNo) {
+		return new ModelAndView(PATH + "view");
 	}
 	
 }

@@ -1,10 +1,10 @@
-$(function(){
-	
+	function initTable(){
+		
 		$('#unloader').bootstrapTable("destroy").bootstrapTable({  // init via javascript
 			
 			method : 'post',
 			contentType : "application/x-www-form-urlencoded",
-			url:BasePath + "/unloader/getUnloaderList",
+			url:BasePath + "/unloader/getUnloaderList?rnd=" + Math.random(),
 			dataType : 'json',
 //			 dataField: 'res',//bootstrap table 可以前端分页也可以后端分页
 			 striped : true, // 是否显示行间隔色
@@ -16,21 +16,21 @@ $(function(){
 			 queryParams : 'queryParams',
 			 sidePagination : 'server',
 			 pageNumber : 1, // 初始化加载第一页，默认第一页			 
-			 pageSize : 50,// 单页记录数
-			 pageList : [50,100,150,300],// 分页步进值
+			 pageSize : 20,// 单页记录数
+			 pageList : [20,50,100,150,300],// 分页步进值
 			 showPaginationSwitch : true,// 是否显示选择分页数按钮
 			 showHeader : true,
 			 showRefresh : true,// 刷新按钮
 			 // showToggle : true,// 是否显示 切换试图（table/card）按钮
 			 showColumns : true,// 是否显示 内容列下拉框
-//			  queryParams: getPageMessage,
+//			 queryParams: getPageMessage,
 //			 search : true, // 显示搜索框
-			 paginationPreText : '<',// 指定分页条中上一页按钮的图标或文字,这里是<
-			 paginationNextText : '>',// 指定分页条中下一页按钮的图标或文字,这里是>
+			 paginationPreText : '上一页',// 指定分页条中上一页按钮的图标或文字,这里是<
+			 paginationNextText : '下一页',// 指定分页条中下一页按钮的图标或文字,这里是>
 			 singleSelect: true,
 			 clickToSelect : true,// 是否启用点击选中行
 			 toolbar : '#toolbar',
-			 toolbarAlign : 'left',
+			 toolbarAlign : 'right',
 			 buttonsAlign : 'left',// 按钮对齐方式
 //			 showExport : true, // 是否显示导出
 //			 exportDataType : "basic", // basic', 'all', 'selected'.
@@ -59,25 +59,27 @@ $(function(){
 			
 			idField : "id",// 指定主键列
 		    columns: [
-		    /*{
+/*		    {
 		    	title:'全选',
 		        field:'select',
 		        //复选框
 		        checkbox:true,
 		        width:25,
 		        align:'center'
-		    }, */{
+		    }, {
 		        field: 'id',
 		        title: 'id',
 		        align: 'center'
-		    }, {
+		    }, */{
 		        field: 'Cmsid',
 		        title: 'Cms卸船机编号',
-		        align: 'center'
+		        align: 'center',
+		        width: '10%'
 		    }, {
 		        field: 'operationType',
 		        title: '操作类型',
 		        align: 'center',
+		        width: '8%',
                 formatter: function (value, row, index) {//自定义显示，这三个参数分别是：value该行的属性，row该行记录，index该行下标  
                     return row.operationType == 0 ? "<font color=grey>位移</font>" : row.operationType == 1 ? "<font color=red>作业</font>" : "<font color=lightgreen>在线</font>";  
                 } 
@@ -85,24 +87,28 @@ $(function(){
 		        field: 'time',
 		        title: '操作时间',
 		        align: 'center',
+		        width: '16%',
 		        sortable:true
 		    }, {
 		        field: 'pushTime',
 		        title: '推送时间',
 		        align: 'center',
+		        width: '16%',
 		        sortable:true
-		    },{
+		    },/*{
 		        field: 'direction',
 		        title: '方向',
 		        align: 'center'
-		    }, {
+		    }, */{
 		        field: 'unloaderMove',
 		        title: '卸船机移动位置',
-		        align: 'center'
+		        align: 'center',
+		        width: '12%'
 		    }, {
 		        field: 'OneTask',
 		        title: '一次抓钩作业量',
-		        align: 'center'
+		        align: 'center',
+		        width: '12%'
 		    }],
 			locale : 'zh-CN',// 中文支持,
 			responseHandler : function(res) {
@@ -110,10 +116,17 @@ $(function(){
 				return res;
 			}
 	});
+		
+	}
+
+$(function(){
+		initTable();
+		
 		//查询按钮
         $("#btn_query").off().on(
         		"click",function(){
-        			$('#unloader').bootstrapTable('refresh');                    
+        			//$('#unloader').bootstrapTable('refresh');     
+        			initTable();
         })
         //重置按钮事件  
         $("#btn_reset").off().on("click",function(){  
@@ -122,5 +135,35 @@ $(function(){
             $("#cmsid").val("");
             $("#startPosition").val("");
             $("#endPosition").val("");
-        });          
+        });
+        $('#btn_submit').modal({backdrop: 'static', show:false,  keyboard: false});
+        
+        $('#btn_submit').off().on("click", function () {
+        	var data={
+        			fcmsid:$("#fcmsid").val(),
+        			operationtype:$("#operationtype").val(),
+        			direction:$("#direction").val(),
+        			move:$("#move").val(),			             
+        			onetask: $("#onetask").val()
+        	}
+            $.ajax({
+                url: BasePath + "/unloader/addUnloader",
+                type: "post",
+                dataType: "json",
+                cache: false,
+                async:false,
+                data: data,
+                success: function (data) {
+                	if (data.success == true){
+                		alert(data.msg);
+                    	$('#unloader').bootstrapTable("refresh");
+                	} else {
+                		alert(data.msg);                		
+                	}
+                },
+                failure: function(data){
+                    alert("保存失败!");
+                }                
+            });
+        });        
 });

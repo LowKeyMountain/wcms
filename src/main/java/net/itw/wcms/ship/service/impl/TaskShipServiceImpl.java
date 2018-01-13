@@ -18,6 +18,7 @@ import net.itw.wcms.ship.repository.CargoRepository;
 import net.itw.wcms.ship.repository.ShipRepository;
 import net.itw.wcms.ship.repository.TaskRepository;
 import net.itw.wcms.ship.service.ITaskShipService;
+import net.itw.wcms.toolkit.DataSyncHelper;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
 import net.itw.wcms.x27.exception.X27Exception;
@@ -43,6 +44,9 @@ public class TaskShipServiceImpl implements ITaskShipService {
 	private CabinRepository cabinRepository;
 	@Autowired
 	private CargoRepository cargoRepository;
+	
+	@Autowired
+	private DataSyncHelper dataSyncHelper;
 
 	/**
 	 * 设置船舱位置
@@ -109,7 +113,8 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			}
 
 			cabinRepository.save(cabins.values());
-
+			// 重新计算作业船舶各舱组信息
+//			dataSyncHelper.recomputationCabinGroup(Integer.parseInt(taskId));
 		} catch (Exception e) {
 			mo.msg = e.getMessage();
 			mo.code = ConstantUtil.FailInt;
@@ -460,6 +465,14 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			switch (shipStatus) {
 			case 0:
 				if ("0".equals(status)) {
+					// 检查当前泊位是否被占用
+					List<Task> tasks = taskRepository.getTaskByStatus(1);
+					for (Task e : tasks) {
+						if (task.getBerth() == e.getBerth()) {
+							throw new X27Exception("操作失败: " + "矿"
+									+ (e.getBerth() == 1 ? "一" : (e.getBerth() == 2 ? "二" : "其他")) + "已被占用！");
+						}
+					}
 					// 开始卸船
 					task.setStatus(1);
 					task.setBeginTime(new Date());
@@ -503,6 +516,8 @@ public class TaskShipServiceImpl implements ITaskShipService {
 					task.setUpdateTime(new Date());
 					task.setUpdateUser(operator.getUserName());
 					taskRepository.saveAndFlush(task);
+					// 更新组结束时间
+					dataSyncHelper.updateGroupEndTime(task.getId());
 				} else {
 					throw new X27Exception("操作失败: 船舶状态参数有误！");
 				}

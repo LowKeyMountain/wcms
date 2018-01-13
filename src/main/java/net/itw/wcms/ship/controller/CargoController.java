@@ -20,6 +20,7 @@ import net.itw.wcms.ship.entity.Cargo;
 import net.itw.wcms.ship.entity.Task;
 import net.itw.wcms.ship.service.ICargoService;
 import net.itw.wcms.ship.service.ITaskService;
+import net.itw.wcms.ship.service.ITaskShipService;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
 import net.itw.wcms.x27.exception.X27Exception;
@@ -35,6 +36,8 @@ public class CargoController {
 	private ITaskService taskService;
 	@Autowired
 	private ICargoService cargoService;
+	@Autowired
+	private ITaskShipService taskShipService;
 
 	protected HttpServletRequest req;
 	protected HttpServletResponse res;
@@ -190,4 +193,19 @@ public class CargoController {
 		return mo;
 	}
 	
+	/**
+	 * 查看船舶货物信息
+	 * @param taskId
+	 * @param cabinNo
+	 * @return
+	 */
+	@RequestMapping("/view")
+	public ModelAndView cargoInfoview(Integer taskId, Integer cabinNo) {
+		taskId = 59;
+		cabinNo = 2;
+		Map<String, Object> map = taskShipService.doGetCargoDetail(taskId, cabinNo);
+		Map<String, Object> data = (Map<String, Object>)map.get("data");
+		modelMap.put("cargo", data);
+		return new ModelAndView(PATH + "view");
+	}
 }

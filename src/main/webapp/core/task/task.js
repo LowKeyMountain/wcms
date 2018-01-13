@@ -470,6 +470,12 @@ var Task = function() {
 			$("#form_cl").ajaxSubmit(options);
 		},
 		/**
+		 * 卸船情况
+		 */
+		unshipInfo_click : function(id) {
+			window.location.href = BasePath + "/task/unshipInfo?id=56";
+		},
+		/**
 		 * 删除
 		 */
 		remove : function(id) {

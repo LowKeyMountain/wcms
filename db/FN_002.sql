@@ -1,3 +1,5 @@
+  select * from (
+
 SELECT
 	t.*, CASE
 WHEN round(qcl.clearance, 1) IS NULL THEN
@@ -31,28 +33,30 @@ FROM
 		)
 	END AS 'remainder'
 	FROM
-		(
-			SELECT
-				xcqk.*, cargo.cargo_type AS 'cargoName'
-			FROM
-				(
-					SELECT
-						cabin.task_id,
-						cabin.cabin_no AS 'cabinNo',
-						cabin.cargo_id AS 'cargoId',
-						cabin.preunloading AS 'total',
-						cabin.start_position AS 'startPosition',
-						cabin.end_position AS 'endPosition',
-						cabin. STATUS AS 'status',
-						task.begin_time,
-						task.end_time,
-						cabin.clear_time
-					FROM
-						tab_task task
-					LEFT JOIN tab_cabin cabin ON task.id = cabin.task_id
-				) xcqk
-			LEFT JOIN tab_cargo cargo ON xcqk.cargoId = cargo.id
-		) z_xcqk
+(
+	SELECT
+		cabin.task_id,
+		cabin.cargo_type AS 'cargoName',
+		cabin.cabin_no AS 'cabinNo',
+		cabin.cargo_id AS 'cargoId',
+		cabin.preunloading AS 'total',
+		cabin.start_position AS 'startPosition',
+		cabin.end_position AS 'endPosition',
+		cabin. STATUS AS 'status',
+		task.begin_time,
+		task.end_time,
+		cabin.clear_time
+	FROM
+		tab_task task
+	LEFT JOIN (
+		SELECT
+			cabin.*, cargo.task_id,
+			cargo.cargo_type
+		FROM
+			tab_cabin cabin
+		LEFT JOIN tab_cargo cargo ON cabin.cargo_id = cargo.id
+	) cabin ON task.id = cabin.task_id
+) z_xcqk
 	LEFT JOIN (
 		SELECT
 			SUM(c.OneTask) AS 'finished',
@@ -60,32 +64,34 @@ FROM
 			o.task_id
 		FROM
 			(
-				SELECT
-					t.*, c.cargo_type AS 'cargoName'
-				FROM
-					(
-						SELECT
-							cabin.task_id,
-							cabin.cabin_no AS 'cabinNo',
-							cabin.cargo_id AS 'cargoId',
-							cabin.preunloading AS 'total',
-							cabin.start_position AS 'startPosition',
-							cabin.end_position AS 'endPosition',
-							cabin. STATUS AS 'status',
-							task.begin_time,
-							CASE
-						WHEN task.end_time IS NULL THEN
-							CURRENT_TIMESTAMP ()
-						ELSE
-							task.end_time
-						END AS 'end_time',
-						cabin.clear_time
-					FROM
-						tab_task task
-					LEFT JOIN tab_cabin cabin ON task.id = cabin.task_id
-					) t
-				LEFT JOIN tab_cargo c ON t.cargoId = c.id
-			) o
+SELECT
+	cabin.task_id,
+	cabin.cargo_type AS 'cargoName',
+		cabin.cabin_no AS 'cabinNo',
+		cabin.cargo_id AS 'cargoId',
+		cabin.preunloading AS 'total',
+		cabin.start_position AS 'startPosition',
+		cabin.end_position AS 'endPosition',
+		cabin. STATUS AS 'status',
+		task.begin_time,
+		CASE
+	WHEN task.end_time IS NULL THEN
+		CURRENT_TIMESTAMP ()
+	ELSE
+		task.end_time
+	END AS 'end_time',
+	cabin.clear_time
+FROM
+	tab_task task
+LEFT JOIN (
+	SELECT
+		cabin.*, cargo.task_id,
+		cargo.cargo_type
+	FROM
+		tab_cabin cabin
+	LEFT JOIN tab_cargo cargo ON cabin.cargo_id = cargo.id
+) cabin ON task.id = cabin.task_id
+) o
 		LEFT JOIN (
 			SELECT
 				t1.Cmsid,
@@ -150,35 +156,34 @@ LEFT JOIN (
 		o.cabinNo,
 		o.task_id
 	FROM
-		(
-			SELECT
-				t.*, c.cargo_type AS 'cargoName'
-			FROM
-				(
-					SELECT
-						cabin.task_id,
-						cabin.cabin_no AS 'cabinNo',
-						cabin.cargo_id AS 'cargoId',
-						cabin.preunloading AS 'total',
-						cabin.start_position AS 'startPosition',
-						cabin.end_position AS 'endPosition',
-						cabin. STATUS AS 'status',
-						task.begin_time,
-						CASE
-					WHEN task.end_time IS NULL THEN
-						CURRENT_TIMESTAMP ()
-					ELSE
-						task.end_time
-					END AS 'end_time',
-					cabin.clear_time
-				FROM
-					tab_task task
-				LEFT JOIN tab_cabin cabin ON task.id = cabin.task_id
-				) t
-			LEFT JOIN tab_cargo c ON t.cargoId = c.id
+		(SELECT
+		cabin.task_id,
+		cabin.cabin_no AS 'cabinNo',
+		cabin.cargo_id AS 'cargoId',
+		cabin.preunloading AS 'total',
+		cabin.start_position AS 'startPosition',
+		cabin.end_position AS 'endPosition',
+		cabin. STATUS AS 'status',
+		task.begin_time,
+		CASE
+	WHEN task.end_time IS NULL THEN
+		CURRENT_TIMESTAMP ()
+	ELSE
+		task.end_time
+	END AS 'end_time',
+	cabin.clear_time
+FROM
+	tab_task task
+LEFT JOIN (
+	SELECT
+		cabin.*, cargo.task_id,
+		cargo.cargo_type
+	FROM
+		tab_cabin cabin
+	LEFT JOIN tab_cargo cargo ON cabin.cargo_id = cargo.id
+) cabin ON task.id = cabin.task_id
 			WHERE
-				t.clear_time IS NOT NULL
-		) o
+				cabin.clear_time IS NOT NULL) o
 	LEFT JOIN (
 		SELECT
 			t1.Cmsid,
@@ -235,4 +240,6 @@ LEFT JOIN (
 		o.cabinNo,
 		o.task_id
 ) qcl ON t.task_id = qcl.task_id
-AND t.cabinNo = qcl.cabinNo
+AND t.cabinNo = qcl.cabinNo  
+
+) t where 1=1  
