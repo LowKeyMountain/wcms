@@ -37,6 +37,8 @@ public interface UnloaderRepository extends JpaRepository<UnloaderAll, Integer>,
 				String endPosition = (params.get("endPosition") == null ? "0" : params.get("endPosition"));
 				String startDate = (params.get("startDate") == null ? "" : params.get("startDate"));
 				String endDate = (params.get("endDate") == null ? "" : params.get("endDate"));
+				String operationType = (params.get("operationType") == null ? "" : params.get("operationType"));
+
 				if(StringUtils.isNotEmpty(startPosition)) {
 					predicates.add(cb.ge(root.get("unloaderMove"),Float.parseFloat(startPosition)));
 				}
@@ -49,6 +51,9 @@ public interface UnloaderRepository extends JpaRepository<UnloaderAll, Integer>,
 				}
 				if(StringUtils.isNotEmpty(endDate)) {
 					predicates.add(cb.lessThanOrEqualTo(root.get("time"), DateTimeUtils.strDateTime2Date(endDate)));
+				}
+				if(StringUtils.isNotEmpty(operationType)) {
+					predicates.add(cb.equal(root.get("operationType"), operationType));
 				}
 				if("1".equals(cmsId)) {
 					predicates.add(cb.equal(root.get("cmsId"), "ABB_GSU_1"));

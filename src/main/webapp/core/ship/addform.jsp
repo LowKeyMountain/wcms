@@ -43,7 +43,7 @@
 							</div>
 						</div>
 						<div class="form-group  margin-top-20">
-							<label class="control-label col-md-3">入港时间 <span
+							<label class="control-label col-md-3">靠泊时间 <span
 								class="required"> </span>
 							</label>
 							<div class="col-md-8">
@@ -56,7 +56,7 @@
 						</div>
 						
 						<div class="form-group  margin-top-20">
-							<label class="control-label col-md-3">离港时间 <span
+							<label class="control-label col-md-3">离泊时间 <span
 								class="required"> </span>
 							</label>
 							<div class="col-md-8">

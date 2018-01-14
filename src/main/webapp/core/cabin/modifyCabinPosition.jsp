@@ -109,56 +109,45 @@ License: You must have a valid license purchased only from themeforest(the above
 							<div class="portlet box yellow">
 								<div class="portlet-title">
 									<div class="caption">
-										<i><a href="#">货船A</a></i>
+										<i><a href="javascript:ModifyCabin.view_ship_click(${taskId})">${shipName}</a></i>
 									</div>
 									<div class="tools">
-										<a onclick="javascript:history.back(-1);" class="fa fa-reply"
-											data-original-title="返回" title="返回"> </a> <a
-											onclick="javascript:;" class="reload" data-original-title="刷新"
-											title="刷新"> </a>
+										<a onclick="javascript:ModifyCabin.list();" class="reload"
+											data-original-title="刷新" title="刷新"> </a>
 									</div>
 								</div>
 								<div class="portlet-body" style="display: block;">
 									<div class="table-responsive">
-										<table
+									<form action="#" id="form_modify_cabin" name="form_cl_modify" class="form-horizontal">
+											<!-- 
+											<div class="alert alert-danger display-hide">
+												<button class="close" data-close="alert"></button>
+												数据格式异常. 请重新输入.
+											</div>
+											<div class="alert alert-success display-hide">
+												<button class="close" data-close="alert"></button>
+												数据校验通过!
+											</div>
+											 -->
+											<table
 											class="table table-striped table-bordered table-hover editable">
 											<thead>
 												<tr>
 													<th>船舱编号</th>
 													<th>开始位置</th>
 													<th>结束位置</th>
-													<th>操作</th>
 												</tr>
 											</thead>
 											<tbody id="cabin_tbody">
-
-												<tr>
-													<th scope="row">1</th>
-													<td>0</td>
-													<td>20</td>
-													<td>
-														<!-- <a href="javascript:void(0)" class="edit"></a> -->
-													</td>
-												</tr>
-												<tr>
-													<th scope="row">2</th>
-													<td>21</td>
-													<td>40</td>
-													<td>
-														<!-- <a href="javascript:void(0)" class="edit"></a> -->
-													</td>
-												</tr>
-												<tr>
-													<th scope="row">3</th>
-													<td>41</td>
-													<td>60</td>
-													<td>
-														<!-- <a href="javascript:void(0)" class="edit"></a> -->
-													</td>
-												</tr>
-
 											</tbody>
 										</table>
+										<div style="text-align:center">
+											<button type="button" class="btn default"
+												data-dismiss="modal" onclick="javascript:history.back(-1);">返回</button>
+											<button type="submit" class="btn blue"
+												onclick="javascript:;">完成</button>
+										</div>
+										</form>
 									</div>
 								</div>
 							</div>
@@ -225,59 +214,22 @@ License: You must have a valid license purchased only from themeforest(the above
 	<script type="text/javascript">
 		var IncPath = '${IncPath}';
 		var BasePath = '${BasePath}';
-		var taskId;
+		var taskId = '${taskId}';
+		var cabinNum = ${cabinNum};
 	</script>
 	
 	<script src="${IncPath}/cl.js?v=${jsVersion}" type="text/javascript"></script>
 	<script src="${IncPath}/scripts/jquery-editTable/editTable.js?v=${jsVersion}" type="text/javascript"></script>
+	<script src="${IncPath}/core/cabin/modifyCabinPosition.js?v=${jsVersion}" type="text/javascript"></script>
+	<script src="${IncPath}/scripts/json2.js?v=${jsVersion}" type="text/javascript"></script>
+	
 	<!-- BEGIN THEME LAYOUT SCRIPTS -->
 	<!-- END THEME LAYOUT SCRIPTS -->
     <script>
         $(function() {
-            //$('.edit').handleTable({"cancel" : "<span class='glyphicon glyphicon-remove'></span>"});
-            $('.editable').handleTable({
-                "handleFirst" : true,
-                "cancel" : "&nbsp;<span class='glyphicon glyphicon-remove'></span>&nbsp;",
-                "edit" : "&nbsp;<span class='glyphicon glyphicon-edit'></span>&nbsp;",
-                "add" : "&nbsp;<span class='glyphicon glyphicon-plus'></span>&nbsp;",
-                "save" : "&nbsp;<span class='glyphicon glyphicon-saved'></span>&nbsp;",
-                "confirm" : "&nbsp;<span class='glyphicon glyphicon-ok'></span>&nbsp;",
-                "operatePos" : -1,
-                "editableCols" : [1,2],
-//                "order": ["add","edit"],
-				"order": ["edit"],
-                "saveCallback" : function(data, isSuccess) { //这里可以写ajax内容，用于保存编辑后的内容
-                    //data: 返回的数据
-                    //isSucess: 方法，用于保存数据成功后，将可编辑状态变为不可编辑状态
-                    var flag = true; //ajax请求成功（保存数据成功），才回调isSuccess函数（修改保存状态为编辑状态）
-                    if(flag) {
-                        isSuccess();
-                        alert(data + " 保存成功");
-                    } else {
-                        alert(data + " 保存失败");
-                    }
-
-                    return true;
-                },
-                "addCallback" : function(data,isSuccess) {
-                    var flag = true;
-                    if(flag) {
-                        isSuccess();
-                        alert(data + " 增加成功");
-                    } else {
-                        alert(data + " 增加失败");
-                    }
-                },
-                "delCallback" : function(isSuccess) {
-                    var flag = true;
-                    if(flag) {
-                        isSuccess();
-                        alert("删除成功");
-                    } else {
-                        alert("删除失败");
-                    }
-                }
-            });
+        	CabinModifyFormCl.init();
+    		FormValidation.init();
+        	ModifyCabin.list();
         });
     </script>
 </body>

@@ -1,8 +1,12 @@
 package net.itw.wcms.toolkit;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -22,19 +26,35 @@ public class OnStartupServlet {
 		if (initialized)
 			return;
 		initialized = true;
-		// 启动卸船机数据同步功能
-		dataSyncHelper.init();
-		new Timer().schedule(new TimerTask() {
-			@Override
-			public void run() {
-				try {
-					dataSyncHelper.start();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-					dataSyncHelper.stop();
+
+		boolean isAllowStartup = false;
+		try {
+			Properties pro = new Properties();
+			pro.load(getClass().getResourceAsStream("/wcms.properties"));
+			String str = (String) pro.get("unloaderDataSyn.isAllowStartup");
+			isAllowStartup = StringUtils.isEmpty(str) ? true : Boolean.parseBoolean(str);
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+
+		if (isAllowStartup) {
+			// 启动卸船机数据同步功能
+			dataSyncHelper.init();
+			new Timer().schedule(new TimerTask() {
+				@Override
+				public void run() {
+					try {
+						dataSyncHelper.start();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+						dataSyncHelper.stop();
+					}
 				}
-			}
-		}, 1000);
+			}, 1000);
+		}
+
 	}
 
 	public void dispose() {

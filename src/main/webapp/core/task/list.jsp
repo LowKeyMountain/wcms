@@ -149,13 +149,13 @@ License: You must have a valid license purchased only from themeforest(the above
 											<div class="panel-body">
 												<ul class="nav nav-pills">
 
-													<li class=""
+													<li class="" id="li_ykcb"
 														style="border-style: solid; border-width: 1.4px; border-color: #2f353b;"><a
 														href="#ykcb" onclick="javascript:loadList('0');" data-toggle="tab">预靠船舶</a></li>
-													<li class="active"
+													<li class=""  id="li_zycb"
 														style="border-style: solid; border-width: 1.4px; border-color: #2f353b;"><a
 														href="#zycb" onclick="javascript:loadList('1');" data-toggle="tab">作业船舶</a></li>
-													<li class=""
+													<li class="" id="li_lgcb"
 														style="border-style: solid; border-width: 1.4px; border-color: #2f353b;"><a
 														href="#lgcb" onclick="javascript:loadList('2');" data-toggle="tab">离港船舶</a>
 												</ul>
@@ -182,7 +182,7 @@ License: You must have a valid license purchased only from themeforest(the above
 														<table id="ykcbship"
 															class="table table-striped table-bordered table-hover table-checkable order-column"></table>
 													</div>
-													<div class="tab-pane fade active in" id="zycb" >
+													<div class="tab-pane fade" id="zycb" > <!-- active in -->
 														<table id="zycbship"
 															class="table table-striped table-bordered table-hover table-checkable order-column"></table>
 													</div>
@@ -279,6 +279,7 @@ License: You must have a valid license purchased only from themeforest(the above
 	<script type="text/javascript">
 		var IncPath = '${IncPath}';
 		var BasePath = '${BasePath}';
+		var type = '${type}';
 	</script>
 	<script src="${IncPath}/cl.js?v=${jsVersion}" type="text/javascript"></script>
 	<script src="${IncPath}/core/task/task.js?v=${jsVersion}" type="text/javascript"></script>
@@ -292,6 +293,16 @@ License: You must have a valid license purchased only from themeforest(the above
 			$('#ykcbship').bootstrapTable("destroy").bootstrapTable(Task.options('0'));
 			$('#zycbship').bootstrapTable("destroy").bootstrapTable(Task.options('1'));
 			$('#lgcbship').bootstrapTable("destroy").bootstrapTable(Task.options('2'));
+			if ('0' == type) {
+				$('#li_ykcb').addClass("active");
+				$('#ykcb').addClass("active in");
+			} else if ('2' == type) {
+				$('#li_lgcb').addClass("active");
+				$('#lgcb').addClass("active in");
+			} else {
+				$('#li_zycb').addClass("active");
+				$('#zycb').addClass("active in");
+			}
 		});
 	</script>
 </body>

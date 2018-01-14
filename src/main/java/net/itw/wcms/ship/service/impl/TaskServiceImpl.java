@@ -76,6 +76,9 @@ public class TaskServiceImpl implements ITaskService {
 			case 1:
 				operation += "<a href='javascript:Task.unshipInfo_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>卸船情况</a>";
 				break;	
+			case 2:
+				operation += "<a href='javascript:Task.unshipInfo_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>卸船情况</a>";
+				break;	
 			default:
 				break;
 			}

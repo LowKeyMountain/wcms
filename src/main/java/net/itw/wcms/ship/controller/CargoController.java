@@ -201,8 +201,8 @@ public class CargoController {
 	 */
 	@RequestMapping("/view")
 	public ModelAndView cargoInfoview(Integer taskId, Integer cabinNo) {
-		taskId = 59;
-		cabinNo = 2;
+//		taskId = 59;
+//		cabinNo = 2;
 		Map<String, Object> map = taskShipService.doGetCargoDetail(taskId, cabinNo);
 		Map<String, Object> data = (Map<String, Object>)map.get("data");
 		modelMap.put("cargo", data);

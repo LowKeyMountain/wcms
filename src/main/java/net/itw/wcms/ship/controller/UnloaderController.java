@@ -138,7 +138,6 @@ public class UnloaderController {
 		res.getWriter().write(jsonObject.toString());
 
 	}
-		
 	
 	/**
 	 * 添加卸船机作业信息

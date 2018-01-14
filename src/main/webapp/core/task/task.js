@@ -210,7 +210,7 @@ var Task = function() {
 //					align : 'center'
 //				}, {
 //					field : 'berthingTime',
-//					title : '入港时间',
+//					title : '靠泊时间',
 //					align : 'center'
 //				}, {
 //					field : 'beginTime',
@@ -263,7 +263,7 @@ var Task = function() {
 					align : 'center'
 				}, {
 					field : 'berthingTime',
-					title : '入港时间',
+					title : '靠泊时间',
 					align : 'center'
 				}, {
 					field : 'operation',
@@ -295,7 +295,7 @@ var Task = function() {
 					align : 'center'
 				}, {
 					field : 'berthingTime',
-					title : '入港时间',
+					title : '靠泊时间',
 					align : 'center'
 				}, {
 					field : 'beginTime',
@@ -336,7 +336,7 @@ var Task = function() {
 					align : 'center'
 				}, {
 					field : 'berthingTime',
-					title : '入港时间',
+					title : '靠泊时间',
 					align : 'center'
 				}, {
 					field : 'beginTime',
@@ -349,7 +349,7 @@ var Task = function() {
 					align : 'center'
 				}, {
 					field : 'departureTime',
-					title : '离港时间',
+					title : '离泊时间',
 					align : 'center'
 				}, {
 					field : 'operation',
@@ -473,7 +473,7 @@ var Task = function() {
 		 * 卸船情况
 		 */
 		unshipInfo_click : function(id) {
-			window.location.href = BasePath + "/task/unshipInfo?id=56";
+			window.location.href = BasePath + "/task/unshipInfo?id=" + id;
 		},
 		/**
 		 * 删除
