@@ -139,7 +139,7 @@ License: You must have a valid license purchased only from themeforest(the above
 												<c:when test="${task.status == 0 || task.status == 1}">
 													<button id="sample_editable_1_new" class="btn default"
 														onclick="javascript:UnshipInfo.modifyCabinPosition_click(${taskId});">
-														修改锚点 <i class="fa"></i>
+														舱口标定 <i class="fa"></i>
 													</button>
 												</c:when>
 											</c:choose>

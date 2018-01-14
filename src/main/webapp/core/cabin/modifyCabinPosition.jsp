@@ -96,7 +96,7 @@ License: You must have a valid license purchased only from themeforest(the above
 								class="fa fa-angle-right"></i></li>
 							<li><a href="${BasePath}/task/unshipInfo?id=56">卸船情况</a><i
 								class="fa fa-angle-right"></i></li>
-							<li>修改舱位</li>
+							<li>舱口标定</li>
 						</ul>
 						<!-- END PAGE TITLE & BREADCRUMB-->
 					</div>
@@ -133,9 +133,9 @@ License: You must have a valid license purchased only from themeforest(the above
 											class="table table-striped table-bordered table-hover editable">
 											<thead>
 												<tr>
-													<th>船舱编号</th>
-													<th>开始位置</th>
-													<th>结束位置</th>
+													<th>船舱名</th>
+													<th>起点</th>
+													<th>终点</th>
 												</tr>
 											</thead>
 											<tbody id="cabin_tbody">
