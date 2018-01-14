@@ -136,6 +136,7 @@ $(function(){
             $("#cmsid").val("");
             $("#startPosition").val("");
             $("#endPosition").val("");
+            $("#operationType").val("");
         });
         $('#btn_submit').modal({backdrop: 'static', show:false,  keyboard: false});
         
