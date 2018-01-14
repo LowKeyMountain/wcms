@@ -52,6 +52,7 @@
 			             startPosition:$("#startPosition").val(),
 			             endPosition:$("#endPosition").val(),			             
 						 cmsId: $("#cmsid").val(),
+						 operationType: $("#operationType").val()
 				};
 				return params; 
 			},

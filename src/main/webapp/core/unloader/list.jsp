@@ -182,59 +182,72 @@ License: You must have a valid license purchased only from themeforest(the above
 
 								<div class="table-toolbar">
 						                <div class="col-md-12 col-sm-2">
-													        <div class="panel panel-primary">
-													            <div class="panel-heading">
-													            		<h3 class="panel-title">查询条件</h3></div>
-													            <div class="panel-body">
-													                <form id="formSearch" class="form-horizontal">
-													                    <div class="form-group" style="margin-top:5px;margin-bottom:5px">
-													                        <label class="control-label col-sm-1" for="unloadername">卸船机编号: </label>
-													                        <div class="col-sm-2">
-																				<select id="cmsid" name="cmsid" class="form-control select2me">
-																					<option value="">请选择...</option>
-																   					<option value="1" >ABB_GSU_1</option>
-																   					<option value="2" >ABB_GSU_2</option>
-																   					<option value="3" >ABB_GSU_3</option>
-																   					<option value="4" >ABB_GSU_4</option>
-																   					<option value="5" >ABB_GSU_5</option>
-																   					<option value="6" >ABB_GSU_6</option>
-																				</select>
-													                        </div>
-													                         <div class="col-sm-2 form-group pdate">
-													                         <label for="pdate">查询时间：</label>
-													                          <input class="form_datetime form-control" id="startDate" placeholder="请选择开始日期" name="startDate" readonly/>
-													                        </div>
-													                        <div class="col-sm-2 form-group pdate">
-													                          <label for="pdate">至</label>
-													                          <input class="form_datetime form-control" id="endDate" placeholder="请选择结束日期" name="endDate" readonly/>
-													                        </div>													                        
-																										                        
-													                         <div class="col-sm-2 form-group position">
-													                          <label for="position">位置：</label>
-													                          <input type="text" class="form-control" id="startPosition" placeholder="请输入起始位置" name="startPosition" />
-													                        </div>
-													                        <div class="col-sm-2 form-group">
-													                          <label for="position">至</label>
-													                          <input type="text" class="form-control" id="endPosition" placeholder="请输入结束位置" name="endPosition"/>
-													                        </div>													                        
-													                        											                        
-													                        <div class="col-sm-1" style="text-align:left;">
-													                            <button type="button" style="margin-left:20px" id="btn_query" class="btn btn-primary btn-sm">查询</button>
-													                        </div>
-													                        <div class="col-sm-1" style="text-align:left;">
-													                            <button type="button" style="margin-left:20px" id="btn_reset" class="btn btn-sm">重置</button>
-													                        </div>													                        
-													                    </div>
-																        <div id="toolbar" class="btn-group">
-																            <button id="btn_add" type="button" class="btn btn-primary btn-default" data-toggle="modal" data-target="#addModal">
-																                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
-																            </button>
-																        </div>
-																        
-													                    <table id="unloader" class="table table-striped table-bordered table-hover table-checkable order-column"></table>												            
-													                </form>
-													            </div>
-													        </div>						                
+									        <div class="panel panel-primary">
+									            <div class="panel-heading">
+									            		<h3 class="panel-title">查询条件</h3></div>
+									            <div class="panel-body">
+									                <form id="formSearch" class="form-horizontal">
+									                    <div class="form-group" style="margin-top:5px;margin-bottom:5px">
+									                        <label class="control-label col-sm-1" for="unloadername">卸船机编号: </label>
+									                        <div class="col-sm-2">
+																<select id="cmsid" name="cmsid" class="form-control select2me">
+																	<option value="">请选择...</option>
+												   					<option value="1" >ABB_GSU_1</option>
+												   					<option value="2" >ABB_GSU_2</option>
+												   					<option value="3" >ABB_GSU_3</option>
+												   					<option value="4" >ABB_GSU_4</option>
+												   					<option value="5" >ABB_GSU_5</option>
+												   					<option value="6" >ABB_GSU_6</option>
+																</select>
+									                        </div>
+									                        <label class="control-label col-sm-1" for="unloadername">操作类型: </label>
+									                        <div class="col-sm-2">
+																<select id="operationType" name="operationType" class="form-control select2me">
+																	<option value="">请选择...</option>
+												   					<option value="2" >在线</option>
+												   					<option value="0" >位移</option>
+												   					<option value="1" >作业</option>
+																</select>
+									                        </div>
+									                    </div>
+									                    <div class="form-group" style="margin-top:5px;margin-bottom:5px">													                        
+									                         <div class="col-sm-2 form-group pdate">
+									                         <label for="pdate">查询时间：</label>
+									                          <input class="form_datetime form-control" id="startDate" placeholder="请选择开始日期" name="startDate" readonly/>
+									                        </div>
+									                        <div class="col-sm-2 form-group pdate">
+									                          <label for="pdate">至</label>
+									                          <input class="form_datetime form-control" id="endDate" placeholder="请选择结束日期" name="endDate" readonly/>
+									                        </div>													                        
+																						                        
+									                         <div class="col-sm-2 form-group position">
+									                          <label for="position">位置：</label>
+									                          <input type="text" class="form-control" id="startPosition" placeholder="请输入起始位置" name="startPosition" />
+									                        </div>
+									                        <div class="col-sm-2 form-group">
+									                          <label for="position">至</label>
+									                          <input type="text" class="form-control" id="endPosition" placeholder="请输入结束位置" name="endPosition"/>
+									                        </div>
+									                        </div>
+									                    <div class="form-group" style="margin-top:5px;margin-left:500px;margin-bottom:5px">
+									                        											                        
+									                        <div class="col-sm-1" style="text-align:left;">
+									                            <button type="button" style="margin-left:20px" id="btn_query" class="btn btn-primary btn-sm">查询</button>
+									                        </div>
+									                        <div class="col-sm-1" style="text-align:left;">
+									                            <button type="button" style="margin-left:20px" id="btn_reset" class="btn btn-sm">重置</button>
+									                        </div>
+									                    </div>
+												        <div id="toolbar" class="btn-group">
+												            <button id="btn_add" type="button" class="btn btn-primary btn-default" data-toggle="modal" data-target="#addModal">
+												                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+												            </button>
+												        </div>
+												        
+									                    <table id="unloader" class="table table-striped table-bordered table-hover table-checkable order-column"></table>												            
+									                </form>
+									            </div>
+									        </div>						                
 								</div>
 							</div>
 						</div>
