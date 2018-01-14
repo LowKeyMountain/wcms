@@ -125,7 +125,14 @@ License: You must have a valid license purchased only from themeforest(the above
 											<td>货物种类</td>
 											<td>${cabin.cargoName}</td>
 											<td>船舱状态</td>
-											<td>${cabin.status}</td>
+											<td>
+											<!-- 状态 （卸货|0、清舱|1、完成|2） -->
+											<c:choose>
+												<c:when test="${cabin.status == 0}">卸货</c:when>
+												<c:when test="${cabin.status == 1}">清舱</c:when>
+												<c:when test="${cabin.status == 2}">完成</c:when>
+											</c:choose>
+											</td>
 										</tr>
 										<tr>
 											<td colspan="3"></td>
@@ -156,32 +163,6 @@ License: You must have a valid license purchased only from themeforest(the above
 											</tr>
 										</thead>
 										<tbody id="cabin_tbody">
-										<!-- 
-											<tr>
-												<td scope="row">#1</td>
-												<td>08:00</td>
-												<td>09:00</td>
-												<td>1.0</td>
-												<td>800</td>
-												<td>800</td>
-											</tr>
-											<tr>
-												<td scope="row">#2</td>
-												<td>08:00</td>
-												<td>09:00</td>
-												<td>1.0</td>
-												<td>800</td>
-												<td>800</td>
-											</tr>
-											<tr>
-												<td scope="row">#3</td>
-												<td>08:00</td>
-												<td>09:00</td>
-												<td>1.0</td>
-												<td>800</td>
-												<td>800</td>
-											</tr>
-											 -->
 										</tbody>
 									</table>
 

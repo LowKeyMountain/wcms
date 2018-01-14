@@ -110,24 +110,10 @@ License: You must have a valid license purchased only from themeforest(the above
 										<i><a href="javascript:UnshipInfo.view_ship_click(${taskId})">${shipName}</a></i>
 									</div>
 									<div class="tools">
-										<button id="sample_editable_1_new" class="btn sbold green"
-											onclick="javascript:UnshipInfo.modifyCabinPosition_click(${taskId});">
-											修改锚点 <i class="fa"></i>
-										</button>
-										<c:choose>
-											<c:when test="${task.status == 0}">
-												<button id="sample_editable_1_new" class="btn sbold green"
-													onclick="javascript:UnshipInfo.setShipStatus_click('${taskId}','0');">
-													开始卸船 <i class="fa"></i>
-												</button>
-											</c:when>
-											<c:when test="${task.status == 1}">
-												<button id="sample_editable_1_new" class="btn sbold green"
-													onclick="javascript:UnshipInfo.setShipStatus_click('${taskId}','1');">
-													完成卸船 <i class="fa"></i>
-												</button>
-											</c:when>
-										</c:choose>
+										<a onclick="javascript:history.back(-1);" class="fa fa-reply"
+										data-original-title="返回" title="返回"> </a> <a
+										onclick="javascript:UnshipInfo.list();" class="reload" data-original-title="刷新"
+										title="刷新"> </a>
 									</div>
 								</div>
 								<div class="portlet-body" style="display: block;">
@@ -148,6 +134,30 @@ License: You must have a valid license purchased only from themeforest(the above
 											<tbody id="unshipInfo_tbody">
 											</tbody>
 										</table>
+										<div style="text-align: center">
+											<c:choose>
+												<c:when test="${task.status == 0 || task.status == 1}">
+													<button id="sample_editable_1_new" class="btn default"
+														onclick="javascript:UnshipInfo.modifyCabinPosition_click(${taskId});">
+														修改锚点 <i class="fa"></i>
+													</button>
+												</c:when>
+											</c:choose>
+											<c:choose>
+												<c:when test="${task.status == 0}">
+													<button id="sample_editable_1_new" class="btn default"
+														onclick="javascript:UnshipInfo.setShipStatus_click('${taskId}','0');">
+														开始卸船 <i class="fa"></i>
+													</button>
+												</c:when>
+												<c:when test="${task.status == 1}">
+													<button id="sample_editable_1_new" class="btn default"
+														onclick="javascript:UnshipInfo.setShipStatus_click('${taskId}','1');">
+														完成卸船 <i class="fa"></i>
+													</button>
+												</c:when>
+											</c:choose>
+										</div>
 									</div>
 								</div>
 							</div>

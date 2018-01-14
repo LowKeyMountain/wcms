@@ -8,6 +8,9 @@ var UnshipInfo = function() {
 			if (taskId == null || taskId == undefined) {
 				return;
 			}
+			
+			// 清空列表数据
+			$("#unshipInfo_tbody").children().empty();
 			var mapping = {};
 			var pageParam = {};
 			pageParam.taskId = taskId;
@@ -23,9 +26,7 @@ var UnshipInfo = function() {
 					// <td>装载量</td>
 					// <td>操作</td>
 					// </tr>
-					
-					// 清空列表数据
-					$("#unshipInfo_tbody").children().empty();
+					$("#unshipInfo_tbody").children().empty();	
 					// 加载列表数据
 					var obj = result.data;
 					for (var i = 0; i < obj.length; i++) {
@@ -68,7 +69,6 @@ var UnshipInfo = function() {
 							tr += "&nbsp;&nbsp;"
 							+ "</td>" 
 							+ "</tr>";
-
 						$("#unshipInfo_tbody").append(tr);
 					}
 					
@@ -138,7 +138,11 @@ var UnshipInfo = function() {
 				$.post(url, pageParam, function(result) {
 					if (result && Cl.successInt == result.code) {
 						alert(result.msg);
-						window.location.href = window.location.href;
+						if (status == '1') {
+							window.location.href = BasePath + "/task/tasklist?type=2";
+						} else {
+							window.location.href = BasePath + "/task/tasklist";
+						}
 					} else {
 						alert(result.msg);
 					}
@@ -160,7 +164,7 @@ var UnshipInfo = function() {
 				$.post(url, pageParam, function(result) {
 					if (result && Cl.successInt == result.code) {
 						alert(result.msg);
-						window.location.href = window.location.href;
+						UnshipInfo.list();
 					} else {
 						alert(result.msg);
 					}

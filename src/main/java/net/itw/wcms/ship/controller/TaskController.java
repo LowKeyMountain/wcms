@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.ui.ModelMap;
@@ -72,6 +73,8 @@ public class TaskController {
 	 */
 	@RequestMapping(value = "/tasklist")
 	public ModelAndView main() {
+		String type = req.getParameter("type");
+		modelMap.put("type", StringUtils.isBlank(type) ? "1" : type);
 		return new ModelAndView(PATH + "list");
 	}
 	

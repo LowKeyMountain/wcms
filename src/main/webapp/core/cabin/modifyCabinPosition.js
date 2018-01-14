@@ -159,6 +159,7 @@ var ModifyCabin = function() {
 					 var code = result.code;
 					 if(Cl.successInt == code){
 						alert("保存成功");
+						history.back(-1);
 					} else {
 						alert("保存失败");
 						return;

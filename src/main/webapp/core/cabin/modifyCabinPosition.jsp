@@ -112,9 +112,8 @@ License: You must have a valid license purchased only from themeforest(the above
 										<i><a href="javascript:ModifyCabin.view_ship_click(${taskId})">${shipName}</a></i>
 									</div>
 									<div class="tools">
-										 <a
-											onclick="javascript:ModifyCabin.list();" class="reload" data-original-title="刷新"
-											title="刷新"> </a>
+										<a onclick="javascript:ModifyCabin.list();" class="reload"
+											data-original-title="刷新" title="刷新"> </a>
 									</div>
 								</div>
 								<div class="portlet-body" style="display: block;">
@@ -146,7 +145,7 @@ License: You must have a valid license purchased only from themeforest(the above
 											<button type="button" class="btn default"
 												data-dismiss="modal" onclick="javascript:history.back(-1);">返回</button>
 											<button type="submit" class="btn blue"
-												onclick="javascript:;">保存</button>
+												onclick="javascript:;">完成</button>
 										</div>
 										</form>
 									</div>

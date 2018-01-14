@@ -210,7 +210,7 @@ var Task = function() {
 //					align : 'center'
 //				}, {
 //					field : 'berthingTime',
-//					title : '入港时间',
+//					title : '靠泊时间',
 //					align : 'center'
 //				}, {
 //					field : 'beginTime',
@@ -263,7 +263,7 @@ var Task = function() {
 					align : 'center'
 				}, {
 					field : 'berthingTime',
-					title : '入港时间',
+					title : '靠泊时间',
 					align : 'center'
 				}, {
 					field : 'operation',
@@ -295,7 +295,7 @@ var Task = function() {
 					align : 'center'
 				}, {
 					field : 'berthingTime',
-					title : '入港时间',
+					title : '靠泊时间',
 					align : 'center'
 				}, {
 					field : 'beginTime',
@@ -336,7 +336,7 @@ var Task = function() {
 					align : 'center'
 				}, {
 					field : 'berthingTime',
-					title : '入港时间',
+					title : '靠泊时间',
 					align : 'center'
 				}, {
 					field : 'beginTime',
@@ -349,7 +349,7 @@ var Task = function() {
 					align : 'center'
 				}, {
 					field : 'departureTime',
-					title : '离港时间',
+					title : '离泊时间',
 					align : 'center'
 				}, {
 					field : 'operation',

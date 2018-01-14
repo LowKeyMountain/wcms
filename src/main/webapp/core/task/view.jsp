@@ -86,7 +86,7 @@ License: You must have a valid license purchased only from themeforest(the above
 				<div class="row">
 					<div class="col-md-12">
 						<!-- BEGIN PAGE TITLE & BREADCRUMB-->
-						<h3 class="page-title">修改船舶</h3>
+						<h3 class="page-title">查看船舶信息</h3>
 						<ul class="page-breadcrumb breadcrumb">
 							<li><i class="fa fa-home"></i> <a
 								href="${BasePath}/web/main"> 主页 </a> <i
@@ -95,7 +95,7 @@ License: You must have a valid license purchased only from themeforest(the above
 							</li>
 							<li><a href="${BasePath}/task/tasklist"> 工作管理 </a><i
 								class="fa fa-angle-right"></i></li>
-							<li><a href="${BasePath}/task/unshipInfo?id=56">卸船情况</a><i
+							<li><a href="${BasePath}/task/unshipInfo?id=${task.id}">卸船情况</a><i
 								class="fa fa-angle-right"></i></li>
 							<li>查看船舶信息</li>
 						</ul>
@@ -149,7 +149,7 @@ License: You must have a valid license purchased only from themeforest(the above
 																			</div>
 																		</div>
 																		<div class="form-group  margin-top-20">
-																			<label class="control-label col-md-3">入港时间 <span
+																			<label class="control-label col-md-3">靠泊时间 <span
 																				class="required"> </span>
 																			</label>
 																			<div class="col-md-8">
@@ -164,7 +164,7 @@ License: You must have a valid license purchased only from themeforest(the above
 																		</div>
 
 																		<div class="form-group  margin-top-20">
-																			<label class="control-label col-md-3">离港时间 <span
+																			<label class="control-label col-md-3">离泊时间 <span
 																				class="required"> </span>
 																			</label>
 																			<div class="col-md-8">
