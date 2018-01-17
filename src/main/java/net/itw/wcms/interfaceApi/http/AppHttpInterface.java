@@ -511,5 +511,83 @@ public class AppHttpInterface {
 			return result;
 		}
 	}
+	
+	/**
+	 * 获取货物卸船情况列表[FN_007] <br>
+	 * 查询卸船情况信息（以货物为维度）
+	 * 
+	 * @param json
+	 * @return
+	 */
+	@RequestMapping(value = "/ship/doGetCargoUnshipInfo")
+	public Map<String, Object> doGetCargoUnshipInfo(@RequestParam("json") String json) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			JSONObject jsonObject = JSONObject.parseObject(json);
+			if (!jsonObject.containsKey("userId")) {
+				throw new X27Exception("操作失败：参数[userId]不能为空！");
+			}
+			if (!jsonObject.containsKey("taskId")) {
+				throw new X27Exception("操作失败：参数[taskId]不能为空！");
+			}
+			checkUser(jsonObject); // 验证用户是否存在
 
+			jsonObject.put("fuctionType", "FN_007");
+
+			String taskId = jsonObject.getString("taskId");
+			if (StringUtils.isBlank(taskId)) {
+				throw new X27Exception("操作失败：作业船舶[taskId]不能为空！");
+			}
+
+			jsonObject.put("order", "asc");
+			jsonObject.put("sort", "CARGOID");
+			jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "'}"));
+			
+			return infoQueryHelper.doQueryInfo(jsonObject);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", "0");
+			result.put("msg", e.getMessage());
+			return result;
+		}
+	}
+	
+	/**
+	 * 获取船舶卸船情况列表[FN_008] <br>
+	 * 查询卸船情况信息（以船舶为维度）
+	 * 
+	 * @param json
+	 * @return
+	 */
+	@RequestMapping(value = "/ship/doGetShipUnshipInfo")
+	public Map<String, Object> doGetShipUnshipInfo(@RequestParam("json") String json) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			JSONObject jsonObject = JSONObject.parseObject(json);
+			if (!jsonObject.containsKey("userId")) {
+				throw new X27Exception("操作失败：参数[userId]不能为空！");
+			}
+			if (!jsonObject.containsKey("taskId")) {
+				throw new X27Exception("操作失败：参数[taskId]不能为空！");
+			}
+			checkUser(jsonObject); // 验证用户是否存在
+
+			jsonObject.put("fuctionType", "FN_008");
+
+			String taskId = jsonObject.getString("taskId");
+			if (StringUtils.isBlank(taskId)) {
+				throw new X27Exception("操作失败：作业船舶[taskId]不能为空！");
+			}
+
+			jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "'}"));
+			
+			return infoQueryHelper.doQueryInfo(jsonObject);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", "0");
+			result.put("msg", e.getMessage());
+			return result;
+		}
+	}
+	
 }
