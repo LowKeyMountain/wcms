@@ -590,4 +590,92 @@ public class AppHttpInterface {
 		}
 	}
 	
+	/**
+	 * 获取卸船机卸船情况列表[FN_009] <br>
+	 * 查询卸船情况信息（以卸船机为维度）
+	 * 
+	 * @param json
+	 * @return
+	 */
+	@RequestMapping(value = "/ship/doGetUnloaderUnshipInfo")
+	public Map<String, Object> doGetUnloaderUnshipInfo(@RequestParam("json") String json) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			JSONObject jsonObject = JSONObject.parseObject(json);
+			if (!jsonObject.containsKey("userId")) {
+				// throw new X27Exception("操作失败：参数[userId]不能为空！");
+			}
+			if (!jsonObject.containsKey("taskId")) {
+				throw new X27Exception("操作失败：参数[taskId]不能为空！");
+			}
+			
+			// checkUser(jsonObject); // 验证用户是否存在
+
+			jsonObject.put("fuctionType", "FN_009");
+
+			String taskId = jsonObject.getString("taskId");
+			if (StringUtils.isBlank(taskId)) {
+				throw new X27Exception("操作失败：作业船舶[taskId]不能为空！");
+			}
+
+			String startTime = jsonObject.getString("startTime");
+			String endTime = jsonObject.getString("endTime");
+			return taskShipService.doGetUnloaderUnshipInfo(Integer.parseInt(taskId.toString()), startTime, endTime);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", "0");
+			result.put("msg", e.getMessage());
+			return result;
+		}
+	}
+	
+	/**
+	 * 获取卸船机卸船明细列表[FN_010] <br>
+	 * 查询卸船机卸船明细列表信息（以卸船机为维度）
+	 * 
+	 * @param json
+	 * @return
+	 */
+	@RequestMapping(value = "/ship/doGetUnloaderUnshipDetailList")
+	public Map<String, Object> doGetUnloaderUnshipDetailList(@RequestParam("json") String json) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			JSONObject jsonObject = JSONObject.parseObject(json);
+			if (!jsonObject.containsKey("userId")) {
+				// throw new X27Exception("操作失败：参数[userId]不能为空！");
+			}
+			if (!jsonObject.containsKey("taskId")) {
+				throw new X27Exception("操作失败：参数[taskId]不能为空！");
+			}
+			if (!jsonObject.containsKey("unloaderId")) {
+				throw new X27Exception("操作失败：参数[unloaderId]不能为空！");
+			}
+
+			// checkUser(jsonObject); // 验证用户是否存在
+
+			jsonObject.put("fuctionType", "FN_010");
+
+			String taskId = jsonObject.getString("taskId");
+			if (StringUtils.isBlank(taskId)) {
+				throw new X27Exception("操作失败：作业船舶[taskId]不能为空！");
+			}
+
+			String unloaderId = jsonObject.getString("unloaderId");
+			if (StringUtils.isBlank(unloaderId)) {
+				throw new X27Exception("操作失败：卸船机编号[unloaderId]不能为空！");
+			}
+
+			String endTime = jsonObject.getString("endTime");
+			String startTime = jsonObject.getString("startTime");
+			return taskShipService.doGetUnloaderUnshipDetailList(Integer.parseInt(taskId.toString()), unloaderId,
+					startTime, endTime);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", "0");
+			result.put("msg", e.getMessage());
+			return result;
+		}
+	}
+	
+	
 }
