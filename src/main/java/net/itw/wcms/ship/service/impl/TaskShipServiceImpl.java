@@ -676,7 +676,6 @@ public class TaskShipServiceImpl implements ITaskShipService {
 		Map<String, Object> result = new HashMap<>();
 		try {
 			StringBuffer sql = new StringBuffer("");
-			
 			sql.append(" SELECT c.task_id, w.cmsid ");
 			sql.append(" , CASE w.cmsid ");
 			sql.append(" WHEN 'ABB_GSU_1' THEN '#1' ");
@@ -709,7 +708,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			
 			Object[] args = new Object[] { taskId , unloaderId};
 			if (StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)) {
-				args = new Object[] { taskId, startTime, endTime, unloaderId};
+				args = new Object[] {startTime, endTime, taskId, unloaderId};
 			}
 			System.out.println("doGetUnloaderUnshipDetailList sql :" + sql.toString());
 			List<Map<String, Object>> data = this.dataSyncHelper.getJdbcTemplate().queryForList(sql.toString(), args);
