@@ -621,52 +621,37 @@ public class TaskShipServiceImpl implements ITaskShipService {
 		try {
 			
 			StringBuffer sql = new StringBuffer("");
-			sql.append("  SELECT vc.Cmsid AS 'unloaderId'	  ");
-			sql.append("  	, CASE vc.cmsid  ");
-			sql.append("  WHEN 'ABB_GSU_1' THEN '#1'  ");
-			sql.append("  WHEN 'ABB_GSU_2' THEN '#2'  ");
-			sql.append("  WHEN 'ABB_GSU_3' THEN '#3'  ");
-			sql.append("  WHEN 'ABB_GSU_4' THEN '#4'  ");
-			sql.append("  WHEN 'ABB_GSU_5' THEN '#5'  ");
-			sql.append("  WHEN 'ABB_GSU_6' THEN '#6'  ");
-			sql.append("  ELSE vc.cmsid  ");
-			sql.append("  	END AS 'unloaderName', SUM(vc.usedTime) AS 'usedTime'  ");
-			sql.append("  	, round(SUM(wi.unloading), 1) AS 'unloading'  ");
-			sql.append("  	, round(SUM(wi.unloading) / SUM(vc.usedTime), 4) AS 'efficiency'  ");
-			sql.append("  FROM (	  ");
-			sql.append("  	SELECT v.task_id, v.cabin_no, c.Cmsid, c.id AS groupId, c.startTime  ");
-			sql.append("  , CASE  	 ");
-			sql.append("  	WHEN c.endTime IS NULL THEN CURRENT_TIMESTAMP()	 ");
-			sql.append("  	ELSE c.endTime	 ");
-			sql.append("  END AS 'endTime'  ");
-			sql.append("  , timestampdiff(MINUTE, c.startTime, CASE  	 ");
-			sql.append("  	WHEN c.endTime IS NULL THEN CURRENT_TIMESTAMP()	 ");
-			sql.append("  	ELSE c.endTime	 ");
-			sql.append("  END) / 60 AS 'usedTime'  ");
-			sql.append("  	FROM tab_temp_c c  ");
-			sql.append("  LEFT JOIN v_cabin_info v ON c.cabinId = v.cabin_id  ");
-			sql.append("  	WHERE 1 = 1  ");
-			sql.append("  AND v.task_id = ?  ");
+			sql.append(" SELECT c.task_id, w.cmsid  ");
+			sql.append(" , CASE w.cmsid  ");
+			sql.append(" WHEN 'ABB_GSU_1' THEN '#1'  ");
+			sql.append(" WHEN 'ABB_GSU_2' THEN '#2'  ");
+			sql.append(" WHEN 'ABB_GSU_3' THEN '#3'  ");
+			sql.append(" WHEN 'ABB_GSU_4' THEN '#4'  ");
+			sql.append(" WHEN 'ABB_GSU_5' THEN '#5'  ");
+			sql.append(" WHEN 'ABB_GSU_6' THEN '#6'  ");
+			sql.append(" ELSE w.cmsid  ");
+			sql.append(" END AS 'unloaderName', round(w.usedTime, 2) AS 'usedTime'  ");
+			sql.append(" , round(w.unloading, 2) AS 'unloading'  ");
+			sql.append(" , round(w.unloading / w.usedTime, 2) AS 'efficiency'  ");
+			sql.append(" FROM (  ");
+			sql.append(" SELECT cabinId, cmsid, MIN(Time) AS 'startTime'  ");
+			sql.append(" , MAX(Time) AS 'endTime'  ");
+			sql.append(" , timestampdiff(SECOND, MIN(Time), MAX(Time)) / 3600 AS 'usedTime'  ");
+			sql.append(" , SUM(OneTask) AS 'unloading'  ");
+			sql.append(" FROM v_work_info  ");
+			sql.append(" WHERE 1 = 1  ");
 			if (StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)) {
-				sql.append("  AND UNIX_TIMESTAMP(c.startTime) BETWEEN UNIX_TIMESTAMP(?) AND UNIX_TIMESTAMP(?)  ");
-				sql.append("  AND UNIX_TIMESTAMP(CASE  	 ");
-				sql.append("  WHEN c.endTime IS NULL THEN CURRENT_TIMESTAMP()	 ");
-				sql.append("  ELSE c.endTime ");
-				sql.append("  END) BETWEEN UNIX_TIMESTAMP(?) AND UNIX_TIMESTAMP(?)  ");
+				sql.append(" AND UNIX_TIMESTAMP(Time) BETWEEN UNIX_TIMESTAMP(?) AND UNIX_TIMESTAMP(?)  ");
 			}
-			sql.append("  ) vc	  ");
-			sql.append("  	LEFT JOIN (  ");
-			sql.append("  SELECT vwi.groupId, SUM(vwi.OneTask) AS 'unloading'  ");
-			sql.append("  FROM v_work_info vwi  ");
-			sql.append("  GROUP BY vwi.groupId  ");
-			sql.append("  	) wi  ");
-			sql.append("  	ON vc.groupId = wi.groupId  ");
-			sql.append("  WHERE 1 = 1	  ");
-			sql.append("  GROUP BY vc.Cmsid	  ");
+			sql.append(" GROUP BY Cmsid  ");
+			sql.append(" ) w  ");
+			sql.append(" LEFT JOIN v_cabin_info c ON w.cabinId = c.cabin_id  ");
+			sql.append(" WHERE 1 = 1  ");
+			sql.append(" AND c.task_id = ?  ");
 			
 			Object[] args = new Object[] { taskId };
 			if (StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)) {
-				args = new Object[] { taskId, startTime, endTime, startTime, endTime };
+				args = new Object[] { startTime, endTime, taskId };
 			}
 			System.out.println("doGetUnloaderUnshipInfo sql :" + sql.toString());
 			List<Map<String, Object>> data = this.dataSyncHelper.getJdbcTemplate().queryForList(sql.toString(), args);
@@ -691,60 +676,40 @@ public class TaskShipServiceImpl implements ITaskShipService {
 		Map<String, Object> result = new HashMap<>();
 		try {
 			StringBuffer sql = new StringBuffer("");
-			sql.append(" SELECT vc.Cmsid AS 'unloaderId' ");
-			sql.append(" , CASE vc.cmsid ");
+			
+			sql.append(" SELECT c.task_id, w.cmsid ");
+			sql.append(" , CASE w.cmsid ");
 			sql.append(" WHEN 'ABB_GSU_1' THEN '#1' ");
-			sql.append(" 	WHEN 'ABB_GSU_2' THEN '#2' ");
+			sql.append(" WHEN 'ABB_GSU_2' THEN '#2' ");
 			sql.append(" WHEN 'ABB_GSU_3' THEN '#3' ");
 			sql.append(" WHEN 'ABB_GSU_4' THEN '#4' ");
 			sql.append(" WHEN 'ABB_GSU_5' THEN '#5' ");
 			sql.append(" WHEN 'ABB_GSU_6' THEN '#6' ");
-			sql.append(" ELSE vc.cmsid ");
-			sql.append(" END AS 'unloaderName', vc.cabin_id AS 'cabinId', vc.cabin_no AS 'cabinNo' ");
-			sql.append(" , DATE_FORMAT(vc.startTime, '%Y-%m-%d %H:%i:%s') AS 'startTime' ");
-			sql.append(" , DATE_FORMAT(vc.endTime, '%Y-%m-%d %H:%i:%s') AS 'endTime' ");
-			sql.append(" , CASE  ");
-			sql.append(" WHEN vc.usedTime IS NULL THEN 0 ");
-			sql.append(" ELSE ROUND(vc.usedTime, 4) ");
-			sql.append(" END AS 'usedTime' ");
-			sql.append(" , CASE  ");
-			sql.append(" WHEN wi.unloading IS NULL THEN 0 ");
-			sql.append(" ELSE ROUND(wi.unloading, 4) ");
-			sql.append(" END AS 'unloading' ");
-			sql.append(" , CASE  ");
-			sql.append(" WHEN round(wi.unloading / vc.usedTime, 4) IS NULL THEN 0 ");
-			sql.append(" ELSE round(wi.unloading / vc.usedTime, 4) ");
-			sql.append(" END AS 'efficiency' ");
+			sql.append(" ELSE w.cmsid ");
+			sql.append(" END AS 'unloaderName', DATE_FORMAT(w.startTime, '%Y-%m-%d %H:%i:%s') AS 'startTime' ");
+			sql.append(" , DATE_FORMAT(w.endTime, '%Y-%m-%d %H:%i:%s') AS 'endTime' ");
+			sql.append(" , round(w.usedTime, 2) AS 'usedTime' ");
+			sql.append(" , round(w.unloading, 2) AS 'unloading' ");
+			sql.append(" , round(w.unloading / w.usedTime, 2) AS 'efficiency' ");
 			sql.append(" FROM ( ");
-			sql.append(" SELECT v.task_id, v.cabin_id, v.cabin_no, c.Cmsid, c.id AS groupId ");
-			sql.append(" , c.startTime ");
-			sql.append(" , CASE  ");
-			sql.append(" WHEN c.endTime IS NULL THEN CURRENT_TIMESTAMP() ");
-			sql.append(" ELSE c.endTime ");
-			sql.append(" END AS 'endTime' ");
-			sql.append(" , timestampdiff(MINUTE, c.startTime, CASE  ");
-			sql.append(" WHEN c.endTime IS NULL THEN CURRENT_TIMESTAMP() ");
-			sql.append(" ELSE c.endTime ");
-			sql.append(" END) / 60 AS 'usedTime' ");
-			sql.append(" FROM tab_temp_c c ");
-			sql.append(" LEFT JOIN v_cabin_info v ON c.cabinId = v.cabin_id ");
-			sql.append(" ) vc ");
-			sql.append(" LEFT JOIN ( ");
-			sql.append(" SELECT vwi.groupId, SUM(vwi.OneTask) AS 'unloading' ");
-			sql.append(" FROM v_work_info vwi ");
-			sql.append(" GROUP BY vwi.groupId ");
-			sql.append(" ) wi ");
-			sql.append(" ON vc.groupId = wi.groupId ");
+			sql.append(" SELECT cabinId, cmsid, MIN(Time) AS 'startTime' ");
+			sql.append(" , MAX(Time) AS 'endTime' ");
+			sql.append(" , timestampdiff(SECOND, MIN(Time), MAX(Time)) / 3600 AS 'usedTime' ");
+			sql.append(" , SUM(OneTask) AS 'unloading' ");
+			sql.append(" FROM v_work_info ");
 			sql.append(" WHERE 1 = 1 ");
-			sql.append(" AND vc.task_id = ? ");
-			sql.append(" AND vc.Cmsid = ? ");
+			if (StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)) {
+				sql.append(" AND UNIX_TIMESTAMP(Time) BETWEEN UNIX_TIMESTAMP(?) AND UNIX_TIMESTAMP(?) ");
+			}
+			sql.append(" GROUP BY Cmsid, groupId ");
+			sql.append(" ) w ");
+			sql.append(" LEFT JOIN v_cabin_info c ON w.cabinId = c.cabin_id ");
+			sql.append(" WHERE 1 = 1 ");
+			sql.append(" AND c.task_id = ? AND w.cmsid = ? ");
 			
 			Object[] args = new Object[] { taskId , unloaderId};
-			
 			if (StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)) {
-				sql.append(" AND UNIX_TIMESTAMP(vc.startTime) BETWEEN UNIX_TIMESTAMP(?) AND UNIX_TIMESTAMP(?) ");
-				sql.append(" AND UNIX_TIMESTAMP(vc.endTime) BETWEEN UNIX_TIMESTAMP(?) AND UNIX_TIMESTAMP(?) ");
-				args = new Object[] { taskId, unloaderId, startTime, endTime, startTime, endTime};
+				args = new Object[] { taskId, startTime, endTime, unloaderId};
 			}
 			System.out.println("doGetUnloaderUnshipDetailList sql :" + sql.toString());
 			List<Map<String, Object>> data = this.dataSyncHelper.getJdbcTemplate().queryForList(sql.toString(), args);
