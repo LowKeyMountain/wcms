@@ -333,6 +333,39 @@ public class AppHttpInterface {
 			return result;
 		}
 	}
+	
+	/**
+	 * 获取货物信息(通过货物ID)<br>
+	 * 获取指定船舱的货物信息, 根据货物ID
+	 * 
+	 * @param json
+	 * @return
+	 */
+	@RequestMapping(value = "/ship/doGetCargoDetailById")
+	public Map<String, Object> doGetCargoDetailById(@RequestParam("json") String json) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			JSONObject jsonObject = JSONObject.parseObject(json);
+
+			checkUser(jsonObject); // 验证用户是否存在
+
+			jsonObject.put("fuctionType", "FN_005");
+
+			Object cargoId = jsonObject.get("cargoId");
+			if (cargoId == null) {
+				throw new X27Exception("操作失败：参数[cargoId]不能为空！");
+			}
+
+			return taskShipService.doGetCargoDetailById(Integer.parseInt(cargoId.toString()));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", "0");
+			result.put("msg", e.getMessage());
+			return result;
+		}
+	}
+	
 
 	/**
 	 * 获取卸货进度信息[FN_006] <br>

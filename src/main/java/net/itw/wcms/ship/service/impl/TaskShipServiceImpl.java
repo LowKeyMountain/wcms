@@ -576,6 +576,44 @@ public class TaskShipServiceImpl implements ITaskShipService {
 	}
 
 	@Override
+	public Map<String, Object> doGetCargoDetailById(Integer cargoId) {
+		String msg = "操作成功！";
+		Integer isSuccess = ConstantUtil.SuccessInt;
+
+		Map<String, Object> result = new HashMap<>();
+		try {
+			
+			Cargo cargo = cargoRepository.findOne(cargoId);
+			if (cargo == null) {
+				result.put("code", ConstantUtil.FailInt);
+				result.put("msg", "货物信息未找到！");
+				return result;
+			}
+
+			Map<String, Object> data = new HashMap<>();
+			data.put("cargoType", cargo.getCargoType());
+			data.put("cargoCategory", cargo.getCargoCategory());
+			data.put("loadingPort", cargo.getLoadingPort());
+			data.put("quality", cargo.getQuality());
+			data.put("moisture", cargo.getMoisture());
+			data.put("owner", cargo.getCargoOwner());
+			data.put("stowage", cargo.getStowage());
+			String warehouse = cargoRepository.getCargoWarehouse(cargo.getId());
+			data.put("warehouse", warehouse);
+			
+			result.put("msg", msg);
+			result.put("data", data);
+			result.put("code", isSuccess);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", ConstantUtil.FailInt);
+			result.put("msg", e.getMessage());
+			return result;
+		}
+		return result;
+	}
+	
+	@Override
 	public Map<String, Object> doGetUnloaderUnshipInfo(int taskId, String startTime, String endTime) {
 		String msg = "操作成功！";
 		Integer isSuccess = ConstantUtil.SuccessInt;
