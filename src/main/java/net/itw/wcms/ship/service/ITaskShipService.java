@@ -79,4 +79,26 @@ public interface ITaskShipService {
 	 * @return
 	 */
 	Map<String, Object> doGetCargoDetail(Integer taskId, Integer cabinNo);
+
+	/**
+	 * 查询卸船情况信息（以卸船机为维度）
+	 * 
+	 * @param parseInt
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	Map<String, Object> doGetUnloaderUnshipInfo(int parseInt, String startTime, String endTime);
+
+	/**
+	 * 查询卸船机卸船明细列表信息（以卸船机为维度）
+	 * 
+	 * @param parseInt
+	 * @param unloaderId
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	Map<String, Object> doGetUnloaderUnshipDetailList(int parseInt, String unloaderId, String startTime,
+			String endTime);
 }

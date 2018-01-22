@@ -71,13 +71,19 @@ public class TaskServiceImpl implements ITaskService {
 			switch (status) {
 			case 0:
 				operation += "<a href='javascript:Task.unshipInfo_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>卸船情况</a>";
+				operation += "<a href='javascript:Task.unloadProgress_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>卸船进度</a>";
+				operation += "<a href='javascript:Task.unloaderOverview_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>卸船机总览</a>";
 				operation += "<a href='javascript:Task.remove(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-times'></i> 删除</a>";
 				break;
 			case 1:
 				operation += "<a href='javascript:Task.unshipInfo_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>卸船情况</a>";
+				operation += "<a href='javascript:Task.unloadProgress_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>卸船进度</a>";
+				operation += "<a href='javascript:Task.unloaderOverview_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>卸船机总览</a>";
 				break;	
 			case 2:
 				operation += "<a href='javascript:Task.unshipInfo_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>卸船情况</a>";
+				operation += "<a href='javascript:Task.unloadProgress_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>卸船进度</a>";
+				operation += "<a href='javascript:Task.unloaderOverview_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>卸船机总览</a>";
 				break;	
 			default:
 				break;

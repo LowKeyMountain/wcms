@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -573,4 +574,155 @@ public class TaskShipServiceImpl implements ITaskShipService {
 		}
 		return result;
 	}
+
+	@Override
+	public Map<String, Object> doGetUnloaderUnshipInfo(int taskId, String startTime, String endTime) {
+		String msg = "操作成功！";
+		Integer isSuccess = ConstantUtil.SuccessInt;
+		Map<String, Object> result = new HashMap<>();
+		try {
+			
+			StringBuffer sql = new StringBuffer("");
+			sql.append("  SELECT vc.Cmsid AS 'unloaderId'	  ");
+			sql.append("  	, CASE vc.cmsid  ");
+			sql.append("  WHEN 'ABB_GSU_1' THEN '#1'  ");
+			sql.append("  WHEN 'ABB_GSU_2' THEN '#2'  ");
+			sql.append("  WHEN 'ABB_GSU_3' THEN '#3'  ");
+			sql.append("  WHEN 'ABB_GSU_4' THEN '#4'  ");
+			sql.append("  WHEN 'ABB_GSU_5' THEN '#5'  ");
+			sql.append("  WHEN 'ABB_GSU_6' THEN '#6'  ");
+			sql.append("  ELSE vc.cmsid  ");
+			sql.append("  	END AS 'unloaderName', SUM(vc.usedTime) AS 'usedTime'  ");
+			sql.append("  	, round(SUM(wi.unloading), 1) AS 'unloading'  ");
+			sql.append("  	, round(SUM(wi.unloading) / SUM(vc.usedTime), 4) AS 'efficiency'  ");
+			sql.append("  FROM (	  ");
+			sql.append("  	SELECT v.task_id, v.cabin_no, c.Cmsid, c.id AS groupId, c.startTime  ");
+			sql.append("  , CASE  	 ");
+			sql.append("  	WHEN c.endTime IS NULL THEN CURRENT_TIMESTAMP()	 ");
+			sql.append("  	ELSE c.endTime	 ");
+			sql.append("  END AS 'endTime'  ");
+			sql.append("  , timestampdiff(MINUTE, c.startTime, CASE  	 ");
+			sql.append("  	WHEN c.endTime IS NULL THEN CURRENT_TIMESTAMP()	 ");
+			sql.append("  	ELSE c.endTime	 ");
+			sql.append("  END) / 60 AS 'usedTime'  ");
+			sql.append("  	FROM tab_temp_c c  ");
+			sql.append("  LEFT JOIN v_cabin_info v ON c.cabinId = v.cabin_id  ");
+			sql.append("  	WHERE 1 = 1  ");
+			sql.append("  AND v.task_id = ?  ");
+			if (StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)) {
+				sql.append("  AND UNIX_TIMESTAMP(c.startTime) BETWEEN UNIX_TIMESTAMP(?) AND UNIX_TIMESTAMP(?)  ");
+				sql.append("  AND UNIX_TIMESTAMP(CASE  	 ");
+				sql.append("  WHEN c.endTime IS NULL THEN CURRENT_TIMESTAMP()	 ");
+				sql.append("  ELSE c.endTime ");
+				sql.append("  END) BETWEEN UNIX_TIMESTAMP(?) AND UNIX_TIMESTAMP(?)  ");
+			}
+			sql.append("  ) vc	  ");
+			sql.append("  	LEFT JOIN (  ");
+			sql.append("  SELECT vwi.groupId, SUM(vwi.OneTask) AS 'unloading'  ");
+			sql.append("  FROM v_work_info vwi  ");
+			sql.append("  GROUP BY vwi.groupId  ");
+			sql.append("  	) wi  ");
+			sql.append("  	ON vc.groupId = wi.groupId  ");
+			sql.append("  WHERE 1 = 1	  ");
+			sql.append("  GROUP BY vc.Cmsid	  ");
+			
+			Object[] args = new Object[] { taskId };
+			if (StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)) {
+				args = new Object[] { taskId, startTime, endTime, startTime, endTime };
+			}
+			System.out.println("doGetUnloaderUnshipInfo sql :" + sql.toString());
+			List<Map<String, Object>> data = this.dataSyncHelper.getJdbcTemplate().queryForList(sql.toString(), args);
+
+			result.put("msg", msg);
+			result.put("data", data);
+			result.put("code", isSuccess);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", ConstantUtil.FailInt);
+			result.put("msg", e.getMessage());
+			return result;
+		}
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> doGetUnloaderUnshipDetailList(int taskId, String unloaderId, String startTime,
+			String endTime) {
+		String msg = "操作成功！";
+		Integer isSuccess = ConstantUtil.SuccessInt;
+		Map<String, Object> result = new HashMap<>();
+		try {
+			StringBuffer sql = new StringBuffer("");
+			sql.append(" SELECT vc.Cmsid AS 'unloaderId' ");
+			sql.append(" , CASE vc.cmsid ");
+			sql.append(" WHEN 'ABB_GSU_1' THEN '#1' ");
+			sql.append(" 	WHEN 'ABB_GSU_2' THEN '#2' ");
+			sql.append(" WHEN 'ABB_GSU_3' THEN '#3' ");
+			sql.append(" WHEN 'ABB_GSU_4' THEN '#4' ");
+			sql.append(" WHEN 'ABB_GSU_5' THEN '#5' ");
+			sql.append(" WHEN 'ABB_GSU_6' THEN '#6' ");
+			sql.append(" ELSE vc.cmsid ");
+			sql.append(" END AS 'unloaderName', vc.cabin_id AS 'cabinId', vc.cabin_no AS 'cabinNo' ");
+			sql.append(" , DATE_FORMAT(vc.startTime, '%Y-%m-%d %H:%i:%s') AS 'startTime' ");
+			sql.append(" , DATE_FORMAT(vc.endTime, '%Y-%m-%d %H:%i:%s') AS 'endTime' ");
+			sql.append(" , CASE  ");
+			sql.append(" WHEN vc.usedTime IS NULL THEN 0 ");
+			sql.append(" ELSE ROUND(vc.usedTime, 4) ");
+			sql.append(" END AS 'usedTime' ");
+			sql.append(" , CASE  ");
+			sql.append(" WHEN wi.unloading IS NULL THEN 0 ");
+			sql.append(" ELSE ROUND(wi.unloading, 4) ");
+			sql.append(" END AS 'unloading' ");
+			sql.append(" , CASE  ");
+			sql.append(" WHEN round(wi.unloading / vc.usedTime, 4) IS NULL THEN 0 ");
+			sql.append(" ELSE round(wi.unloading / vc.usedTime, 4) ");
+			sql.append(" END AS 'efficiency' ");
+			sql.append(" FROM ( ");
+			sql.append(" SELECT v.task_id, v.cabin_id, v.cabin_no, c.Cmsid, c.id AS groupId ");
+			sql.append(" , c.startTime ");
+			sql.append(" , CASE  ");
+			sql.append(" WHEN c.endTime IS NULL THEN CURRENT_TIMESTAMP() ");
+			sql.append(" ELSE c.endTime ");
+			sql.append(" END AS 'endTime' ");
+			sql.append(" , timestampdiff(MINUTE, c.startTime, CASE  ");
+			sql.append(" WHEN c.endTime IS NULL THEN CURRENT_TIMESTAMP() ");
+			sql.append(" ELSE c.endTime ");
+			sql.append(" END) / 60 AS 'usedTime' ");
+			sql.append(" FROM tab_temp_c c ");
+			sql.append(" LEFT JOIN v_cabin_info v ON c.cabinId = v.cabin_id ");
+			sql.append(" ) vc ");
+			sql.append(" LEFT JOIN ( ");
+			sql.append(" SELECT vwi.groupId, SUM(vwi.OneTask) AS 'unloading' ");
+			sql.append(" FROM v_work_info vwi ");
+			sql.append(" GROUP BY vwi.groupId ");
+			sql.append(" ) wi ");
+			sql.append(" ON vc.groupId = wi.groupId ");
+			sql.append(" WHERE 1 = 1 ");
+			sql.append(" AND vc.task_id = ? ");
+			sql.append(" AND vc.Cmsid = ? ");
+			
+			Object[] args = new Object[] { taskId , unloaderId};
+			
+			if (StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)) {
+				sql.append(" AND UNIX_TIMESTAMP(vc.startTime) BETWEEN UNIX_TIMESTAMP(?) AND UNIX_TIMESTAMP(?) ");
+				sql.append(" AND UNIX_TIMESTAMP(vc.endTime) BETWEEN UNIX_TIMESTAMP(?) AND UNIX_TIMESTAMP(?) ");
+				args = new Object[] { taskId, unloaderId, startTime, endTime, startTime, endTime};
+			}
+			System.out.println("doGetUnloaderUnshipDetailList sql :" + sql.toString());
+			List<Map<String, Object>> data = this.dataSyncHelper.getJdbcTemplate().queryForList(sql.toString(), args);
+			
+			result.put("msg", msg);
+			result.put("data", data);
+			result.put("code", isSuccess);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", ConstantUtil.FailInt);
+			result.put("msg", e.getMessage());
+			return result;
+		}
+		return result;
+	}
+	
+	
+	
 }

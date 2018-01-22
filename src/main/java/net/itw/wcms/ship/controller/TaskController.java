@@ -282,4 +282,85 @@ public class TaskController {
 		}
 	}
 	
+	/**
+	 * 卸船进度
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("/unloadProgress")
+	public ModelAndView unloadProgress(@RequestParam("id") Integer id) {
+		Task task = taskService.getTaskById(id);
+		modelMap.put("taskId", id);
+		modelMap.put("task", task);
+		modelMap.put("shipName", task != null && task.getShip() != null ? task.getShip().getShipName() : "");
+		return new ModelAndView(PATH_UNSHIPINFO + "progressList");
+	}
+	
+	/**
+	 * 返回卸船进度列表
+	 * @param taskId
+	 * @return
+	 */
+	@RequestMapping(value = "/getUnloadProgressList", produces = "text/json;charset=UTF-8")
+	public String getUnloadProgressList(@RequestParam("taskId") Integer taskId) {
+		Map<String, Object> result = null;
+		JSONObject json = new JSONObject();
+		try {
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("fuctionType", "FN_007");
+			jsonObject.put("order", "asc");
+			jsonObject.put("sort", "cargoId");
+			jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "'}"));
+			result = infoQueryHelper.doQueryInfo(jsonObject);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		json.put("rows",result.get("data"));
+		json.put("total",result.get("total"));
+
+		return json.toString();
+	}
+
+	/**
+	 * 卸船机总览
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("/unloaderOverview")
+	public ModelAndView unloaderOverview(@RequestParam("id") Integer id) {
+		Task task = taskService.getTaskById(id);
+		modelMap.put("taskId", id);
+		modelMap.put("task", task);
+		modelMap.put("shipName", task != null && task.getShip() != null ? task.getShip().getShipName() : "");
+		return new ModelAndView(PATH_UNSHIPINFO + "overviewList");
+	}
+	
+	/**
+	 * 返回卸船机总览列表
+	 * @param taskId
+	 * @return
+	 */
+	@RequestMapping(value = "/getUnloaderOverviewList", produces = "text/json;charset=UTF-8")
+	public String getUnloaderOverviewList(@RequestParam("taskId") Integer taskId) {
+		Map<String, Object> result = null;
+		JSONObject json = new JSONObject();
+		try {
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("fuctionType", "FN_006");
+			jsonObject.put("order", "asc");
+			jsonObject.put("sort", "startTime");
+			jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "'}"));
+			result = infoQueryHelper.doQueryInfo(jsonObject);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		json.put("rows",result.get("data"));
+		json.put("total",result.get("total"));
+
+		return json.toString();
+	}
+	
+	
 }

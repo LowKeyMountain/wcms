@@ -116,7 +116,7 @@ public class DataSyncHelper extends JdbcDaoSupport {
 							+ " (id, Time, Cmsid, PushTime, OneTask, direction, unloaderMove, operationType, offset, groupId) "
 							+ "values(?,?,?,?,?,?,?,?,?,?) ";
 
-					Object[] args = new Object[] { id, time, cmsid, pushTime, oneTask, direction, unloaderMove + 7,
+					Object[] args = new Object[] { id, time, cmsid, pushTime, oneTask, direction, unloaderMove,
 							operationType, 0, 0 };
 					this.getJdbcTemplate().update(sql, args);
 				} catch (Exception e) {
