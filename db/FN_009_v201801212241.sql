@@ -23,3 +23,5 @@ FROM (
 	LEFT JOIN v_cabin_info c ON w.cabinId = c.cabin_id
 WHERE 1 = 1
 	AND c.task_id = ?
+	ORDER BY w.cmsid ASC
+	

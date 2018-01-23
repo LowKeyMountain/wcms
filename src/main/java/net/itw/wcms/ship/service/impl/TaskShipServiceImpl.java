@@ -647,7 +647,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			sql.append(" ) w  ");
 			sql.append(" LEFT JOIN v_cabin_info c ON w.cabinId = c.cabin_id  ");
 			sql.append(" WHERE 1 = 1  ");
-			sql.append(" AND c.task_id = ?  ");
+			sql.append(" AND c.task_id = ? 	ORDER BY w.cmsid ASC ");
 			
 			Object[] args = new Object[] { taskId };
 			if (StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)) {
@@ -704,7 +704,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			sql.append(" ) w ");
 			sql.append(" LEFT JOIN v_cabin_info c ON w.cabinId = c.cabin_id ");
 			sql.append(" WHERE 1 = 1 ");
-			sql.append(" AND c.task_id = ? AND w.cmsid = ? ");
+			sql.append(" AND c.task_id = ? AND w.cmsid = ? ORDER BY w.startTime ASC  ");
 			
 			Object[] args = new Object[] { taskId , unloaderId};
 			if (StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)) {

@@ -24,4 +24,4 @@ FROM (
 ) w
 	LEFT JOIN v_cabin_info c ON w.cabinId = c.cabin_id
 WHERE 1 = 1
-	AND c.task_id = ? AND w.cmsid = ?
+	AND c.task_id = ? AND w.cmsid = ?  ORDER BY w.startTime ASC 
