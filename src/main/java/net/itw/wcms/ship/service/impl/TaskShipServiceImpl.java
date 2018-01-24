@@ -621,7 +621,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 		try {
 			
 			StringBuffer sql = new StringBuffer("");
-			sql.append(" SELECT c.task_id,  c.cabin_id, c.cabin_no, w.cmsid  ");
+			sql.append(" SELECT c.task_id, c.cabinId, c.cabinNo, w.cmsid  ");
 			sql.append(" , CASE w.cmsid  ");
 			sql.append(" WHEN 'ABB_GSU_1' THEN '#1'  ");
 			sql.append(" WHEN 'ABB_GSU_2' THEN '#2'  ");
