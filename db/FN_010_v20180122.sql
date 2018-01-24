@@ -1,5 +1,5 @@
 SELECT c.task_id, w.cmsid
-	, CASE w.cmsid
+	, c.cabin_id, c.cabin_no, CASE w.cmsid
 		WHEN 'ABB_GSU_1' THEN '#1'
 		WHEN 'ABB_GSU_2' THEN '#2'
 		WHEN 'ABB_GSU_3' THEN '#3'
