@@ -117,14 +117,12 @@ public class TaskServiceImpl implements ITaskService {
 
 	@Override
 	public Integer createTask(Task task, User operator) {
-		
 		task.setUpdateUser(operator.getUserName());
 		task.setUpdateTime(new Date());
 		task.setStatus(0);
 		
 		autoCreateCargoCabinInfo(task, operator);
 		taskRepository.saveAndFlush(task);
-		
 		return ConstantUtil.SuccessInt;
 
 	}
