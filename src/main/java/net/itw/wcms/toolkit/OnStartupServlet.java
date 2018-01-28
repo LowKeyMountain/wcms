@@ -21,6 +21,8 @@ public class OnStartupServlet {
 	private boolean initialized;
 	@Autowired
 	private DataSyncHelper dataSyncHelper;
+	@Autowired
+	private DataSyncHelperV6 dataSyncHelperV6;
 
 	public void init() {
 		if (initialized)
@@ -41,15 +43,15 @@ public class OnStartupServlet {
 
 		if (isAllowStartup) {
 			// 启动卸船机数据同步功能
-			dataSyncHelper.init();
+			dataSyncHelperV6.init();
 			new Timer().schedule(new TimerTask() {
 				@Override
 				public void run() {
 					try {
-						dataSyncHelper.start();
+						dataSyncHelperV6.start();
 					} catch (InterruptedException e) {
 						e.printStackTrace();
-						dataSyncHelper.stop();
+						dataSyncHelperV6.stop();
 					}
 				}
 			}, 1000);

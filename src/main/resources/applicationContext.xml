@@ -51,6 +51,14 @@
 	<bean id="dataSyncHelper" class="net.itw.wcms.toolkit.DataSyncHelper">
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
+	
+	<bean id="dataSyncHelperV6" class="net.itw.wcms.toolkit.DataSyncHelperV6">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<bean id="autoCreateDBTable" class="net.itw.wcms.toolkit.AutoCreateDBTable">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
 
 	<!-- 2.配置JPA EntityManagerFactory -->
 	<bean id="entityManagerFactory"

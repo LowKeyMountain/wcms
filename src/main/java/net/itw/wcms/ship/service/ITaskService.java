@@ -1,5 +1,6 @@
 package net.itw.wcms.ship.service;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -58,7 +59,7 @@ public interface ITaskService {
 	 * @param operator
 	 * @return
 	 */
-	Integer createTask(Task task, User operator);
+	Integer createTask(Task task, User operator) throws SQLException ;
 
 	Integer updateTask(Task task, User operator);
 	
