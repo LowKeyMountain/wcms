@@ -127,7 +127,7 @@ public class TaskServiceImpl implements ITaskService {
 
 		autoCreateCargoCabinInfo(task, operator);
 		taskRepository.saveAndFlush(task);
-		autoCreateDBTable.createTable(task);
+		autoCreateDBTable.createTable(task.getId());
 		return ConstantUtil.SuccessInt;
 	}
 	

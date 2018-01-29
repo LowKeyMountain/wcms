@@ -1,14 +1,18 @@
 package net.itw.wcms.toolkit;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.xml.bind.JAXBException;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
-import net.itw.wcms.ship.entity.Task;
+import net.itw.wcms.toolkit.sql.SqlMap;
 
 /**
  * Description: 自动创建数据库表
@@ -17,54 +21,66 @@ import net.itw.wcms.ship.entity.Task;
  */
 public class AutoCreateDBTable extends JdbcDaoSupport {
 
-	private static String SQL_B;
-	private static String SQL_C;
+	private static SqlMap sqlMap;
+	private Map<Integer, String> cache = new HashMap<>();
 
 	static {
 		try {
-			SQL_B = loadSqlFile("./tab_temp_b.sql");
-			SQL_C = loadSqlFile("./tab_temp_c.sql");
+			sqlMap = SqlMap.load(SqlMap.class.getResourceAsStream("./create_table.xml"));
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (JAXBException e) {
 			e.printStackTrace();
 		}
 	}
 
 	/**
-	 * 加载sql文件
+	 * 创建表TAB_TEMP_B、TAB_TEMP_C
 	 * 
-	 * @param path
-	 * @return
-	 * @throws IOException
+	 * @param taskId
+	 * @throws SQLException
 	 */
-	private static String loadSqlFile(String path) throws IOException {
-		BufferedReader in = new BufferedReader(
-				new InputStreamReader(AutoCreateDBTable.class.getResourceAsStream(path)));
-		StringBuffer buf = new StringBuffer();
-		String line = " ";
-		while ((line = in.readLine()) != null) {
-			buf.append(line);
+	public void createTable(Integer taskId) throws SQLException {
+		if (cache.containsKey(taskId)) {
+			return;
 		}
-		return buf.toString();
+		String tabName_b = "tab_temp_b_" + taskId;
+		if (!isExistsTable(tabName_b)) {
+			this.getJdbcTemplate().update(sqlMap.getSql("TAB_B"), tabName_b);
+		}
+		String tabName_c = "tab_temp_c_" + taskId;
+		if (!isExistsTable(tabName_c)) {
+			this.getJdbcTemplate().update(sqlMap.getSql("TAB_C"), tabName_c);
+		}
+		cache.put(taskId, (tabName_b + "," + tabName_c));
 	}
 
 	/**
-	 * 创建表B、表C
+	 * 检查表是否存在
 	 * 
-	 * @param task
-	 * @throws SQLException
+	 * @param tableName
+	 * @return
 	 */
-	public void createTable(Task task) throws SQLException {
-		String tableName_B = "tab_temp_b_" + task.getId();
-		List<String> list = this.getJdbcTemplate().queryForList(" SHOW TABLES LIKE '%" + tableName_B + "%' ",
-				String.class);
+	private boolean isExistsTable(String tableName) {
+		List<String> list = this.getJdbcTemplate().queryForList(sqlMap.getSql("checkTable"), String.class, tableName);
 		if (list.isEmpty()) {
-			this.getJdbcTemplate().execute(SQL_B.replace("tab_temp_b", tableName_B));
+			return false;
 		}
-		String tableName_C = "tab_temp_c_" + task.getId();
-		list = this.getJdbcTemplate().queryForList(" SHOW TABLES LIKE '%" + tableName_C + "%' ", String.class);
-		if (list.isEmpty()) {
-			this.getJdbcTemplate().execute(SQL_C.replace("tab_temp_c", tableName_C));
+		return true;
+	}
+	
+	/**
+	 * 程序入口
+	 * 
+	 * @param args
+	 * @throws InterruptedException
+	 */
+	public static void main(String[] args) throws Exception {
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+		if (ctx != null) {
+			AutoCreateDBTable helper = (AutoCreateDBTable) ctx.getBean("autoCreateDBTable");
+			helper.createTable(null);
 		}
 	}
-
+	
 }

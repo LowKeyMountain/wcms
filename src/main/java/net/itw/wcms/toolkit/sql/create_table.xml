@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqlMap>
+	<sqls>
+		<entry>
+			<key>TAB_B</key>
+			<description>创建表tab_temp_b语句</description>
+			<value>
+			<![CDATA[
+				CREATE TABLE `?` (
+				  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+				  `Cmsid` varchar(100) NOT NULL COMMENT 'Cms卸船机编号',
+				  `operationType` int(2) DEFAULT NULL COMMENT '操作类型(0大车位置，1作业量信息。)',
+				  `Time` datetime DEFAULT NULL COMMENT '操作时间(YYYY—MM—dd  HH_mi_SS)',
+				  `PushTime` datetime DEFAULT NULL COMMENT '推送时间',
+				  `direction` varchar(1) DEFAULT NULL COMMENT '方向(0正方向，1反方向，设定编码器一个方向为正方向，如果无需设定，默认正方向)',
+				  `unloaderMove` double DEFAULT NULL COMMENT '卸船机移动位置(移动位置)',
+				  `OneTask` double DEFAULT NULL COMMENT '一次抓钩作业量(一次抓钩作业量)',
+				  `offset` double DEFAULT NULL COMMENT '船舶偏移量',
+				  `groupId` int(11) DEFAULT NULL,
+				  PRIMARY KEY (`id`,`Cmsid`)
+				) ENGINE=InnoDB AUTO_INCREMENT=35413 DEFAULT CHARSET=utf8;
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>TAB_C</key>
+			<description>创建表tab_temp_c语句</description>
+			<value>
+			<![CDATA[
+				CREATE TABLE `?` (
+				  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id主键',
+				  `cabinId` int(11) DEFAULT NULL COMMENT '船舱id',
+				  `Cmsid` varchar(50) DEFAULT NULL COMMENT '卸船机编号',
+				  `startTime` datetime DEFAULT NULL COMMENT '开始时间',
+				  `endTime` datetime DEFAULT NULL COMMENT '结束时间',
+				  `firstTime` datetime DEFAULT NULL COMMENT '第一次抓钩作业时间',
+				  `lastTime` datetime DEFAULT NULL COMMENT '最后一次抓钩作业时间',
+				  `status` int(11) DEFAULT NULL,
+				  PRIMARY KEY (`id`)
+				) ENGINE=InnoDB AUTO_INCREMENT=494 DEFAULT CHARSET=utf8;
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>checkTable</key>
+			<description>检查表是否存在</description>
+			<value>
+			<![CDATA[
+ 				SHOW TABLES LIKE '%?%'
+			]]>
+			</value>
+		</entry>
+	</sqls>
+</sqlMap>

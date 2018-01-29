@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqlMap>
+	<sqls>
+		<entry>
+			<key>01</key>
+			<description>将船舶任务子表数据同步到临时表</description>
+			<value>
+			<![CDATA[
+ 			 INSERT INTO tab_temp_b (id, Time, Cmsid, PushTime, OneTask, direction, unloaderMove, operationType, offset, groupId)
+ 			 SELECT id, Time, Cmsid, PushTime, OneTask, direction, unloaderMove, operationType, offset, ? from tab_temp_b_? 
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>02</key>
+			<description>【任务子表】删除任务子表：卸船作业信息</description>
+			<value>
+			<![CDATA[
+ 			DELETE FROM tab_temp_b_? 
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>03</key>
+			<description>【任务子表】删除任务子表：组信息</description>
+			<value>
+			<![CDATA[
+			DELETE FROM tab_temp_c_? 
+			]]>
+			</value>
+		</entry>
+	</sqls>
+</sqlMap>

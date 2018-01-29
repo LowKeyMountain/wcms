@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqlMap>
+	<sqls>
+		<entry>
+			<key>01</key>
+			<description>查询临时表待处理数据</description>
+			<value>
+			<![CDATA[
+			select * from tab_temp_b b where b.groupId = 0 ORDER BY b.Cmsid, id ASC  
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>02</key>
+			<description>查询卸船机作业数据任务ID、船舱ID</description>
+			<value>
+			<![CDATA[
+			 SELECT cabin.id, t.task_id AS 'taskId' FROM tab_cabin cabin LEFT JOIN ( SELECT c.*, task.`offset`, 
+			 task.`status`, task.begin_time, CASE WHEN task.end_time IS NULL THEN CURRENT_TIMESTAMP () ELSE task.end_time 
+			 END AS 'end_time' FROM tab_cargo c LEFT JOIN tab_task task ON c.task_id = task.id ) t ON cabin.cargo_id = 
+			 t.id WHERE t.`status` = 1 AND cabin.start_position <= ? AND cabin.end_position >= ? AND t.begin_time <= ? AND 
+			 t.end_time >= ? 
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>03</key>
+			<description>【任务子表】将临时表作业数据插入子表</description>
+			<value>
+			<![CDATA[
+ 			 INSERT INTO tab_temp_b_? (id, Time, Cmsid, PushTime, OneTask, direction, unloaderMove, operationType, offset, groupId)
+ 			 SELECT id, Time, Cmsid, PushTime, OneTask, direction, unloaderMove, operationType, offset, ? from tab_temp_b 
+ 			 where id = ? and cmsid = ? 
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>04</key>
+			<description>删除临时表作业数据</description>
+			<value>
+			<![CDATA[
+			   delete from tab_temp_b where id = ? and cmsid = ?   
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>05</key>
+			<description>【任务子表】查询组信息，根据舱ID、 卸船机ID</description>
+			<value>
+			<![CDATA[
+			    select * from tab_temp_c_?  t where t.`status` = 0 and t.cabinId = ? AND t.Cmsid = ? 
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>06</key>
+			<description>【任务子表】创建组信息，根据位移数据</description>
+			<value>
+			<![CDATA[
+			     insert into tab_temp_c_? (cabinId, Cmsid, startTime, status)  values(?,?,?,?) 
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>07</key>
+			<description>【任务子表】创建组信息，根据作业数据</description>
+			<value>
+			<![CDATA[
+			     insert into tab_temp_c_? (cabinId, Cmsid, startTime, firstTime, lastTime, status)  values(?,?,?,?,?,?)  
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>08</key>
+			<description>【任务子表】查询当前卸船机上一组数据</description>
+			<value>
+			<![CDATA[
+			      select * from tab_temp_c_? t where t.`status` = 0 AND t.Cmsid = ? AND t.id != ?   
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>09</key>
+			<description>【任务子表】更新组结束时间</description>
+			<value>
+			<![CDATA[
+			      UPDATE tab_temp_c_?   t SET t.endTime = ?, t.status = 1 WHERE t.id = ?    
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>10</key>
+			<description>【任务子表】更新组结束时间、最后一铲时间</description>
+			<value>
+			<![CDATA[
+			       UPDATE tab_temp_c_? t SET t.endTime = ?, t.lastTime = ?, t.status = 1 WHERE t.id = ?     
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>11</key>
+			<description>【任务子表】更新组第一铲、最后一铲时间</description>
+			<value>
+			<![CDATA[
+			        UPDATE tab_temp_c_? t SET t.firstTime = ?, t.lastTime = ?  WHERE t.id = ?      
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>12</key>
+			<description>【任务子表】更新组最后一铲时间</description>
+			<value>
+			<![CDATA[
+			         UPDATE tab_temp_c_?  t SET t.lastTime = ?  WHERE t.id = ?      
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>13</key>
+			<description>【任务子表】根据任务编号，查询该任务未结束组信息</description>
+			<value>
+			<![CDATA[
+			         select c2.* from tab_temp_c_? c2 LEFT JOIN v_cabin_info c1 ON c1.cabin_id = c2.cabinId 
+			         where  c2.`status` = 0 AND c1.task_id = ?       
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>14</key>
+			<description>【任务子表】更新组结束时间、状态</description>
+			<value>
+			<![CDATA[
+			          UPDATE tab_temp_c_? t SET t.endTime = ?, t.status = ? WHERE t.id = ?      
+			]]>
+			</value>
+		</entry>
+	</sqls>
+</sqlMap>
