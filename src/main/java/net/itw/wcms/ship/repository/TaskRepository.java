@@ -26,6 +26,8 @@ import org.springframework.data.repository.query.Param;
 
 import net.itw.wcms.ship.entity.Ship;
 import net.itw.wcms.ship.entity.Task;
+import net.itw.wcms.ship.entity.UnloaderAll;
+import net.itw.wcms.toolkit.DateTimeUtils;
 import net.itw.wcms.toolkit.lang.Int32;
 import net.itw.wcms.x27.utils.StringUtil;
 
@@ -50,6 +52,44 @@ public interface TaskRepository extends JpaRepository<Task, Integer>, JpaSpecifi
 			}
 		}, pageable);
 	}
+
+	default Page<Task> findAllByParams(Pageable pageable,  Map<String, String> params) {
+		return this.findAll(new Specification<Task>() {
+			public Predicate toPredicate(Root<Task> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				Predicate predicate = null;
+				List<Predicate> predicates = new ArrayList<Predicate>();
+/*				String cmsId = params.get("cmsId");
+				String startPosition = (params.get("startPosition") == null ? "0" : params.get("startPosition"));
+				String endPosition = (params.get("endPosition") == null ? "0" : params.get("endPosition"));
+				String startDate = (params.get("startDate") == null ? "" : params.get("startDate"));
+				String endDate = (params.get("endDate") == null ? "" : params.get("endDate"));*/
+				String status = (params.get("status") == null ? "" : params.get("status"));
+
+/*				if(StringUtils.isNotEmpty(startPosition)) {
+					predicates.add(cb.ge(root.get("unloaderMove"),Float.parseFloat(startPosition)));
+				}
+				if(StringUtils.isNotEmpty(endPosition)) {
+					predicates.add(cb.le(root.get("unloaderMove"),Float.parseFloat(endPosition)));
+				}
+
+				if(StringUtils.isNotEmpty(startDate)) {
+					predicates.add(cb.greaterThanOrEqualTo(root.get("time"), DateTimeUtils.strDateTime2Date(startDate)));
+				}
+				if(StringUtils.isNotEmpty(endDate)) {
+					predicates.add(cb.lessThanOrEqualTo(root.get("time"), DateTimeUtils.strDateTime2Date(endDate)));
+				}*/
+				if(StringUtils.isNotEmpty(status)) {
+					predicates.add(cb.equal(root.get("status"), status));
+				}
+				predicate = cb.and(predicates.toArray(new Predicate[predicates.size()]));				
+		        query.where(predicate);  
+		        //添加排序的功能  
+		        query.orderBy(cb.desc(root.get("updateTime")));
+		        return query.getRestriction();  
+				//return predicate;
+			}
+		}, pageable);
+	}	
 
 	default Page<Task> findAll(Pageable pageable, Map<String, String> params) {
 		return this.findAll(new Specification<Task>() {

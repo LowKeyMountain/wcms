@@ -101,4 +101,12 @@ public interface ITaskShipService {
 	 */
 	Map<String, Object> doGetUnloaderUnshipDetailList(int parseInt, String unloaderId, String startTime,
 			String endTime);
+
+	/**
+	 * 获取指定船舱的货物信息, 根据货物ID
+	 * @param cargoId
+	 * @return
+	 */
+	Map<String, Object> doGetCargoDetailById(Integer cargoId);
+	
 }

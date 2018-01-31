@@ -23,6 +23,7 @@ import com.alibaba.fastjson.JSONObject;
 import net.itw.wcms.ship.entity.Unloader;
 import net.itw.wcms.ship.entity.UnloaderAll;
 import net.itw.wcms.ship.service.IUnloaderService;
+import net.itw.wcms.toolkit.DateTimeUtils;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
 import net.itw.wcms.x27.utils.ConstantUtil;
@@ -114,7 +115,7 @@ public class UnloaderController {
 			unloader.setCmsId("ABB_GSU_6");
 			tableName="tab_unloader_6";
 		}
-		unloader.setTime(new Date());
+		unloader.setTime(DateTimeUtils.strDateTime2Date(params.get("operationtime")));
 		unloader.setPushTime(new Date());
 		unloader.setOneTask(Float.parseFloat(params.get("onetask")));
 		unloader.setUnloaderMove(Float.parseFloat(params.get("move")));

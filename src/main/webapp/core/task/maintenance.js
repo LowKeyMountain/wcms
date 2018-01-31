@@ -1,10 +1,10 @@
 	function initTable(){
 		
-		$('#unloader').bootstrapTable("destroy").bootstrapTable({  // init via javascript
+		$('#maintenance').bootstrapTable("destroy").bootstrapTable({  // init via javascript
 			
 			method : 'post',
 			contentType : "application/x-www-form-urlencoded",
-			url:BasePath + "/unloader/getUnloaderList?rnd=" + Math.random(),
+			url:BasePath + "/task/getTaskWhList?rnd=" + Math.random(),
 			dataType : 'json',
 //			 dataField: 'res',//bootstrap table 可以前端分页也可以后端分页
 			 striped : true, // 是否显示行间隔色
@@ -32,7 +32,7 @@
 			 toolbar : '#toolbar',
 			 toolbarAlign : 'right',
 			 buttonsAlign : 'left',// 按钮对齐方式
-//			 showExport : true, // 是否显示导出
+			 showExport : true, // 是否显示导出
 //			 exportDataType : "basic", // basic', 'all', 'selected'.
 			
 			queryParams: function queryParams(params){//自定义参数，这里的参数是传给后台的，分页使用
@@ -47,12 +47,12 @@
 //			             pageindex:params.pageNumber,
 //						 order: params.order,
 //						 sort: params.sort,
-			             startDate:$("#startDate").val(),
-			             endDate:$("#endDate").val(),
-			             startPosition:$("#startPosition").val(),
-			             endPosition:$("#endPosition").val(),			             
-						 cmsId: $("#cmsid").val(),
-						 operationType: $("#operationType").val()
+//			             startDate:$("#startDate").val(),
+//			             endDate:$("#endDate").val(),
+//			             startPosition:$("#startPosition").val(),
+//			             endPosition:$("#endPosition").val(),			             
+//						 cmsId: $("#cmsid").val(),
+						 status: $("#status").val()
 				};
 				return params; 
 			},
@@ -67,49 +67,82 @@
 		        checkbox:true,
 		        width:25,
 		        align:'center'
-		    }, {
+		    },*/{
 		        field: 'id',
 		        title: 'id',
-		        align: 'center'
-		    }, */{
-		        field: 'Cmsid',
-		        title: 'Cms卸船机编号',
+		        align: 'center',
+		        visible: false
+		    }, {
+		        field: 'shipName',
+		        title: '船舶名称',
 		        align: 'center',
 		        width: '10%'
 		    }, {
-		        field: 'operationType',
-		        title: '操作类型',
+		        field: 'berth',
+		        title: '泊位',
+		        align: 'center',
+		        width: '6%'
+		    }, {
+		        field: 'berthingTime',
+		        title: '靠泊时间',
+		        align: 'center',
+		        width: '12%'
+		    }, {
+		        field: 'departureTime',
+		        title: '离泊时间',
+		        align: 'center',
+		        width: '12%'
+		    }, {
+		        field: 'beginTime',
+		        title: '开工时间',
+		        align: 'center',
+		        width: '12%',
+		        sortable:true
+		    }, {
+		        field: 'endTime',
+		        title: '结束时间',
+		        align: 'center',
+		        width: '12%',
+		        sortable:true
+		    },{
+		        field: 'cargoLoad',
+		        title: '货物总重',
+		        width: '6%',		        
+		        align: 'center'
+		    }, {
+		        field: 'status',
+		        title: '状态',
 		        align: 'center',
 		        width: '8%',
                 formatter: function (value, row, index) {//自定义显示，这三个参数分别是：value该行的属性，row该行记录，index该行下标  
-                    return row.operationType == 0 ? "<font color=grey>位移</font>" : row.operationType == 1 ? "<font color=red>作业</font>" : "<font color=lightgreen>在线</font>";  
-                } 
+                    return row.status == 0 ? "<font color=lightgreen>预靠</font>" : row.status == 1 ? "<font color=red>作业中</font>" : "<font color=grey>已离港</font>";  
+                }
+		    }, /*{
+		        field: 'updateUser',
+		        title: '修改人',
+		        align: 'center',
+		        width: '10%'
 		    }, {
-		        field: 'time',
-		        title: '操作时间',
+		        field: 'Date',
+		        title: '更新时间',
+		        align: 'center',
+		        width: '10%'
+		    },*/ {
+		        title: '操作',
 		        align: 'center',
 		        width: '16%',
-		        sortable:true
-		    }, {
-		        field: 'pushTime',
-		        title: '推送时间',
-		        align: 'center',
-		        width: '16%',
-		        sortable:true
-		    },/*{
-		        field: 'direction',
-		        title: '方向',
-		        align: 'center'
-		    }, */{
-		        field: 'unloaderMove',
-		        title: '卸船机移动位置',
-		        align: 'center',
-		        width: '12%'
-		    }, {
-		        field: 'OneTask',
-		        title: '一次抓钩作业量',
-		        align: 'center',
-		        width: '12%'
+		        formatter: function (value, row, index) {
+		            return ['<a class="btn cabindetail btn-primary" >船舱详情</a>',
+		            	'<a class="btn mod btn-primary">修改</a>'].join('');
+		        },
+		    	events: {
+					'click .mod' : function(e, value, row, index) {      
+						 alert('页面正在开发中...')// + JSON.stringify(row.id));
+					},
+	                'click .cabindetail' : function(e, value, row, index) {
+						 alert('页面正在开发中...')// + JSON.stringify(row.id));
+	                 }
+	        	}
 		    }],
 			locale : 'zh-CN',// 中文支持,
 			responseHandler : function(res) {
@@ -131,16 +164,16 @@ $(function(){
         })
         //重置按钮事件  
         $("#btn_reset").off().on("click",function(){  
-            $("#startDate").val("");
-            $("#endDate").val("");
-            $("#cmsid").val("");
-            $("#startPosition").val("");
-            $("#endPosition").val("");
-            $("#operationType").val("");
-    		$("#startDate").datetimepicker('setStartDate', null);
-    		$("#startDate").datetimepicker('setEndDate', new Date());
-    		$("#endDate").datetimepicker('setStartDate', null);
-    		$("#endDate").datetimepicker('setEndDate', new Date());
+//            $("#startDate").val("");
+//            $("#endDate").val("");
+//            $("#cmsid").val("");
+//            $("#startPosition").val("");
+//            $("#endPosition").val("");
+            $("#status").val("");
+//    		$("#startDate").datetimepicker('setStartDate', null);
+//    		$("#startDate").datetimepicker('setEndDate', new Date());
+//    		$("#endDate").datetimepicker('setStartDate', null);
+//    		$("#endDate").datetimepicker('setEndDate', new Date());
 
         });
         $('#btn_submit').modal({backdrop: 'static', show:false,  keyboard: false});

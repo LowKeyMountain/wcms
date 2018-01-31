@@ -77,6 +77,16 @@ public class TaskController {
 		modelMap.put("type", StringUtils.isBlank(type) ? "1" : type);
 		return new ModelAndView(PATH + "list");
 	}
+
+	/**
+	 * 跳转至船舶作业维护页面
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/maintenance")
+	public ModelAndView maintenance() {
+		return new ModelAndView(PATH + "maintenancelist");
+	}
 	
 	@RequestMapping("/addform")
 	public ModelAndView newTask() {
@@ -318,6 +328,7 @@ public class TaskController {
 		}
 		json.put("rows",result.get("data"));
 		json.put("total",result.get("total"));
+		json.put("task_id", taskId);
 
 		return json.toString();
 	}
@@ -347,20 +358,51 @@ public class TaskController {
 		Map<String, Object> result = null;
 		JSONObject json = new JSONObject();
 		try {
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("fuctionType", "FN_006");
-			jsonObject.put("order", "asc");
-			jsonObject.put("sort", "startTime");
-			jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "'}"));
-			result = infoQueryHelper.doQueryInfo(jsonObject);
+			result = taskShipService.doGetUnloaderUnshipInfo(taskId, null, null);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		json.put("rows",result.get("data"));
-		json.put("total",result.get("total"));
+//		json.put("total",result.get("total"));
 
 		return json.toString();
 	}
 	
+	/**
+	 * 返回卸船机总览列表
+	 * @param taskId
+	 * @return
+	 */
+	@RequestMapping(value = "/getUnloaderDetailList", produces = "text/json;charset=UTF-8")
+	public String getUnloaderDetailList(@RequestParam("taskId") Integer taskId,@RequestParam("unloaderId") String unloaderId) {
+		Map<String, Object> result = null;
+		JSONObject json = new JSONObject();
+		try {
+			result = taskShipService.doGetUnloaderUnshipDetailList(taskId,unloaderId, null, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		json.put("rows",result.get("data"));
+//		json.put("total",result.get("total"));
+
+		return json.toString();
+	}
 	
+	/**
+	 * 返回卸船机数据
+	 * 
+	 * @param params
+	 * @param map
+	 * @return
+	 */
+	@RequestMapping(value = "/getTaskWhList", produces = "text/json;charset=UTF-8")
+	public String getTaskWhList(@RequestParam Map<String, String> params, ModelMap map) {
+		int pageSize = Integer.parseInt(params.get("limit"));
+		int pageNum = Integer.parseInt(params.get("offset"));
+		String sortType = params.get("sortName");
+		String direction = params.get("sortOrder");
+		
+		Pageable pageable = PageUtils.buildPageRequest(pageNum, pageSize, sortType, direction);
+		return taskService.getTaskList(pageable, params);
+	}	
 }

@@ -52,21 +52,58 @@
 			},
 			 			
 //			idField : "id",// 指定主键列
-		    columns: [{
+		    columns: [/*{
 		        field: 'cargoId',
 		        title: '货物编号',
 		        align: 'center',
 		        width: '10%'
-		    }, {
+		    },*/ {
 		        field: 'cargoName',
 		        title: '货物名称',
 		        align: 'center',
 		        width: '10%',
+		        formatter: function (value, row, index) {
+                    //var html = '<a href="#" data-toggle="popover" data-original-title="货物详情" class="btn btn-success pop addon">'+row.cargoName+'</a>';
+                    var html = '<a href="javascript:view_click(' + row.cargoId + ')" class="btn btn-success pop addon">' + row.cargoName + '</a>';
+                    return html;
+                }/*,
+                events: {
+                    'mouseenter .addon': function (e, value, row, index) {
+//                        alert(row.cargoName);
+                    	$(".pop").popover({
+            			    trigger: "hover focus",
+            			    html: true,
+                            content: function() {
+                                return $('#popover_content_wrapper').html();
+                            },    
+            			    animation: false
+            			  })
+            			  .on("mouseenter", function() {
+            			    var _this = this;
+            			    $(this).popover("show");
+            			    $(".popover").on("mouseleave", function() {
+            			      $(_this).popover('hide');
+            			    });
+            			  }).on("mouseleave", function() {
+            			    var _this = this;
+            			    setTimeout(function() {
+            			      if (!$(".popover:hover").length) {
+            			        $(_this).popover("hide");
+            			      }
+            			    }, 300);
+            			  });                  	
+                     }
+                }*/
 		    }, {
 		        field: 'total',
 		        title: '总量',
 		        align: 'center',
-		        width: '10%',
+		        width: '10%'
+/*		        formatter:function(value,row,index) {
+		            return [
+		                '<a class="pop" data-toggle="popover" href="#">'+row.total+"("+row.total+')</a>'
+		            ]
+		        }*/		        
 		    }, {
 		        field: 'finished',
 		        title: '已完成',
@@ -89,5 +126,11 @@
 				return res;
 			}
 	});
-		
+	
 }
+	/**
+	 * 点击查看信息
+	 */
+	function view_click(id) {
+		Cl.showModalWindow(Cl.modalName, BasePath + "/cargo/cargoview?id=" + id);
+	}	

@@ -101,6 +101,28 @@ License: You must have a valid license purchased only from themeforest(the above
 	                        </p>
 	                    </div>
                     	-->
+				<!-- 模态对话框 -->
+				<div id="unloaderDetailModal" class="modal fade" role="dialog" tabindex="-1" aria-hidden="true" aria-labelledby="myModalLabel" backdrop=false style="display: block;">
+				    <div class="portlet-body">
+				        <div class="modal-content">
+				            <div class="modal-header bg-info">
+				                <!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button> -->
+				                <h4 class="modal-title">
+				                    <i class="glyphicon glyphicon-th-list"></i>
+				                    <a class="close" data-dismiss="modal">×</a>
+				                    <span id="lblAddTitle" style="font-weight:bold">卸船机作业明细</span>
+				                </h4>
+				            </div>
+			                <div class="modal-body" style="text-align:left;">
+						           <table id="unloaderdetail" class="table table-striped table-bordered table-hover table-checkable order-column"></table>												            
+			                </div>
+							<div class="modal-footer bg-info"  style="width:1000px;">
+								<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭</button>
+							</div>
+				        </div>
+				    </div>
+				</div>
+				                    	
 				<div class="row">
 					<div class="col-md-12">
 						<!-- BEGIN EXAMPLE TABLE PORTLET-->
@@ -131,6 +153,8 @@ License: You must have a valid license purchased only from themeforest(the above
 				</div>
 				<!-- END CONTENT BODY -->
 			</div>
+			<span id="unloaderDetail" class="" data-toggle="modal" data-target="#unloaderDetailModal"></span>
+			
 			<!-- END CONTENT -->
 		</div>
 	</div>

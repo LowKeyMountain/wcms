@@ -208,4 +208,18 @@ public class CargoController {
 		modelMap.put("cargo", data);
 		return new ModelAndView(PATH + "view");
 	}
+	
+	/**
+	 * 查看船舶货物信息(通过货物id)
+	 * @param id
+	 * @param cabinNo
+	 * @return
+	 */
+	@RequestMapping("/cargoview")
+	public ModelAndView cargoview(Integer id) {
+		Map<String, Object> map = taskShipService.doGetCargoDetailById(id);
+		Map<String, Object> data = (Map<String, Object>)map.get("data");
+		modelMap.put("cargo", data);
+		return new ModelAndView(PATH + "view");
+	}	
 }

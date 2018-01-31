@@ -3,6 +3,7 @@ package net.itw.wcms.ship.service;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import net.itw.wcms.ship.entity.Task;
@@ -27,12 +28,28 @@ public interface ITaskService {
 	String getTaskList(Pageable pageable, Integer status, Map<String, String> params);
 	
 	/**
+	 * 获取船舶作业列表
+	 * @param pageable
+	 * @param params
+	 * @return
+	 */
+	String getTaskList(Pageable pageable, Map<String, String> params);
+	
+	/**
 	 * 根据船舶状态，返回船舶列表
 	 * 
 	 * @param status
 	 * @return
 	 */
 	List<Task> getTaskByStatus(Integer status);
+
+	/**
+	 * 根据查询参数，返回作业船舶列表
+	 * 
+	 * @param params
+	 * @return
+	 */	
+	Page<Task> findAllByParams(Pageable pageable, Map<String , String > params);
 	
 	/**
 	 * 根据船舶id，返回船舶作业信息

@@ -19,6 +19,7 @@ import com.alibaba.fastjson.JSONObject;
 import net.itw.wcms.ship.entity.Cabin;
 import net.itw.wcms.ship.entity.Cargo;
 import net.itw.wcms.ship.entity.Task;
+import net.itw.wcms.ship.entity.UnloaderAll;
 import net.itw.wcms.ship.repository.CabinRepository;
 import net.itw.wcms.ship.repository.TaskRepository;
 import net.itw.wcms.ship.service.ITaskService;
@@ -41,6 +42,10 @@ public class TaskServiceImpl implements ITaskService {
 		return taskRepository.findAllByStatus(pageable, status);
 	}
 
+	public Page<Task> findAllByParams(Pageable pageable, Map<String , String > params)
+	{
+		return taskRepository.findAllByParams(pageable, params);
+	}
 	
 	public Page<Task> findAll(Pageable pageable, Map<String , String > params)
 	{
@@ -71,18 +76,18 @@ public class TaskServiceImpl implements ITaskService {
 			switch (status) {
 			case 0:
 				operation += "<a href='javascript:Task.unshipInfo_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>卸船情况</a>";
-				operation += "<a href='javascript:Task.unloadProgress_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>卸船进度</a>";
+				operation += "<a href='javascript:Task.unloadProgress_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>货物进度</a>";
 				operation += "<a href='javascript:Task.unloaderOverview_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>卸船机总览</a>";
 				operation += "<a href='javascript:Task.remove(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-times'></i> 删除</a>";
 				break;
 			case 1:
 				operation += "<a href='javascript:Task.unshipInfo_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>卸船情况</a>";
-				operation += "<a href='javascript:Task.unloadProgress_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>卸船进度</a>";
+				operation += "<a href='javascript:Task.unloadProgress_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>货物进度</a>";
 				operation += "<a href='javascript:Task.unloaderOverview_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>卸船机总览</a>";
 				break;	
 			case 2:
 				operation += "<a href='javascript:Task.unshipInfo_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>卸船情况</a>";
-				operation += "<a href='javascript:Task.unloadProgress_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>卸船进度</a>";
+				operation += "<a href='javascript:Task.unloadProgress_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>货物进度</a>";
 				operation += "<a href='javascript:Task.unloaderOverview_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>卸船机总览</a>";
 				break;	
 			default:
@@ -239,5 +244,33 @@ public class TaskServiceImpl implements ITaskService {
 		}
 		return mo;
 	}
-	
+
+	@Override
+	public String getTaskList(Pageable pageable, Map<String, String> params) {
+		Page<Task> page = findAllByParams(pageable, params);
+		JSONObject jo=null;
+		if (page == null || page.getTotalPages() == 0) {
+			return "{\"total\":0,\"rows\":[],}";
+		}
+		long total = page.getTotalElements();
+		JSONArray jsonArray = new JSONArray();
+		for (Task t : page) {
+			jo = new JSONObject();
+			jo.put("id", t.getId());
+			jo.put("departureTime", t.getDepartureTime() == null ? "" : DateTimeUtils.date2StrDateTime(t.getDepartureTime()));
+			jo.put("berthingTime", t.getBerthingTime() == null ? "" : DateTimeUtils.date2StrDateTime(t.getBerthingTime()));
+			jo.put("beginTime", t.getBeginTime() == null ? "" : DateTimeUtils.date2StrDateTime(t.getBeginTime()));
+			jo.put("endTime", t.getEndTime() == null ? "" : DateTimeUtils.date2StrDateTime(t.getEndTime()));
+			jo.put("berth", t.getBerth() == 1 ? "矿一":(t.getBerth() == 2 ? "矿二" :""));
+			jo.put("shipName", t.getShip().getShipName());
+			jo.put("status", t.getStatus());
+			jo.put("updateUser", t.getUpdateUser());
+			jo.put("updateTime", t.getUpdateTime() == null ? "" : DateTimeUtils.date2StrDateTime(t.getUpdateTime()));			
+			jsonArray.add(jo);
+		}
+		JSONObject jsonObject=new JSONObject();
+		jsonObject.put("total", total);
+		jsonObject.put("rows", jsonArray);
+		return jsonObject.toString();
+	}
 }
