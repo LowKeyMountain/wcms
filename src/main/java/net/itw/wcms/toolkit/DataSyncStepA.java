@@ -25,7 +25,7 @@ public class DataSyncStepA extends JdbcDaoSupport {
 	private final Logger log = Logger.getLogger("DataSyncStepA");
 
 	private static SqlMap sqlMap;
-	public static boolean isContinue;
+	public static boolean isContinue = false;
 
 	static {
 		try {
@@ -35,15 +35,6 @@ public class DataSyncStepA extends JdbcDaoSupport {
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		}
-	}
-
-	/**
-	 * 初始化
-	 * 
-	 */
-	public void init() {
-		isContinue = false;
-		log.info("初始化同步工具：步骤A ...");
 	}
 
 	/**
@@ -94,8 +85,7 @@ public class DataSyncStepA extends JdbcDaoSupport {
 		boolean isUpdateData = false;
 		try {
 			// 查询卸船机增量数据
-			List<Map<String, Object>> list = this.getJdbcTemplate().queryForList(sqlMap.getSql("01"),
-					new Object[] { cmsNum, cmsNum });
+			List<Map<String, Object>> list = this.getJdbcTemplate().queryForList(sqlMap.getSql("01", cmsNum), "ABB_GSU_" + cmsNum);
 			for (Map<String, Object> map : list) {
 
 				Integer operationType = (Integer) map.get("operationType");
@@ -138,7 +128,7 @@ public class DataSyncStepA extends JdbcDaoSupport {
 		} finally {
 			// 记录卸船机数据增量标识
 			if (isUpdateData && max > 0) {
-				this.getJdbcTemplate().update(sqlMap.getSql("04"), new Object[] { max, cmsNum });
+				this.getJdbcTemplate().update(sqlMap.getSql("04"), new Object[] { max, "ABB_GSU_" + cmsNum });
 			}
 		}
 	}

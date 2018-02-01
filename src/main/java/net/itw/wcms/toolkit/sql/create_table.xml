@@ -6,7 +6,7 @@
 			<description>创建表tab_temp_b语句</description>
 			<value>
 			<![CDATA[
-				CREATE TABLE `?` (
+				CREATE TABLE `%s` (
 				  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
 				  `Cmsid` varchar(100) NOT NULL COMMENT 'Cms卸船机编号',
 				  `operationType` int(2) DEFAULT NULL COMMENT '操作类型(0大车位置，1作业量信息。)',
@@ -27,7 +27,7 @@
 			<description>创建表tab_temp_c语句</description>
 			<value>
 			<![CDATA[
-				CREATE TABLE `?` (
+				CREATE TABLE `%s` (
 				  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id主键',
 				  `cabinId` int(11) DEFAULT NULL COMMENT '船舱id',
 				  `Cmsid` varchar(50) DEFAULT NULL COMMENT '卸船机编号',
@@ -46,7 +46,7 @@
 			<description>检查表是否存在</description>
 			<value>
 			<![CDATA[
- 				SHOW TABLES LIKE '%?%'
+ 				SHOW TABLES LIKE ?
 			]]>
 			</value>
 		</entry>

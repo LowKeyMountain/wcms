@@ -1,10 +1,13 @@
 package net.itw.wcms.ship.service.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.xml.bind.JAXBException;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,7 @@ import net.itw.wcms.ship.repository.TaskRepository;
 import net.itw.wcms.ship.service.ITaskShipService;
 import net.itw.wcms.toolkit.DataSyncHelper;
 import net.itw.wcms.toolkit.MessageOption;
+import net.itw.wcms.toolkit.sql.SqlMap;
 import net.itw.wcms.x27.entity.User;
 import net.itw.wcms.x27.exception.X27Exception;
 import net.itw.wcms.x27.service.IUserService;
@@ -48,7 +52,19 @@ public class TaskShipServiceImpl implements ITaskShipService {
 	
 	@Autowired
 	private DataSyncHelper dataSyncHelper;
+	
+	private static SqlMap sqlMap;
 
+	static {
+		try {
+			sqlMap = SqlMap.load(SqlMap.class.getResourceAsStream("./queryInterfaceConfig.xml"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * 设置船舱位置
 	 * 
@@ -374,43 +390,16 @@ public class TaskShipServiceImpl implements ITaskShipService {
 		Integer isSuccess = ConstantUtil.SuccessInt;
 		Map<String, Object> result = new HashMap<>();
 		try {
-			
-			StringBuffer sql = new StringBuffer("");
-			sql.append(" SELECT c.task_id, c.cabinId, c.cabinNo, w.cmsid  ");
-			sql.append(" , CASE w.cmsid  ");
-			sql.append(" WHEN 'ABB_GSU_1' THEN '#1'  ");
-			sql.append(" WHEN 'ABB_GSU_2' THEN '#2'  ");
-			sql.append(" WHEN 'ABB_GSU_3' THEN '#3'  ");
-			sql.append(" WHEN 'ABB_GSU_4' THEN '#4'  ");
-			sql.append(" WHEN 'ABB_GSU_5' THEN '#5'  ");
-			sql.append(" WHEN 'ABB_GSU_6' THEN '#6'  ");
-			sql.append(" ELSE w.cmsid  ");
-			sql.append(" END AS 'unloaderName', round(w.usedTime, 2) AS 'usedTime'  ");
-			sql.append(" , round(w.unloading, 2) AS 'unloading'  ");
-			sql.append(" , round(w.unloading / w.usedTime, 2) AS 'efficiency'  ");
-			sql.append(" FROM (  ");
-			sql.append(" SELECT cabinId, cmsid, MIN(Time) AS 'startTime'  ");
-			sql.append(" , MAX(Time) AS 'endTime'  ");
-			sql.append(" , timestampdiff(SECOND, MIN(Time), MAX(Time)) / 3600 AS 'usedTime'  ");
-			sql.append(" , SUM(OneTask) AS 'unloading'  ");
-			sql.append(" FROM v_work_info  ");
-			sql.append(" WHERE 1 = 1  ");
+			String sql = "";
+			Object[] args = null;
 			if (StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)) {
-				sql.append(" AND UNIX_TIMESTAMP(Time) BETWEEN UNIX_TIMESTAMP(?) AND UNIX_TIMESTAMP(?)  ");
-			}
-			sql.append(" GROUP BY Cmsid  ");
-			sql.append(" ) w  ");
-			sql.append(" LEFT JOIN v_cabin_info c ON w.cabinId = c.cabin_id  ");
-			sql.append(" WHERE 1 = 1  ");
-			sql.append(" AND c.task_id = ? 	ORDER BY w.cmsid ASC ");
-			
-			Object[] args = new Object[] { taskId };
-			if (StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)) {
+				sql = sqlMap.getSql("FN_009_2", taskId, taskId);
 				args = new Object[] { startTime, endTime, taskId };
+			} else {
+				args = new Object[] { taskId };
+				sql = sqlMap.getSql("FN_009_1", taskId, taskId);
 			}
-			System.out.println("doGetUnloaderUnshipInfo sql :" + sql.toString());
 			List<Map<String, Object>> data = this.dataSyncHelper.getJdbcTemplate().queryForList(sql.toString(), args);
-
 			result.put("msg", msg);
 			result.put("data", data);
 			result.put("code", isSuccess);
@@ -430,44 +419,18 @@ public class TaskShipServiceImpl implements ITaskShipService {
 		Integer isSuccess = ConstantUtil.SuccessInt;
 		Map<String, Object> result = new HashMap<>();
 		try {
-			StringBuffer sql = new StringBuffer("");
-			sql.append(" SELECT c.task_id, w.cmsid ");
-			sql.append(" , CASE w.cmsid ");
-			sql.append(" WHEN 'ABB_GSU_1' THEN '#1' ");
-			sql.append(" WHEN 'ABB_GSU_2' THEN '#2' ");
-			sql.append(" WHEN 'ABB_GSU_3' THEN '#3' ");
-			sql.append(" WHEN 'ABB_GSU_4' THEN '#4' ");
-			sql.append(" WHEN 'ABB_GSU_5' THEN '#5' ");
-			sql.append(" WHEN 'ABB_GSU_6' THEN '#6' ");
-			sql.append(" ELSE w.cmsid ");
-			sql.append(" END AS 'unloaderName', DATE_FORMAT(w.startTime, '%Y-%m-%d %H:%i:%s') AS 'startTime' ");
-			sql.append(" , DATE_FORMAT(w.endTime, '%Y-%m-%d %H:%i:%s') AS 'endTime' ");
-			sql.append(" , round(w.usedTime, 2) AS 'usedTime' ");
-			sql.append(" , round(w.unloading, 2) AS 'unloading' ");
-			sql.append(" , round(w.unloading / w.usedTime, 2) AS 'efficiency' ");
-			sql.append(" FROM ( ");
-			sql.append(" SELECT cabinId, cmsid, MIN(Time) AS 'startTime' ");
-			sql.append(" , MAX(Time) AS 'endTime' ");
-			sql.append(" , timestampdiff(SECOND, MIN(Time), MAX(Time)) / 3600 AS 'usedTime' ");
-			sql.append(" , SUM(OneTask) AS 'unloading' ");
-			sql.append(" FROM v_work_info ");
-			sql.append(" WHERE 1 = 1 ");
+			String sql = "";
+			Object[] args = null;
 			if (StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)) {
-				sql.append(" AND UNIX_TIMESTAMP(Time) BETWEEN UNIX_TIMESTAMP(?) AND UNIX_TIMESTAMP(?) ");
+				sql = sqlMap.getSql("FN_010_2");
+				sql = StringUtils.replace(sql, "%#", taskId + "");
+				args = new Object[] { startTime, endTime, taskId, unloaderId };
+			} else {
+				sql = sqlMap.getSql("FN_010_1");
+				sql = StringUtils.replace(sql, "%#", taskId + "");
+				args = new Object[] { taskId, unloaderId };
 			}
-			sql.append(" GROUP BY Cmsid, groupId ");
-			sql.append(" ) w ");
-			sql.append(" LEFT JOIN v_cabin_info c ON w.cabinId = c.cabin_id ");
-			sql.append(" WHERE 1 = 1 ");
-			sql.append(" AND c.task_id = ? AND w.cmsid = ? ORDER BY w.startTime ASC  ");
-			
-			Object[] args = new Object[] { taskId , unloaderId};
-			if (StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)) {
-				args = new Object[] {startTime, endTime, taskId, unloaderId};
-			}
-			System.out.println("doGetUnloaderUnshipDetailList sql :" + sql.toString());
 			List<Map<String, Object>> data = this.dataSyncHelper.getJdbcTemplate().queryForList(sql.toString(), args);
-			
 			result.put("msg", msg);
 			result.put("data", data);
 			result.put("code", isSuccess);

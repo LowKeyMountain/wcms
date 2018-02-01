@@ -65,11 +65,11 @@ public class DataSyncStepC extends JdbcDaoSupport {
 		try {
 			conn.setAutoCommit(false);
 			// 将船舶任务子表数据同步到临时表
-			this.getJdbcTemplate().update(sqlMap.getSql("01"), 0, taskId);
+			this.getJdbcTemplate().update(sqlMap.getSql("01"), 0, "tab_temp_b_" + taskId);
 			// 【任务子表】删除任务子表：卸船作业信息
-			this.getJdbcTemplate().update(sqlMap.getSql("02"), taskId);
+			this.getJdbcTemplate().update(sqlMap.getSql("02"), "tab_temp_b_" + taskId);
 			// 【任务子表】删除任务子表：组信息
-			this.getJdbcTemplate().update(sqlMap.getSql("03"), taskId);
+			this.getJdbcTemplate().update(sqlMap.getSql("03"), "tab_temp_c_" + taskId);
 			conn.commit();
 		} catch (DataAccessException e) {
 			conn.rollback();

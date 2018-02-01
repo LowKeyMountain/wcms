@@ -1,5 +1,6 @@
 package net.itw.wcms.interfaceApi.http;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,11 +12,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.bind.JAXBException;
+
 import org.apache.commons.lang.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
 
 import net.itw.wcms.toolkit.jdbc.DBUtil;
+import net.itw.wcms.toolkit.sql.SqlMap;
 
 /**
  * 
@@ -27,7 +31,19 @@ public class InfoQueryHelper {
 
 	private static final SimpleDateFormat Simple_Date_Format = new SimpleDateFormat("yyyy-MM-dd");
 	private static final SimpleDateFormat Simple_Time_Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	
+	private static SqlMap sqlMap;
 
+	static {
+		try {
+			sqlMap = SqlMap.load(SqlMap.class.getResourceAsStream("./queryInterfaceConfig.xml"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * 数据查询接口
 	 * 
@@ -36,9 +52,22 @@ public class InfoQueryHelper {
 	 * 
 	 *         <b> 出参[数据格式json]: </b> code 结果码( 1|成功; 0|失败)、 msg 返回提示信息、data
 	 *         返回数据</b>
-	 * 
-	 **/
+	 */
 	public Map<String, Object> doQueryInfo(JSONObject jsonObject) {
+		return doQueryInfo(jsonObject, null);
+	}
+	
+	/**
+	 * 数据查询接口
+	 * 
+	 * @param json
+	 * @param options
+	 * @return <b> 入参[数据格式json]: </b> fuctionType :功能类型(功能号) </b><br>
+	 * 
+	 *         <b> 出参[数据格式json]: </b> code 结果码( 1|成功; 0|失败)、 msg 返回提示信息、data
+	 *         返回数据</b>
+	 */
+	public Map<String, Object> doQueryInfo(JSONObject jsonObject, QueryOptions options) {
 		long a = System.currentTimeMillis();
 
 		System.out.println("接口[doQueryInfo_" + a + "] start ...");
@@ -47,7 +76,9 @@ public class InfoQueryHelper {
 		String msg = "操作成功！";
 		boolean isSuccess = true;
 		Map<String, Object> map = null;
-		QueryOptions options = new QueryOptions();
+		if (options == null) {
+			options = new QueryOptions();
+		}
 		// 解析入参
 		try {
 			String fuctionType = (String) jsonObject.get("fuctionType");
@@ -119,7 +150,24 @@ public class InfoQueryHelper {
 			ps.setString(1, functionType);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				config.put("SQL", rs.getString("SQL"));
+				try {
+					String _SQL = "";
+					if (options.args != null) {
+						_SQL = sqlMap.getSql(rs.getString("FUCTION_TYPE"), options.args);
+					}
+					if (StringUtils.isNotBlank(options.searchString) && StringUtils.isNotBlank(options.replacement)) {
+						if (StringUtils.isBlank(_SQL)) {
+							_SQL = sqlMap.getSql(rs.getString("FUCTION_TYPE"));
+						}
+						_SQL = StringUtils.replace(_SQL, options.searchString, options.replacement);
+					}
+					if (StringUtils.isBlank(_SQL)) {
+						_SQL = rs.getString("SQL");
+					}
+					config.put("SQL", _SQL);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				config.put("PARAM_CHECK", rs.getString("PARAM_CHECK"));
 				config.put("FUCTION_TYPE", rs.getString("FUCTION_TYPE"));
 				config.put("EXTEND_CONFIG", rs.getString("EXTEND_CONFIG"));
@@ -456,40 +504,5 @@ public class InfoQueryHelper {
 			conn.close();
 		}
 		return map;
-	}
-	
-	class QueryOptions {
-		public String order;
-		public String sort;
-		public Integer page;
-		private Integer total;
-		public Integer rows;
-
-		public Integer getTotal() {
-			return total;
-		}
-
-		public void setTotal(Integer total) {
-			this.total = total;
-		}
-
-		/**
-		 * 设置查询入参值。
-		 * 
-		 * @param param
-		 * @param value
-		 */
-		public void setQueryInParamValue(String param, Object value) {
-			if ("order".equalsIgnoreCase(param)) {
-				order = value.toString();
-			} else if ("sort".equalsIgnoreCase(param)) {
-				sort = value.toString();
-			} else if ("page".equalsIgnoreCase(param)) {
-				page = Integer.valueOf(value.toString());
-			} else if ("rows".equalsIgnoreCase(param)) {
-				rows = Integer.valueOf(value.toString());
-			}
-		}
-
 	}
 }

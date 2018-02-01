@@ -46,11 +46,11 @@ public class AutoCreateDBTable extends JdbcDaoSupport {
 		}
 		String tabName_b = "tab_temp_b_" + taskId;
 		if (!isExistsTable(tabName_b)) {
-			this.getJdbcTemplate().update(sqlMap.getSql("TAB_B"), tabName_b);
+			this.getJdbcTemplate().update(sqlMap.getSql("TAB_B", tabName_b));
 		}
 		String tabName_c = "tab_temp_c_" + taskId;
 		if (!isExistsTable(tabName_c)) {
-			this.getJdbcTemplate().update(sqlMap.getSql("TAB_C"), tabName_c);
+			this.getJdbcTemplate().update(sqlMap.getSql("TAB_C", tabName_c));
 		}
 		cache.put(taskId, (tabName_b + "," + tabName_c));
 	}
@@ -62,7 +62,7 @@ public class AutoCreateDBTable extends JdbcDaoSupport {
 	 * @return
 	 */
 	private boolean isExistsTable(String tableName) {
-		List<String> list = this.getJdbcTemplate().queryForList(sqlMap.getSql("checkTable"), String.class, tableName);
+		List<String> list = this.getJdbcTemplate().queryForList(sqlMap.getSql("checkTable"), String.class,"%" + tableName + "%");
 		if (list.isEmpty()) {
 			return false;
 		}

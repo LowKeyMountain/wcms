@@ -30,7 +30,12 @@ public class SqlMap {
 	public String getSql(String name) {
 		return sqls.get(name);
 	}
-
+	
+	public String getSql(String name, Object... args) {
+		String sql = sqls.get(name);
+		return String.format(sql, args);
+	}
+	
 	public static SqlMap load(String name) throws JAXBException, UnsupportedEncodingException {
 		SqlMap sqlMap = null;
 		if (StringUtils.isNotEmpty(name)) {

@@ -1,0 +1,579 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqlMap>
+	<sqls>
+		<entry>
+			<key>FN_002</key>
+			<description></description>
+			<value>
+			<![CDATA[
+			SELECT *
+			FROM (
+				SELECT t.*
+					, CASE 
+						WHEN round(qcl.clearance, 1) IS NULL THEN 0
+						ELSE round(qcl.clearance, 1)
+					END AS 'clearance'
+				FROM (
+					SELECT z_xcqk.*
+						, CASE 
+							WHEN round(c_syl.finished, 1) IS NULL THEN 0
+							ELSE round(c_syl.finished, 1)
+						END AS 'finished'
+						, CASE 
+							WHEN round(z_xcqk.total - c_syl.finished, 1) IS NULL THEN z_xcqk.total
+							ELSE round(z_xcqk.total - c_syl.finished, 1)
+						END AS 'remainder'
+					FROM (
+						SELECT cabin.task_id, cabin.cargo_id AS 'cargoId', cabin.cabin_id AS 'cabinId', cabin.cabin_no AS 'cabinNo', cabin.cargo_type AS 'cargoName'
+							, round(cabin.preunloading, 1) AS 'total', cabin.STATUS AS 'status'
+						FROM v_cabin_info cabin
+					) z_xcqk
+						LEFT JOIN (
+							SELECT SUM(c.OneTask) AS 'finished', o.cabinNo, o.task_id
+							FROM (
+								SELECT cabin.task_id, cabin.begin_time, cabin.cabin_no AS 'cabinNo', cabin.cabin_id
+									, CASE 
+										WHEN cabin.end_time IS NULL
+										AND cabin.clear_time IS NULL THEN CURRENT_TIMESTAMP()
+										WHEN cabin.end_time IS NULL
+										AND cabin.clear_time IS NOT NULL THEN cabin.clear_time
+										WHEN cabin.end_time IS NOT NULL
+										AND cabin.clear_time IS NULL THEN cabin.end_time
+										WHEN cabin.end_time IS NOT NULL
+										AND cabin.clear_time IS NOT NULL THEN cabin.clear_time
+									END AS 'end_time'
+								FROM v_cabin_info cabin
+							) o
+								LEFT JOIN (
+									SELECT `cc`.`cabinId` AS `cabinId`, `bb`.`groupId` AS `groupId`, `bb`.`Cmsid` AS `Cmsid`, `bb`.`Time` AS `Time`, `bb`.`unloaderMove` AS `unloaderMove`
+										, `bb`.`OneTask` AS `OneTask`, `bb`.`operationType` AS `operationType`
+									FROM `tab_temp_c_%s` `cc`
+										JOIN `tab_temp_b_%s` `bb`
+									WHERE `cc`.`id` = `bb`.`groupId`
+										AND `bb`.`operationType` = 1
+								) c
+								ON o.begin_time <= c.Time
+									AND o.end_time >= c.Time
+									AND o.cabin_id = c.cabinId
+							GROUP BY o.cabinNo, o.task_id
+						) c_syl
+						ON z_xcqk.task_id = c_syl.task_id
+							AND z_xcqk.cabinNo = c_syl.cabinNo
+				) t
+					LEFT JOIN (
+						SELECT SUM(c.OneTask) AS 'clearance', o.cabinNo, o.task_id
+						FROM (
+							SELECT cabin.task_id, cabin.cabin_id, cabin.cabin_no AS 'cabinNo'
+								, CASE 
+									WHEN cabin.end_time IS NULL THEN CURRENT_TIMESTAMP()
+									ELSE cabin.end_time
+								END AS 'end_time', cabin.clear_time
+							FROM v_cabin_info cabin
+						) o
+							LEFT JOIN (
+								SELECT `cc`.`cabinId` AS `cabinId`, `bb`.`groupId` AS `groupId`, `bb`.`Cmsid` AS `Cmsid`, `bb`.`Time` AS `Time`, `bb`.`unloaderMove` AS `unloaderMove`
+									, `bb`.`OneTask` AS `OneTask`, `bb`.`operationType` AS `operationType`
+								FROM `tab_temp_c_%s` `cc`
+									JOIN `tab_temp_b_%s` `bb`
+								WHERE `cc`.`id` = `bb`.`groupId`
+									AND `bb`.`operationType` = 1
+							) c
+							ON o.clear_time <= c.Time
+								AND o.end_time >= c.Time
+								AND o.cabin_id = c.cabinId
+						GROUP BY o.cabinNo, o.task_id
+					) qcl
+					ON t.task_id = qcl.task_id
+						AND t.cabinNo = qcl.cabinNo
+			) t
+			WHERE 1 = 1
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>FN_004</key>
+			<description>获取卸船情况信息</description>
+			<value>
+			<![CDATA[
+			SELECT *
+			FROM (
+				SELECT t.*
+					, CASE 
+						WHEN round(qcl.clearance, 1) IS NULL THEN 0
+						ELSE round(qcl.clearance, 1)
+					END AS 'clearance'
+				FROM (
+					SELECT z_xcqk.*
+						, CASE 
+							WHEN round(c_syl.finished, 1) IS NULL THEN 0
+							ELSE round(c_syl.finished, 1)
+						END AS 'finished'
+						, CASE 
+							WHEN round(z_xcqk.total - c_syl.finished, 1) IS NULL THEN z_xcqk.total
+							ELSE round(z_xcqk.total - c_syl.finished, 1)
+						END AS 'remainder'
+					FROM (
+						SELECT cabin.task_id, cabin.cargo_id AS 'cargoId', cabin.cabin_id AS 'cabinId', cabin.cabin_no AS 'cabinNo', cabin.cargo_type AS 'cargoName'
+							, round(cabin.preunloading, 1) AS 'total', cabin.start_position AS 'startPosition'
+							, cabin.end_position AS 'endPosition', cabin.STATUS AS 'status'
+						FROM v_cabin_info cabin
+					) z_xcqk
+						LEFT JOIN (
+							SELECT SUM(c.OneTask) AS 'finished', o.cabinNo, o.task_id
+							FROM (
+								SELECT cabin.task_id, cabin.begin_time, cabin.cabin_no AS 'cabinNo', cabin.cabin_id
+									, CASE 
+										WHEN cabin.end_time IS NULL
+										AND cabin.clear_time IS NULL THEN CURRENT_TIMESTAMP()
+										WHEN cabin.end_time IS NULL
+										AND cabin.clear_time IS NOT NULL THEN cabin.clear_time
+										WHEN cabin.end_time IS NOT NULL
+										AND cabin.clear_time IS NULL THEN cabin.end_time
+										WHEN cabin.end_time IS NOT NULL
+										AND cabin.clear_time IS NOT NULL THEN cabin.clear_time
+									END AS 'end_time'
+								FROM v_cabin_info cabin
+							) o
+								LEFT JOIN (
+									SELECT `c`.`cabinId` AS `cabinId`, `b`.`groupId` AS `groupId`, `b`.`Cmsid` AS `Cmsid`, `b`.`Time` AS `Time`, `b`.`unloaderMove` AS `unloaderMove`
+										, `b`.`OneTask` AS `OneTask`, `b`.`operationType` AS `operationType`
+									FROM `tab_temp_c_%s` `c`
+										JOIN `tab_temp_b_%s` `b`
+									WHERE `c`.`id` = `b`.`groupId`
+										AND `b`.`operationType` = 1
+								) c
+								ON o.begin_time <= c.Time
+									AND o.end_time >= c.Time
+									AND o.cabin_id = c.cabinId
+							GROUP BY o.cabinNo, o.task_id
+						) c_syl
+						ON z_xcqk.task_id = c_syl.task_id
+							AND z_xcqk.cabinNo = c_syl.cabinNo
+				) t
+					LEFT JOIN (
+						SELECT SUM(c.OneTask) AS 'clearance', o.cabinNo, o.task_id
+						FROM (
+							SELECT cabin.task_id, cabin.cabin_id, cabin.cabin_no AS 'cabinNo'
+								, CASE 
+									WHEN cabin.end_time IS NULL THEN CURRENT_TIMESTAMP()
+									ELSE cabin.end_time
+								END AS 'end_time', cabin.clear_time
+							FROM v_cabin_info cabin
+						) o
+							LEFT JOIN (
+								SELECT `cc`.`cabinId` AS `cabinId`, `bb`.`groupId` AS `groupId`, `bb`.`Cmsid` AS `Cmsid`, `bb`.`Time` AS `Time`, `bb`.`unloaderMove` AS `unloaderMove`
+									, `bb`.`OneTask` AS `OneTask`, `bb`.`operationType` AS `operationType`
+								FROM `tab_temp_c_%s` `cc`
+									JOIN `tab_temp_b_%s` `bb`
+								WHERE `cc`.`id` = `bb`.`groupId`
+									AND `bb`.`operationType` = 1
+							) c
+							ON o.clear_time <= c.Time
+								AND o.end_time >= c.Time
+								AND o.cabin_id = c.cabinId
+						GROUP BY o.cabinNo, o.task_id
+					) qcl
+					ON t.task_id = qcl.task_id
+						AND t.cabinNo = qcl.cabinNo
+			) t
+			WHERE 1 = 1
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>FN_006</key>
+			<description>获取卸船进度信息</description>
+			<value>
+			<![CDATA[
+			SELECT CASE cabin.cmsid
+					WHEN 'ABB_GSU_1' THEN '#1'
+					WHEN 'ABB_GSU_2' THEN '#2'
+					WHEN 'ABB_GSU_3' THEN '#3'
+					WHEN 'ABB_GSU_4' THEN '#4'
+					WHEN 'ABB_GSU_5' THEN '#5'
+					WHEN 'ABB_GSU_6' THEN '#6'
+					ELSE cabin.cmsid
+				END AS 'unloaderName', cabin.cabinNo, DATE_FORMAT(cabin.startTime, '%Y-%m-%d %H:%i:%s') AS 'startTime'
+				, DATE_FORMAT(cabin.endTime, '%Y-%m-%d %H:%i:%s') AS 'endTime', cabin.usedTime
+				, round(cabin.unloading, 1) AS 'unloading'
+				, round(cabin.efficiency, 4) AS 'efficiency', t.taskId AS 'task_id'
+			FROM (
+				SELECT c2.cabinId, c2.cmsid, c2.startTime, c2.endTime, c2.usedTime
+					, c2.unloading, c2.efficiency, c2.cargo_id, c2.cabin_no AS 'cabinNo'
+				FROM (
+					SELECT t1.*, t2.cargo_id, t2.cabin_no, t1.unloading / t1.usedTime AS 'efficiency'
+					FROM (
+						SELECT tc.*
+							, timestampdiff(MINUTE, tc.startTime, tc.endTime) / 60 AS 'usedTime'
+							, tb.unloading
+							, CASE 
+								WHEN tc.endTime IS NULL THEN CURRENT_TIMESTAMP()
+								ELSE tc.endTime
+							END AS 'endTime2'
+						FROM tab_temp_c tc
+							LEFT JOIN (
+								SELECT c.id AS 'groupId', c.cabinId, SUM(b.OneTask) AS 'unloading'
+								FROM tab_temp_b_%# b
+									LEFT JOIN tab_temp_c_%# c ON b.groupId = c.id
+								GROUP BY c.id
+							) tb
+							ON tc.id = tb.groupId
+					) t1
+						LEFT JOIN tab_cabin t2 ON t1.cabinid = t2.id
+				) c2
+			) cabin
+				LEFT JOIN (
+					SELECT c.*, task.id AS 'taskId', task.`status`, task.begin_time, task.end_time
+					FROM tab_cargo c
+						LEFT JOIN tab_task task ON c.task_id = task.id
+				) t
+				ON cabin.cargo_id = t.id
+			WHERE 1 = 1
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>FN_007</key>
+			<description></description>
+			<value>
+			<![CDATA[
+		  SELECT *
+			FROM (
+				SELECT t.task_id, t.cargo_id AS 'cargoId', MIN(t.cargoName) AS 'cargoName'
+					, MIN(t.total) AS 'total', MIN(t.finished) AS 'finished'
+					, MIN(t.remainder) AS 'remainder', MIN(t.clearance) AS 'clearance'
+				FROM (
+					SELECT t.*
+						, CASE 
+							WHEN round(qcl.clearance, 1) IS NULL THEN 0
+							ELSE round(qcl.clearance, 1)
+						END AS 'clearance'
+					FROM (
+						SELECT z_xcqk.*
+							, CASE 
+								WHEN round(c_syl.finished, 1) IS NULL THEN 0
+								ELSE round(c_syl.finished, 1)
+							END AS 'finished'
+							, CASE 
+								WHEN round(z_xcqk.total - c_syl.finished, 1) IS NULL THEN z_xcqk.total
+								ELSE round(z_xcqk.total - c_syl.finished, 1)
+							END AS 'remainder'
+						FROM (
+							SELECT cabin.task_id, cabin.cargo_id, cabin.cabin_id AS 'cabinId', cabin.cabin_no AS 'cabinNo', cabin.cargo_type AS 'cargoName'
+								, round(cabin.cargoPreunloading, 1) AS 'total', cabin.start_position AS 'startPosition'
+								, cabin.end_position AS 'endPosition', cabin.STATUS AS 'status'
+							FROM v_cabin_info cabin
+						) z_xcqk
+							LEFT JOIN (
+								SELECT SUM(c.OneTask) AS 'finished', o.cargo_id, o.task_id
+								FROM (
+									SELECT cabin.task_id, cabin.begin_time, cabin.cargo_id, cabin.cabin_id
+										, CASE 
+											WHEN cabin.end_time IS NULL
+											AND cabin.clear_time IS NULL THEN CURRENT_TIMESTAMP()
+											WHEN cabin.end_time IS NULL
+											AND cabin.clear_time IS NOT NULL THEN cabin.clear_time
+											WHEN cabin.end_time IS NOT NULL
+											AND cabin.clear_time IS NULL THEN cabin.end_time
+											WHEN cabin.end_time IS NOT NULL
+											AND cabin.clear_time IS NOT NULL THEN cabin.clear_time
+										END AS 'end_time'
+									FROM v_cabin_info cabin
+								) o
+									LEFT JOIN (
+										SELECT `cc`.`cabinId` AS `cabinId`, `bb`.`groupId` AS `groupId`, `bb`.`Cmsid` AS `Cmsid`, `bb`.`Time` AS `Time`, `bb`.`unloaderMove` AS `unloaderMove`
+											, `bb`.`OneTask` AS `OneTask`, `bb`.`operationType` AS `operationType`
+										FROM `tab_temp_c_%s` `cc`
+											JOIN `tab_temp_b_%s` `bb`
+										WHERE `cc`.`id` = `bb`.`groupId`
+											AND `bb`.`operationType` = 1
+									) c
+									ON o.begin_time <= c.Time
+										AND o.end_time >= c.Time
+										AND o.cabin_id = c.cabinId
+								GROUP BY o.cargo_id, o.task_id
+							) c_syl
+							ON z_xcqk.task_id = c_syl.task_id
+								AND z_xcqk.cargo_id = c_syl.cargo_id
+					) t
+						LEFT JOIN (
+							SELECT SUM(c.OneTask) AS 'clearance', o.cargo_id, o.task_id
+							FROM (
+								SELECT cabin.task_id, cabin.cabin_id, cabin.cargo_id
+									, CASE 
+										WHEN cabin.end_time IS NULL THEN CURRENT_TIMESTAMP()
+										ELSE cabin.end_time
+									END AS 'end_time', cabin.clear_time
+								FROM v_cabin_info cabin
+							) o
+								LEFT JOIN (
+									SELECT `cc`.`cabinId` AS `cabinId`, `bb`.`groupId` AS `groupId`, `bb`.`Cmsid` AS `Cmsid`, `bb`.`Time` AS `Time`, `bb`.`unloaderMove` AS `unloaderMove`
+										, `bb`.`OneTask` AS `OneTask`, `bb`.`operationType` AS `operationType`
+									FROM `tab_temp_c_%s` `cc`
+										JOIN `tab_temp_b_%s` `bb`
+									WHERE `cc`.`id` = `bb`.`groupId`
+										AND `bb`.`operationType` = 1
+								) c
+								ON o.clear_time <= c.Time
+									AND o.end_time >= c.Time
+									AND o.cabin_id = c.cabinId
+							GROUP BY o.cargo_id, o.task_id
+						) qcl
+						ON t.task_id = qcl.task_id
+							AND t.cargo_id = qcl.cargo_id
+				) t
+				WHERE 1 = 1
+				GROUP BY t.cargo_id, t.task_id
+			) t
+			WHERE 1 = 1
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>FN_008</key>
+			<description></description>
+			<value>
+			<![CDATA[
+			SELECT *
+			FROM (
+				SELECT t.task_id, MIN(t.total) AS 'total', MIN(t.finished) AS 'finished'
+					, MIN(t.remainder) AS 'remainder', MIN(t.clearance) AS 'clearance'
+				FROM (
+					SELECT t.*
+						, CASE 
+							WHEN round(qcl.clearance, 1) IS NULL THEN 0
+							ELSE round(qcl.clearance, 1)
+						END AS 'clearance'
+					FROM (
+						SELECT z_xcqk.*
+							, CASE 
+								WHEN round(c_syl.finished, 1) IS NULL THEN 0
+								ELSE round(c_syl.finished, 1)
+							END AS 'finished'
+							, CASE 
+								WHEN round(z_xcqk.total - c_syl.finished, 1) IS NULL THEN z_xcqk.total
+								ELSE round(z_xcqk.total - c_syl.finished, 1)
+							END AS 'remainder'
+						FROM (
+							SELECT cabin.task_id, cabin.cabin_id AS 'cabinId', round(cabin.shipPreunloading, 1) AS 'total'
+							FROM v_cabin_info cabin
+						) z_xcqk
+							LEFT JOIN (
+								SELECT SUM(c.OneTask) AS 'finished', o.task_id
+								FROM (
+									SELECT cabin.task_id, cabin.begin_time, cabin.cabin_id
+										, CASE 
+											WHEN cabin.end_time IS NULL
+											AND cabin.clear_time IS NULL THEN CURRENT_TIMESTAMP()
+											WHEN cabin.end_time IS NULL
+											AND cabin.clear_time IS NOT NULL THEN cabin.clear_time
+											WHEN cabin.end_time IS NOT NULL
+											AND cabin.clear_time IS NULL THEN cabin.end_time
+											WHEN cabin.end_time IS NOT NULL
+											AND cabin.clear_time IS NOT NULL THEN cabin.clear_time
+										END AS 'end_time'
+									FROM v_cabin_info cabin
+								) o
+									LEFT JOIN (
+										SELECT `cc`.`cabinId` AS `cabinId`, `bb`.`groupId` AS `groupId`, `bb`.`Cmsid` AS `Cmsid`, `bb`.`Time` AS `Time`, `bb`.`unloaderMove` AS `unloaderMove`
+											, `bb`.`OneTask` AS `OneTask`, `bb`.`operationType` AS `operationType`
+										FROM `tab_temp_c_%s` `cc`
+											JOIN `tab_temp_b_%s` `bb`
+										WHERE `cc`.`id` = `bb`.`groupId`
+											AND `bb`.`operationType` = 1
+									) c
+									ON o.begin_time <= c.Time
+										AND o.end_time >= c.Time
+										AND o.cabin_id = c.cabinId
+								GROUP BY o.task_id
+							) c_syl
+							ON z_xcqk.task_id = c_syl.task_id
+					) t
+						LEFT JOIN (
+							SELECT SUM(c.OneTask) AS 'clearance', o.task_id
+							FROM (
+								SELECT cabin.task_id, cabin.cabin_id
+									, CASE 
+										WHEN cabin.end_time IS NULL THEN CURRENT_TIMESTAMP()
+										ELSE cabin.end_time
+									END AS 'end_time', cabin.clear_time
+								FROM v_cabin_info cabin
+							) o
+								LEFT JOIN (
+									SELECT `cc`.`cabinId` AS `cabinId`, `bb`.`groupId` AS `groupId`, `bb`.`Cmsid` AS `Cmsid`, `bb`.`Time` AS `Time`, `bb`.`unloaderMove` AS `unloaderMove`
+										, `bb`.`OneTask` AS `OneTask`, `bb`.`operationType` AS `operationType`
+									FROM `tab_temp_c_%s` `cc`
+										JOIN `tab_temp_b_%s` `bb`
+									WHERE `cc`.`id` = `bb`.`groupId`
+										AND `bb`.`operationType` = 1
+								) c
+								ON o.clear_time <= c.Time
+									AND o.end_time >= c.Time
+									AND o.cabin_id = c.cabinId
+							GROUP BY o.task_id
+						) qcl
+						ON t.task_id = qcl.task_id
+				) t
+				WHERE 1 = 1
+				GROUP BY t.task_id
+			) t
+			WHERE 1 = 1
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>FN_009_1</key>
+			<description></description>
+			<value>
+			<![CDATA[
+			SELECT c.task_id, w.cmsid
+				, CASE w.cmsid
+					WHEN 'ABB_GSU_1' THEN '#1'
+					WHEN 'ABB_GSU_2' THEN '#2'
+					WHEN 'ABB_GSU_3' THEN '#3'
+					WHEN 'ABB_GSU_4' THEN '#4'
+					WHEN 'ABB_GSU_5' THEN '#5'
+					WHEN 'ABB_GSU_6' THEN '#6'
+					ELSE w.cmsid
+				END AS 'unloaderName', round(w.usedTime, 2) AS 'usedTime'
+				, round(w.unloading, 2) AS 'unloading'
+				, round(w.unloading / w.usedTime, 2) AS 'efficiency'
+			FROM (
+				SELECT c.cabinId, c.cmsid, MIN(c.Time) AS 'startTime'
+					, MAX(c.Time) AS 'endTime'
+					, timestampdiff(SECOND, MIN(c.Time), MAX(c.Time)) / 3600 AS 'usedTime'
+					, SUM(c.OneTask) AS 'unloading'
+				FROM (
+					SELECT `cc`.`cabinId` AS `cabinId`, `bb`.`groupId` AS `groupId`, `bb`.`Cmsid` AS `Cmsid`, `bb`.`Time` AS `Time`, `bb`.`unloaderMove` AS `unloaderMove`
+						, `bb`.`OneTask` AS `OneTask`, `bb`.`operationType` AS `operationType`
+					FROM `tab_temp_c_%s` `cc`
+						JOIN `tab_temp_b_%s` `bb`
+					WHERE `cc`.`id` = `bb`.`groupId`
+						AND `bb`.`operationType` = 1
+				) c
+				WHERE 1 = 1
+				GROUP BY c.Cmsid
+			) w
+				LEFT JOIN v_cabin_info c ON w.cabinId = c.cabin_id
+			WHERE 1 = 1
+				AND c.task_id = ?
+			ORDER BY w.cmsid ASC
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>FN_009_2</key>
+			<description></description>
+			<value>
+			<![CDATA[
+			SELECT c.task_id, w.cmsid
+				, CASE w.cmsid
+					WHEN 'ABB_GSU_1' THEN '#1'
+					WHEN 'ABB_GSU_2' THEN '#2'
+					WHEN 'ABB_GSU_3' THEN '#3'
+					WHEN 'ABB_GSU_4' THEN '#4'
+					WHEN 'ABB_GSU_5' THEN '#5'
+					WHEN 'ABB_GSU_6' THEN '#6'
+					ELSE w.cmsid
+				END AS 'unloaderName', round(w.usedTime, 2) AS 'usedTime'
+				, round(w.unloading, 2) AS 'unloading'
+				, round(w.unloading / w.usedTime, 2) AS 'efficiency'
+			FROM (
+				SELECT c.cabinId, c.cmsid, MIN(c.Time) AS 'startTime'
+					, MAX(c.Time) AS 'endTime'
+					, timestampdiff(SECOND, MIN(c.Time), MAX(c.Time)) / 3600 AS 'usedTime'
+					, SUM(c.OneTask) AS 'unloading'
+				FROM (
+					SELECT `cc`.`cabinId` AS `cabinId`, `bb`.`groupId` AS `groupId`, `bb`.`Cmsid` AS `Cmsid`, `bb`.`Time` AS `Time`, `bb`.`unloaderMove` AS `unloaderMove`
+						, `bb`.`OneTask` AS `OneTask`, `bb`.`operationType` AS `operationType`
+					FROM `tab_temp_c_%s` `cc`
+						JOIN `tab_temp_b_%s` `bb`
+					WHERE `cc`.`id` = `bb`.`groupId`
+						AND `bb`.`operationType` = 1
+				) c
+				WHERE 1 = 1
+					AND UNIX_TIMESTAMP(c.Time) BETWEEN UNIX_TIMESTAMP(?) AND UNIX_TIMESTAMP(?)
+				GROUP BY c.Cmsid
+			) w
+				LEFT JOIN v_cabin_info c ON w.cabinId = c.cabin_id
+			WHERE 1 = 1
+				AND c.task_id = ?
+			ORDER BY w.cmsid ASC
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>FN_010_1</key>
+			<description></description>
+			<value>
+			<![CDATA[
+			SELECT c.task_id, w.cmsid, c.cabin_id, c.cabin_no
+				, CASE w.cmsid
+					WHEN 'ABB_GSU_1' THEN '#1'
+					WHEN 'ABB_GSU_2' THEN '#2'
+					WHEN 'ABB_GSU_3' THEN '#3'
+					WHEN 'ABB_GSU_4' THEN '#4'
+					WHEN 'ABB_GSU_5' THEN '#5'
+					WHEN 'ABB_GSU_6' THEN '#6'
+					ELSE w.cmsid
+				END AS 'unloaderName', DATE_FORMAT(w.startTime, '%Y-%m-%d %H:%i:%s') AS 'startTime'
+				, DATE_FORMAT(w.endTime, '%Y-%m-%d %H:%i:%s') AS 'endTime'
+				, round(w.usedTime, 2) AS 'usedTime'
+				, round(w.unloading, 2) AS 'unloading'
+				, round(w.unloading / w.usedTime, 2) AS 'efficiency'
+			FROM (
+				SELECT c.cabinId, b.cmsid, MIN(b.Time) AS 'startTime'
+					, MAX(b.Time) AS 'endTime'
+					, timestampdiff(SECOND, MIN(b.Time), MAX(b.Time)) / 3600 AS 'usedTime'
+					, SUM(b.OneTask) AS 'unloading'
+				FROM `tab_temp_c_%#` `c`, `tab_temp_b_%#` `b`
+				WHERE 1 = 1
+					AND `c`.`id` = `b`.`groupId`
+				GROUP BY b.Cmsid, b.groupId
+			) w
+				LEFT JOIN v_cabin_info c ON w.cabinId = c.cabin_id
+			WHERE 1 = 1
+			AND c.task_id = ? AND w.cmsid = ?
+			ORDER BY w.startTime ASC
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>FN_010_2</key>
+			<description></description>
+			<value>
+			<![CDATA[
+			SELECT c.task_id, w.cmsid, c.cabin_id, c.cabin_no
+				, CASE w.cmsid
+					WHEN 'ABB_GSU_1' THEN '#1'
+					WHEN 'ABB_GSU_2' THEN '#2'
+					WHEN 'ABB_GSU_3' THEN '#3'
+					WHEN 'ABB_GSU_4' THEN '#4'
+					WHEN 'ABB_GSU_5' THEN '#5'
+					WHEN 'ABB_GSU_6' THEN '#6'
+					ELSE w.cmsid
+				END AS 'unloaderName', DATE_FORMAT(w.startTime, '%Y-%m-%d %H:%i:%s') AS 'startTime'
+				, DATE_FORMAT(w.endTime, '%Y-%m-%d %H:%i:%s') AS 'endTime'
+				, round(w.usedTime, 2) AS 'usedTime'
+				, round(w.unloading, 2) AS 'unloading'
+				, round(w.unloading / w.usedTime, 2) AS 'efficiency'
+			FROM (
+				SELECT c.cabinId, b.cmsid, MIN(b.Time) AS 'startTime'
+					, MAX(b.Time) AS 'endTime'
+					, timestampdiff(SECOND, MIN(b.Time), MAX(b.Time)) / 3600 AS 'usedTime'
+					, SUM(b.OneTask) AS 'unloading'
+				FROM `tab_temp_c_%#` `c`, `tab_temp_b_%#` `b`
+				WHERE 1 = 1
+					AND `c`.`id` = `b`.`groupId`
+					AND UNIX_TIMESTAMP(b.Time) BETWEEN UNIX_TIMESTAMP(?) AND UNIX_TIMESTAMP(?) 
+				GROUP BY b.Cmsid, b.groupId
+			) w
+				LEFT JOIN v_cabin_info c ON w.cabinId = c.cabin_id
+			WHERE 1 = 1
+			AND c.task_id = ? AND w.cmsid = ?
+			ORDER BY w.startTime ASC
+			]]>
+			</value>
+		</entry>
+	</sqls>
+</sqlMap>

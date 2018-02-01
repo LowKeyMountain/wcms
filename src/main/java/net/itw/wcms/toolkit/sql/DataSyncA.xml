@@ -6,7 +6,7 @@
 			<description>查询卸船机增量数据</description>
 			<value>
 			<![CDATA[
-			select * from tab_unloader_? t where t.id > ( select t.id from tab_temp_d t where t.unloaderId = 'ABB_GSU_?' ) 
+			select * from tab_unloader_%s t where t.id > ( select t.id from tab_temp_d t where t.unloaderId = ? ) 
 			ORDER BY id ASC
 			]]>
 			</value>
@@ -36,7 +36,7 @@
 			<description>更新卸船机数据增量标识</description>
 			<value>
 			<![CDATA[
-			  UPDATE tab_temp_d t SET t.id = ? WHERE t.unloaderId = 'ABB_GSU_?'  
+			  UPDATE tab_temp_d t SET t.id = ? WHERE t.unloaderId = ?  
 			]]>
 			</value>
 		</entry>
