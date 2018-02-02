@@ -196,13 +196,13 @@ License: You must have a valid license purchased only from themeforest(the above
 												   					<option value="6" >ABB_GSU_6</option>
 																</select>
 									                        </div>-->
-									                        <label class="control-label col-md-1" for="status">作业状态: </label>
+									                        <label class="control-label col-md-1" for="status">状态: </label>
 									                        <div class="col-md-2">
 																<select id="status" name="status" class="form-control select2me">
 																	<option value="">请选择...</option>
-												   					<option value="0" >预靠船舶</option>
-												   					<option value="1" >作业船舶</option>
-												   					<option value="2" >离港船舶</option>
+												   					<option value="0" >预靠</option>
+												   					<option value="1" >作业中</option>
+												   					<option value="2" >已离港</option>
 																</select>
 									                        </div>								                        
 									                    </div>

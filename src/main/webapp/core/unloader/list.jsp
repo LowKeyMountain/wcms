@@ -316,7 +316,7 @@ License: You must have a valid license purchased only from themeforest(the above
             $(document).ready(function(){
       			$(".form_datetime").datetimepicker({
 	            	startView: 'month',
-	            	minView: 'month',
+	            	minView: 'hour',
     			    language:  'zh-CN',
     			    format: 'yyyy-mm-dd hh:ii:ss',
     			    todayBtn:  true,
