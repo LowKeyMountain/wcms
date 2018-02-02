@@ -214,7 +214,9 @@ public class AppHttpInterface {
 
 			jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "','$cabinNo':'" + cabinNo + "'}"));
 			
-			return infoQueryHelper.doQueryInfo(jsonObject);
+			QueryOptions options = new QueryOptions();
+			options.args = new Object[] { taskId, taskId, taskId, taskId };
+			return infoQueryHelper.doQueryInfo(jsonObject, options);
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.put("code", "0");
@@ -287,8 +289,9 @@ public class AppHttpInterface {
 			jsonObject.put("order", "asc");
 			jsonObject.put("sort", "cabinNo");
 			jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "'}"));
-			
-			return infoQueryHelper.doQueryInfo(jsonObject);
+			QueryOptions options = new QueryOptions();
+			options.args = new Object[] { taskId, taskId, taskId, taskId };
+			return infoQueryHelper.doQueryInfo(jsonObject, options);
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.put("code", "0");
@@ -400,8 +403,10 @@ public class AppHttpInterface {
 			jsonObject.put("order", "DESC");
 			jsonObject.put("sort", "startTime");
 			jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "','$cabinNo':'" + cabinNo + "'}"));
-			
-			return infoQueryHelper.doQueryInfo(jsonObject);
+			QueryOptions options = new QueryOptions();
+			options.searchString = "%#";
+			options.replacement = taskId;
+			return infoQueryHelper.doQueryInfo(jsonObject, options);
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.put("code", "0");
@@ -575,8 +580,9 @@ public class AppHttpInterface {
 			jsonObject.put("order", "asc");
 			jsonObject.put("sort", "CARGOID");
 			jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "'}"));
-			
-			return infoQueryHelper.doQueryInfo(jsonObject);
+			QueryOptions options = new QueryOptions();
+			options.args = new Object[] { taskId, taskId, taskId, taskId };
+			return infoQueryHelper.doQueryInfo(jsonObject, options);
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.put("code", "0");
@@ -613,8 +619,9 @@ public class AppHttpInterface {
 			}
 
 			jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "'}"));
-			
-			return infoQueryHelper.doQueryInfo(jsonObject);
+			QueryOptions options = new QueryOptions();
+			options.args = new Object[] { taskId, taskId, taskId, taskId };
+			return infoQueryHelper.doQueryInfo(jsonObject, options);
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.put("code", "0");

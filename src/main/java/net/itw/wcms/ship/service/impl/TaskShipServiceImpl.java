@@ -1,10 +1,13 @@
 package net.itw.wcms.ship.service.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.xml.bind.JAXBException;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,7 @@ import net.itw.wcms.ship.repository.TaskRepository;
 import net.itw.wcms.ship.service.ITaskShipService;
 import net.itw.wcms.toolkit.DataSyncHelper;
 import net.itw.wcms.toolkit.MessageOption;
+import net.itw.wcms.toolkit.sql.SqlMap;
 import net.itw.wcms.x27.entity.User;
 import net.itw.wcms.x27.exception.X27Exception;
 import net.itw.wcms.x27.service.IUserService;
@@ -48,7 +52,19 @@ public class TaskShipServiceImpl implements ITaskShipService {
 	
 	@Autowired
 	private DataSyncHelper dataSyncHelper;
+	
+	private static SqlMap sqlMap;
 
+	static {
+		try {
+			sqlMap = SqlMap.load(SqlMap.class.getResourceAsStream("./queryInterfaceConfig.xml"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * 设置船舱位置
 	 * 
@@ -123,251 +139,6 @@ public class TaskShipServiceImpl implements ITaskShipService {
 		return mo;
 	}
 
-	/**
-	 * 开始卸船
-	 * 
-	 * @param taskId
-	 * @param userName
-	 * @return
-	 */
-	@Override
-	public MessageOption beginShipUnload(String taskId, String userName) {
-		// 需求：作业船舶开始卸船功能。
-		// 前置条件：
-		// 1. 检查当前作业船舶状态，只有"预靠船舶|0"状态才能开始卸船，其他状态不接受开始卸船请求；
-		// 2. 检查作业船舶是否设置舱位；
-		// 处理流程：
-		// 1. 将作业船舶状态改为 : 作业船舶|1；
-		// 2. 设置作业船舶开始卸货时间；
-		// 3. 设置作业船舶关联的卸船机开始作业时间；
-		// [作业船舶状态 : 卸货中|2]
-		// 1. 设置作业船舶开始卸货时间；
-		// 2. 设置作业船舶关联的卸船机开始作业时间；
-		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
-		// try {
-		//
-		// User operator = userService.getUserByUserName(userName);
-		// Task task = taskRepository.findOne(Integer.parseInt(taskId));
-		//
-		// if (task == null) {
-		// throw new X27Exception("操作失败：[taskId]未找到指定作业船舶 ！");
-		// }
-		//
-		// // 前置条件验证
-		// // 1. 检查当前作业船舶状态，只有"预卸货|1、 卸货中|2"状态才能开始卸船，其他状态不接受开始卸船请求；
-		// Integer taskStatus = task.getStatus();
-		// if (!(Task.TaskStatus_PreDischarge == taskStatus ||
-		// Task.TaskStatus_InDischarge == taskStatus)) {
-		// throw new X27Exception("操作失败： 作业船舶只在预卸货、 卸货中状态时才可以进行开始卸船！");
-		// }
-		// // 2. 检查作业船舶是否有绑定泊位；
-		// boolean isBind = false;
-		// Set<TaskBerth> taskBerths = task.getTaskBerths();
-		// if (taskBerths != null) {
-		// for (TaskBerth e : taskBerths) {
-		// if (Berth.BerthStatus_Occupied == e.getBerth().getStatus()) {
-		// isBind = true;
-		// }
-		// }
-		// }
-		// if (!isBind) {
-		// throw new X27Exception("操作失败： 作业船舶未绑定泊位！");
-		// }
-		// // 3.检查作业船舶是否设置舱位；
-		// boolean isSet = false;
-		// if (taskBerths != null) {
-		// for (TaskBerth e : taskBerths) {
-		// if (Berth.BerthStatus_Occupied == e.getBerth().getStatus()) {
-		// Set<TaskCabinPositionDetail> taskCabinPositionDetails =
-		// e.getTaskCabinPositionDetails();
-		// if (taskCabinPositionDetails != null
-		// && taskCabinPositionDetails.size() == task.getShip().getCabinNum()) {
-		// isSet = true;
-		// }
-		// }
-		// }
-		// }
-		// if (!isSet) {
-		// throw new X27Exception("操作失败： 当前作业船舶未设置舱位！");
-		// }
-		//
-		// switch (taskStatus) {
-		// case 1:
-		// // [作业船舶状态 : 预卸货|1]
-		// // 1. 将作业船舶状态改为 : 卸货中|2；
-		// // 2. 设置作业船舶开始卸货时间；
-		// // 3. 设置作业船舶关联的卸船机开始作业时间；
-		// task.setStatus(2);
-		// task.setBeginTime(new Date());
-		// // 设置作业船舶关联的卸船机开始作业时间；
-		// for (TaskBerth tb : task.getTaskBerths()) {
-		// for (TaskUnloadShipDetail e : tb.getTaskUnloadShipDetails()) {
-		// e.setStartTime(new Date());
-		// }
-		// }
-		// task.setUpdateTime(new Date());
-		// task.setUpdateUser(operator.getUserName());
-		// taskRepository.saveAndFlush(task);
-		// break;
-		// case 2:
-		// // [作业船舶状态 : 卸货中|2]
-		// // 1. 设置作业船舶开始卸货时间；
-		// // 2. 设置作业船舶关联的卸船机开始作业时间；
-		// task.setBeginTime(new Date());
-		// // 设置作业船舶关联的卸船机开始作业时间；
-		// for (TaskBerth tb : task.getTaskBerths()) {
-		// for (TaskUnloadShipDetail e : tb.getTaskUnloadShipDetails()) {
-		// e.setStartTime(new Date());
-		// }
-		// }
-		// task.setUpdateTime(new Date());
-		// task.setUpdateUser(operator.getUserName());
-		// taskRepository.saveAndFlush(task);
-		// break;
-		// default:
-		// break;
-		// }
-		//
-		// } catch (Exception e) {
-		// mo.msg = e.getMessage();
-		// mo.code = ConstantUtil.FailInt;
-		// }
-		return mo;
-	}
-
-	/**
-	 * 设置清舱
-	 * 
-	 * @param taskId
-	 * @param cabinNo
-	 * @param userName
-	 * @return
-	 */
-	@Override
-	public MessageOption setClearCabin(String taskId, String cabinNo, String userName) {
-		// 需求：作业船舶设置清舱功能。
-		// 前置条件：
-		// 1. 检查该船舱货物是否快卸完；
-		// 2. 检查当前作业船舶状态，只有"卸货中|2"状态才能清舱，其他状态不接受清舱请求；
-		// 处理流程：
-		// [作业船舶状态 : 卸货中|2]
-		// 1. 设置作业船舶指定舱位状态为：清舱状态；
-		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
-		// try {
-		//
-		// User operator = userService.getUserByUserName(userName);
-		// Task task = taskRepository.findOne(Integer.parseInt(taskId));
-		//
-		// if (task == null) {
-		// throw new X27Exception("操作失败：[taskId]未找到指定作业船舶 ！");
-		// }
-		//
-		// // 前置条件验证
-		// // 1. 检查该船舱货物是否快卸完；
-		// // TODO:??
-		// // 2. 检查当前作业船舶状态，只有"卸货中|2"状态才能清舱，其他状态不接受清舱请求；
-		// Integer taskStatus = task.getStatus();
-		// if (!(Task.TaskStatus_InDischarge == taskStatus)) {
-		// throw new X27Exception("操作失败： 作业船舶只卸货中状态时才可以设置清舱状态！");
-		// }
-		//
-		// // [作业船舶状态 : 卸货中|2]
-		// // 1. 设置作业船舶指定舱位状态为：清舱状态；
-		// for (TaskCabinDetail cabin : task.getTaskCabinDetails()) {
-		// if (cabin.getId() == Integer.parseInt(cabinNo)) {
-		// cabin.setIsFinish(true);
-		// cabin.setUpdateTime(new Date());
-		// cabin.setUpdateUser(operator.getUserName());
-		// }
-		// }
-		// task.setUpdateTime(new Date());
-		// task.setUpdateUser(operator.getUserName());
-		// taskRepository.saveAndFlush(task);
-		// } catch (Exception e) {
-		// mo.msg = e.getMessage();
-		// mo.code = ConstantUtil.FailInt;
-		// }
-		return mo;
-	}
-
-	/**
-	 * 完成卸船
-	 * 
-	 * @param taskId
-	 * @param userName
-	 * @return
-	 */
-	@Override
-	public MessageOption finishedShipUnload(String taskId, String userName) {
-
-		// 需求：设置船舶完成卸货状态
-		// 前置条件：
-		// 1.检查当前船舶状态，只有“卸货中|2”状态才能设置“完成卸船”，其它状态不能进行设定；
-		// 2.检查各船舱是否为清舱状态,各舱均为清舱状态时才可设置完成卸船；
-		// 处理流程：
-		// 【作业船舶状态：卸货中|2】
-		// 分析 ：
-		// 1.查询各船舱是否全部为清舱状态，如果全部清舱则变更船舶状态为“完成卸船”
-
-		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
-		// try {
-		//
-		// User operator = userService.getUserByUserName(userName);
-		// Task task = taskRepository.findOne(Integer.parseInt(taskId));
-		//
-		// if (task == null) {
-		// throw new X27Exception("操作失败：[taskId]未找到指定作业船舶 ！");
-		// }
-		//
-		// // 作业状态 （已入港|0、 预卸货|1、 卸货中|2、 完成卸船|3、 已离港|4）
-		// // 1.检查当前船舶状态，只有“卸货中|2”状态才能设置“完成卸船”，其它状态不能进行设定；
-		// Integer status = task.getStatus();
-		// switch (status) {
-		// case 0:
-		// mo.msg = "操作失败: 当前船舶为绑定泊位或设置舱位！";
-		// mo.code = ConstantUtil.FailInt;
-		// break;
-		// case 1:
-		// mo.msg = "操作失败: 当前还未开始卸货！";
-		// mo.code = ConstantUtil.FailInt;
-		// break;
-		// case 2:
-		// // 2.检查各船舱是否为清舱状态,各舱均为清舱状态时才可设置完成卸船；
-		// for (TaskCabinDetail cabin : task.getTaskCabinDetails()) {
-		// if (cabin.getIsFinish() == true) {
-		// continue;
-		// } else {
-		// mo.msg = "操作失败：当前船舶存在未清舱的船舱，船舱编号：" + cabin.getCabinNo();
-		// mo.code = ConstantUtil.FailInt;
-		// return mo;
-		// }
-		// }
-		// task.setStatus(3);
-		// task.setEndTime(new Date());
-		// task.setUpdateTime(new Date());
-		// task.setUpdateUser(operator.getUserName());
-		// taskRepository.saveAndFlush(task);
-		// break;
-		// case 3:
-		// mo.msg = "操作失败: 当前船舶已完成卸船！";
-		// mo.code = ConstantUtil.FailInt;
-		// break;
-		// case 4:
-		// mo.msg = "操作失败: 当前船舶已离港！";
-		// mo.code = ConstantUtil.FailInt;
-		// break;
-		// default:
-		// break;
-		// }
-		//
-		// } catch (Exception e) {
-		// mo.msg = e.getMessage();
-		// mo.code = ConstantUtil.FailInt;
-		// }
-
-		return mo;
-	}
-	
 	/**
 	 * 修改船舱状态
 	 * 
@@ -619,43 +390,16 @@ public class TaskShipServiceImpl implements ITaskShipService {
 		Integer isSuccess = ConstantUtil.SuccessInt;
 		Map<String, Object> result = new HashMap<>();
 		try {
-			
-			StringBuffer sql = new StringBuffer("");
-			sql.append(" SELECT c.task_id, w.cmsid  ");
-			sql.append(" , CASE w.cmsid  ");
-			sql.append(" WHEN 'ABB_GSU_1' THEN '#1'  ");
-			sql.append(" WHEN 'ABB_GSU_2' THEN '#2'  ");
-			sql.append(" WHEN 'ABB_GSU_3' THEN '#3'  ");
-			sql.append(" WHEN 'ABB_GSU_4' THEN '#4'  ");
-			sql.append(" WHEN 'ABB_GSU_5' THEN '#5'  ");
-			sql.append(" WHEN 'ABB_GSU_6' THEN '#6'  ");
-			sql.append(" ELSE w.cmsid  ");
-			sql.append(" END AS 'unloaderName', round(w.usedTime, 2) AS 'usedTime'  ");
-			sql.append(" , round(w.unloading, 2) AS 'unloading'  ");
-			sql.append(" , round(w.unloading / w.usedTime, 2) AS 'efficiency'  ");
-			sql.append(" FROM (  ");
-			sql.append(" SELECT cabinId, cmsid, MIN(Time) AS 'startTime'  ");
-			sql.append(" , MAX(Time) AS 'endTime'  ");
-			sql.append(" , timestampdiff(SECOND, MIN(Time), MAX(Time)) / 3600 AS 'usedTime'  ");
-			sql.append(" , SUM(OneTask) AS 'unloading'  ");
-			sql.append(" FROM v_work_info  ");
-			sql.append(" WHERE 1 = 1  ");
+			String sql = "";
+			Object[] args = null;
 			if (StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)) {
-				sql.append(" AND UNIX_TIMESTAMP(Time) BETWEEN UNIX_TIMESTAMP(?) AND UNIX_TIMESTAMP(?)  ");
-			}
-			sql.append(" GROUP BY Cmsid  ");
-			sql.append(" ) w  ");
-			sql.append(" LEFT JOIN v_cabin_info c ON w.cabinId = c.cabin_id  ");
-			sql.append(" WHERE 1 = 1  ");
-			sql.append(" AND c.task_id = ? 	ORDER BY w.cmsid ASC ");
-			
-			Object[] args = new Object[] { taskId };
-			if (StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)) {
+				sql = sqlMap.getSql("FN_009_2", taskId, taskId);
 				args = new Object[] { startTime, endTime, taskId };
+			} else {
+				args = new Object[] { taskId };
+				sql = sqlMap.getSql("FN_009_1", taskId, taskId);
 			}
-			System.out.println("doGetUnloaderUnshipInfo sql :" + sql.toString());
 			List<Map<String, Object>> data = this.dataSyncHelper.getJdbcTemplate().queryForList(sql.toString(), args);
-
 			result.put("msg", msg);
 			result.put("data", data);
 			result.put("code", isSuccess);
@@ -675,44 +419,18 @@ public class TaskShipServiceImpl implements ITaskShipService {
 		Integer isSuccess = ConstantUtil.SuccessInt;
 		Map<String, Object> result = new HashMap<>();
 		try {
-			StringBuffer sql = new StringBuffer("");
-			sql.append(" SELECT c.task_id as 'taskId', w.cmsid as 'unloaderId' , c.cabin_id as 'cabinId', c.cabin_no as 'cabinNo' ");
-			sql.append(" , CASE w.cmsid ");
-			sql.append(" WHEN 'ABB_GSU_1' THEN '#1' ");
-			sql.append(" WHEN 'ABB_GSU_2' THEN '#2' ");
-			sql.append(" WHEN 'ABB_GSU_3' THEN '#3' ");
-			sql.append(" WHEN 'ABB_GSU_4' THEN '#4' ");
-			sql.append(" WHEN 'ABB_GSU_5' THEN '#5' ");
-			sql.append(" WHEN 'ABB_GSU_6' THEN '#6' ");
-			sql.append(" ELSE w.cmsid ");
-			sql.append(" END AS 'unloaderName', DATE_FORMAT(w.startTime, '%Y-%m-%d %H:%i:%s') AS 'startTime' ");
-			sql.append(" , DATE_FORMAT(w.endTime, '%Y-%m-%d %H:%i:%s') AS 'endTime' ");
-			sql.append(" , round(w.usedTime, 2) AS 'usedTime' ");
-			sql.append(" , round(w.unloading, 2) AS 'unloading' ");
-			sql.append(" , round(w.unloading / w.usedTime, 2) AS 'efficiency' ");
-			sql.append(" FROM ( ");
-			sql.append(" SELECT cabinId, cmsid, MIN(Time) AS 'startTime' ");
-			sql.append(" , MAX(Time) AS 'endTime' ");
-			sql.append(" , timestampdiff(SECOND, MIN(Time), MAX(Time)) / 3600 AS 'usedTime' ");
-			sql.append(" , SUM(OneTask) AS 'unloading' ");
-			sql.append(" FROM v_work_info ");
-			sql.append(" WHERE 1 = 1 ");
+			String sql = "";
+			Object[] args = null;
 			if (StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)) {
-				sql.append(" AND UNIX_TIMESTAMP(Time) BETWEEN UNIX_TIMESTAMP(?) AND UNIX_TIMESTAMP(?) ");
+				sql = sqlMap.getSql("FN_010_2");
+				sql = StringUtils.replace(sql, "%#", taskId + "");
+				args = new Object[] { startTime, endTime, taskId, unloaderId };
+			} else {
+				sql = sqlMap.getSql("FN_010_1");
+				sql = StringUtils.replace(sql, "%#", taskId + "");
+				args = new Object[] { taskId, unloaderId };
 			}
-			sql.append(" GROUP BY Cmsid, groupId ");
-			sql.append(" ) w ");
-			sql.append(" LEFT JOIN v_cabin_info c ON w.cabinId = c.cabin_id ");
-			sql.append(" WHERE 1 = 1 ");
-			sql.append(" AND c.task_id = ? AND w.cmsid = ? ORDER BY w.startTime ASC  ");
-			
-			Object[] args = new Object[] { taskId , unloaderId};
-			if (StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)) {
-				args = new Object[] {startTime, endTime, taskId, unloaderId};
-			}
-			System.out.println("doGetUnloaderUnshipDetailList sql :" + sql.toString());
 			List<Map<String, Object>> data = this.dataSyncHelper.getJdbcTemplate().queryForList(sql.toString(), args);
-			
 			result.put("msg", msg);
 			result.put("data", data);
 			result.put("code", isSuccess);

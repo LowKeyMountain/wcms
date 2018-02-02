@@ -1,5 +1,6 @@
 package net.itw.wcms.ship.service.impl;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,6 +24,7 @@ import net.itw.wcms.ship.entity.UnloaderAll;
 import net.itw.wcms.ship.repository.CabinRepository;
 import net.itw.wcms.ship.repository.TaskRepository;
 import net.itw.wcms.ship.service.ITaskService;
+import net.itw.wcms.toolkit.AutoCreateDBTable;
 import net.itw.wcms.toolkit.DateTimeUtils;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
@@ -37,6 +39,8 @@ public class TaskServiceImpl implements ITaskService {
 	private TaskRepository taskRepository;
 	@Autowired
 	private CabinRepository cabinRepository;
+	@Autowired
+	private AutoCreateDBTable autoCreateDBTable;
 
 	public Page<Task> findAllByStatus(Pageable pageable, Integer status) {
 		return taskRepository.findAllByStatus(pageable, status);
@@ -121,17 +125,15 @@ public class TaskServiceImpl implements ITaskService {
 	}
 
 	@Override
-	public Integer createTask(Task task, User operator) {
-		
+	public Integer createTask(Task task, User operator) throws SQLException {
 		task.setUpdateUser(operator.getUserName());
 		task.setUpdateTime(new Date());
 		task.setStatus(0);
-		
+
 		autoCreateCargoCabinInfo(task, operator);
 		taskRepository.saveAndFlush(task);
-		
+		autoCreateDBTable.createTable(task.getId());
 		return ConstantUtil.SuccessInt;
-
 	}
 	
 	/**

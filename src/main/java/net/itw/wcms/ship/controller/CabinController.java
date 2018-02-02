@@ -24,6 +24,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import net.itw.wcms.interfaceApi.http.InfoQueryHelper;
+import net.itw.wcms.interfaceApi.http.QueryOptions;
 import net.itw.wcms.ship.entity.Cabin;
 import net.itw.wcms.ship.entity.Cargo;
 import net.itw.wcms.ship.entity.Task;
@@ -299,7 +300,9 @@ public class CabinController {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("fuctionType", "FN_002");
 		jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "','$cabinNo':'" + cabinNo + "'}"));
-		Map<String, Object> result = infoQueryHelper.doQueryInfo(jsonObject);
+		QueryOptions options = new QueryOptions();
+		options.args = new Object[] { taskId, taskId, taskId, taskId };
+		Map<String, Object> result = infoQueryHelper.doQueryInfo(jsonObject,options);
 		modelMap.put("cabin", result.get("data"));
 		return new ModelAndView(PATH + "view");
 	}

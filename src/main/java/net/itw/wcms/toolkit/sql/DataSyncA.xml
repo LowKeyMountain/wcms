@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqlMap>
+	<sqls>
+		<entry>
+			<key>01</key>
+			<description>查询卸船机增量数据</description>
+			<value>
+			<![CDATA[
+			select * from tab_unloader_%s t where t.id > ( select t.id from tab_temp_d t where t.unloaderId = ? ) 
+			ORDER BY id ASC
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>02</key>
+			<description>检查数据是否存在</description>
+			<value>
+			<![CDATA[
+			select  * from tab_temp_b t where t.id = ? AND t.Cmsid = ? 
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>03</key>
+			<description>卸船机数据插入表b</description>
+			<value>
+			<![CDATA[
+			 insert into tab_temp_b 
+			 (id, Time, Cmsid, PushTime, OneTask, direction, unloaderMove, operationType, offset, groupId) 
+			 values(?,?,?,?,?,?,?,?,?,?) 
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>04</key>
+			<description>更新卸船机数据增量标识</description>
+			<value>
+			<![CDATA[
+			  UPDATE tab_temp_d t SET t.id = ? WHERE t.unloaderId = ?  
+			]]>
+			</value>
+		</entry>
+	</sqls>
+</sqlMap>

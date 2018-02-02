@@ -24,34 +24,6 @@ public interface ITaskShipService {
 	MessageOption setCabinPosition(String taskId, String userName, List<Map<String, Object>> list);
 
 	/**
-	 * 开始卸船
-	 * 
-	 * @param taskId
-	 * @param userName
-	 * @return
-	 */
-	MessageOption beginShipUnload(String taskId, String userName);
-
-	/**
-	 * 设置清舱
-	 * 
-	 * @param taskId
-	 * @param cabinNo
-	 * @param userName
-	 * @return
-	 */
-	MessageOption setClearCabin(String taskId, String cabinNo, String userName);
-
-	/**
-	 * 完成卸船
-	 * 
-	 * @param taskId
-	 * @param userName
-	 * @return
-	 */
-	MessageOption finishedShipUnload(String taskId, String userName);
-
-	/**
 	 * 修改船舶状态
 	 * 
 	 * @param taskId

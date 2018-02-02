@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSONObject;
 
 import net.itw.wcms.interfaceApi.http.InfoQueryHelper;
+import net.itw.wcms.interfaceApi.http.QueryOptions;
 import net.itw.wcms.ship.entity.Task;
 import net.itw.wcms.ship.service.ITaskService;
 import net.itw.wcms.ship.service.ITaskShipService;
@@ -239,7 +240,9 @@ public class TaskController {
 			jsonObject.put("order", "asc");
 			jsonObject.put("sort", "cabinNo");
 			jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "'}"));
-			result = infoQueryHelper.doQueryInfo(jsonObject);
+			QueryOptions options = new QueryOptions();
+			options.args = new Object[] { taskId, taskId, taskId, taskId };
+			result = infoQueryHelper.doQueryInfo(jsonObject, options);
 		} catch (Exception e) {
 			e.printStackTrace();
 			mo.msg = e.getMessage();
@@ -322,13 +325,13 @@ public class TaskController {
 			jsonObject.put("order", "asc");
 			jsonObject.put("sort", "cargoId");
 			jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "'}"));
-			result = infoQueryHelper.doQueryInfo(jsonObject);
-		} catch (Exception e) {
+			QueryOptions options = new QueryOptions();
+			options.args = new Object[] { taskId, taskId, taskId, taskId };
+			result = infoQueryHelper.doQueryInfo(jsonObject, options);		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		json.put("rows",result.get("data"));
 		json.put("total",result.get("total"));
-		json.put("task_id", taskId);
 
 		return json.toString();
 	}
@@ -358,12 +361,20 @@ public class TaskController {
 		Map<String, Object> result = null;
 		JSONObject json = new JSONObject();
 		try {
-			result = taskShipService.doGetUnloaderUnshipInfo(taskId, null, null);
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("fuctionType", "FN_006");
+			jsonObject.put("order", "asc");
+			jsonObject.put("sort", "startTime");
+			jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "'}"));
+			QueryOptions options = new QueryOptions();
+			options.searchString = "%#";
+			options.replacement = taskId + "";
+			result = infoQueryHelper.doQueryInfo(jsonObject, options);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		json.put("rows",result.get("data"));
-//		json.put("total",result.get("total"));
+		json.put("total",result.get("total"));
 
 		return json.toString();
 	}
