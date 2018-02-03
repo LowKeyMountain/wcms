@@ -104,12 +104,12 @@
 		        align: 'center',
 		        width: '12%',
 		        sortable:true
-		    },{
+		    },/*{
 		        field: 'cargoLoad',
 		        title: '货物总重',
 		        width: '6%',		        
 		        align: 'center'
-		    }, {
+		    }, */{
 		        field: 'status',
 		        title: '状态',
 		        align: 'center',

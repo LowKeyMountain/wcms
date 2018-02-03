@@ -307,7 +307,7 @@ public class TaskController {
 		modelMap.put("taskId", id);
 		modelMap.put("task", task);
 		modelMap.put("shipName", task != null && task.getShip() != null ? task.getShip().getShipName() : "");
-		return new ModelAndView(PATH_UNSHIPINFO + "progressList");
+		return new ModelAndView(PATH_UNSHIPINFO + "progresslist");
 	}
 	
 	/**

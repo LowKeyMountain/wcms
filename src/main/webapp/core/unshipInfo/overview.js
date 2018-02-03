@@ -16,8 +16,8 @@
 			 queryParams : 'queryParams',
 			 sidePagination : 'server',
 			 pageNumber : 1, // 初始化加载第一页，默认第一页			 
-			 pageSize : 20,// 单页记录数
-			 pageList : [20,50,100,150,300],// 分页步进值
+			 pageSize : 10,// 单页记录数
+			 pageList : [10,20,30,50],// 分页步进值
 //			 showPaginationSwitch : true,// 是否显示选择分页数按钮
 			 showHeader : true,
 			 showRefresh : true,// 刷新按钮
