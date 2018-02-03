@@ -22,7 +22,7 @@ import net.itw.wcms.toolkit.sql.SqlMap;
 public class AutoCreateDBTable extends JdbcDaoSupport {
 
 	private static SqlMap sqlMap;
-	private Map<Integer, String> cache = new HashMap<>();
+	private Map<String, String> cache = new HashMap<>();
 
 	static {
 		try {
@@ -52,9 +52,9 @@ public class AutoCreateDBTable extends JdbcDaoSupport {
 		if (!isExistsTable(tabName_c)) {
 			this.getJdbcTemplate().update(sqlMap.getSql("TAB_C", tabName_c));
 		}
-		cache.put(taskId, (tabName_b + "," + tabName_c));
+		cache.put(taskId+"", (tabName_b + "," + tabName_c));
 	}
-
+	
 	/**
 	 * 检查表是否存在
 	 * 

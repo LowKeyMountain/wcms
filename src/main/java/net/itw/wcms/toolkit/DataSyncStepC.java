@@ -1,7 +1,6 @@
 package net.itw.wcms.toolkit;
 
 import java.io.IOException;
-import java.sql.Connection;
 
 import javax.xml.bind.JAXBException;
 
@@ -11,6 +10,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
+import org.springframework.transaction.annotation.Transactional;
 
 import net.itw.wcms.toolkit.sql.SqlMap;
 
@@ -49,7 +49,11 @@ public class DataSyncStepC extends JdbcDaoSupport {
 		log.info("同步工具：步骤C 开始...");
 		dataSyncStepA.stop();
 		dataSyncStepB.stop();
+
 		sync(taskId);
+		// 重新同步任务子表数据
+		dataSyncStepB.resyncByTaskId(taskId);
+
 		dataSyncStepA.restart();
 		dataSyncStepB.restart();
 		log.info("同步工具：步骤C 结束...");
@@ -60,24 +64,20 @@ public class DataSyncStepC extends JdbcDaoSupport {
 	 * 
 	 * @param taskId
 	 */
+	@Transactional
 	public void sync(Integer taskId) throws Exception {
-		Connection conn = this.getJdbcTemplate().getDataSource().getConnection();
 		try {
-			conn.setAutoCommit(false);
 			// 将船舶任务子表数据同步到临时表
-			this.getJdbcTemplate().update(sqlMap.getSql("01"), 0, "tab_temp_b_" + taskId);
+			this.getJdbcTemplate().update(sqlMap.getSql("01", "tab_temp_b_" + taskId), 0);
 			// 【任务子表】删除任务子表：卸船作业信息
-			this.getJdbcTemplate().update(sqlMap.getSql("02"), "tab_temp_b_" + taskId);
+			this.getJdbcTemplate().update(sqlMap.getSql("02", "tab_temp_b_" + taskId));
 			// 【任务子表】删除任务子表：组信息
-			this.getJdbcTemplate().update(sqlMap.getSql("03"), "tab_temp_c_" + taskId);
-			conn.commit();
+			this.getJdbcTemplate().update(sqlMap.getSql("03", "tab_temp_c_" + taskId));
 		} catch (DataAccessException e) {
-			conn.rollback();
 			e.printStackTrace();
 			log.error(e.getMessage());
 			throw e;
 		} finally {
-			conn.setAutoCommit(true);
 		}
 	}
 
@@ -91,7 +91,10 @@ public class DataSyncStepC extends JdbcDaoSupport {
 		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
 		if (ctx != null) {
 			DataSyncStepC helper = (DataSyncStepC) ctx.getBean("dataSyncStepC");
-			helper.start(null);
+			helper.start(48);
+			// DataSyncStepB helper = (DataSyncStepB)
+			// ctx.getBean("dataSyncStepB");
+			// helper.resyncByTaskId(48);
 		}
 	}
 

@@ -7,7 +7,7 @@
 			<value>
 			<![CDATA[
  			 INSERT INTO tab_temp_b (id, Time, Cmsid, PushTime, OneTask, direction, unloaderMove, operationType, offset, groupId)
- 			 SELECT id, Time, Cmsid, PushTime, OneTask, direction, unloaderMove, operationType, offset, ? from ?
+ 			 SELECT id, Time, Cmsid, PushTime, OneTask, direction, unloaderMove, operationType, offset, ? from %s
 			]]>
 			</value>
 		</entry>
@@ -16,7 +16,7 @@
 			<description>【任务子表】删除任务子表：卸船作业信息</description>
 			<value>
 			<![CDATA[
- 			DELETE FROM ?
+ 			DELETE FROM %s
 			]]>
 			</value>
 		</entry>
@@ -25,7 +25,7 @@
 			<description>【任务子表】删除任务子表：组信息</description>
 			<value>
 			<![CDATA[
-			DELETE FROM ?
+			DELETE FROM %s
 			]]>
 			</value>
 		</entry>

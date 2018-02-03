@@ -28,6 +28,7 @@
 
 	<!-- 1.配置数据源 -->
 	<context:property-placeholder location="classpath:db.properties" />
+	
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
 		lazy-init="true" destroy-method="close">
 		<property name="user" value="${jdbc.username}"></property>
@@ -44,7 +45,48 @@
 		<property name="preferredTestQuery" value="SELECT 1" />
 		<property name="idleConnectionTestPeriod" value="60" />
 	</bean>
-
+	 
+     <!-- 配置来源数据 -->
+    <bean id="dataSource2" parent="dataSource_Abstract">
+        <property name="url" value="${jdbc.jdbcUrl}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+        <property name="driverClassName" value="${jdbc.driverClass}" />
+        <!-- 连接池最大使用连接数量 -->
+        <property name="maxActive" value="50" />
+    </bean>
+	 
+   <bean id="dataSource_Abstract" class="com.alibaba.druid.pool.DruidDataSource"
+           destroy-method="close"  abstract="true" init-method="init" >
+        <!-- 初始化连接大小 -->
+        <property name="initialSize" value="2" />
+        <!-- 连接池最大使用连接数量 -->
+        <property name="maxActive" value="10" />
+        <!-- 连接池最小空闲 -->
+        <property name="minIdle" value="5" />
+        <!-- 获取连接最大等待时间 -->
+        <property name="maxWait" value="30000" />
+        <!-- <property name="poolPreparedStatements" value="true" /> -->
+        <!-- <property name="maxPoolPreparedStatementPerConnectionSize" value="33" /> -->
+        <property name="validationQuery" value="SELECT 1" />
+        <property name="testOnBorrow" value="false" />
+        <property name="testOnReturn" value="false" />
+        <property name="testWhileIdle" value="true" />
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000" />
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="25200000" />
+        <!-- 打开removeAbandoned功能 -->
+        <property name="removeAbandoned" value="true" />
+        <!-- 1800秒，也就是30分钟 -->
+        <property name="removeAbandonedTimeout" value="1800" />
+        <!-- 关闭abanded连接时输出错误日志 -->
+        <property name="logAbandoned" value="true" />
+        <!-- 监控数据库 -->
+        <!-- <property name="filters" value="stat" /> -->
+        <property name="filters" value="mergeStat" />
+    </bean>
+    
 	<bean id="onStartupServlet" class="net.itw.wcms.toolkit.OnStartupServlet"
 		lazy-init="false" init-method="init" destroy-method="dispose" />
 		

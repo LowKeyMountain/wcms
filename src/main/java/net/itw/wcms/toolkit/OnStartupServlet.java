@@ -1,8 +1,12 @@
 package net.itw.wcms.toolkit;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -26,29 +30,22 @@ public class OnStartupServlet {
 		}
 		initialized = true;
 		
-		new Timer().schedule(new TimerTask() {
-			@Override
-			public void run() {
-				try {
-					dataSyncStepA.start();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}, 1000);
+		boolean pattern = false;
+		try {
+			Properties pro = new Properties();
+			pro.load(getClass().getResourceAsStream("/wcms.properties"));
+			String str = (String) pro.get("unloaderDataSyn.runTask.pattern");
+			pattern = StringUtils.isEmpty(str) ? false : Boolean.parseBoolean(str);
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 		
-		new Timer().schedule(new TimerTask() {
-			@Override
-			public void run() {
-				try {
-					dataSyncStepB.start();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}, 1000);
+		dataSyncStepA.runTask(pattern);
+		dataSyncStepB.runTask(pattern);
 	}
-
+	
 	public void dispose() {
 	}
 
