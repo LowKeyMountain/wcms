@@ -426,7 +426,7 @@
 			<description></description>
 			<value>
 			<![CDATA[
-			SELECT c.task_id, w.cmsid
+			SELECT c.task_id, w.cmsid  AS 'unloaderId'
 				, CASE w.cmsid
 					WHEN 'ABB_GSU_1' THEN '#1'
 					WHEN 'ABB_GSU_2' THEN '#2'
@@ -466,7 +466,7 @@
 			<description></description>
 			<value>
 			<![CDATA[
-			SELECT c.task_id, w.cmsid
+			SELECT c.task_id, w.cmsid  AS 'unloaderId'
 				, CASE w.cmsid
 					WHEN 'ABB_GSU_1' THEN '#1'
 					WHEN 'ABB_GSU_2' THEN '#2'
@@ -507,7 +507,7 @@
 			<description></description>
 			<value>
 			<![CDATA[
-			SELECT c.task_id, w.cmsid, c.cabin_id, c.cabin_no
+			SELECT c.task_id, w.cmsid AS 'unloaderId', c.cabin_id AS 'cabinId', c.cabin_no AS 'cabinNo'
 				, CASE w.cmsid
 					WHEN 'ABB_GSU_1' THEN '#1'
 					WHEN 'ABB_GSU_2' THEN '#2'
@@ -543,7 +543,7 @@
 			<description></description>
 			<value>
 			<![CDATA[
-			SELECT c.task_id, w.cmsid, c.cabin_id, c.cabin_no
+			SELECT c.task_id, w.cmsid AS 'unloaderId', c.cabin_id AS 'cabinId', c.cabin_no AS 'cabinNo'
 				, CASE w.cmsid
 					WHEN 'ABB_GSU_1' THEN '#1'
 					WHEN 'ABB_GSU_2' THEN '#2'
