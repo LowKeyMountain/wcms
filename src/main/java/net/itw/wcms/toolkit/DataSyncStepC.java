@@ -1,6 +1,8 @@
 package net.itw.wcms.toolkit;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 
@@ -28,7 +30,11 @@ public class DataSyncStepC extends JdbcDaoSupport {
 	private DataSyncStepA dataSyncStepA;
 	@Autowired
 	private DataSyncStepB dataSyncStepB;
-
+	
+	public List<Map<String, Object>> queryForList(String sql, Object... args){
+		return this.getJdbcTemplate().queryForList(sql, args);
+	}
+	
 	static {
 		try {
 			sqlMap = SqlMap.load(SqlMap.class.getResourceAsStream("./DataSyncC.xml"));
