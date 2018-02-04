@@ -63,7 +63,7 @@
                             </a>
                         </li>
                          <li class="nav-item start ">
-                            <a href="#" class="nav-link ">
+                            <a href="${IncPath}/task/statistics" class="nav-link ">
                                 <i class="icon-bar-chart"></i>
                                 <span class="title">统计报表</span>
                             </a>

@@ -22,7 +22,8 @@ import net.itw.wcms.ship.repository.CargoRepository;
 import net.itw.wcms.ship.repository.ShipRepository;
 import net.itw.wcms.ship.repository.TaskRepository;
 import net.itw.wcms.ship.service.ITaskShipService;
-import net.itw.wcms.toolkit.DataSyncHelper;
+import net.itw.wcms.toolkit.DataSyncStepB;
+import net.itw.wcms.toolkit.DataSyncStepC;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.toolkit.sql.SqlMap;
 import net.itw.wcms.x27.entity.User;
@@ -51,7 +52,9 @@ public class TaskShipServiceImpl implements ITaskShipService {
 	private CargoRepository cargoRepository;
 	
 	@Autowired
-	private DataSyncHelper dataSyncHelper;
+	private DataSyncStepB dataSyncStepB;
+	@Autowired
+	private DataSyncStepC dataSyncStepC;
 	
 	private static SqlMap sqlMap;
 
@@ -74,6 +77,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 	 * @return
 	 */
 	@Override
+	@Transactional
 	public MessageOption setCabinPosition(String taskId, String userName, List<Map<String, Object>> list) {
 
 		// 需求：设定船舱位置功能。
@@ -130,8 +134,8 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			}
 
 			cabinRepository.save(cabins.values());
-			// 重新计算作业船舶各舱组信息
-//			dataSyncHelper.recomputationCabinGroup(Integer.parseInt(taskId));
+			// 将船舶任务子表数据同步到临时表
+			dataSyncStepC.sync(Integer.parseInt(taskId));
 		} catch (Exception e) {
 			mo.msg = e.getMessage();
 			mo.code = ConstantUtil.FailInt;
@@ -289,7 +293,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 					task.setUpdateUser(operator.getUserName());
 					taskRepository.saveAndFlush(task);
 					// 更新组结束时间
-					dataSyncHelper.updateGroupEndTime(task.getId());
+					dataSyncStepB.updateGroupEndTime(task.getId());
 				} else {
 					throw new X27Exception("操作失败: 船舶状态参数有误！");
 				}
@@ -399,7 +403,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 				args = new Object[] { taskId };
 				sql = sqlMap.getSql("FN_009_1", taskId, taskId);
 			}
-			List<Map<String, Object>> data = this.dataSyncHelper.getJdbcTemplate().queryForList(sql.toString(), args);
+			List<Map<String, Object>> data = this.dataSyncStepC.getJdbcTemplate().queryForList(sql.toString(), args);
 			result.put("msg", msg);
 			result.put("data", data);
 			result.put("code", isSuccess);
@@ -430,7 +434,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 				sql = StringUtils.replace(sql, "%#", taskId + "");
 				args = new Object[] { taskId, unloaderId };
 			}
-			List<Map<String, Object>> data = this.dataSyncHelper.getJdbcTemplate().queryForList(sql.toString(), args);
+			List<Map<String, Object>> data = this.dataSyncStepC.getJdbcTemplate().queryForList(sql.toString(), args);
 			result.put("msg", msg);
 			result.put("data", data);
 			result.put("code", isSuccess);

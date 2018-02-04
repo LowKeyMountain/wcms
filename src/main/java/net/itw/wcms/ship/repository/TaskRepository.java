@@ -58,26 +58,25 @@ public interface TaskRepository extends JpaRepository<Task, Integer>, JpaSpecifi
 			public Predicate toPredicate(Root<Task> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				Predicate predicate = null;
 				List<Predicate> predicates = new ArrayList<Predicate>();
-/*				String cmsId = params.get("cmsId");
-				String startPosition = (params.get("startPosition") == null ? "0" : params.get("startPosition"));
-				String endPosition = (params.get("endPosition") == null ? "0" : params.get("endPosition"));
-				String startDate = (params.get("startDate") == null ? "" : params.get("startDate"));
-				String endDate = (params.get("endDate") == null ? "" : params.get("endDate"));*/
+				String startDepartureDate = (params.get("startDepartureDate") == null ? "" : params.get("startDepartureDate"));
+				String endDepartureDate = (params.get("endDepartureDate") == null ? "" : params.get("endDepartureDate"));
+				String startBerthDate = (params.get("startBerthDate") == null ? "" : params.get("startBerthDate"));
+				String endBerthDate = (params.get("endBerthDate") == null ? "" : params.get("endBerthDate"));
 				String status = (params.get("status") == null ? "" : params.get("status"));
 
-/*				if(StringUtils.isNotEmpty(startPosition)) {
-					predicates.add(cb.ge(root.get("unloaderMove"),Float.parseFloat(startPosition)));
+				if(StringUtils.isNotEmpty(startDepartureDate)) {
+					predicates.add(cb.greaterThanOrEqualTo(root.get("departureTime"), DateTimeUtils.strDateTime2Date(startDepartureDate)));
 				}
-				if(StringUtils.isNotEmpty(endPosition)) {
-					predicates.add(cb.le(root.get("unloaderMove"),Float.parseFloat(endPosition)));
+				if(StringUtils.isNotEmpty(endDepartureDate)) {
+					predicates.add(cb.lessThanOrEqualTo(root.get("departureTime"), DateTimeUtils.strDateTime2Date(endDepartureDate)));
 				}
 
-				if(StringUtils.isNotEmpty(startDate)) {
-					predicates.add(cb.greaterThanOrEqualTo(root.get("time"), DateTimeUtils.strDateTime2Date(startDate)));
+				if(StringUtils.isNotEmpty(startBerthDate)) {
+					predicates.add(cb.greaterThanOrEqualTo(root.get("berthingTime"), DateTimeUtils.strDateTime2Date(startBerthDate)));
 				}
-				if(StringUtils.isNotEmpty(endDate)) {
-					predicates.add(cb.lessThanOrEqualTo(root.get("time"), DateTimeUtils.strDateTime2Date(endDate)));
-				}*/
+				if(StringUtils.isNotEmpty(endBerthDate)) {
+					predicates.add(cb.lessThanOrEqualTo(root.get("berthingTime"), DateTimeUtils.strDateTime2Date(endBerthDate)));
+				}
 				if(StringUtils.isNotEmpty(status)) {
 					predicates.add(cb.equal(root.get("status"), status));
 				}

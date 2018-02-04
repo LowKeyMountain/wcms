@@ -152,12 +152,13 @@ public class InfoQueryHelper {
 			while (rs.next()) {
 				try {
 					String _SQL = "";
+					String fuctionType = rs.getString("FUCTION_TYPE");
 					if (options.args != null) {
-						_SQL = sqlMap.getSql(rs.getString("FUCTION_TYPE"), options.args);
+						_SQL = sqlMap.getSql(fuctionType, options.args);
 					}
 					if (StringUtils.isNotBlank(options.searchString) && StringUtils.isNotBlank(options.replacement)) {
 						if (StringUtils.isBlank(_SQL)) {
-							_SQL = sqlMap.getSql(rs.getString("FUCTION_TYPE"));
+							_SQL = sqlMap.getSql(fuctionType);
 						}
 						_SQL = StringUtils.replace(_SQL, options.searchString, options.replacement);
 					}
