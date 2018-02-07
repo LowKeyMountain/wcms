@@ -50,7 +50,11 @@ public class DataSyncStepB extends JdbcDaoSupport {
 			e.printStackTrace();
 		}
 	}
-
+	
+	public SqlMap getSqlMap(){
+		return sqlMap;
+	}
+	
 	/**
 	 * 运行数据同步任务
 	 * 
@@ -243,7 +247,7 @@ public class DataSyncStepB extends JdbcDaoSupport {
 								args = new Object[] { time, id2 };
 							} else if (1 == operationType) {
 								sql = sqlMap.getSql("10", taskId);
-								args = new Object[] { time, time, id };
+								args = new Object[] { time, time, id2 };
 							}
 							this.getJdbcTemplate().update(sql, args);
 						}

@@ -55,5 +55,16 @@
 			]]>
 			</value>
 		</entry>
+		<entry>
+			<key>05</key>
+			<description>【任务子表】将临时表作业数据插入子表</description>
+			<value>
+			<![CDATA[
+ 			 INSERT INTO tab_temp_b_%s (id, Time, Cmsid, PushTime, OneTask, direction, unloaderMove, operationType, offset, groupId)
+ 			 SELECT id, Time, Cmsid, PushTime, OneTask, direction, unloaderMove, operationType, 0, ? from tab_unloader_all 
+ 			 where id = ? and cmsid = ? 
+			]]>
+			</value>
+		</entry>
 	</sqls>
 </sqlMap>

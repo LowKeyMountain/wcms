@@ -173,7 +173,7 @@
 					WHEN MAX(end_position) - MAX(start_position) < 0 THEN MAX(start_position)
 				END AS 'maxPosition'
 			FROM v_cabin_info
-			WHERE `status` = 1
+			WHERE `taskStatus` = 1
 			GROUP BY task_id, begin_time, end_time
 			HAVING minPosition <= ?
 			AND maxPosition >= ?

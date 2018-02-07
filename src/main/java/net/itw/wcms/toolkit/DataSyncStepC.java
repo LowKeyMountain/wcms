@@ -14,7 +14,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
-import org.springframework.transaction.annotation.Transactional;
 
 import net.itw.wcms.toolkit.sql.SqlMap;
 
@@ -32,11 +31,11 @@ public class DataSyncStepC extends JdbcDaoSupport {
 	private DataSyncStepB dataSyncStepB;
 	@Autowired
 	private AutoCreateDBTable autoCreateDBTable;
-	
-	public List<Map<String, Object>> queryForList(String sql, Object... args){
+
+	public List<Map<String, Object>> queryForList(String sql, Object... args) {
 		return this.getJdbcTemplate().queryForList(sql, args);
 	}
-	
+
 	static {
 		try {
 			sqlMap = SqlMap.load(SqlMap.class.getResourceAsStream("./DataSyncC.xml"));
@@ -60,7 +59,6 @@ public class DataSyncStepC extends JdbcDaoSupport {
 		log.info("同步工具：步骤C 结束...");
 	}
 
-
 	private void delete(Integer taskId) {
 		try {
 			// 【任务子表】删除任务子表：卸船作业信息
@@ -73,8 +71,7 @@ public class DataSyncStepC extends JdbcDaoSupport {
 			throw e;
 		}
 	}
-	
-	
+
 	/**
 	 * 重新同步任务子表数据
 	 * 
@@ -100,26 +97,29 @@ public class DataSyncStepC extends JdbcDaoSupport {
 
 				// 查询卸船机作业数据任务ID、船舱ID
 				Object[] args = new Object[] { unloaderMove, unloaderMove, time, time };
-				List<Map<String, Object>> cabinNums = this.getJdbcTemplate().queryForList(sqlMap.getSql("02"), args);
+				List<Map<String, Object>> cabinNums = this.getJdbcTemplate()
+						.queryForList(dataSyncStepB.getSqlMap().getSql("02"), args);
 
 				if (cabinNums == null || cabinNums.isEmpty()) {
 					log.error("数据异常：数据编号[" + id + "]|卸船机编号[" + cmsid + "] 未找到船舱信息！");
-					List<Map<String, Object>> tasks = this.getJdbcTemplate().queryForList(sqlMap.getSql("18"), args);
+					List<Map<String, Object>> tasks = this.getJdbcTemplate()
+							.queryForList(dataSyncStepB.getSqlMap().getSql("18"), args);
 					if (tasks != null && !tasks.isEmpty()) {
 						String sql = "";
 						taskId = (Integer) tasks.get(0).get("taskId");
 						if (taskId != tid) {
 							continue;
 						}
-						List<Map<String, Object>> list2 = this.getJdbcTemplate().queryForList(sqlMap.getSql("19", taskId), cmsid);
+						List<Map<String, Object>> list2 = this.getJdbcTemplate()
+								.queryForList(dataSyncStepB.getSqlMap().getSql("19", taskId), cmsid);
 						for (Map<String, Object> map2 : list2) {
 							Integer id2 = (Integer) map2.get("id");
 							if (0 == operationType) {
-								sql = sqlMap.getSql("09", taskId);
+								sql = dataSyncStepB.getSqlMap().getSql("09", taskId);
 								args = new Object[] { time, id2 };
 							} else if (1 == operationType) {
-								sql = sqlMap.getSql("10", taskId);
-								args = new Object[] { time, time, id };
+								sql = dataSyncStepB.getSqlMap().getSql("10", taskId);
+								args = new Object[] { time, time, id2 };
 							}
 							this.getJdbcTemplate().update(sql, args);
 						}
@@ -132,11 +132,11 @@ public class DataSyncStepC extends JdbcDaoSupport {
 				}
 				cabinId = (Integer) cabinNums.get(0).get("id");
 				taskId = (Integer) cabinNums.get(0).get("taskId");
-				
+
 				if (taskId != tid) {
 					continue;
 				}
-				
+
 				try {
 					// 自动创建任务子表
 					autoCreateDBTable.createTable(taskId);
@@ -149,8 +149,7 @@ public class DataSyncStepC extends JdbcDaoSupport {
 				// 更新表b数据
 				try {
 					// 【任务子表】将临时表作业数据插入子表
-					args = new Object[] { groupId, id, cmsid };
-					this.getJdbcTemplate().update(sqlMap.getSql("03", taskId), args);
+					this.getJdbcTemplate().update(sqlMap.getSql("05", taskId), groupId, id, cmsid);
 					num++;
 					log.info("数据编号[" + id + "]|卸船机编号[" + cmsid + "] 数据已计算组信息！");
 				} catch (Exception e) {
@@ -167,7 +166,6 @@ public class DataSyncStepC extends JdbcDaoSupport {
 			log.info("数据已处理" + num + "条。");
 		}
 	}
-	
 
 	/**
 	 * 程序入口
