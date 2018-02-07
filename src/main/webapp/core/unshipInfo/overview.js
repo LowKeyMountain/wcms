@@ -89,7 +89,7 @@
 			
 			method : 'post',
 			contentType : "application/x-www-form-urlencoded",
-			url:BasePath + "/task/getUnloaderDetailList?taskId=" + taskId+"&unloaderId="+unloaderId,
+			url:BasePath + "/task/getUnloaderDetailList?taskId=" + taskId + "&unloaderId=" + unloaderId,
 			dataType : 'json',
 //			 dataField: 'res',//bootstrap table 可以前端分页也可以后端分页
 			 striped : true, // 是否显示行间隔色

@@ -88,6 +88,16 @@ public class TaskController {
 	public ModelAndView maintenance() {
 		return new ModelAndView(PATH + "maintenancelist");
 	}
+
+	/**
+	 * 跳转至船舶实时统计页面
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/statistics")
+	public ModelAndView shipStatistics() {
+		return new ModelAndView(PATH_UNSHIPINFO + "statistics");
+	}
 	
 	@RequestMapping("/addform")
 	public ModelAndView newTask() {
@@ -400,7 +410,7 @@ public class TaskController {
 	}
 	
 	/**
-	 * 返回卸船机数据
+	 * 返回所有船舶作业数据
 	 * 
 	 * @param params
 	 * @param map
@@ -415,5 +425,46 @@ public class TaskController {
 		
 		Pageable pageable = PageUtils.buildPageRequest(pageNum, pageSize, sortType, direction);
 		return taskService.getTaskList(pageable, params);
+	}
+
+	/**
+	 * 船舱列表
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("/cabinlist")
+	public ModelAndView cabinList(@RequestParam("id") Integer id) {
+		Task task = taskService.getTaskById(id);
+		modelMap.put("taskId", id);
+		modelMap.put("task", task);
+		modelMap.put("shipName", task != null && task.getShip() != null ? task.getShip().getShipName() : "");
+		return new ModelAndView(PATH + "cabinlist");
+	}
+	
+	/**
+	 * 返回船舱列表
+	 * @param taskId
+	 * @return
+	 */
+	@RequestMapping(value = "/getCabinList", produces = "text/json;charset=UTF-8")
+	public String getCabinList(@RequestParam("taskId") Integer taskId) {
+		Map<String, Object> result = null;
+		JSONObject json = new JSONObject();
+		try {
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("fuctionType", "FN_004");
+			jsonObject.put("order", "asc");
+			jsonObject.put("sort", "cabinNo");
+			jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "'}"));
+			QueryOptions options = new QueryOptions();
+			options.args = new Object[] { taskId, taskId, taskId, taskId };
+			result = infoQueryHelper.doQueryInfo(jsonObject, options);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		json.put("rows",result.get("data"));
+		json.put("total",result.get("total"));
+		return json.toString();
 	}	
 }
