@@ -29,5 +29,31 @@
 			]]>
 			</value>
 		</entry>
+		<entry>
+			<key>04</key>
+			<description>重新同步任务子表数据</description>
+			<value>
+			<![CDATA[
+				SELECT *
+				FROM tab_unloader_all b
+				WHERE (b.operationType = 0
+						OR b.operationType = 1)
+					AND b.Time >= (
+						SELECT t.begin_time
+						FROM tab_task t
+						WHERE t.id = ?
+					)
+					AND b.Time <= (
+						SELECT CASE 
+								WHEN t.end_time IS NULL THEN CURRENT_TIMESTAMP()
+								ELSE t.end_time
+							END
+						FROM tab_task t
+						WHERE t.id = ?
+					)
+				ORDER BY b.Time ASC
+			]]>
+			</value>
+		</entry>
 	</sqls>
 </sqlMap>

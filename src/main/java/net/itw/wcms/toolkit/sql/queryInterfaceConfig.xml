@@ -210,7 +210,7 @@
 								WHEN tc.endTime IS NULL THEN CURRENT_TIMESTAMP()
 								ELSE tc.endTime
 							END AS 'endTime2'
-						FROM tab_temp_c tc
+						FROM tab_temp_c_%# tc
 							LEFT JOIN (
 								SELECT c.id AS 'groupId', c.cabinId, SUM(b.OneTask) AS 'unloading'
 								FROM tab_temp_b_%# b

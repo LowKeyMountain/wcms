@@ -133,10 +133,13 @@ public class TaskShipServiceImpl implements ITaskShipService {
 				cabin.setStartPosition(Float.parseFloat(map.get("startPosition").toString()));
 			}
 
+			// 事务开始
 			cabinRepository.save(cabins.values());
+			cabinRepository.flush();
 			// 将船舶任务子表数据同步到临时表
-			dataSyncStepC.sync(Integer.parseInt(taskId));
+			dataSyncStepC.start(Integer.parseInt(taskId));
 		} catch (Exception e) {
+			e.printStackTrace();
 			mo.msg = e.getMessage();
 			mo.code = ConstantUtil.FailInt;
 		}
