@@ -133,7 +133,6 @@ public class TaskShipServiceImpl implements ITaskShipService {
 				cabin.setStartPosition(Float.parseFloat(map.get("startPosition").toString()));
 			}
 
-			// 事务开始
 			cabinRepository.save(cabins.values());
 			cabinRepository.flush();
 			// 将船舶任务子表数据同步到临时表
@@ -407,7 +406,6 @@ public class TaskShipServiceImpl implements ITaskShipService {
 				sql = sqlMap.getSql("FN_009_1", taskId, taskId);
 			}
 			List<Map<String, Object>> data = this.dataSyncStepC.queryForList(sql.toString(), args);
-			System.out.println("doGetUnloaderUnshipInfo >>" + sql.toString() + args);
 			result.put("msg", msg);
 			result.put("data", data);
 			result.put("code", isSuccess);
@@ -439,7 +437,6 @@ public class TaskShipServiceImpl implements ITaskShipService {
 				args = new Object[] { taskId, unloaderId };
 			}
 			List<Map<String, Object>> data = this.dataSyncStepC.queryForList(sql.toString(), args);
-			System.out.println("doGetUnloaderUnshipInfo >>" + sql.toString() + args);
 			result.put("msg", msg);
 			result.put("data", data);
 			result.put("code", isSuccess);
