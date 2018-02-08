@@ -24,7 +24,7 @@ import net.itw.wcms.toolkit.sql.SqlMap;
  */
 public class DataSyncStepC extends JdbcDaoSupport {
 
-	private final Logger log = Logger.getLogger("DataSyncStepC");
+	private final Logger log = Logger.getLogger("dataSyncInfo");
 
 	private static SqlMap sqlMap;
 	@Autowired

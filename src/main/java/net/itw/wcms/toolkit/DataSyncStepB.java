@@ -34,7 +34,7 @@ import net.itw.wcms.toolkit.sql.SqlMap;
  */
 public class DataSyncStepB extends JdbcDaoSupport {
 
-	private final Logger log = Logger.getLogger("DataSyncStepB");
+	private final Logger log = Logger.getLogger("dataSyncInfo");
 
 	private static SqlMap sqlMap;
 	public static boolean isContinue = false;
