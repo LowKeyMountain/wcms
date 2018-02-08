@@ -21,7 +21,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
     <head>
         <meta charset="utf-8" />
-        <title>京唐港  | 卸船机 - 作业船舶维护</title>
+        <title>京唐港  | 卸船机 - 船舶班次作业量统计</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         <meta content="" name="description" />
@@ -78,14 +78,16 @@ License: You must have a valid license purchased only from themeforest(the above
 				<div class="row">
 					<div class="col-md-12">
 						<!-- BEGIN PAGE TITLE & BREADCRUMB-->
-						<h3 class="page-title icon-settings">&nbsp;&nbsp;船舶信息实时查询</h3>
+						<h3 class="page-title icon-settings">&nbsp;&nbsp;船舶班次作业量统计</h3>
 						<ul class="page-breadcrumb breadcrumb">
 							<li><i class="fa fa-home"></i> <a
 								href="${BasePath}/web/main"> 主页 </a> <i
 								class="fa fa-angle-right"></i></li>
 							<li>管理中心 <i class="fa fa-angle-right"></i>
 							</li>
-							<li>船舶信息实时查询</li>
+							<li><a href="${IncPath}/task/report">报表统计 </a><i class="fa fa-angle-right"></i>
+							</li>							
+							<li>船舶班次作业量统计</li>
 						</ul>
 						<!-- END PAGE TITLE & BREADCRUMB-->
 					</div>
@@ -129,7 +131,7 @@ License: You must have a valid license purchased only from themeforest(the above
 								   					<option value="0" >预靠</option>
 								   					<option value="1" >作业中</option>
 								   					<option value="2" >已离港</option>
-												</select>
+												</select>												
 												<!-- <div class="btn-group" id="status" data-toggle="buttons">
 												       <label class="btn btn-info">
 												         <input type="radio" class="toggle" value="0">卸货

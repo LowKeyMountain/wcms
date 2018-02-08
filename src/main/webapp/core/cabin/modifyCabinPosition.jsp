@@ -94,7 +94,7 @@ License: You must have a valid license purchased only from themeforest(the above
 							</li>
 							<li><a href="${BasePath}/task/tasklist"> 工作管理 </a><i
 								class="fa fa-angle-right"></i></li>
-							<li><a href="${BasePath}/task/unshipInfo?id=56">卸船情况</a><i
+							<li><a href="${BasePath}/task/unshipInfo?id=${taskId}">卸船情况</a><i
 								class="fa fa-angle-right"></i></li>
 							<li>舱口标定</li>
 						</ul>

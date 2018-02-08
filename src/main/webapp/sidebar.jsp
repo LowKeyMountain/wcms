@@ -62,13 +62,20 @@
                                 <span class="title">工作管理</span>
                             </a>
                         </li>
-                         <li class="nav-item start ">
+<%--                          <li class="nav-item start ">
                             <a href="${IncPath}/task/statistics" class="nav-link ">
                                 <i class="icon-bar-chart"></i>
-                                <span class="title">统计报表</span>
+                                <span class="title">实时查询</span>
+                            </a>
+                        </li> --%>
+
+                         <li class="nav-item start ">
+                            <a href="${IncPath}/task/report" class="nav-link ">
+                                <i class="icon-bar-chart"></i>
+                                <span class="title">报表统计</span>
                             </a>
                         </li>
-                         
+                                                 
 						<li class="nav-item start ">
                             <a href="${IncPath}/unloader/list" class="nav-link ">
                                 <i class="icon-magnifier"></i>

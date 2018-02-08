@@ -304,6 +304,7 @@ public class CabinController {
 		options.args = new Object[] { taskId, taskId, taskId, taskId };
 		Map<String, Object> result = infoQueryHelper.doQueryInfo(jsonObject,options);
 		modelMap.put("cabin", result.get("data"));
+		modelMap.put("taskId", taskId);
 		return new ModelAndView(PATH + "view");
 	}
 	

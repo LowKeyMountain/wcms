@@ -95,7 +95,7 @@ License: You must have a valid license purchased only from themeforest(the above
 							</li>
 							<li><a href="${BasePath}/task/tasklist"> 工作管理 </a><i
 								class="fa fa-angle-right"></i></li>
-							<li><a href="${BasePath}/task/unshipInfo?id=56">卸船情况</a><i
+							<li><a href="${BasePath}/task/unshipInfo?id=${taskId}">卸船情况</a><i
 								class="fa fa-angle-right"></i></li>
 							<li>卸货进度</li>
 						</ul>
@@ -231,7 +231,7 @@ License: You must have a valid license purchased only from themeforest(the above
 	<script type="text/javascript">
 		var IncPath = '${IncPath}';
 		var BasePath = '${BasePath}';
-		var taskId = ${task.id};
+		var taskId = ${taskId};
 	</script>
 	<script src="${IncPath}/cl.js?v=${jsVersion}" type="text/javascript"></script>
 	<script src="${IncPath}/core/cabin/view.js?v=${jsVersion}" type="text/javascript"></script>

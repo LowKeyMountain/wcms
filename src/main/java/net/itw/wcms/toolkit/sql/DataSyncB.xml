@@ -6,7 +6,7 @@
 			<description>查询临时表待处理数据</description>
 			<value>
 			<![CDATA[
-				select * from tab_temp_b b where b.groupId = 0 AND b.`status` is NULL 
+				select * from tab_temp_b b where b.groupId = 0 
 				AND (b.operationType = 0 OR b.operationType = 1) ORDER BY b.Time ASC  
 			]]>
 			</value>
@@ -145,22 +145,49 @@
 			</value>
 		</entry>
 		<entry>
-			<key>16</key>
-			<description>重新同步任务子表数据</description>
-			<value>
-			<![CDATA[
-				select * from tab_temp_b b where b.groupId = 0 AND (b.operationType = 0 OR b.operationType = 1) AND 
-				b.Time > (select t.begin_time from tab_task t where t.id = ?) ORDER BY b.Time ASC  
-			]]>
-			</value>
-		</entry>
-		<entry>
 			<key>17</key>
 			<description>根据卸船机编号，查询临时表待处理数据</description>
 			<value>
 			<![CDATA[
-				select * from tab_temp_b b where b.groupId = 0 AND b.`status` is NULL 
+				select * from tab_temp_b b where b.groupId = 0 
 				AND (b.operationType = 0 OR b.operationType = 1) AND b.Cmsid = ? ORDER BY b.Time ASC  
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>18</key>
+			<description>查询卸船机数据所属的作业任务</description>
+			<value>
+			<![CDATA[
+			SELECT task_id AS taskId, begin_time AS 'beginTime'
+				, CASE 
+					WHEN end_time IS NULL THEN CURRENT_TIMESTAMP()
+					ELSE end_time
+				END AS 'endTime'
+				, CASE 
+					WHEN MIN(start_position) - MIN(end_position) < 0 THEN MIN(start_position)
+					WHEN MIN(end_position) - MIN(start_position) < 0 THEN MIN(end_position)
+				END AS 'minPosition'
+				, CASE 
+					WHEN MAX(start_position) - MAX(end_position) < 0 THEN MAX(end_position)
+					WHEN MAX(end_position) - MAX(start_position) < 0 THEN MAX(start_position)
+				END AS 'maxPosition'
+			FROM v_cabin_info
+			WHERE `taskStatus` = 1
+			GROUP BY task_id, begin_time, end_time
+			HAVING minPosition <= ?
+			AND maxPosition >= ?
+			AND beginTime <= ?
+			AND endTime >= ? 
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>19</key>
+			<description></description>
+			<value>
+			<![CDATA[
+			 select * from tab_temp_c_%s t where t.`status` = 0 AND t.Cmsid = ? 
 			]]>
 			</value>
 		</entry>

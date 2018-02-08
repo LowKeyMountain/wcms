@@ -134,9 +134,11 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			}
 
 			cabinRepository.save(cabins.values());
+			cabinRepository.flush();
 			// 将船舶任务子表数据同步到临时表
-			dataSyncStepC.sync(Integer.parseInt(taskId));
+			dataSyncStepC.start(Integer.parseInt(taskId));
 		} catch (Exception e) {
+			e.printStackTrace();
 			mo.msg = e.getMessage();
 			mo.code = ConstantUtil.FailInt;
 		}
@@ -403,7 +405,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 				args = new Object[] { taskId };
 				sql = sqlMap.getSql("FN_009_1", taskId, taskId);
 			}
-			List<Map<String, Object>> data = this.dataSyncStepC.getJdbcTemplate().queryForList(sql.toString(), args);
+			List<Map<String, Object>> data = this.dataSyncStepC.queryForList(sql.toString(), args);
 			result.put("msg", msg);
 			result.put("data", data);
 			result.put("code", isSuccess);
@@ -434,7 +436,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 				sql = StringUtils.replace(sql, "%#", taskId + "");
 				args = new Object[] { taskId, unloaderId };
 			}
-			List<Map<String, Object>> data = this.dataSyncStepC.getJdbcTemplate().queryForList(sql.toString(), args);
+			List<Map<String, Object>> data = this.dataSyncStepC.queryForList(sql.toString(), args);
 			result.put("msg", msg);
 			result.put("data", data);
 			result.put("code", isSuccess);

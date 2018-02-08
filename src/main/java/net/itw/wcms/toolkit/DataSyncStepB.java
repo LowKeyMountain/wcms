@@ -50,7 +50,11 @@ public class DataSyncStepB extends JdbcDaoSupport {
 			e.printStackTrace();
 		}
 	}
-
+	
+	public SqlMap getSqlMap(){
+		return sqlMap;
+	}
+	
 	/**
 	 * 运行数据同步任务
 	 * 
@@ -216,10 +220,6 @@ public class DataSyncStepB extends JdbcDaoSupport {
 			for (Map<String, Object> map : list) {
 
 				Integer operationType = (Integer) map.get("operationType");
-				// 过滤卸船机在线状态数据
-				if (2 == operationType) {
-					continue;
-				}
 
 				Integer taskId = 0;
 				Integer cabinId = 0;
@@ -234,98 +234,27 @@ public class DataSyncStepB extends JdbcDaoSupport {
 				List<Map<String, Object>> cabinNums = this.getJdbcTemplate().queryForList(sqlMap.getSql("02"), args);
 
 				if (cabinNums == null || cabinNums.isEmpty()) {
-					try {
-						args = new Object[] { id, cmsid };
-						this.getJdbcTemplate().update(sqlMap.getSql("15"), args);
-						log.error("数据异常：数据编号[" + id + "]|卸船机编号[" + cmsid + "] 未找到船舱信息！");
-					} catch (Exception e) {
-						e.printStackTrace();
-						log.error(e.getMessage());
+					log.error("数据异常：数据编号[" + id + "]|卸船机编号[" + cmsid + "] 未找到船舱信息！");
+					List<Map<String, Object>> tasks = this.getJdbcTemplate().queryForList(sqlMap.getSql("18"), args);
+					if (tasks != null && !tasks.isEmpty()) {
+						String sql = "";
+						taskId = (Integer) tasks.get(0).get("taskId");
+						List<Map<String, Object>> list2 = this.getJdbcTemplate().queryForList(sqlMap.getSql("19", taskId), cmsid);
+						for (Map<String, Object> map2 : list2) {
+							Integer id2 = (Integer) map2.get("id");
+							if (0 == operationType) {
+								sql = sqlMap.getSql("09", taskId);
+								args = new Object[] { time, id2 };
+							} else if (1 == operationType) {
+								sql = sqlMap.getSql("10", taskId);
+								args = new Object[] { time, time, id2 };
+							}
+							this.getJdbcTemplate().update(sql, args);
+						}
 					}
-					continue;
-				}
-
-				if (cabinNums.size() > 1) {
-					log.error("数据异常：数据编号[" + id + "]|卸船机编号[" + cmsid + "] 匹配到多个船舱信息！");
-				}
-				cabinId = (Integer) cabinNums.get(0).get("id");
-				taskId = (Integer) cabinNums.get(0).get("taskId");
-
-				try {
-					// 自动创建任务子表
-					autoCreateDBTable.createTable(taskId);
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-
-				groupId = calc(taskId, cabinId, cmsid, operationType, time);
-
-				// 更新表b数据
-				try {
-					// 【任务子表】将临时表作业数据插入子表
-					args = new Object[] { groupId, id, cmsid };
-					this.getJdbcTemplate().update(sqlMap.getSql("03", taskId), args);
 					// 删除临时表作业数据
 					args = new Object[] { id, cmsid };
 					this.getJdbcTemplate().update(sqlMap.getSql("04"), args);
-					num++;
-					log.info("数据编号[" + id + "]|卸船机编号[" + cmsid + "] 数据已计算组信息！");
-				} catch (Exception e) {
-					e.printStackTrace();
-					log.error(e.getMessage());
-					continue;
-				} finally {
-				}
-			}
-		} catch (DataAccessException e) {
-			e.printStackTrace();
-			log.error(e.getMessage());
-		} finally {
-			log.info("数据已处理" + num + "条。");
-		}
-	}
-
-	/**
-	 * 重新同步任务子表数据
-	 * 
-	 * @param tid
-	 */
-	@Transactional
-	public void resyncByTaskId(Integer tid) {
-		int num = 0;
-		try {
-			// 查询临时表待处理数据
-			List<Map<String, Object>> list = this.getJdbcTemplate().queryForList(sqlMap.getSql("16"), tid);
-			log.info("待计算数据" + list.size() + "条。");
-			for (Map<String, Object> map : list) {
-
-				Integer operationType = (Integer) map.get("operationType");
-				// 过滤卸船机在线状态数据
-				if (2 == operationType) {
-					continue;
-				}
-
-				Integer taskId = 0;
-				Integer cabinId = 0;
-				Integer groupId = 0;
-				Date time = (Date) map.get("Time");
-				Integer id = (Integer) map.get("id");
-				String cmsid = (String) map.get("Cmsid");
-				Double unloaderMove = (Double) map.get("unloaderMove");
-
-				// 查询卸船机作业数据任务ID、船舱ID
-				Object[] args = new Object[] { unloaderMove, unloaderMove, time, time };
-				List<Map<String, Object>> cabinNums = this.getJdbcTemplate().queryForList(sqlMap.getSql("02"), args);
-
-				if (cabinNums == null || cabinNums.isEmpty()) {
-					try {
-						args = new Object[] { id, cmsid };
-						this.getJdbcTemplate().update(sqlMap.getSql("15"), args);
-						log.error("数据异常：数据编号[" + id + "]|卸船机编号[" + cmsid + "] 未找到船舱信息！");
-					} catch (Exception e) {
-						e.printStackTrace();
-						log.error(e.getMessage());
-					}
 					continue;
 				}
 
@@ -384,7 +313,7 @@ public class DataSyncStepB extends JdbcDaoSupport {
 	 *            操作时间
 	 * @return
 	 */
-	private Integer calc(Integer taskId, Integer cabinId, String cmsid, int operationType, Date time) {
+	Integer calc(Integer taskId, Integer cabinId, String cmsid, int operationType, Date time) {
 		int groupId = 0;
 		String sql = "";
 		Object[] args = new Object[0];

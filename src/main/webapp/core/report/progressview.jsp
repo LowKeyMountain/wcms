@@ -21,7 +21,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
     <head>
         <meta charset="utf-8" />
-        <title>京唐港  | 卸船机 - 数据管理</title>
+        <title>京唐港  | 报表统计</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         <meta content="" name="description" />
@@ -77,16 +77,16 @@ License: You must have a valid license purchased only from themeforest(the above
 				<div class="row">
 					<div class="col-md-12">
 						<!-- BEGIN PAGE TITLE & BREADCRUMB-->
-						<h3 class="page-title">船舱信息</h3>
+						<h3 class="page-title">船舶货物进度统计</h3>
 						<ul class="page-breadcrumb breadcrumb">
 							<li><i class="fa fa-home"></i> <a
 								href="${BasePath}/web/main"> 主页 </a> <i
 								class="fa fa-angle-right"></i></li>
 							<li>管理中心 <i class="fa fa-angle-right"></i>
 							</li>
-							<li><a href="${BasePath}/task/maintenance">船舶作业管理 </a><i
+							<li><a href="${BasePath}/task/tasklist"> 工作管理 </a><i
 								class="fa fa-angle-right"></i></li>							
-							<li>船舱信息</li>
+							<li>船舶货物进度统计</li>
 						</ul>
 						<!-- END PAGE TITLE & BREADCRUMB-->
 					</div>
@@ -105,71 +105,17 @@ License: You must have a valid license purchased only from themeforest(the above
 					<div><span style="color:red">Hello</span>
 					</div>
 				</div>
-				<!-- 模态对话框 -->
-				<div id="cabinStatus" class="modal fade" role="dialog" tabindex="-1" aria-hidden="true" aria-labelledby="myModalLabel" style="display: block;">
-				    <div class="modal-dialog">
-				        <div class="modal-content">
-				            <div class="modal-header bg-primary">
-				                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-				                <h4 class="modal-title">
-				                    <i class="icon-pencil"></i>
-				                    <a class="close" data-dismiss="modal">×</a>
-				                    
-				                    <span id="lblAddTitle" style="font-weight:bold">修改船舱状态</span>
-				                </h4>
-				            </div>
-				                <div class="modal-body" style="text-align:left;">
-				                    <form  id ='addForm' class="bs-example bs-example-form" role = "form">
-				                    <div class="modal-body" >
-										<div class="alert alert-danger display-hide">
-											<button class="close" data-close="alert"></button>
-											数据格式异常. 请重新输入.
-										</div>
-										<div class="alert alert-success display-hide">
-											<button class="close" data-close="alert"></button>
-											数据校验通过!
-										</div>
-										<div class = "input-group" >
-				                                <span class="input-group-addon text-center"><b class="icon-td">船舱状态</b></span>
-												<select id="status" name="status" class="form-control select2me"  style="width:240px;">
-								   					<option value="0" >卸货</option>
-								   					<option value="1" >清舱</option>
-								   					<option value="2" >完成</option>
-												</select>
-												<input type="hidden" name="cabinNo" placeholder="cabinNo" id="cabinNo" />
-												
-												<!-- <div class="btn-group" id="status" data-toggle="buttons">
-												       <label class="btn btn-info">
-												         <input type="radio" class="toggle" value="0">卸货
-												       </label>
-												       <label class="btn btn-info">
-												         <input type="radio" class="toggle" value="1">清舱
-												       </label>
-												       <label class="btn btn-info">
-												         <input type="radio" class="toggle" value="2">完成
-												       </label>
-												</div> -->
-											</div>							                            
-				                    </div>                            
-				                    </form>
-				                </div>
-								<div class="modal-footer bg-info"  style="width:500px;">
-									<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>取消</button>
-									<button type="button" id="btn_submit" class="btn btn-primary" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>提交</button>
-								</div>
-				        </div>
-				    </div>
-				</div>				
             	<div class="row">
 					<div class="col-md-12">
 						<!-- BEGIN EXAMPLE TABLE PORTLET-->
 						<div class="portlet light bordered">
-<!-- 							<div class="portlet-title">
+							<div class="portlet-title">
 								<div class="caption font-dark">
 									<i class="icon-settings font-dark"></i> <span
-										class="caption-subject bold uppercase">船舱信息</span>
+										class="caption-subject bold uppercase">船舶货物进度统计</span>
 								</div>
-							</div> -->
+
+							</div>
 							<div class="portlet-body">
 
 								<div class="table-toolbar">
@@ -178,7 +124,7 @@ License: You must have a valid license purchased only from themeforest(the above
 									            <div class="panel-heading">
 									            		<h3 class="panel-title"><a href="javascript:view_ship(${taskId})">${shipName}</a></h3></div>
 									            <div class="panel-body">
-									                <table id="cabinDetail" class="table table-striped table-bordered table-hover table-checkable order-column"></table>												            
+									                <table id="unloadProgress" class="table table-striped table-bordered table-hover table-checkable order-column"></table>												            
 									            </div>								            
 									        </div>				                
 								</div>
@@ -192,7 +138,7 @@ License: You must have a valid license purchased only from themeforest(the above
 			<!-- END CONTENT -->
 		</div>
 	</div>
-</div>
+</div>	
 	<!-- END CONTAINER -->
 	<jsp:include page="../../footer.jsp" />
 	<!--[if lt IE 9]>
@@ -244,7 +190,7 @@ License: You must have a valid license purchased only from themeforest(the above
 		</script>
 		<script src="${IncPath}/cl.js?v=${jsVersion}"
 			type="text/javascript"></script>
-		<script src="${IncPath}/core/task/cabinlist.js?v=${jsVersion}"
+		<script src="${IncPath}/core/unshipInfo/progress.js?v=${jsVersion}"
 			type="text/javascript"></script>
 	<script>
 		jQuery(document).ready(function() {

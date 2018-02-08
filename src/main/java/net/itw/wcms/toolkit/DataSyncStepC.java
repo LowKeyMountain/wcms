@@ -1,6 +1,10 @@
 package net.itw.wcms.toolkit;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 
@@ -10,7 +14,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
-import org.springframework.transaction.annotation.Transactional;
 
 import net.itw.wcms.toolkit.sql.SqlMap;
 
@@ -25,9 +28,13 @@ public class DataSyncStepC extends JdbcDaoSupport {
 
 	private static SqlMap sqlMap;
 	@Autowired
-	private DataSyncStepA dataSyncStepA;
-	@Autowired
 	private DataSyncStepB dataSyncStepB;
+	@Autowired
+	private AutoCreateDBTable autoCreateDBTable;
+
+	public List<Map<String, Object>> queryForList(String sql, Object... args) {
+		return this.getJdbcTemplate().queryForList(sql, args);
+	}
 
 	static {
 		try {
@@ -47,28 +54,13 @@ public class DataSyncStepC extends JdbcDaoSupport {
 	 */
 	public void start(Integer taskId) throws Exception {
 		log.info("同步工具：步骤C 开始...");
-		dataSyncStepA.stop();
-		dataSyncStepB.stop();
-
-		sync(taskId);
-		// 重新同步任务子表数据
-		dataSyncStepB.resyncByTaskId(taskId);
-
-		dataSyncStepA.restart();
-		dataSyncStepB.restart();
+		delete(taskId);
+		resync(taskId);
 		log.info("同步工具：步骤C 结束...");
 	}
 
-	/**
-	 * 将船舶任务子表数据同步到临时表
-	 * 
-	 * @param taskId
-	 */
-	@Transactional
-	public void sync(Integer taskId) throws Exception {
+	private void delete(Integer taskId) {
 		try {
-			// 将船舶任务子表数据同步到临时表
-			this.getJdbcTemplate().update(sqlMap.getSql("01", "tab_temp_b_" + taskId), 0);
 			// 【任务子表】删除任务子表：卸船作业信息
 			this.getJdbcTemplate().update(sqlMap.getSql("02", "tab_temp_b_" + taskId));
 			// 【任务子表】删除任务子表：组信息
@@ -77,7 +69,101 @@ public class DataSyncStepC extends JdbcDaoSupport {
 			e.printStackTrace();
 			log.error(e.getMessage());
 			throw e;
+		}
+	}
+
+	/**
+	 * 重新同步任务子表数据
+	 * 
+	 * @param tid
+	 */
+	private void resync(Integer tid) {
+		int num = 0;
+		try {
+			// 查询临时表待处理数据
+			List<Map<String, Object>> list = this.getJdbcTemplate().queryForList(sqlMap.getSql("04"), tid, tid);
+			log.info("待计算数据" + list.size() + "条。");
+			for (Map<String, Object> map : list) {
+
+				Integer operationType = (Integer) map.get("operationType");
+
+				Integer taskId = 0;
+				Integer cabinId = 0;
+				Integer groupId = 0;
+				Date time = (Date) map.get("Time");
+				Integer id = (Integer) map.get("id");
+				String cmsid = (String) map.get("Cmsid");
+				Double unloaderMove = (Double) map.get("unloaderMove");
+
+				// 查询卸船机作业数据任务ID、船舱ID
+				Object[] args = new Object[] { unloaderMove, unloaderMove, time, time };
+				List<Map<String, Object>> cabinNums = this.getJdbcTemplate()
+						.queryForList(dataSyncStepB.getSqlMap().getSql("02"), args);
+
+				if (cabinNums == null || cabinNums.isEmpty()) {
+					log.error("数据异常：数据编号[" + id + "]|卸船机编号[" + cmsid + "] 未找到船舱信息！");
+					List<Map<String, Object>> tasks = this.getJdbcTemplate()
+							.queryForList(dataSyncStepB.getSqlMap().getSql("18"), args);
+					if (tasks != null && !tasks.isEmpty()) {
+						String sql = "";
+						taskId = (Integer) tasks.get(0).get("taskId");
+						if (taskId != tid) {
+							continue;
+						}
+						List<Map<String, Object>> list2 = this.getJdbcTemplate()
+								.queryForList(dataSyncStepB.getSqlMap().getSql("19", taskId), cmsid);
+						for (Map<String, Object> map2 : list2) {
+							Integer id2 = (Integer) map2.get("id");
+							if (0 == operationType) {
+								sql = dataSyncStepB.getSqlMap().getSql("09", taskId);
+								args = new Object[] { time, id2 };
+							} else if (1 == operationType) {
+								sql = dataSyncStepB.getSqlMap().getSql("10", taskId);
+								args = new Object[] { time, time, id2 };
+							}
+							this.getJdbcTemplate().update(sql, args);
+						}
+					}
+					continue;
+				}
+
+				if (cabinNums.size() > 1) {
+					log.error("数据异常：数据编号[" + id + "]|卸船机编号[" + cmsid + "] 匹配到多个船舱信息！");
+				}
+				cabinId = (Integer) cabinNums.get(0).get("id");
+				taskId = (Integer) cabinNums.get(0).get("taskId");
+
+				if (taskId != tid) {
+					continue;
+				}
+
+				try {
+					// 自动创建任务子表
+					autoCreateDBTable.createTable(taskId);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+
+				groupId = dataSyncStepB.calc(taskId, cabinId, cmsid, operationType, time);
+
+				// 更新表b数据
+				try {
+					// 【任务子表】将临时表作业数据插入子表
+					this.getJdbcTemplate().update(sqlMap.getSql("05", taskId), groupId, id, cmsid);
+					num++;
+					log.info("数据编号[" + id + "]|卸船机编号[" + cmsid + "] 数据已计算组信息！");
+				} catch (Exception e) {
+					e.printStackTrace();
+					log.error(e.getMessage());
+					continue;
+				} finally {
+				}
+			}
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
 		} finally {
+			log.info("数据已处理" + num + "条。");
 		}
 	}
 
