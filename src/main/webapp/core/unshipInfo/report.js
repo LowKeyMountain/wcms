@@ -1,10 +1,10 @@
 	function initTable(){
 		
-		$('#maintenance').bootstrapTable("destroy").bootstrapTable({  // init via javascript
+		$('#statistics').bootstrapTable("destroy").bootstrapTable({  // init via javascript
 			
 			method : 'post',
 			contentType : "application/x-www-form-urlencoded",
-			url:BasePath + "/task/getTaskWhList?rnd=" + Math.random(),
+			url:BasePath + "/task/getUnloaderOverviewList?rnd=" + Math.random(),
 			dataType : 'json',
 //			 dataField: 'res',//bootstrap table 可以前端分页也可以后端分页
 			 striped : true, // 是否显示行间隔色
@@ -73,95 +73,25 @@
 		        align: 'center',
 		        visible: false
 		    }, {
-		        field: 'shipName',
-		        title: '船舶名称',
+		        field: 'unloaderName',
+		        title: '卸船机',
 		        align: 'center',
-		        width: '10%',
-		        formatter: function (value, row, index) {
-                    var html = '<a href="javascript:view_ship(' + row.id + ')" class="btn btn-success">' + row.shipName + '</a>';
-                    return html;
-                }
+		        width: '10%'
 		    }, {
-		        field: 'berth',
-		        title: '泊位',
+		        field: 'unloading',
+		        title: '作业量',
 		        align: 'center',
 		        width: '6%'
 		    }, {
-		        field: 'berthingTime',
-		        title: '靠泊时间',
+		        field: 'usedTime',
+		        title: '台时',
 		        align: 'center',
 		        width: '12%'
 		    }, {
-		        field: 'departureTime',
-		        title: '离泊时间',
+		        field: 'efficiency',
+		        title: '效率',
 		        align: 'center',
 		        width: '12%'
-		    }, {
-		        field: 'beginTime',
-		        title: '开工时间',
-		        align: 'center',
-		        width: '12%',
-		        sortable:true
-		    }, {
-		        field: 'endTime',
-		        title: '结束时间',
-		        align: 'center',
-		        width: '12%',
-		        sortable:true
-		    },/*{
-		        field: 'cargoLoad',
-		        title: '货物总重',
-		        width: '6%',		        
-		        align: 'center'
-		    }, */{
-		        field: 'status',
-		        title: '状态',
-		        align: 'center',
-		        width: '8%',
-                formatter: function (value, row, index) {//自定义显示，这三个参数分别是：value该行的属性，row该行记录，index该行下标  
-                    return row.status == 0 ? "<font color=lightgreen>预靠</font>" : row.status == 1 ? "<font color=red>作业中</font>" : "<font color=grey>已离港</font>";  
-                }
-		    }, /*{
-		        field: 'updateUser',
-		        title: '修改人',
-		        align: 'center',
-		        width: '10%'
-		    }, {
-		        field: 'Date',
-		        title: '更新时间',
-		        align: 'center',
-		        width: '10%'
-		    },*/ {
-		        title: '修改',
-		        align: 'center',
-		        width: '16%',
-		        formatter: function (value, row, index) {
-		            return ['<a class="btn cabindetail btn-info glyphicon glyphicon-zoom-in icon-white" >船舱</a>',
-		            	'<a class="btn btn-info mod glyphicon glyphicon-edit icon-white" >船舶</a>'].join('');
-		        },
-		    	events: {
-					'click .mod' : function(e, value, row, index) {
-	                	if(row.status==0){
-	                		$("#modiStatus").empty();
-	                		$("#modiStatus").append("<option value='1'>作业中</option>");
-	                		$('#begintime').attr('disabled', 'false');
-	                	}else if(row.status==1){
-	                		$("#modiStatus").empty();
-	                		$("#modiStatus").append("<option value='0'>预靠</option>").append("<option value='2'>已离港</option>");	                		
-	                	}else if(row.status==2){
-	                		$("#modiStatus").empty();
-	                		$("#modiStatus").append("<option value='1'>作业中</option>");
-	                		$('#begintime').attr('disabled', 'true'); 
-
-	                	}else{
-	                	}
-						$('#taskId').val(row.id);
-						$('#shipStatus').modal('show');
-					},
-	                'click .cabindetail' : function(e, value, row, index) {
-	        			window.location.href = BasePath + "/task/cabinlist?id=" + row.id;
-	                 }
-	        	}
 		    }],
 			locale : 'zh-CN',// 中文支持,
 			responseHandler : function(res) {
@@ -208,8 +138,9 @@ $(function(){
         
         $('#btn_submit').off().on("click", function () {
         	var data={
-        			status:$("#modiStatus").val(),
-        			taskId:$("#taskId").val()
+        			shipStatus:$("#shipStatus").val(),
+        			operationtype:$("#operationtype").val(),
+        			direction:$("#direction").val(),
         	}
             $.ajax({
                 url: BasePath + "/task/doSetShipStatus",
@@ -227,7 +158,7 @@ $(function(){
                 	}
                 },
                 failure: function(data){
-                    alert("修改失败!");
+                    alert("保存失败!");
                 }                
             });
         });        

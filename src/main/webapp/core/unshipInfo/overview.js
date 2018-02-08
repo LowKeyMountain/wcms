@@ -176,3 +176,10 @@
 	});	
 	$("#unloaderDetail").trigger("click"); 	
 }
+	/**
+	 * 查看船舶信息
+	 */
+	function view_ship(taskId) {
+		window.location.href = BasePath + "/task/view?taskId="+ taskId;
+	}
+	

@@ -98,6 +98,16 @@ public class TaskController {
 	public ModelAndView shipStatistics() {
 		return new ModelAndView(PATH_UNSHIPINFO + "statistics");
 	}
+
+	/**
+	 * 跳转至报表管理页面
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/report")
+	public ModelAndView report() {
+		return new ModelAndView(PATH_UNSHIPINFO + "report");
+	}
 	
 	@RequestMapping("/addform")
 	public ModelAndView newTask() {

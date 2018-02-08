@@ -141,7 +141,8 @@
 		        },
 		    	events: {
 					'click .mod' : function(e, value, row, index) {      
-						 var cabinNo = row.cabinNo;
+						$('#cabinNo').val(row.cabinNo);
+						 $('#cabinStatus').modal('show');
 					}
 	        	}
 		    }],
@@ -158,7 +159,7 @@
     	var data={
     			status: $("#status").val(),
     			taskId: taskId,
-    			cabinNo: cabinNo
+    			cabinNo: $("#cabinNo").val()
     	}
         $.ajax({
             url: BasePath + "/cabin/updateCabinStatus",
@@ -170,13 +171,14 @@
             success: function (data) {
             	if (data.success == true){
             		alert(data.msg);
-                	$('#unloader').bootstrapTable("refresh");
+            		initTable(taskId);
+                	//$('#cabinDetail').bootstrapTable("refresh");
             	} else {
             		alert(data.msg);                		
             	}
             },
             failure: function(data){
-                alert("保存失败!");
+                alert("修改失败!");
             }                
         });
     }); 
@@ -187,7 +189,8 @@
 	 */
 	function view_cargo(id) {
 		Cl.showModalWindow(Cl.modalName, BasePath + "/cargo/cargoview?id=" + id);
-	}	
+	}
+	
 	/**
 	 * 查看船舶信息
 	 */

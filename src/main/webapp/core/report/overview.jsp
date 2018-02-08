@@ -21,7 +21,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
     <head>
         <meta charset="utf-8" />
-        <title>京唐港  | 卸船机 - 作业船舶维护</title>
+        <title>京唐港  | 报表统计</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         <meta content="" name="description" />
@@ -78,14 +78,16 @@ License: You must have a valid license purchased only from themeforest(the above
 				<div class="row">
 					<div class="col-md-12">
 						<!-- BEGIN PAGE TITLE & BREADCRUMB-->
-						<h3 class="page-title icon-settings">&nbsp;&nbsp;作业船舶维护</h3>
+						<h3 class="page-title icon-settings">&nbsp;&nbsp;船舶卸船机作业量总览</h3>
 						<ul class="page-breadcrumb breadcrumb">
 							<li><i class="fa fa-home"></i> <a
 								href="${BasePath}/web/main"> 主页 </a> <i
 								class="fa fa-angle-right"></i></li>
 							<li>管理中心 <i class="fa fa-angle-right"></i>
 							</li>
-							<li>作业船舶维护</li>
+							<li><a href="${IncPath}/task/report">报表统计 </a><i class="fa fa-angle-right"></i>
+							</li>							
+							<li>船舶卸船机作业量总览</li>
 						</ul>
 						<!-- END PAGE TITLE & BREADCRUMB-->
 					</div>
@@ -100,7 +102,7 @@ License: You must have a valid license purchased only from themeforest(the above
 	                        </p>
 	                    </div>
                     	-->
-				<div id="shipStatus" class="modal fade" role="dialog" tabindex="-1" aria-hidden="true" aria-labelledby="myModalLabel" style="display: block;">
+				<div id="alterStatus" class="modal fade" role="dialog" tabindex="-1" aria-hidden="true" aria-labelledby="myModalLabel" style="display: block;">
 				    <div class="modal-dialog">
 				        <div class="modal-content">
 				            <div class="modal-header bg-primary">
@@ -109,7 +111,7 @@ License: You must have a valid license purchased only from themeforest(the above
 				                    <i class="icon-pencil"></i>
 				                    <a class="close" data-dismiss="modal">×</a>
 				                    
-				                    <span id="lblAddTitle" style="font-weight:bold">修改船舶状态</span>
+				                    <span id="lblAddTitle" style="font-weight:bold">修改作业状态</span>
 				                </h4>
 				            </div>
 				                <div class="modal-body" style="text-align:left;">
@@ -125,26 +127,23 @@ License: You must have a valid license purchased only from themeforest(the above
 										</div>
 										<div class = "input-group" >
 				                                <span class="input-group-addon text-center"><b class="icon-td">作业状态</b></span>
-												<select id="modiStatus" name="modiStatus" class="form-control select2me"  style="width:240px;">
+												<select id="shipStatus" name="shipStatus" class="form-control select2me"  style="width:240px;">
 								   					<option value="0" >预靠</option>
 								   					<option value="1" >作业中</option>
 								   					<option value="2" >已离港</option>
-												</select>
-										</div>
-										<div class = "input-group" >
-												<span class="input-group-addon text-center"><b class="icon-td">开工时间</b></span>
-										        <input class="form-control form_datetime" name="begintime" placeholder="请选择开工时间" id="begintime" style="width:240px;" readonly />
-										</div>
-										<div class = "input-group" >
-												<span class="input-group-addon text-center"><b class="icon-td">结束时间</b></span>
-										        <input class="form-control form_datetime" name="endtime" placeholder="请选择结束时间" id="endtime" style="width:240px;" readonly />
-										</div>										
-										<div class = "input-group" >
-												<span class="input-group-addon text-center"><b class="icon-td">离港时间</b></span>
-										        <input class="form-control form_datetime" name="departuretime" placeholder="请选择离港时间" id="departuretime" style="width:240px;" readonly/>
-										</div>
-										<input type="hidden" class="form-control" name="taskId" placeholder="taskId" id="taskId" />
-										
+												</select>												
+												<!-- <div class="btn-group" id="status" data-toggle="buttons">
+												       <label class="btn btn-info">
+												         <input type="radio" class="toggle" value="0">卸货
+												       </label>
+												       <label class="btn btn-info">
+												         <input type="radio" class="toggle" value="1">清舱
+												       </label>
+												       <label class="btn btn-info">
+												         <input type="radio" class="toggle" value="2">完成
+												       </label>
+												</div> -->
+											</div>							                            
 				                    </div>                            
 				                    </form>
 				                </div>
@@ -170,29 +169,26 @@ License: You must have a valid license purchased only from themeforest(the above
 									                <form id="formSearch" class="form-horizontal">
 							                
 									                    <div class="form-group" style="margin-top:5px;margin-bottom:5px">
-									                        <label class="control-label col-md-1" for="status">状态: </label>
-									                        <div class="col-md-2">
+									                        <label class="control-label col-md-1" for="status">船名: </label>
+									                        <div class="col-md-3">
 																<select id="status" name="status" class="form-control select2me">
 																	<option value="">请选择...</option>
-												   					<option value="0" >预靠</option>
-												   					<option value="1" >作业中</option>
-												   					<option value="2" >已离港</option>
+
 																</select>
 									                        </div>
-													    	<label class="control-label  col-md-1 cy-pad-hor-s">靠泊时间：</label>
-													        <div class="col-md-4 input-daterange input-group">
-													            <input class="form-control" name="startBerthDate" placeholder="请选择靠泊起始时间" id="startBerthDate" readonly/>
-													            <span class="input-group-addon">--</span>
-																<input class="form-control" name="endBerthDate" placeholder="请选择靠泊截止时间" id="endBerthDate" readonly/>
-															</div>
-													    <div class="form-group"  style="margin-top:10px;margin-bottom:5px">
-															<label class="control-label  col-md-1 cy-pad-hor-s">离泊时间：</label>
-													        <div class="col-md-4 input-daterange input-group">
-													            <input class="form-control" name="startDepartureDate" placeholder="请选择离泊起始时间" id="startDepartureDate" readonly/>
-													            <span class="input-group-addon">--</span>
-																<input class="form-control" name="endDepartureDate" placeholder="请选择离泊截止时间" id="endDepartureDate" readonly/>
-															</div>
-														</div>																	
+									                        <!-- 
+													    	<label class="control-label  col-md-1 cy-pad-hor-s">日期：</label>
+													        <div class="col-md-2">
+																<input class="form-control form_datetime" name="queryDate" placeholder="请选择查询日期" id="queryDate" readonly/>
+															</div>									                        
+									                        <label class="control-label col-md-1" for="status">班次: </label>
+									                        <div class="col-md-2">
+																<select id="shift" name="shift" class="form-control select2me">
+																	<option value="">请选择...</option>
+												   					<option value="0" >白班</option>
+												   					<option value="1" >夜班</option>
+																</select>
+									                        </div>	 -->																
 									                    </div>
 									                    <div class="form-group" style="margin-top:5px;margin-left:500px;margin-bottom:5px">
 									                        <div class="col-md-2" style="text-align:left;">
@@ -207,7 +203,7 @@ License: You must have a valid license purchased only from themeforest(the above
 												                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
 												            </button>
 												        </div> -->
-									                    <table id="maintenance" class="table table-striped table-bordered table-hover table-checkable order-column"></table>												            
+									                    <table id="statistics" class="table table-striped table-bordered table-hover table-checkable order-column"></table>												            
 									                </form>
 									            </div>
 									        </div>						                
@@ -277,7 +273,7 @@ License: You must have a valid license purchased only from themeforest(the above
 		</script>
 		<script src="${IncPath}/cl.js?v=${jsVersion}"
 			type="text/javascript"></script>
-		<script src="${IncPath}/core/task/maintenance.js?v=${jsVersion}"
+		<script src="${IncPath}/core/report/overview.js?v=${jsVersion}"
 			type="text/javascript"></script>
 			
         <script>  
@@ -286,7 +282,7 @@ License: You must have a valid license purchased only from themeforest(the above
 	            	startView: 'month',
 	            	minView: 'month',
     			    language:  'zh-CN',
-    			    format: 'yyyy-mm-dd hh:ii:ss',
+    			    format: 'yyyy-mm-dd',
     			    todayBtn:  true,
     			    autoclose: true,
 	            	clearBtn: true,
@@ -341,15 +337,7 @@ License: You must have a valid license purchased only from themeforest(the above
     	            })
     	        }
     	        DatePicker("#startDepartureDate","#endDepartureDate");
-    	        DatePicker("#startBerthDate","#endBerthDate");
-    	        
-/*     	        if($("#modiStatus").val()==0){
-            		$('#begintime').attr('disabled', 'false');
-            		$('#departuretime').attr('disabled', 'false'); 
-    	        }else if($("#modiStatus").val()==1){
-            		$('#begintime').attr('disabled', 'true');
-            		$('#departuretime').attr('disabled', 'false');     	        	
-    	        } */
+    	        DatePicker("#startBerthDate","#endBerthDate");			
             });  
         </script>			
 		<!-- BEGIN THEME LAYOUT SCRIPTS -->
