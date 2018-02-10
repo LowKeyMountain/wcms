@@ -11,6 +11,7 @@ var CabinView = function() {
 			var mapping = {};
 			var pageParam = {};
 			pageParam.taskId = taskId;
+			pageParam.cabinNo = cabinNo;
 			var url = BasePath + "/cabin/doGetUnloaderDetail";
 			$.post(url, pageParam, function(result) {
 				if (result && Cl.successInt == result.code) {
@@ -38,7 +39,7 @@ var CabinView = function() {
 						
 						var tr = ""
 							+ "<tr>"
-							+ "<td>#"+res.unloaderName+"</td>"
+							+ "<td>"+res.unloaderName+"</td>"
 							+ "<td>"+res.startTime+"</td>"
 							+ "<td>"+res.endTime+"</td>"
 							+ "<td>"+res.usedTime+"</td>"

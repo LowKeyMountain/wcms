@@ -107,14 +107,20 @@ License: You must have a valid license purchased only from themeforest(the above
  							<a href="${IncPath}/report/progressview" class="btn btn-info btn-lg btn-block" role="button">船舶货物进度统计</a>	
  						</div>
 						<div class="col-md-6" style="margin-top:5px;margin-bottom:5px">
- 							<a href="" class="btn btn-info btn-lg btn-block" role="button">船舶舱口卸货统计</a>	
+ 							<a href="${IncPath}/report/unloadview" class="btn btn-info btn-lg btn-block" role="button">船舶舱口卸货统计</a>	
  						</div>
 						<div class="col-md-6" style="margin-top:5px;margin-bottom:5px">
- 							<a href="${IncPath}/report/overview" class="btn btn-info btn-lg btn-block" role="button">船舶卸船机作业量总览</a>	
+ 							<a href="${IncPath}/report/overview" class="btn btn-info btn-lg btn-block" role="button">船舶卸船机作业量统计</a>	
  						</div>
 						<div class="col-md-6" style="margin-top:5px;margin-bottom:5px">
  							<a href="${IncPath}/task/statistics" class="btn btn-info btn-lg btn-block" role="button">船舶班次作业量统计</a>	
  						</div>
+						<div class="col-md-6" style="margin-top:5px;margin-bottom:5px">
+ 							<a href="${IncPath}/report/cabinquantity" class="btn btn-info btn-lg btn-block" role="button">船舶分舱作业量统计</a>	
+ 						</div>
+						<div class="col-md-6" style="margin-top:5px;margin-bottom:5px">
+ 							<a href="${IncPath}/report/cargoquantity" class="btn btn-info btn-lg btn-block" role="button">船舶分货作业量统计</a>	
+ 						</div> 						
 						<!-- END EXAMPLE TABLE PORTLET-->
 					</div>
 				</div>

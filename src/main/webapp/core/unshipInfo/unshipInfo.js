@@ -125,6 +125,20 @@ var UnshipInfo = function() {
 			window.location.href = BasePath + "/cabin/view?taskId="
 					+ taskId + '&cabinNo=' + cabinNo;
 		},
+		
+		/**
+		 * 卸船进度
+		 */
+		unloadProgress_click : function(id) {
+			window.location.href = BasePath + "/task/unloadProgress?id=" + id;
+		},
+		
+		/**
+		 * 卸船机总览
+		 */
+		unloaderOverview_click : function(id) {
+			window.location.href = BasePath + "/task/unloaderOverview?id=" + id;
+		},		
 		/**
 		 * 点击设置船舶状态
 		 */

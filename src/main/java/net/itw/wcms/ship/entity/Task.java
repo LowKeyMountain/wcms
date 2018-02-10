@@ -36,7 +36,7 @@ public class Task implements Entityable {
 	private Integer id; // 编号
 	
 	@DateTimeFormat( pattern = "yyyy-MM-dd HH:mm:ss" )
-	private Date berthingTime; // 靠泊时间
+	private Date berthingTime; // 预靠时间
 	@DateTimeFormat( pattern = "yyyy-MM-dd HH:mm:ss" )
 	private Date departureTime; // 离泊时间
 	@DateTimeFormat( pattern = "yyyy-MM-dd HH:mm:ss" )

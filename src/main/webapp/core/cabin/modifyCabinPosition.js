@@ -170,7 +170,7 @@ var ModifyCabin = function() {
 				},
 //				clearForm : true,
 //				resetForm : true,
-				timeout : 3000
+				timeout : 8000
 			};
 			$("#form_modify_cabin").ajaxSubmit(options);
 		}

@@ -135,21 +135,13 @@ License: You must have a valid license purchased only from themeforest(the above
 								   					<option value="0" >卸货</option>
 								   					<option value="1" >清舱</option>
 								   					<option value="2" >完成</option>
-												</select>
+												</select>											
 												<input type="hidden" name="cabinNo" placeholder="cabinNo" id="cabinNo" />
-												
-												<!-- <div class="btn-group" id="status" data-toggle="buttons">
-												       <label class="btn btn-info">
-												         <input type="radio" class="toggle" value="0">卸货
-												       </label>
-												       <label class="btn btn-info">
-												         <input type="radio" class="toggle" value="1">清舱
-												       </label>
-												       <label class="btn btn-info">
-												         <input type="radio" class="toggle" value="2">完成
-												       </label>
-												</div> -->
-											</div>							                            
+										</div>
+										<div class = "input-group" id="cleartime-div" >
+												<span class="input-group-addon text-center"><b class="icon-td">清舱时间</b></span>
+										        <input class="form-control form_datetime" name="cleartime" placeholder="请选择清舱时间" id="cleartime" style="width:240px;" readonly />
+										</div>
 				                    </div>                            
 				                    </form>
 				                </div>
@@ -249,13 +241,30 @@ License: You must have a valid license purchased only from themeforest(the above
 	<script>
 		jQuery(document).ready(function() {
 			// initiate layout and plugins
-			
+			$(".form_datetime").datetimepicker({
+					startView : 'month',
+					minView : 'month',
+					language : 'zh-CN',
+					format : 'yyyy-mm-dd hh:ii:ss',
+					todayBtn : true,
+					autoclose : true,
+					clearBtn : true,
+					todayHighlight : true,
+					showMeridian : true,
+					endDate : new Date()
+			});
+		    $("#status").change(function(){
+		            if($("#status").val()==1){
+						$('#cleartime-div').show();
+		            }else{
+						$('#cleartime-div').hide();
+		            }
+		    });
 			initTable(taskId);
-			
+	
 			Cl.initModal();
-
-		
-		});
+	
+			});
 	</script>						
 		<!-- BEGIN THEME LAYOUT SCRIPTS -->
         <!-- END THEME LAYOUT SCRIPTS -->

@@ -34,7 +34,7 @@ import net.itw.wcms.toolkit.sql.SqlMap;
  */
 public class DataSyncStepB extends JdbcDaoSupport {
 
-	private final Logger log = Logger.getLogger("DataSyncStepB");
+	private final Logger log = Logger.getLogger("dataSyncInfo");
 
 	private static SqlMap sqlMap;
 	public static boolean isContinue = false;
@@ -50,11 +50,11 @@ public class DataSyncStepB extends JdbcDaoSupport {
 			e.printStackTrace();
 		}
 	}
-	
-	public SqlMap getSqlMap(){
+
+	public SqlMap getSqlMap() {
 		return sqlMap;
 	}
-	
+
 	/**
 	 * 运行数据同步任务
 	 * 
@@ -239,16 +239,18 @@ public class DataSyncStepB extends JdbcDaoSupport {
 					if (tasks != null && !tasks.isEmpty()) {
 						String sql = "";
 						taskId = (Integer) tasks.get(0).get("taskId");
-						List<Map<String, Object>> list2 = this.getJdbcTemplate().queryForList(sqlMap.getSql("19", taskId), cmsid);
+						try {
+							// 自动创建任务子表
+							autoCreateDBTable.createTable(taskId);
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+						List<Map<String, Object>> list2 = this.getJdbcTemplate()
+								.queryForList(sqlMap.getSql("19", taskId), cmsid);
 						for (Map<String, Object> map2 : list2) {
 							Integer id2 = (Integer) map2.get("id");
-							if (0 == operationType) {
-								sql = sqlMap.getSql("09", taskId);
-								args = new Object[] { time, id2 };
-							} else if (1 == operationType) {
-								sql = sqlMap.getSql("10", taskId);
-								args = new Object[] { time, time, id2 };
-							}
+							sql = sqlMap.getSql("setFinishTicket", taskId);
+							args = new Object[] { id2 };
 							this.getJdbcTemplate().update(sql, args);
 						}
 					}
@@ -275,9 +277,11 @@ public class DataSyncStepB extends JdbcDaoSupport {
 
 				// 更新表b数据
 				try {
-					// 【任务子表】将临时表作业数据插入子表
-					args = new Object[] { groupId, id, cmsid };
-					this.getJdbcTemplate().update(sqlMap.getSql("03", taskId), args);
+					// 【任务子表】将临时表作业信息插入子表
+					if (1 == operationType) {
+						args = new Object[] { groupId, id, cmsid };
+						this.getJdbcTemplate().update(sqlMap.getSql("03", taskId), args);
+					}
 					// 删除临时表作业数据
 					args = new Object[] { id, cmsid };
 					this.getJdbcTemplate().update(sqlMap.getSql("04"), args);
@@ -324,35 +328,39 @@ public class DataSyncStepB extends JdbcDaoSupport {
 
 		if (conut == 0) {
 			// 新建组信息
-			KeyHolder keyHolder = new GeneratedKeyHolder();
-			this.getJdbcTemplate().update(new PreparedStatementCreator() {
-				public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-					String inster_sql = "";
-					if (0 == operationType) {
-						inster_sql = sqlMap.getSql("06", taskId);
-					} else if (1 == operationType) {
-						inster_sql = sqlMap.getSql("07", taskId);
+			if (1 == operationType) {
+				KeyHolder keyHolder = new GeneratedKeyHolder();
+				this.getJdbcTemplate().update(new PreparedStatementCreator() {
+					public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+						String inster_sql = "";
+						if (0 == operationType) {
+//							inster_sql = sqlMap.getSql("createTicketByDisplacementInfo", taskId);
+						} else if (1 == operationType) {
+							inster_sql = sqlMap.getSql("createTicketByJobInfo", taskId);
+						}
+						PreparedStatement ps = connection.prepareStatement(inster_sql, Statement.RETURN_GENERATED_KEYS);
+						if (0 == operationType) {
+//							ps.setInt(1, cabinId);
+//							ps.setString(2, cmsid);
+//							ps.setTimestamp(3, (Timestamp) time);
+//							ps.setTimestamp(4, (Timestamp) time);
+//							ps.setInt(5, 0);
+						} else if (1 == operationType) {
+							ps.setInt(1, cabinId);
+							ps.setString(2, cmsid);
+							ps.setTimestamp(3, (Timestamp) time);
+							ps.setTimestamp(4, (Timestamp) time);
+							ps.setTimestamp(5, (Timestamp) time);
+							ps.setTimestamp(6, (Timestamp) time);
+							ps.setInt(7, 0);
+						}
+						return ps;
 					}
-					PreparedStatement ps = connection.prepareStatement(inster_sql, Statement.RETURN_GENERATED_KEYS);
-					if (0 == operationType) {
-						ps.setInt(1, cabinId);
-						ps.setString(2, cmsid);
-						ps.setTimestamp(3, (Timestamp) time);
-						ps.setInt(4, 0);
-					} else if (1 == operationType) {
-						ps.setInt(1, cabinId);
-						ps.setString(2, cmsid);
-						ps.setTimestamp(3, (Timestamp) time);
-						ps.setTimestamp(4, (Timestamp) time);
-						ps.setTimestamp(5, (Timestamp) time);
-						ps.setInt(6, 0);
-					}
-					return ps;
+				}, keyHolder);
+				Long generatenKey = (Long) keyHolder.getKeys().get("GENERATED_KEY");
+				if (generatenKey != null) {
+					groupId = generatenKey.intValue();
 				}
-			}, keyHolder);
-			Long generatenKey = (Long) keyHolder.getKeys().get("GENERATED_KEY");
-			if (generatenKey != null) {
-				groupId = generatenKey.intValue();
 			}
 
 			// 维护上一组结束时间
@@ -361,35 +369,10 @@ public class DataSyncStepB extends JdbcDaoSupport {
 			if (groups != null) {
 				for (Map<String, Object> m : groups) {
 					Integer id = (Integer) m.get("id");
-					if (0 == operationType) {
-						sql = sqlMap.getSql("09", taskId);
-						args = new Object[] { time, id };
-					} else if (1 == operationType) {
-						sql = sqlMap.getSql("10", taskId);
-						args = new Object[] { time, time, id };
-					}
+					sql = sqlMap.getSql("setFinishTicket", taskId);
+					args = new Object[] { id };
 					this.getJdbcTemplate().update(sql, args);
 				}
-			}
-		} else if (conut == 1) {
-			Map<String, Object> map = list.get(0);
-			groupId = (Integer) map.get("id");
-			Date firstTime = (Date) map.get("firstTime");
-			switch (operationType) {
-			case 0:
-				break;
-			case 1:
-				if (firstTime == null) {
-					sql = sqlMap.getSql("11", taskId);
-					args = new Object[] { time, time, groupId };
-				} else {
-					sql = sqlMap.getSql("12", taskId);
-					args = new Object[] { time, groupId };
-				}
-				this.getJdbcTemplate().update(sql, args);
-				break;
-			default:
-				break;
 			}
 		} else {
 			Map<String, Object> map = list.get(0);
@@ -397,14 +380,17 @@ public class DataSyncStepB extends JdbcDaoSupport {
 			Date firstTime = (Date) map.get("firstTime");
 			switch (operationType) {
 			case 0:
+//				sql = sqlMap.getSql("updateTicketByDisplacementInfo", taskId);
+//				args = new Object[] { time, groupId };
+//				this.getJdbcTemplate().update(sql, args);
 				break;
 			case 1:
 				if (firstTime == null) {
-					sql = sqlMap.getSql("11", taskId);
-					args = new Object[] { time, time, groupId };
+					sql = sqlMap.getSql("updateTicketByJobInfoForFirstTimeIsNull", taskId);
+					args = new Object[] { time, time, time, groupId };
 				} else {
-					sql = sqlMap.getSql("12", taskId);
-					args = new Object[] { time, groupId };
+					sql = sqlMap.getSql("updateTicketByJobInfo", taskId);
+					args = new Object[] { time, time, groupId };
 				}
 				this.getJdbcTemplate().update(sql, args);
 				break;
@@ -427,11 +413,8 @@ public class DataSyncStepB extends JdbcDaoSupport {
 		List<Map<String, Object>> list = this.getJdbcTemplate().queryForList(sqlMap.getSql("13", taskId), taskId);
 		for (Map<String, Object> m : list) {
 			Integer groupId = (Integer) m.get("id");
-			Date startTime = (Date) m.get("startTime");
-			Date lastTime = (Date) m.get("lastTime");
-			Date endTime = lastTime != null ? lastTime : (startTime != null ? startTime : new Date());
-			Object[] args = new Object[] { endTime, 1, groupId };
-			this.getJdbcTemplate().update(sqlMap.getSql("14", taskId), args);
+			Object[] args = new Object[] { groupId };
+			this.getJdbcTemplate().update(sqlMap.getSql("setFinishTicket", taskId), args);
 		}
 	}
 

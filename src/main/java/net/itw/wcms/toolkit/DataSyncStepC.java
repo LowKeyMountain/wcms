@@ -24,7 +24,7 @@ import net.itw.wcms.toolkit.sql.SqlMap;
  */
 public class DataSyncStepC extends JdbcDaoSupport {
 
-	private final Logger log = Logger.getLogger("DataSyncStepC");
+	private final Logger log = Logger.getLogger("dataSyncInfo");
 
 	private static SqlMap sqlMap;
 	@Autowired
@@ -110,17 +110,18 @@ public class DataSyncStepC extends JdbcDaoSupport {
 						if (taskId != tid) {
 							continue;
 						}
+						try {
+							// 自动创建任务子表
+							autoCreateDBTable.createTable(taskId);
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
 						List<Map<String, Object>> list2 = this.getJdbcTemplate()
 								.queryForList(dataSyncStepB.getSqlMap().getSql("19", taskId), cmsid);
 						for (Map<String, Object> map2 : list2) {
 							Integer id2 = (Integer) map2.get("id");
-							if (0 == operationType) {
-								sql = dataSyncStepB.getSqlMap().getSql("09", taskId);
-								args = new Object[] { time, id2 };
-							} else if (1 == operationType) {
-								sql = dataSyncStepB.getSqlMap().getSql("10", taskId);
-								args = new Object[] { time, time, id2 };
-							}
+							sql = dataSyncStepB.getSqlMap().getSql("setFinishTicket", taskId);
+							args = new Object[] { id2 };
 							this.getJdbcTemplate().update(sql, args);
 						}
 					}
@@ -149,9 +150,11 @@ public class DataSyncStepC extends JdbcDaoSupport {
 				// 更新表b数据
 				try {
 					// 【任务子表】将临时表作业数据插入子表
-					this.getJdbcTemplate().update(sqlMap.getSql("05", taskId), groupId, id, cmsid);
-					num++;
-					log.info("数据编号[" + id + "]|卸船机编号[" + cmsid + "] 数据已计算组信息！");
+					if ( 1 == operationType) {
+						this.getJdbcTemplate().update(sqlMap.getSql("05", taskId), groupId, id, cmsid);
+						num++;
+						log.info("数据编号[" + id + "]|卸船机编号[" + cmsid + "] 数据已计算组信息！");
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 					log.error(e.getMessage());

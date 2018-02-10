@@ -102,6 +102,7 @@ License: You must have a valid license purchased only from themeforest(the above
 				<!-- END PAGE HEADER-->
 				<div class="row">
 					<div class="col-md-12">
+			            
 						<!-- BEGIN EXAMPLE TABLE PORTLET-->
 						<div class="tab-pane" id="cabin">
 							<div class="portlet box yellow">
@@ -115,9 +116,19 @@ License: You must have a valid license purchased only from themeforest(the above
 										onclick="javascript:UnshipInfo.list();" class="reload" data-original-title="刷新"
 										title="刷新"> </a>
 									</div>
+
 								</div>
+	
 								<div class="portlet-body" style="display: block;">
 									<div class="table-responsive">
+										<div class="dropdown" id="toolbar" >
+										  <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">卸货统计
+										  <span class="caret"></span></button>
+										  <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+										    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:UnshipInfo.unloadProgress_click(${taskId})">货物进度</a></li>
+										    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:UnshipInfo.unloaderOverview_click(${taskId})">卸船机总览</a></li>
+										  </ul>
+										</div>									
 										<table class="table table-striped table-bordered table-hover editable">
 											<thead>
 												<tr>

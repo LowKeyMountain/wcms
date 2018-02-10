@@ -53,16 +53,6 @@ public class ReportController {
 	}
 
 	/**
-	 * 跳转至船舶作业维护页面
-	 * 
-	 * @return
-	 */
-	@RequestMapping(value = "/maintenance")
-	public ModelAndView maintenance() {
-		return new ModelAndView(PATH + "maintenancelist");
-	}
-
-	/**
 	 * 跳转至船舶实时统计页面
 	 * 
 	 * @return
@@ -101,4 +91,34 @@ public class ReportController {
 	public ModelAndView processview() {
 		return new ModelAndView(PATH_REPORT + "progressview");
 	}
+	
+	/**
+	 * 跳转至船舶舱口卸货统计页面
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/unloadview")
+	public ModelAndView unloadview() {
+		return new ModelAndView(PATH_REPORT + "unloadview");
+	}
+	
+	/**
+	 * 跳转至船舶舱口卸货统计页面
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/cabinquantity")
+	public ModelAndView cabinQuantity() {
+		return new ModelAndView(PATH_REPORT + "cabinquantity");
+	}	
+	
+	/**
+	 * 跳转至船舶舱口卸货统计页面
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/cargoquantity")
+	public ModelAndView cargoquantity() {
+		return new ModelAndView(PATH_REPORT + "cargoquantity");
+	}	
 }

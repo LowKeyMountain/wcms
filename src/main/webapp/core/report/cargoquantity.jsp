@@ -77,7 +77,7 @@ License: You must have a valid license purchased only from themeforest(the above
 				<div class="row">
 					<div class="col-md-12">
 						<!-- BEGIN PAGE TITLE & BREADCRUMB-->
-						<h3 class="page-title">船舶货物进度统计</h3>
+						<h3 class="page-title">船舶分货作业量统计</h3>
 						<ul class="page-breadcrumb breadcrumb">
 							<li><i class="fa fa-home"></i> <a
 								href="${BasePath}/web/main"> 主页 </a> <i
@@ -85,7 +85,7 @@ License: You must have a valid license purchased only from themeforest(the above
 							<li>管理中心 <i class="fa fa-angle-right"></i>
 							</li>
 							<li><a href="${IncPath}/task/report">报表统计 </a><i class="fa fa-angle-right"></i>
-							<li>船舶货物进度统计</li>
+							<li>船舶分货作业量统计</li>
 						</ul>
 						<!-- END PAGE TITLE & BREADCRUMB-->
 					</div>
@@ -157,7 +157,7 @@ License: You must have a valid license purchased only from themeforest(the above
 									                            <button type="button" style="margin-left:20px" id="btn_reset" class="btn btn-sm">重置</button>
 									                        </div>
 									                    </div>
-														<table id="unloadProgress" class="table table-striped table-bordered table-hover table-checkable order-column"></table>
+														<table id="cargoquantity" class="table table-striped table-bordered table-hover table-checkable order-column"></table>
 													</form>
 									                						            
 									            </div>
@@ -228,7 +228,7 @@ License: You must have a valid license purchased only from themeforest(the above
 		</script>
 		<script src="${IncPath}/cl.js?v=${jsVersion}"
 			type="text/javascript"></script>
-		<script src="${IncPath}/core/report/progressview.js?v=${jsVersion}"
+		<script src="${IncPath}/core/report/cargoquantity.js?v=${jsVersion}"
 			type="text/javascript"></script>
 	<script>
 		jQuery(document).ready(function() {
