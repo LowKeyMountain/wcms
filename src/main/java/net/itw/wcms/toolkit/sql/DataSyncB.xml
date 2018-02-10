@@ -54,20 +54,20 @@
 			</value>
 		</entry>
 		<entry>
-			<key>06</key>
-			<description>【任务子表】创建组信息，根据位移数据</description>
+			<key>createTicketByDisplacementInfo</key>
+			<description>【任务子表】创建票信息，根据位移数据</description>
 			<value>
-			<![CDATA[
-			     insert into tab_temp_c_%s (cabinId, Cmsid, startTime, status)  values(?,?,?,?) 
-			]]>
+				<![CDATA[
+				     insert into tab_temp_c_%s (cabinId, Cmsid, startTime, endTime, status)  values(?,?,?,?,?) 
+				]]>
 			</value>
 		</entry>
 		<entry>
-			<key>07</key>
-			<description>【任务子表】创建组信息，根据作业数据</description>
+			<key>createTicketByJobInfo</key>
+			<description>【任务子表】创建票信息，根据作业数据</description>
 			<value>
 			<![CDATA[
-			     insert into tab_temp_c_%s (cabinId, Cmsid, startTime, firstTime, lastTime, status)  values(?,?,?,?,?,?)  
+			     insert into tab_temp_c_%s (cabinId, Cmsid, startTime, firstTime, lastTime, endTime, status)  values(?,?,?,?,?,?,?)  
 			]]>
 			</value>
 		</entry>
@@ -81,38 +81,38 @@
 			</value>
 		</entry>
 		<entry>
-			<key>09</key>
-			<description>【任务子表】更新组结束时间</description>
+			<key>setFinishTicket</key>
+			<description>【任务子表】设置票信息未完成状态</description>
 			<value>
 			<![CDATA[
-			      UPDATE tab_temp_c_%s   t SET t.endTime = ?, t.status = 1 WHERE t.id = ?    
+			      UPDATE tab_temp_c_%s   t SET t.status = 1 WHERE t.id = ?    
 			]]>
 			</value>
 		</entry>
 		<entry>
-			<key>10</key>
-			<description>【任务子表】更新组结束时间、最后一铲时间</description>
+			<key>updateTicketByDisplacementInfo</key>
+			<description>【任务子表】更新票信息，根据位移信息</description>
 			<value>
 			<![CDATA[
-			       UPDATE tab_temp_c_%s t SET t.endTime = ?, t.lastTime = ?, t.status = 1 WHERE t.id = ?     
+			         UPDATE tab_temp_c_%s  t SET t.endTime = ?  WHERE t.id = ?      
 			]]>
 			</value>
 		</entry>
 		<entry>
-			<key>11</key>
-			<description>【任务子表】更新组第一铲、最后一铲时间</description>
+			<key>updateTicketByJobInfoForFirstTimeIsNull</key>
+			<description>【任务子表】更新票信息，根据作业信息</description>
 			<value>
 			<![CDATA[
-			        UPDATE tab_temp_c_%s t SET t.firstTime = ?, t.lastTime = ?  WHERE t.id = ?      
+			        UPDATE tab_temp_c_%s t SET t.firstTime = ?, t.lastTime = ?, t.endTime = ?  WHERE t.id = ?      
 			]]>
 			</value>
 		</entry>
 		<entry>
-			<key>12</key>
-			<description>【任务子表】更新组最后一铲时间</description>
+			<key>updateTicketByJobInfo</key>
+			<description>【任务子表】更新票信息，根据作业信息</description>
 			<value>
 			<![CDATA[
-			         UPDATE tab_temp_c_%s  t SET t.lastTime = ?  WHERE t.id = ?      
+			         UPDATE tab_temp_c_%s  t SET t.lastTime = ?, t.endTime = ?  WHERE t.id = ?      
 			]]>
 			</value>
 		</entry>
@@ -123,24 +123,6 @@
 			<![CDATA[
 			         select c2.* from tab_temp_c_%s c2 LEFT JOIN v_cabin_info c1 ON c1.cabin_id = c2.cabinId 
 			         where  c2.`status` = 0 AND c1.task_id = ?       
-			]]>
-			</value>
-		</entry>
-		<entry>
-			<key>14</key>
-			<description>【任务子表】更新组结束时间、状态</description>
-			<value>
-			<![CDATA[
-			          UPDATE tab_temp_c_%s t SET t.endTime = ?, t.status = ? WHERE t.id = ?      
-			]]>
-			</value>
-		</entry>
-		<entry>
-			<key>15</key>
-			<description>更新异常数据状态</description>
-			<value>
-			<![CDATA[
-	          		UPDATE tab_temp_b t SET t.status = 1  where id = ? and cmsid = ?   
 			]]>
 			</value>
 		</entry>

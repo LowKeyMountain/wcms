@@ -305,6 +305,7 @@ public class CabinController {
 		Map<String, Object> result = infoQueryHelper.doQueryInfo(jsonObject,options);
 		modelMap.put("cabin", result.get("data"));
 		modelMap.put("taskId", taskId);
+		modelMap.put("cabinNo", cabinNo);
 		return new ModelAndView(PATH + "view");
 	}
 	
@@ -324,7 +325,10 @@ public class CabinController {
 			jsonObject.put("order", "DESC");
 			jsonObject.put("sort", "startTime");
 			jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "','$cabinNo':'" + cabinNo + "'}"));
-			result = infoQueryHelper.doQueryInfo(jsonObject);
+			QueryOptions options = new QueryOptions();
+			options.searchString = "%#";
+			options.replacement = taskId + "";
+			return infoQueryHelper.doQueryInfo(jsonObject, options);
 		} catch (Exception e) {
 			e.printStackTrace();
 			mo.msg = e.getMessage();

@@ -232,6 +232,7 @@ License: You must have a valid license purchased only from themeforest(the above
 		var IncPath = '${IncPath}';
 		var BasePath = '${BasePath}';
 		var taskId = ${taskId};
+		var cabinNo = ${cabinNo};
 	</script>
 	<script src="${IncPath}/cl.js?v=${jsVersion}" type="text/javascript"></script>
 	<script src="${IncPath}/core/cabin/view.js?v=${jsVersion}" type="text/javascript"></script>

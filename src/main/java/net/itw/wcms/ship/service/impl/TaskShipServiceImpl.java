@@ -275,19 +275,19 @@ public class TaskShipServiceImpl implements ITaskShipService {
 					throw new X27Exception("操作失败: 当前船舶为作业状态！");
 				} else if ("1".equals(status)) {
 					// 检查各船舱是否为完成状态,各舱均为完成状态时才可设置结束卸船；
-					List<Cabin> cabins = new ArrayList<>();
-					for (Cargo cargo : task.getCargos()) {
-						for (Cabin cabin : cargo.getCabins()) {
-							cabins.add(cabin);
-						}
-					}
-					for (Cabin cabin : cabins) {
-						if (cabin.getStatus() == 2) {
-							continue;
-						} else {
-							throw new X27Exception("操作失败：当前船舶存在未完成卸货的船舱!");
-						}
-					}
+//					List<Cabin> cabins = new ArrayList<>();
+//					for (Cargo cargo : task.getCargos()) {
+//						for (Cabin cabin : cargo.getCabins()) {
+//							cabins.add(cabin);
+//						}
+//					}
+//					for (Cabin cabin : cabins) {
+//						if (cabin.getStatus() == 2) {
+//							continue;
+//						} else {
+//							throw new X27Exception("操作失败：当前船舶存在未完成卸货的船舱!");
+//						}
+//					}
 					// 结束卸船
 					task.setStatus(2);
 					task.setEndTime(new Date());
@@ -401,11 +401,14 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			if (StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)) {
 				sql = sqlMap.getSql("FN_009_2", taskId, taskId);
 				args = new Object[] { startTime, endTime, taskId };
+				System.out.println(startTime + "|" + endTime + "|" + taskId);
 			} else {
 				args = new Object[] { taskId };
 				sql = sqlMap.getSql("FN_009_1", taskId, taskId);
+				System.out.println(taskId);
 			}
 			List<Map<String, Object>> data = this.dataSyncStepC.queryForList(sql.toString(), args);
+			System.out.println(sql.toString());
 			result.put("msg", msg);
 			result.put("data", data);
 			result.put("code", isSuccess);
@@ -431,12 +434,16 @@ public class TaskShipServiceImpl implements ITaskShipService {
 				sql = sqlMap.getSql("FN_010_2");
 				sql = StringUtils.replace(sql, "%#", taskId + "");
 				args = new Object[] { startTime, endTime, taskId, unloaderId };
+				System.out.println(startTime + "|" + endTime + "|" + taskId + "|" + unloaderId);
+				
 			} else {
 				sql = sqlMap.getSql("FN_010_1");
 				sql = StringUtils.replace(sql, "%#", taskId + "");
 				args = new Object[] { taskId, unloaderId };
+				System.out.println(taskId + "|" + unloaderId);
 			}
 			List<Map<String, Object>> data = this.dataSyncStepC.queryForList(sql.toString(), args);
+			System.out.println(sql.toString());
 			result.put("msg", msg);
 			result.put("data", data);
 			result.put("code", isSuccess);
