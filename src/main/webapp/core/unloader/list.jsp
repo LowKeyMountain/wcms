@@ -323,8 +323,8 @@ License: You must have a valid license purchased only from themeforest(the above
     			    autoclose: true,
 	            	clearBtn: true,
 	            	todayHighlight: true,
-	            	showMeridian: true,
-	            	endDate: new Date()
+	            	showMeridian: true
+	            	//endDate: new Date()
     			});
 
      			function DatePicker(beginSelector,endSelector){
