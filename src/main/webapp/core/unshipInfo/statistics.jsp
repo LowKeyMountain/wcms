@@ -189,6 +189,18 @@ License: You must have a valid license purchased only from themeforest(the above
 																</select>
 									                        </div>																	
 									                    </div>
+									                    <div class="form-group" style="margin-top:5px;margin-bottom:5px">
+									                        <label class="control-label col-md-1" for="status">查询范围: </label>
+									                        <div class="col-md-3">
+																<select id="daterange" name="daterange" class="form-control select2me">
+																	<option value="0">最近一周</option>
+																	<option value="1">最近一个月</option>
+																	<option value="1">最近三个月</option>
+																	<option value="1">最近半年</option>
+																	<option value="1">最近一年</option>
+																</select>
+									                        </div>									                    
+									                    </div>
 									                    <div class="form-group" style="margin-top:5px;margin-left:500px;margin-bottom:5px">
 									                        <div class="col-md-2" style="text-align:left;">
 									                            <button type="button" style="margin-left:20px" id="btn_query" class="btn btn-primary btn-sm">查询</button>

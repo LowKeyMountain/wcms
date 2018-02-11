@@ -144,16 +144,24 @@
 	                	if(row.status==0){
 	                		$("#modiStatus").empty();
 	                		$("#modiStatus").append("<option value='1'>作业中</option>");
-	                		$('#begintime').attr('disabled', 'false');
+							$('#begintime-div').show();
+							$('#endtime-div').hide();
 	                	}else if(row.status==1){
 	                		$("#modiStatus").empty();
-	                		$("#modiStatus").append("<option value='0'>预靠</option>").append("<option value='2'>已离港</option>");	                		
+	                		$("#modiStatus").append("<option value='0'>预靠</option>").append("<option value='2'>已离港</option>");
+							if($("#modiStatus").val() == 0){
+								$('#begintime-div').hide();
+								$('#endtime-div').hide();
+							}else{
+								$('#endtime-div').show();
+							}
 	                	}else if(row.status==2){
 	                		$("#modiStatus").empty();
 	                		$("#modiStatus").append("<option value='1'>作业中</option>");
-	                		$('#begintime').attr('disabled', 'true'); 
-
-	                	}else{
+							$('#begintime-div').show();
+							$('#endtime-div').hide();
+						}else{
+							alert("1");
 	                	}
 						$('#taskId').val(row.id);
 						$('#shipStatus').modal('show');

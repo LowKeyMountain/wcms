@@ -131,18 +131,16 @@ License: You must have a valid license purchased only from themeforest(the above
 								   					<option value="2" >已离港</option>
 												</select>
 										</div>
-										<div class = "input-group" >
+										<div class = "input-group" id="begintime-div">
 												<span class="input-group-addon text-center"><b class="icon-td">开工时间</b></span>
-										        <input class="form-control form_datetime" name="begintime" placeholder="请选择开工时间" id="begintime" style="width:240px;" readonly />
+										        <input class="form-control form_datetime" name="begintime"  placeholder="请选择开工时间" id="begintime" style="width:240px;" readonly />
+										        <span class="required">&nbsp;*&nbsp;</span>
 										</div>
-										<div class = "input-group" >
-												<span class="input-group-addon text-center"><b class="icon-td">结束时间</b></span>
-										        <input class="form-control form_datetime" name="endtime" placeholder="请选择结束时间" id="endtime" style="width:240px;" readonly />
+										<div class = "input-group" id="endtime-div">
+												<span class="input-group-addon text-center"><b class="icon-td">完工时间</b></span>
+										        <input class="form-control form_datetime" name="endtime" placeholder="请选择完工时间" id="endtime" style="width:240px;" readonly />
+										        <span class="required">&nbsp;*&nbsp;</span>
 										</div>										
-										<div class = "input-group" >
-												<span class="input-group-addon text-center"><b class="icon-td">离港时间</b></span>
-										        <input class="form-control form_datetime" name="departuretime" placeholder="请选择离港时间" id="departuretime" style="width:240px;" readonly/>
-										</div>
 										<input type="hidden" class="form-control" name="taskId" placeholder="taskId" id="taskId" />
 										
 				                    </div>                            
@@ -350,6 +348,15 @@ License: You must have a valid license purchased only from themeforest(the above
             		$('#begintime').attr('disabled', 'true');
             		$('#departuretime').attr('disabled', 'false');     	        	
     	        } */
+    		    $("#modiStatus").change(function(){
+		            if($("#modiStatus").val()==0){
+						$('#begintime-div').hide();
+						$('#endtime-div').hide();
+					}else{
+						$('#endtime-div').show();
+		            }
+		    });    	        
+    	        
             });  
         </script>			
 		<!-- BEGIN THEME LAYOUT SCRIPTS -->

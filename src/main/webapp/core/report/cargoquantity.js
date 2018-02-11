@@ -1,10 +1,10 @@
 	function initTable(taskId){
 		
-		$('#cabinDetail').bootstrapTable("destroy").bootstrapTable({  // init via javascript
+		$('#cargoquantity').bootstrapTable("destroy").bootstrapTable({  // init via javascript
 			
 			method : 'post',
 			contentType : "application/x-www-form-urlencoded",
-			url:BasePath + "/task/getCabinList?taskId=" + taskId,
+			url:BasePath + "/task/getUnloadProgressList?taskId=" + taskId,
 			dataType : 'json',
 //			 dataField: 'res',//bootstrap table 可以前端分页也可以后端分页
 			 striped : true, // 是否显示行间隔色
@@ -54,29 +54,19 @@
 //			idField : "id",// 指定主键列
 		    columns: [/*{
 		        field: 'cargoId',
-		        title: '船舱号',
+		        title: '货物编号',
+		        align: 'center',
+		        width: '10%'
+		    },*/ {
+		        field: 'cargoName',
+		        title: '货物名称',
 		        align: 'center',
 		        width: '10%',
-		        visible: false
-		    }, */{
-		        field: 'cabinNo',
-		        title: '船舱号',
-		        align: 'center',
-		        width: '3%',
-		        formatter: function (value, row, index) {
-                    var html = '<a href="javascript:view_unload(' + taskId + ',' + row.cabinNo + ')" class="btn btn-success pop addon">' + row.cabinNo + '</a>';
-                    return html;
-                }
-		    }, {
-		        field: 'cargoName',
-		        title: '货名',
-		        align: 'center',
-		        width: '5%',
 		        formatter: function (value, row, index) {
                     //var html = '<a href="#" data-toggle="popover" data-original-title="货物详情" class="btn btn-success pop addon">'+row.cargoName+'</a>';
-                    var html = '<a href="javascript:view_cargo(' + row.cargoId + ')" class="btn btn-success pop addon">' + row.cargoName + '</a>';
+                    var html = '<a href="javascript:view_click(' + row.cargoId + ')" class="btn btn-success pop addon">' + row.cargoName + '</a>';
                     return html;
-                }/*
+                }/*,
                 events: {
                     'mouseenter .addon': function (e, value, row, index) {
 //                        alert(row.cargoName);
@@ -108,48 +98,27 @@
 		        field: 'total',
 		        title: '总量',
 		        align: 'center',
-		        width: '5%'	        
+		        width: '10%'
+/*		        formatter:function(value,row,index) {
+		            return [
+		                '<a class="pop" data-toggle="popover" href="#">'+row.total+"("+row.total+')</a>'
+		            ]
+		        }*/		        
 		    }, {
 		        field: 'finished',
-		        title: '已完成',
-		        align: 'center',
-		        width: '5%',
-		    },{
-		        field: 'remainder',
-		        title: '剩余量',
-		        align: 'center',
-		        width: '5%'
-		    }, {
-		        field: 'clearance',
-		        title: '清舱量',
-		        align: 'center',
-		        width: '5%'
-		    }, {
-		        field: 'status',
-		        title: '状态',
-		        align: 'center',
-		        width: '3%',
-                formatter: function (value, row, index) {//自定义显示，这三个参数分别是：value该行的属性，row该行记录，index该行下标  
-                    return row.status == 0 ? "<font color=red>卸货</font>" : (row.status == 1 ? "<font color=grey>清舱</font>" : (row.status == 1 ? "<font color=lightgreen>完成</font>" : "<font color=red>未开始</font>"));  
-                }		        
-		    }, {
-		        title: '操作',
+		        title: '作业量',
 		        align: 'center',
 		        width: '10%',
-		        formatter: function (value, row, index) {
-		            return '<a class="btn mod btn-info glyphicon glyphicon-edit icon-white" data-toggle="modal" data-target="#alterStatus">修改</a>';
-		        },
-		    	events: {
-					'click .mod' : function(e, value, row, index) {
-						if($("#status").val() == 1){
-							$('#cleartime-div').show();
-						}else{
-							$('#cleartime-div').hide();
-						}
-						$('#cabinNo').val(row.cabinNo);
-						$('#cabinStatus').modal('show');
-					}
-	        	}
+		    },{
+		        field: 'remainder',
+		        title: '台时',
+		        align: 'center',
+		        width: '10%'
+		    }, {
+		        field: 'clearance',
+		        title: '速率',
+		        align: 'center',
+		        width: '10%'
 		    }],
 			locale : 'zh-CN',// 中文支持,
 			responseHandler : function(res) {
@@ -157,42 +126,12 @@
 				return res;
 			}
 	});
-
-    $('#btn_submit').modal({backdrop: 'static', show:false,  keyboard: false});
-    
-    $('#btn_submit').off().on("click", function () {
-    	var data={
-    			status: $("#status").val(),
-    			taskId: taskId,
-    			cabinNo: $("#cabinNo").val()
-    	}
-        $.ajax({
-            url: BasePath + "/cabin/updateCabinStatus",
-            type: "post",
-            dataType: "json",
-            cache: false,
-            async:false,
-            data: data,
-            success: function (data) {
-            	if (data.success == true){
-            		alert(data.msg);
-            		initTable(taskId);
-                	//$('#cabinDetail').bootstrapTable("refresh");
-            	} else {
-            		alert(data.msg);                		
-            	}
-            },
-            failure: function(data){
-                alert("修改失败!");
-            }                
-        });
-    }); 
+	
 }
-
 	/**
-	 * 查看货物信息
+	 * 点击查看信息
 	 */
-	function view_cargo(id) {
+	function view_click(id) {
 		Cl.showModalWindow(Cl.modalName, BasePath + "/cargo/cargoview?id=" + id);
 	}
 	
@@ -201,13 +140,4 @@
 	 */
 	function view_ship(taskId) {
 		window.location.href = BasePath + "/task/view?taskId="+ taskId;
-	}
-	
-	/**
-	 * 查看卸船信息
-	 */
-	function view_unload(taskId, cabinNo) {
-		window.location.href = BasePath + "/cabin/view?taskId="+ taskId + '&cabinNo=' + cabinNo;
-	}
-	   	
-	
+	}	
