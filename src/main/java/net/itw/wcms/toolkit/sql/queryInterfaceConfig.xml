@@ -217,7 +217,7 @@
 									LEFT JOIN tab_temp_c_%# c ON b.groupId = c.id
 								GROUP BY c.id
 							) tb
-							ON tc.id = tb.groupId
+							ON tc.id = tb.groupId where firstTime is NOT null AND endTime IS NOT NULL
 					) t1
 						LEFT JOIN tab_cabin t2 ON t1.cabinid = t2.id
 				) c2

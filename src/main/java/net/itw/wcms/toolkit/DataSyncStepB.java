@@ -328,39 +328,37 @@ public class DataSyncStepB extends JdbcDaoSupport {
 
 		if (conut == 0) {
 			// 新建组信息
-			if (1 == operationType) {
-				KeyHolder keyHolder = new GeneratedKeyHolder();
-				this.getJdbcTemplate().update(new PreparedStatementCreator() {
-					public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-						String inster_sql = "";
-						if (0 == operationType) {
-//							inster_sql = sqlMap.getSql("createTicketByDisplacementInfo", taskId);
-						} else if (1 == operationType) {
-							inster_sql = sqlMap.getSql("createTicketByJobInfo", taskId);
-						}
-						PreparedStatement ps = connection.prepareStatement(inster_sql, Statement.RETURN_GENERATED_KEYS);
-						if (0 == operationType) {
-//							ps.setInt(1, cabinId);
-//							ps.setString(2, cmsid);
-//							ps.setTimestamp(3, (Timestamp) time);
-//							ps.setTimestamp(4, (Timestamp) time);
-//							ps.setInt(5, 0);
-						} else if (1 == operationType) {
-							ps.setInt(1, cabinId);
-							ps.setString(2, cmsid);
-							ps.setTimestamp(3, (Timestamp) time);
-							ps.setTimestamp(4, (Timestamp) time);
-							ps.setTimestamp(5, (Timestamp) time);
-							ps.setTimestamp(6, (Timestamp) time);
-							ps.setInt(7, 0);
-						}
-						return ps;
+			KeyHolder keyHolder = new GeneratedKeyHolder();
+			this.getJdbcTemplate().update(new PreparedStatementCreator() {
+				public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+					String inster_sql = "";
+					if (0 == operationType) {
+						inster_sql = sqlMap.getSql("createTicketByDisplacementInfo", taskId);
+					} else if (1 == operationType) {
+						inster_sql = sqlMap.getSql("createTicketByJobInfo", taskId);
 					}
-				}, keyHolder);
-				Long generatenKey = (Long) keyHolder.getKeys().get("GENERATED_KEY");
-				if (generatenKey != null) {
-					groupId = generatenKey.intValue();
+					PreparedStatement ps = connection.prepareStatement(inster_sql, Statement.RETURN_GENERATED_KEYS);
+					if (0 == operationType) {
+						ps.setInt(1, cabinId);
+						ps.setString(2, cmsid);
+						ps.setTimestamp(3, (Timestamp) time);
+						ps.setTimestamp(4, (Timestamp) time);
+						ps.setInt(5, 0);
+					} else if (1 == operationType) {
+						ps.setInt(1, cabinId);
+						ps.setString(2, cmsid);
+						ps.setTimestamp(3, (Timestamp) time);
+						ps.setTimestamp(4, (Timestamp) time);
+						ps.setTimestamp(5, (Timestamp) time);
+						ps.setTimestamp(6, (Timestamp) time);
+						ps.setInt(7, 0);
+					}
+					return ps;
 				}
+			}, keyHolder);
+			Long generatenKey = (Long) keyHolder.getKeys().get("GENERATED_KEY");
+			if (generatenKey != null) {
+				groupId = generatenKey.intValue();
 			}
 
 			// 维护上一组结束时间
@@ -380,9 +378,9 @@ public class DataSyncStepB extends JdbcDaoSupport {
 			Date firstTime = (Date) map.get("firstTime");
 			switch (operationType) {
 			case 0:
-//				sql = sqlMap.getSql("updateTicketByDisplacementInfo", taskId);
-//				args = new Object[] { time, groupId };
-//				this.getJdbcTemplate().update(sql, args);
+				sql = sqlMap.getSql("updateTicketByDisplacementInfo", taskId);
+				args = new Object[] { time, groupId };
+				this.getJdbcTemplate().update(sql, args);
 				break;
 			case 1:
 				if (firstTime == null) {

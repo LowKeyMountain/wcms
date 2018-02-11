@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.xml.bind.JAXBException;
 
@@ -54,8 +56,13 @@ public class DataSyncStepC extends JdbcDaoSupport {
 	 */
 	public void start(Integer taskId) throws Exception {
 		log.info("同步工具：步骤C 开始...");
-		delete(taskId);
-		resync(taskId);
+		new Timer().schedule(new TimerTask() {
+			@Override
+			public void run() {
+				delete(taskId);
+				resync(taskId);
+			}
+		}, 1000);
 		log.info("同步工具：步骤C 结束...");
 	}
 
