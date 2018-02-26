@@ -61,7 +61,7 @@ public class AutoCreateDBTable extends JdbcDaoSupport {
 	 * @param tableName
 	 * @return
 	 */
-	private boolean isExistsTable(String tableName) {
+	public boolean isExistsTable(String tableName) {
 		List<String> list = this.getJdbcTemplate().queryForList(sqlMap.getSql("checkTable"), String.class,"%" + tableName + "%");
 		if (list.isEmpty()) {
 			return false;

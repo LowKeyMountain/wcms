@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.xml.bind.JAXBException;
 
@@ -54,8 +56,19 @@ public class DataSyncStepC extends JdbcDaoSupport {
 	 */
 	public void start(Integer taskId) throws Exception {
 		log.info("同步工具：步骤C 开始...");
-		delete(taskId);
-		resync(taskId);
+		new Timer().schedule(new TimerTask() {
+			@Override
+			public void run() {
+				try {
+					// 自动创建任务子表
+					autoCreateDBTable.createTable(taskId);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				delete(taskId);
+				resync(taskId);
+			}
+		}, 1000);
 		log.info("同步工具：步骤C 结束...");
 	}
 
@@ -81,7 +94,7 @@ public class DataSyncStepC extends JdbcDaoSupport {
 		int num = 0;
 		try {
 			// 查询临时表待处理数据
-			List<Map<String, Object>> list = this.getJdbcTemplate().queryForList(sqlMap.getSql("04"), tid, tid);
+			List<Map<String, Object>> list = this.getJdbcTemplate().queryForList(sqlMap.getSql("04"), tid, tid, tid, tid);
 			log.info("待计算数据" + list.size() + "条。");
 			for (Map<String, Object> map : list) {
 
@@ -98,23 +111,17 @@ public class DataSyncStepC extends JdbcDaoSupport {
 				// 查询卸船机作业数据任务ID、船舱ID
 				Object[] args = new Object[] { unloaderMove, unloaderMove, time, time };
 				List<Map<String, Object>> cabinNums = this.getJdbcTemplate()
-						.queryForList(dataSyncStepB.getSqlMap().getSql("02"), args);
+						.queryForList(sqlMap.getSql("06"), args);
 
 				if (cabinNums == null || cabinNums.isEmpty()) {
 					log.error("数据异常：数据编号[" + id + "]|卸船机编号[" + cmsid + "] 未找到船舱信息！");
 					List<Map<String, Object>> tasks = this.getJdbcTemplate()
-							.queryForList(dataSyncStepB.getSqlMap().getSql("18"), args);
+							.queryForList(sqlMap.getSql("07"), args);
 					if (tasks != null && !tasks.isEmpty()) {
 						String sql = "";
 						taskId = (Integer) tasks.get(0).get("taskId");
 						if (taskId != tid) {
 							continue;
-						}
-						try {
-							// 自动创建任务子表
-							autoCreateDBTable.createTable(taskId);
-						} catch (SQLException e) {
-							e.printStackTrace();
 						}
 						List<Map<String, Object>> list2 = this.getJdbcTemplate()
 								.queryForList(dataSyncStepB.getSqlMap().getSql("19", taskId), cmsid);
@@ -136,13 +143,6 @@ public class DataSyncStepC extends JdbcDaoSupport {
 
 				if (taskId != tid) {
 					continue;
-				}
-
-				try {
-					// 自动创建任务子表
-					autoCreateDBTable.createTable(taskId);
-				} catch (SQLException e) {
-					e.printStackTrace();
 				}
 
 				groupId = dataSyncStepB.calc(taskId, cabinId, cmsid, operationType, time);

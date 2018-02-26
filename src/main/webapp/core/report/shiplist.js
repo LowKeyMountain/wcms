@@ -56,16 +56,15 @@
 				};
 				return params; 
 			},
-			 
 			
 			idField : "id",// 指定主键列
 		    columns: [
 /*		    {
-		    	title:'全选',
+		    	title:'',
 		        field:'select',
 		        //复选框
 		        checkbox:true,
-		        width:25,
+		        width:'3%',
 		        align:'center'
 		    },*/{
 		        field: 'id',
@@ -121,7 +120,7 @@
                 formatter: function (value, row, index) {//自定义显示，这三个参数分别是：value该行的属性，row该行记录，index该行下标  
                     return row.status == 0 ? "<font color=lightgreen>预靠</font>" : row.status == 1 ? "<font color=red>作业中</font>" : "<font color=grey>已离港</font>";  
                 }
-		    }, /*{
+		    },/* {
 		        field: 'updateUser',
 		        title: '修改人',
 		        align: 'center',
@@ -131,43 +130,43 @@
 		        title: '更新时间',
 		        align: 'center',
 		        width: '10%'
-		    },*/ {
-		        title: '修改',
+		    }, */{
+		        title: '操作',
 		        align: 'center',
 		        width: '16%',
 		        formatter: function (value, row, index) {
-		            return ['<a class="btn cabindetail btn-info glyphicon glyphicon-zoom-in icon-white" >船舱</a>',
-		            	'<a class="btn btn-info mod glyphicon glyphicon-edit icon-white" >船舶</a>'].join('');
+		        	if(reportType==1){
+			            return '<a class="btn progressview btn-info glyphicon glyphicon-zoom-in icon-white" >船舶货物进度统计</a>'
+		        	}else if(reportType==2){
+			            return '<a class="btn unloadview btn-info glyphicon glyphicon-zoom-in icon-white" >船舶舱口卸货统计</a>'
+		        	}else if(reportType==3){
+			            return '<a class="btn overview btn-info glyphicon glyphicon-zoom-in icon-white" >船舶卸船机作业量统计</a>'
+		        	}else if(reportType==4){
+			            return '<a class="btn statistics btn-info glyphicon glyphicon-zoom-in icon-white" >船舶班次作业量统计</a>'
+		        	}else if(reportType==5){
+			            return '<a class="btn cabinquantity btn-info glyphicon glyphicon-zoom-in icon-white" >船舶舱口效率统计</a>'
+		        	}else if(reportType==6){
+			            return '<a class="btn cargoquantity btn-info glyphicon glyphicon-zoom-in icon-white" >船舶货物效率统计</a>'
+		        	}
 		        },
 		    	events: {
-					'click .mod' : function(e, value, row, index) {
-	                	if(row.status==0){
-	                		$("#modiStatus").empty();
-	                		$("#modiStatus").append("<option value='1'>作业中</option>");
-							$('#begintime-div').show();
-							$('#endtime-div').hide();
-	                	}else if(row.status==1){
-	                		$("#modiStatus").empty();
-	                		$("#modiStatus").append("<option value='0'>预靠</option>").append("<option value='2'>已离港</option>");
-							if($("#modiStatus").val() == 0){
-								$('#begintime-div').hide();
-								$('#endtime-div').hide();
-							}else{
-								$('#endtime-div').show();
-							}
-	                	}else if(row.status==2){
-	                		$("#modiStatus").empty();
-	                		$("#modiStatus").append("<option value='1'>作业中</option>");
-							$('#begintime-div').show();
-							$('#endtime-div').hide();
-						}else{
-							alert("1");
-	                	}
-						$('#taskId').val(row.id);
-						$('#shipStatus').modal('show');
-					},
-	                'click .cabindetail' : function(e, value, row, index) {
-	        			window.location.href = BasePath + "/task/cabinlist?id=" + row.id;
+	                'click .progressview' : function(e, value, row, index) {
+	        			window.location.href = BasePath + "/report/progressview";
+	                 },
+	                'click .unloadview' : function(e, value, row, index) {
+	        			window.location.href = BasePath + "/report/unloadview";
+	                 },
+	                'click .overview' : function(e, value, row, index) {
+	        			window.location.href = BasePath + "/report/overview";
+	                 },
+	                'click .statistics' : function(e, value, row, index) {
+	        			window.location.href = BasePath + "/report/statistics";
+	                 },
+	                'click .cabinquantity' : function(e, value, row, index) {
+	        			window.location.href = BasePath + "/report/cabinquantity";
+	                 },
+	                'click .cargoquantity' : function(e, value, row, index) {
+	        			window.location.href = BasePath + "/report/cargoquantity";
 	                 }
 	        	}
 		    }],
@@ -176,7 +175,7 @@
 				// 在ajax获取到数据，渲染表格之前，修改数据源
 				return res;
 			}		
-	});
+		});
 		
 	}
 	/**
@@ -184,16 +183,33 @@
 	 */
 	function view_ship(taskId) {
 		window.location.href = BasePath + "/task/view?taskId="+ taskId;
-	}	
-$(function(){
+	}
+	
+	/**
+	 * 点击查看报表信息
+	 */
+	function view_report(reportType) {
+        var a= $('#maintenance').bootstrapTable('getSelections');
+        if(a.length==1){
+//             console.log(a[0].id);
+             window.location.href = BasePath + "/report/reportview?taskId="+ a[0].id + "&reportType=" + reportType;
+        }else{
+        	alert("请先选中一行记录!");
+        }    		
+	}
+	
+	$(function(){
 		initTable();
 		
-	
+		if(reportType == 3){
+       		$('#shift-div').show();
+	    }else{
+       		$('#shift-div').hide();
+	    }
 		//查询按钮
-        $("#btn_query").off().on(
-        		"click",function(){
-        			//$('#unloader').bootstrapTable('refresh');     
-        			initTable();
+        $("#btn_query").off().on("click",function(){
+			//$('#unloader').bootstrapTable('refresh');     
+			initTable();
         })
         //重置按钮事件  
         $("#btn_reset").off().on("click",function(){
@@ -211,32 +227,5 @@ $(function(){
     		$("#startBerthDate").datetimepicker('setEndDate', new Date());
     		$("#endBerthDate").datetimepicker('setStartDate', null);
     		$("#endBerthDate").datetimepicker('setEndDate', new Date());
-        });
-        $('#btn_submit').modal({backdrop: 'static', show:false,  keyboard: false});
-        
-        $('#btn_submit').off().on("click", function () {
-        	var data={
-        			status:$("#modiStatus").val(),
-        			taskId:$("#taskId").val()
-        	}
-            $.ajax({
-                url: BasePath + "/task/doSetShipStatus",
-                type: "post",
-                dataType: "json",
-                cache: false,
-                async:false,
-                data: data,
-                success: function (data) {
-                	if (data.success == true){
-                		alert(data.msg);
-                    	$('#maintenance').bootstrapTable("refresh");
-                	} else {
-                		alert(data.msg);                		
-                	}
-                },
-                failure: function(data){
-                    alert("修改失败!");
-                }                
-            });
-        });        
-});
+        });      
+	});

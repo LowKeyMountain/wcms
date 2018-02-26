@@ -21,7 +21,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
     <head>
         <meta charset="utf-8" />
-        <title>京唐港  | 报表统计</title>
+        <title>京唐港  | 卸船机 - 报表统计</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         <meta content="" name="description" />
@@ -78,18 +78,15 @@ License: You must have a valid license purchased only from themeforest(the above
 				<div class="row">
 					<div class="col-md-12">
 						<!-- BEGIN PAGE TITLE & BREADCRUMB-->
-						<h3 class="page-title icon-settings">&nbsp;&nbsp;船舶卸船机作业量总览</h3>
+						<h3 class="page-title icon-settings">&nbsp;&nbsp;作业船舶查询</h3>
 						<ul class="page-breadcrumb breadcrumb">
 							<li><i class="fa fa-home"></i> <a
 								href="${BasePath}/web/main"> 主页 </a> <i
 								class="fa fa-angle-right"></i></li>
 							<li>管理中心 <i class="fa fa-angle-right"></i>
+							<li><a href="${IncPath}/report/reportview">报表统计 </a><i class="fa fa-angle-right"></i>
 							</li>
-							<li><a href="${IncPath}/report/shiplist">报表统计 </a><i class="fa fa-angle-right"></i>
-							</li>
-							<li><a href="${IncPath}/report/shiplist?reportType=3">船舶卸船机作业量统计</a><i class="fa fa-angle-right"></i>
-							</li>
-							<li>船舶卸船机作业量统计</li>
+							<li>作业船舶查询</li>
 						</ul>
 						<!-- END PAGE TITLE & BREADCRUMB-->
 					</div>
@@ -103,60 +100,7 @@ License: You must have a valid license purchased only from themeforest(the above
 	                            <a class="btn red btn-outline" href="#" target="_blank">the official documentation</a>
 	                        </p>
 	                    </div>
-                    	-->
-				<div id="alterStatus" class="modal fade" role="dialog" tabindex="-1" aria-hidden="true" aria-labelledby="myModalLabel" style="display: block;">
-				    <div class="modal-dialog">
-				        <div class="modal-content">
-				            <div class="modal-header bg-primary">
-				                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-				                <h4 class="modal-title">
-				                    <i class="icon-pencil"></i>
-				                    <a class="close" data-dismiss="modal">×</a>
-				                    
-				                    <span id="lblAddTitle" style="font-weight:bold">修改作业状态</span>
-				                </h4>
-				            </div>
-				                <div class="modal-body" style="text-align:left;">
-				                    <form  id ='addForm' class="bs-example bs-example-form" role = "form">
-				                    <div class="modal-body" >
-										<div class="alert alert-danger display-hide">
-											<button class="close" data-close="alert"></button>
-											数据格式异常. 请重新输入.
-										</div>
-										<div class="alert alert-success display-hide">
-											<button class="close" data-close="alert"></button>
-											数据校验通过!
-										</div>
-										<div class = "input-group" >
-				                                <span class="input-group-addon text-center"><b class="icon-td">作业状态</b></span>
-												<select id="shipStatus" name="shipStatus" class="form-control select2me"  style="width:240px;">
-								   					<option value="0" >预靠</option>
-								   					<option value="1" >作业中</option>
-								   					<option value="2" >已离港</option>
-												</select>												
-												<!-- <div class="btn-group" id="status" data-toggle="buttons">
-												       <label class="btn btn-info">
-												         <input type="radio" class="toggle" value="0">卸货
-												       </label>
-												       <label class="btn btn-info">
-												         <input type="radio" class="toggle" value="1">清舱
-												       </label>
-												       <label class="btn btn-info">
-												         <input type="radio" class="toggle" value="2">完成
-												       </label>
-												</div> -->
-											</div>							                            
-				                    </div>                            
-				                    </form>
-				                </div>
-								<div class="modal-footer bg-info"  style="width:500px;">
-									<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>取消</button>
-									<button type="button" id="btn_submit" class="btn btn-primary" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>提交</button>
-								</div>
-				        </div>
-				    </div>
-				</div>                    	
-                    	
+                    	-->                   	
 				<div class="row">
 					<div class="col-md-12">
 						<!-- BEGIN EXAMPLE TABLE PORTLET-->
@@ -166,29 +110,62 @@ License: You must have a valid license purchased only from themeforest(the above
 						                <div class="col-md-12">
 									        <div class="panel panel-primary">
 									            <div class="panel-heading">
-									            		<h3 class="panel-title">船舶卸船机作业量统计</h3></div>
+									            		<h3 class="panel-title">查询条件</h3></div>
 									            <div class="panel-body">
 									                <form id="formSearch" class="form-horizontal">
-<!-- 						                
+							                
 									                    <div class="form-group" style="margin-top:5px;margin-bottom:5px">
-									                        <label class="control-label col-md-1" for="status">船名: </label>
-									                        <div class="col-md-3">
-																<select id="status" name="status" class="form-control select2me">
-																	<option value="">请选择...</option>
-
-																</select>
+										                        <label class="control-label col-md-1" for="status">船名: </label>
+										                        <div class="col-md-3">
+																	<select id="status" name="status" class="form-control select2me">
+																		<option value="">请选择...</option>
+																	</select>
+										                        </div>									                    
+										                        <label class="control-label col-md-1" for="status">状态: </label>
+										                        <div class="col-md-2">
+																	<select id="status" name="status" class="form-control select2me">
+																		<option value="">请选择...</option>
+													   					<option value="0" >预靠</option>
+													   					<option value="1" >作业中</option>
+													   					<option value="2" >已离港</option>
+																	</select>
+										                        </div>
+										                        <label class="control-label col-md-1" for="status">查询范围: </label>
+										                        <div class="col-md-3">
+																	<select id="daterange" name="daterange" class="form-control select2me">
+																		<option value="0">最近一周</option>
+																		<option value="1">最近一个月</option>
+																		<option value="1">最近三个月</option>
+																		<option value="1">最近半年</option>
+																		<option value="1">最近一年</option>
+																	</select>
+										                        </div>
 									                        </div>
-									                        <label class="control-label col-md-1" for="status">查询范围: </label>
-									                        <div class="col-md-3">
-																<select id="daterange" name="daterange" class="form-control select2me">
-																	<option value="0">最近一周</option>
-																	<option value="1">最近一个月</option>
-																	<option value="1">最近三个月</option>
-																	<option value="1">最近半年</option>
-																	<option value="1">最近一年</option>
-																</select>
-									                        </div>															
-									                    </div>
+									                        <div class="form-group" style="margin-top:5px;margin-bottom:5px" id="shift-div">
+										                        <label class="control-label col-md-1" for="status">班次: </label>
+										                        <div class="col-md-2">
+																	<select id="shift" name="shift" class="form-control select2me">
+																		<option value="">请选择...</option>
+													   					<option value="0" >白班</option>
+													   					<option value="1" >夜班</option>
+																	</select>
+										                        </div>
+									                    	</div>
+									                        										                        
+<!-- 													    	<label class="control-label  col-md-1 cy-pad-hor-s">靠泊时间：</label>
+													        <div class="col-md-4 input-daterange input-group">
+													            <input class="form-control" name="startBerthDate" placeholder="请选择靠泊起始时间" id="startBerthDate" readonly/>
+													            <span class="input-group-addon">--</span>
+																<input class="form-control" name="endBerthDate" placeholder="请选择靠泊截止时间" id="endBerthDate" readonly/>
+															</div>
+													    <div class="form-group"  style="margin-top:10px;margin-bottom:5px">
+															<label class="control-label  col-md-1 cy-pad-hor-s">离泊时间：</label>
+													        <div class="col-md-4 input-daterange input-group">
+													            <input class="form-control" name="startDepartureDate" placeholder="请选择离泊起始时间" id="startDepartureDate" readonly/>
+													            <span class="input-group-addon">--</span>
+																<input class="form-control" name="endDepartureDate" placeholder="请选择离泊截止时间" id="endDepartureDate" readonly/>
+															</div>
+														</div> -->
 									                    <div class="form-group" style="margin-top:5px;margin-left:500px;margin-bottom:5px">
 									                        <div class="col-md-2" style="text-align:left;">
 									                            <button type="button" style="margin-left:20px" id="btn_query" class="btn btn-primary btn-sm">查询</button>
@@ -202,7 +179,19 @@ License: You must have a valid license purchased only from themeforest(the above
 												                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
 												            </button>
 												        </div> -->
-									                    <table id="statistics" class="table table-striped table-bordered table-hover table-checkable order-column"></table>												            
+<!-- 														<div class="dropdown" id="toolbar" >
+														  <button class="btn btn-success dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">报表统计
+														  <span class="caret"></span></button>
+														  <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+														    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:view_report(1)">船舶货物进度统计</a></li>
+														    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:view_report(2)">船舶舱口卸货统计</a></li>
+														    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:view_report(3)">船舶卸船机作业量统计</a></li>
+														    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:view_report(4)">船舶班次作业量统计</a></li>
+														    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:view_report(5)">船舶分舱作业量统计</a></li>
+														    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:view_report(6)">船舶分货作业量统计</a></li>
+														  </ul>
+														</div> -->													        
+									                    <table id="maintenance" class="table table-striped table-bordered table-hover table-checkable order-column"></table>												            
 									                </form>
 									            </div>
 									        </div>						                
@@ -270,10 +259,11 @@ License: You must have a valid license purchased only from themeforest(the above
 		<script type="text/javascript">
 			var IncPath = '${IncPath}';
 			var BasePath = '${BasePath}';
+			var reportType = '${reportType}';
 		</script>
 		<script src="${IncPath}/cl.js?v=${jsVersion}"
 			type="text/javascript"></script>
-		<script src="${IncPath}/core/report/overview.js?v=${jsVersion}"
+		<script src="${IncPath}/core/report/shiplist.js?v=${jsVersion}"
 			type="text/javascript"></script>
 			
         <script>  
@@ -282,7 +272,7 @@ License: You must have a valid license purchased only from themeforest(the above
 	            	startView: 'month',
 	            	minView: 'month',
     			    language:  'zh-CN',
-    			    format: 'yyyy-mm-dd',
+    			    format: 'yyyy-mm-dd hh:ii:ss',
     			    todayBtn:  true,
     			    autoclose: true,
 	            	clearBtn: true,
@@ -337,7 +327,14 @@ License: You must have a valid license purchased only from themeforest(the above
     	            })
     	        }
     	        DatePicker("#startDepartureDate","#endDepartureDate");
-    	        DatePicker("#startBerthDate","#endBerthDate");			
+    	        DatePicker("#startBerthDate","#endBerthDate");
+/*     	        if($("#modiStatus").val()==0){
+            		$('#begintime').attr('disabled', 'false');
+            		$('#departuretime').attr('disabled', 'false'); 
+    	        }else if($("#modiStatus").val()==1){
+            		$('#begintime').attr('disabled', 'true');
+            		$('#departuretime').attr('disabled', 'false');     	        	
+    	        } */
             });  
         </script>			
 		<!-- BEGIN THEME LAYOUT SCRIPTS -->

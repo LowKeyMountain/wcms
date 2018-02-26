@@ -70,7 +70,7 @@
                         </li> --%>
 
                          <li class="nav-item start ">
-                            <a href="${IncPath}/task/report" class="nav-link ">
+                            <a href="${IncPath}/report/reportview" class="nav-link ">
                                 <i class="icon-bar-chart"></i>
                                 <span class="title">报表统计</span>
                             </a>

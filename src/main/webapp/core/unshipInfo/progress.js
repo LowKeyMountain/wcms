@@ -32,6 +32,7 @@
 			 toolbar : '#toolbar',
 			 toolbarAlign : 'right',
 			 buttonsAlign : 'left',// 按钮对齐方式
+			 showFooter: true,
 //			 showExport : true, // 是否显示导出
 //			 exportDataType : "basic", // basic', 'all', 'selected'.
 			
@@ -66,59 +67,49 @@
                     //var html = '<a href="#" data-toggle="popover" data-original-title="货物详情" class="btn btn-success pop addon">'+row.cargoName+'</a>';
                     var html = '<a href="javascript:view_click(' + row.cargoId + ')" class="btn btn-success pop addon">' + row.cargoName + '</a>';
                     return html;
-                }/*,
-                events: {
-                    'mouseenter .addon': function (e, value, row, index) {
-//                        alert(row.cargoName);
-                    	$(".pop").popover({
-            			    trigger: "hover focus",
-            			    html: true,
-                            content: function() {
-                                return $('#popover_content_wrapper').html();
-                            },    
-            			    animation: false
-            			  })
-            			  .on("mouseenter", function() {
-            			    var _this = this;
-            			    $(this).popover("show");
-            			    $(".popover").on("mouseleave", function() {
-            			      $(_this).popover('hide');
-            			    });
-            			  }).on("mouseleave", function() {
-            			    var _this = this;
-            			    setTimeout(function() {
-            			      if (!$(".popover:hover").length) {
-            			        $(_this).popover("hide");
-            			      }
-            			    }, 300);
-            			  });                  	
-                     }
-                }*/
+                },
+                footerFormatter: '合计'
 		    }, {
 		        field: 'total',
 		        title: '总量',
 		        align: 'center',
-		        width: '10%'
-/*		        formatter:function(value,row,index) {
-		            return [
-		                '<a class="pop" data-toggle="popover" href="#">'+row.total+"("+row.total+')</a>'
-		            ]
-		        }*/		        
+		        width: '10%',
+	            footerFormatter: function (value1) {
+	                var tcount = 0;
+	                for (var t in value1) {
+	                	tcount += value1[t].total;
+	                }
+	                return tcount;
+	            }	        
 		    }, {
 		        field: 'finished',
 		        title: '已完成',
 		        align: 'center',
 		        width: '10%',
+	            footerFormatter: function (value2) {
+	                var fcount = 0;
+	                for (var f in value2) {
+	                	fcount += value2[f].total;
+	                }
+	                return fcount;
+	            }		        
 		    },{
 		        field: 'remainder',
 		        title: '剩余量',
 		        align: 'center',
-		        width: '10%'
+		        width: '10%',
+	            footerFormatter: function (value3) {
+	                var rcount = 0;
+	                for (var r in value3) {
+	                	rcount += value3[r].total;
+	                }
+	                return rcount;
+	            }		        
 		    }, {
 		        field: 'clearance',
 		        title: '清舱量',
 		        align: 'center',
-		        width: '10%'
+		        width: '10%'	        
 		    }],
 			locale : 'zh-CN',// 中文支持,
 			responseHandler : function(res) {

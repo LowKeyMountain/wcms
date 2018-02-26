@@ -59,19 +59,64 @@ public class ReportController {
 	 */
 	@RequestMapping(value = "/statistics")
 	public ModelAndView shipStatistics() {
-		return new ModelAndView(PATH_UNSHIPINFO + "statistics");
+		return new ModelAndView(PATH_REPORT + "statistics");
 	}
+
+	/**
+	 * 根据报表类型跳转至对应报表明细页面
+	 * 
+	 * @return
+	 */
+/*	@RequestMapping(value = "/reportview")
+	public ModelAndView report(HttpServletRequest req, HttpServletResponse res, ModelMap modelMap) {
+		String reportType = req.getParameter("reportType");
+		String fileName = "";
+		switch (reportType) {
+		case "1":
+			fileName ="progressview";
+			break;
+		case "2":
+			fileName ="unloadview";
+			break;
+		case "3":
+			fileName ="overview";
+			break;
+		case "4":
+			fileName ="statistics";
+			break;
+		case "5":
+			fileName ="cabinquantity";
+			break;
+		case "6":
+			fileName ="cargoquantity";
+			break;			
+		default:
+			break;
+		}		
+		return new ModelAndView(PATH_REPORT + fileName);
+	}*/
 
 	/**
 	 * 跳转至报表管理页面
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/report")
+	@RequestMapping(value = "/reportview")
 	public ModelAndView report() {
-		return new ModelAndView(PATH_UNSHIPINFO + "report");
+		return new ModelAndView(PATH_REPORT + "report");
 	}
 	
+	/**
+	 * 跳转至船舶作业列表页面
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/shiplist")
+	public ModelAndView shipList() {
+		String reportType = req.getParameter("reportType");
+		modelMap.put("reportType", StringUtils.isBlank(reportType) ? "1" : reportType);		
+		return new ModelAndView(PATH_REPORT + "shiplist");
+	}
 	/**
 	 * 跳转至船舶实时统计页面
 	 * 
