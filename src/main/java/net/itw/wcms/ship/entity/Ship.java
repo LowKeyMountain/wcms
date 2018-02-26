@@ -33,8 +33,8 @@ public class Ship implements Entityable {
 	private Float length; // 船长（单位：米）
 	private Float breadth; // 船宽 （单位：米）
 	private String mouldedDepth; // 型深 （单位：米）
-	private Integer cabinNum; // 船舱数据
-	private String hatch; // 舱口
+	private Integer cabinNum; // 舱口（注：与船舱数据名称互换）
+	private String hatch; // 船舱数据
 
 	private String wire; // 缆绳
 	private String specialCabinType; // 特殊舱型

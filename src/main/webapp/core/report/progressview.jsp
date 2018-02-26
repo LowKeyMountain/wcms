@@ -84,7 +84,9 @@ License: You must have a valid license purchased only from themeforest(the above
 								class="fa fa-angle-right"></i></li>
 							<li>管理中心 <i class="fa fa-angle-right"></i>
 							</li>
-							<li><a href="${IncPath}/task/report">报表统计 </a><i class="fa fa-angle-right"></i>
+							<li><a href="${IncPath}/report/shiplist">报表统计 </a><i class="fa fa-angle-right"></i></li>
+							<li><a href="${IncPath}/report/shiplist?reportType=1">船舶货物进度统计</a><i class="fa fa-angle-right"></i>
+							</li>							
 							<li>船舶货物进度统计</li>
 						</ul>
 						<!-- END PAGE TITLE & BREADCRUMB-->
@@ -127,7 +129,7 @@ License: You must have a valid license purchased only from themeforest(the above
 									            <div class="panel-body">
 									            
 									                <form id="formSearch" class="form-horizontal">
-							                
+<!-- 						                
 									                    <div class="form-group" style="margin-top:5px;margin-bottom:5px">
 									                        <label class="control-label col-md-1" for="status">船名: </label>
 									                        <div class="col-md-3">
@@ -156,7 +158,7 @@ License: You must have a valid license purchased only from themeforest(the above
 									                        <div class="col-md-2" style="text-align:left;">
 									                            <button type="button" style="margin-left:20px" id="btn_reset" class="btn btn-sm">重置</button>
 									                        </div>
-									                    </div>
+									                    </div> -->	
 														<table id="unloadProgress" class="table table-striped table-bordered table-hover table-checkable order-column"></table>
 													</form>
 									                						            

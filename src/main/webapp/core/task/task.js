@@ -60,15 +60,15 @@ var FormCl = function () {
 					// date:true
 				},
 				'ship.length' : {
-					required : true,
+//					required : true,
 					number : true
 				},
 				'ship.breadth' : {
-					required : true,
+//					required : true,
 					number : true
 				},
 				'ship.mouldedDepth' : {
-					required : true,
+//					required : true,
 					number : true
 				},
 				'ship.cabinNum' : {

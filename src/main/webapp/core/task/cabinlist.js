@@ -64,7 +64,7 @@
 		        align: 'center',
 		        width: '3%',
 		        formatter: function (value, row, index) {
-                    var html = '<a href="javascript:view_unload(' + taskId + ',' + row.cabinNo + ')" class="btn btn-success pop addon">' + row.cabinNo + '</a>';
+                    var html = '<a href="javascript:view_unload(' + taskId + ',' + row.cabinNo + ')" class="font-weight-normal">' + row.cabinNo + '</a>';
                     return html;
                 }
 		    }, {
@@ -74,7 +74,7 @@
 		        width: '5%',
 		        formatter: function (value, row, index) {
                     //var html = '<a href="#" data-toggle="popover" data-original-title="货物详情" class="btn btn-success pop addon">'+row.cargoName+'</a>';
-                    var html = '<a href="javascript:view_cargo(' + row.cargoId + ')" class="btn btn-success pop addon">' + row.cargoName + '</a>';
+                    var html = '<a href="javascript:view_cargo(' + row.cargoId + ')" class="font-weight-normal">' + row.cargoName + '</a>';
                     return html;
                 }/*
                 events: {
