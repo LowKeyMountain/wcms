@@ -65,7 +65,7 @@
 		        width: '10%',
 		        formatter: function (value, row, index) {
                     //var html = '<a href="#" data-toggle="popover" data-original-title="货物详情" class="btn btn-success pop addon">'+row.cargoName+'</a>';
-                    var html = '<a href="javascript:view_click(' + row.cargoId + ')" class="btn btn-success pop addon">' + row.cargoName + '</a>';
+                    var html = '<a href="javascript:view_click(' + row.cargoId + ')" class="font-weight-normal">' + row.cargoName + '</a>';
                     return html;
                 },
                 footerFormatter: '合计'
