@@ -253,7 +253,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 					}
 					// 开始卸船
 					task.setStatus(1);
-					task.setBeginTime(new Date());
+					task.setBerthingTime(new Date());
 					task.setUpdateTime(new Date());
 					task.setUpdateUser(operator.getUserName());
 					// 更新所有船舱状态为卸货|0

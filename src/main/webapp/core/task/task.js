@@ -20,7 +20,7 @@ var FormCl = function () {
 				'ship.shipEnName' : {
 					required : true
 				},
-				'berthingTime' : {
+				'enterPortTime' : {
 //					required : true,
 //					date:true
 				},
@@ -76,7 +76,7 @@ var FormCl = function () {
 					range:[1,20]
 				},
 				'ship.hatch' : {
-					
+					required : true
 				}
 			}, 
             invalidHandler: function (event, validator) { // display error
@@ -161,32 +161,41 @@ var Task = function() {
 				 // dataField: 'res',//bootstrap table 可以前端分页也可以后端分页
 				 striped : true, // 是否显示行间隔色
 				 pageNumber : 1, // 初始化加载第一页，默认第一页
-//				 pagination : true,// 是否分页
-				 queryParamsType : 'limit',
+				 pagination : true,// 是否分页
+		         sortable: true,    //是否启用排序
+		         sortOrder: "asc",  //排序方式
+				 queryParamsType : '',
+				 queryParams : 'queryParams',
 				 sidePagination : 'server',
+				 cache: false,  //是否使用缓存，默认为true
 				 pageSize : 10,// 单页记录数
-				 pageList : [ 5, 10, 20, 30 ],// 分页步进值
-				 // showPaginationSwitch : true,// 是否显示选择分页数按钮
-				 // showHeader : true,
+				 pageList : [ 20, 30, 50],// 分页步进值
+//				 showPaginationSwitch : true,// 是否显示选择分页数按钮
+//				 showHeader : true,
 //				 showRefresh : true,// 刷新按钮
 				 // showToggle : true,// 是否显示 切换试图（table/card）按钮
 				 // showColumns : true,// 是否显示 内容列下拉框
 				 // queryParams: getPageMessage,
 //				 search : true, // 显示搜索框
-				 paginationPreText : '‹',// 指定分页条中上一页按钮的图标或文字,这里是<
-				 paginationNextText : '›',// 指定分页条中下一页按钮的图标或文字,这里是>
+				 paginationPreText : '上一页',// 指定分页条中上一页按钮的图标或文字,这里是<
+				 paginationNextText : '下一页',// 指定分页条中下一页按钮的图标或文字,这里是>
 				 // singleSelect: false,
 				 // clickToSelect : true,// 是否启用点击选中行
 //				 toolbarAlign : 'right',
 //				 buttonsAlign : 'right',// 按钮对齐方式
 				 showExport : true, // 是否显示导出
 				 exportDataType : "basic", // basic', 'all', 'selected'.
-				/*
-				 * queryParams: function queryParams(params)
-				 * {//自定义参数，这里的参数是传给后台的，分页使用 var param = { pageNumber:
-				 * params.pageNumber, pageSize: params.pageSize, orderNum :
-				 * $("#orderNum").val() }; return param; },
-				 */
+				 
+				 queryParams: function queryParams(params){//自定义参数，这里的参数是传给后台的，分页使用
+						var params = {//这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+								 limit: params.pageSize,
+								 offset: params.pageNumber,
+					             sortName: params.sortName,
+					             sortOrder: params.sortOrder,			             
+
+						};
+						return params; 
+				 },
 				
 				idField : "id",// 指定主键列
 //				columns : [ {
@@ -240,14 +249,14 @@ var Task = function() {
 
 			if (status == '0') {
 				columns = [ 
-				            {
-					title : '全选',
-					field : 'select',
-					// 复选框
-					checkbox : true,
-					width : 25,
-					align : 'center'
-				}, 
+//				            {
+//					title : '全选',
+//					field : 'select',
+//					// 复选框
+//					checkbox : true,
+//					width : 25,
+//					align : 'center'
+//				}, 
 //				{
 //					field : 'id',
 //					title : 'ID',
@@ -262,8 +271,8 @@ var Task = function() {
 					title : '船名',
 					align : 'center'
 				}, {
-					field : 'berthingTime',
-					title : '靠泊时间',
+					field : 'enterPortTime',
+					title : '预靠时间',
 					align : 'center'
 				}, {
 					field : 'operation',
@@ -272,14 +281,14 @@ var Task = function() {
 
 			} else if (status == '1') {
 				columns = [ 
-				            {
-					title : '全选',
-					field : 'select',
-					// 复选框
-					checkbox : true,
-					width : 25,
-					align : 'center'
-				},
+//				            {
+//					title : '全选',
+//					field : 'select',
+//					// 复选框
+//					checkbox : true,
+//					width : 25,
+//					align : 'center'
+//				},
 //				             {
 //					field : 'id',
 //					title : 'ID',
@@ -294,6 +303,10 @@ var Task = function() {
 					title : '船名',
 					align : 'center'
 				}, {
+					field : 'enterPortTime',
+					title : '预靠时间',
+					align : 'center'
+				}, {
 					field : 'berthingTime',
 					title : '靠泊时间',
 					align : 'center'
@@ -302,25 +315,27 @@ var Task = function() {
 					title : '开工时间',
 					align : 'center',
 					sortable : true
-				}, {
-					field : 'endTime',
-					title : '完工时间',
-					align : 'center'
-				}, {
+				}, 
+//				{
+//					field : 'endTime',
+//					title : '完工时间',
+//					align : 'center'
+//				},
+				{
 					field : 'operation',
 					title : '操作'
 				} ];
 
 			} else if (status == '2') {
 				columns = [
-				           {
-					title : '全选',
-					field : 'select',
-					// 复选框
-					checkbox : true,
-					width : 25,
-					align : 'center'
-				}, 
+//				           {
+//					title : '全选',
+//					field : 'select',
+//					// 复选框
+//					checkbox : true,
+//					width : 25,
+//					align : 'center'
+//				}, 
 //				{
 //					field : 'id',
 //					title : 'ID',
@@ -333,6 +348,10 @@ var Task = function() {
 				}, {
 					field : 'shipName',
 					title : '船名',
+					align : 'center'
+				}, {
+					field : 'enterPortTime',
+					title : '预靠时间',
 					align : 'center'
 				}, {
 					field : 'berthingTime',
@@ -516,6 +535,44 @@ var Task = function() {
 		},
 		returnList:function(){
 			window.location.href = BasePath + "/task/tasklist";
+		},
+		/**
+		 * 点击查看信息
+		 */
+		modifyCabinPosition_click : function(taskId) {
+			window.location.href = BasePath + "/cabin/modifyCabinPosition?taskId="
+					+ taskId;
+		},
+		/**
+		 * 点击设置船舶状态
+		 */
+		setShipStatus_click : function(taskId, status) {
+			var con = confirm(status == '0' ? '请确认是否船舶靠泊！' : (status == '1' ? '请确认是否完成卸船！' : ""));
+			if (con == true) {
+				var pageParam = {};
+				pageParam.taskId = taskId;
+				pageParam.status = status;
+				var url = BasePath + "/task/doSetShipStatus";
+				$.post(url, pageParam, function(result) {
+					if (result && Cl.successInt == result.code) {
+						alert(result.msg);
+						if (status == '1') {
+							window.location.href = BasePath + "/task/tasklist?type=2";
+						} else {
+							window.location.href = BasePath + "/task/tasklist";
+						}
+					} else {
+						alert(result.msg);
+					}
+				});
+			}
+		},
+		/**
+		 * 点击查看船舶信息
+		 */
+		view_ship_click : function(taskId) {
+			window.location.href = BasePath + "/task/view?taskId="
+					+ taskId;
 		}
 
 	};

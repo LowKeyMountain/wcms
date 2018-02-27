@@ -176,7 +176,7 @@
 						</div>
 
 						<div class="form-group  margin-top-20">
-							<label class="control-label col-md-3">船舱数(个) <span
+							<label class="control-label col-md-3">船舱数（个） <span
 								class="required"> * </span>
 							</label>
 							<div class="col-md-8">

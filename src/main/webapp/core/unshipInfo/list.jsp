@@ -121,14 +121,20 @@ License: You must have a valid license purchased only from themeforest(the above
 	
 								<div class="portlet-body" style="display: block;">
 									<div class="table-responsive">
-										<div class="dropdown" id="toolbar" >
+<!-- 										<div class="dropdown" id="toolbar" >
 										  <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">卸货统计
 										  <span class="caret"></span></button>
 										  <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
 										    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:UnshipInfo.unloadProgress_click(${taskId})">货物进度</a></li>
 										    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:UnshipInfo.unloaderOverview_click(${taskId})">卸船机总览</a></li>
 										  </ul>
-										</div>									
+										</div> -->
+								        <div id="toolbar">
+								            <button type="button" onclick="javascript:UnshipInfo.unloadProgress_click(${taskId});" class="btn btn-info" >货物进度
+								            </button>
+								            <button type="button" onclick="javascript:UnshipInfo.unloaderOverview_click(${taskId});" class="btn btn-info" >卸船机总览
+								            </button>								            
+								        </div>
 										<table class="table table-striped table-bordered table-hover editable">
 											<thead>
 												<tr>
