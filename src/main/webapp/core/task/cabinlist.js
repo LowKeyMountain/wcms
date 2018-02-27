@@ -130,7 +130,8 @@
 		        align: 'center',
 		        width: '3%',
                 formatter: function (value, row, index) {//自定义显示，这三个参数分别是：value该行的属性，row该行记录，index该行下标  
-                    return row.status == 0 ? "<font color=red>卸货</font>" : (row.status == 1 ? "<font color=grey>清舱</font>" : (row.status == 1 ? "<font color=lightgreen>完成</font>" : "<font color=red>未开始</font>"));  
+//                    return row.status == 0 ? "<font color=red>卸货</font>" : (row.status == 1 ? "<font color=grey>清舱</font>" : (row.status == 2 ? "<font color=lightgreen>完成</font>" : "<font color=red>未开始</font>"));
+                	return row.status == 0 ? "<font color=red>卸货</font>" : (row.status == 1 ? "<font color=grey>清舱</font>" : (row.status == 2 ? "" : "<font color=red>未开始</font>"));
                 }		        
 		    }, {
 		        title: '操作',

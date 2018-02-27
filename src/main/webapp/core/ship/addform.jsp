@@ -43,18 +43,31 @@
 							</div>
 						</div>
 						<div class="form-group  margin-top-20">
+							<label class="control-label col-md-3">预靠时间<span
+								class="required"> </span>
+							</label>
+							<div class="col-md-8">
+								<div class="input-icon right">
+									<i class="fa"></i> 
+									<input size="16" type="text" id="enterPortTime" name="enterPortTime" readonly class="form_datetime form-control">
+								</div>
+							</div>
+						</div>
+						
+						<!-- 
+						<div class="form-group  margin-top-20">
 							<label class="control-label col-md-3">靠泊时间 <span
 								class="required"> </span>
 							</label>
 							<div class="col-md-8">
 								<div class="input-icon right">
 									<i class="fa"></i> 
-									<!-- <input type="text" id="berthingTime" name="berthingTime" data-required="1" class="form-control" /> -->
 									<input size="16" type="text" id="berthingTime" name="berthingTime" readonly class="form_datetime form-control">
 								</div>
 							</div>
 						</div>
-						
+						 -->
+						 
 						<div class="form-group  margin-top-20">
 							<label class="control-label col-md-3">离泊时间 <span
 								class="required"> </span>
@@ -150,7 +163,7 @@
 						</div>
 
 						<div class="form-group  margin-top-20">
-							<label class="control-label col-md-3">舱口 <span
+							<label class="control-label col-md-3">舱口数（个） <span
 								class="required"> * </span>
 							</label>
 							<div class="col-md-8">
@@ -163,7 +176,7 @@
 
 						<div class="form-group  margin-top-20">
 							<label class="control-label col-md-3">船舱数(个) <span
-								class="required"> </span>
+								class="required"> * </span>
 							</label>
 							<div class="col-md-8">
 								<div class="input-icon right">

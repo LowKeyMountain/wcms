@@ -20,7 +20,7 @@ var FormCl = function () {
 				'ship.shipEnName' : {
 					required : true
 				},
-				'berthingTime' : {
+				'enterPortTime' : {
 //					required : true,
 //					date:true
 				},
@@ -76,7 +76,7 @@ var FormCl = function () {
 					range:[1,20]
 				},
 				'ship.hatch' : {
-					
+					required : true
 				}
 			}, 
             invalidHandler: function (event, validator) { // display error
@@ -240,14 +240,14 @@ var Task = function() {
 
 			if (status == '0') {
 				columns = [ 
-				            {
-					title : '全选',
-					field : 'select',
-					// 复选框
-					checkbox : true,
-					width : 25,
-					align : 'center'
-				}, 
+//				            {
+//					title : '全选',
+//					field : 'select',
+//					// 复选框
+//					checkbox : true,
+//					width : 25,
+//					align : 'center'
+//				}, 
 //				{
 //					field : 'id',
 //					title : 'ID',
@@ -262,8 +262,8 @@ var Task = function() {
 					title : '船名',
 					align : 'center'
 				}, {
-					field : 'berthingTime',
-					title : '靠泊时间',
+					field : 'enterPortTime',
+					title : '预靠时间',
 					align : 'center'
 				}, {
 					field : 'operation',
@@ -272,14 +272,14 @@ var Task = function() {
 
 			} else if (status == '1') {
 				columns = [ 
-				            {
-					title : '全选',
-					field : 'select',
-					// 复选框
-					checkbox : true,
-					width : 25,
-					align : 'center'
-				},
+//				            {
+//					title : '全选',
+//					field : 'select',
+//					// 复选框
+//					checkbox : true,
+//					width : 25,
+//					align : 'center'
+//				},
 //				             {
 //					field : 'id',
 //					title : 'ID',
@@ -294,6 +294,10 @@ var Task = function() {
 					title : '船名',
 					align : 'center'
 				}, {
+					field : 'enterPortTime',
+					title : '预靠时间',
+					align : 'center'
+				}, {
 					field : 'berthingTime',
 					title : '靠泊时间',
 					align : 'center'
@@ -302,25 +306,27 @@ var Task = function() {
 					title : '开工时间',
 					align : 'center',
 					sortable : true
-				}, {
-					field : 'endTime',
-					title : '完工时间',
-					align : 'center'
-				}, {
+				}, 
+//				{
+//					field : 'endTime',
+//					title : '完工时间',
+//					align : 'center'
+//				},
+				{
 					field : 'operation',
 					title : '操作'
 				} ];
 
 			} else if (status == '2') {
 				columns = [
-				           {
-					title : '全选',
-					field : 'select',
-					// 复选框
-					checkbox : true,
-					width : 25,
-					align : 'center'
-				}, 
+//				           {
+//					title : '全选',
+//					field : 'select',
+//					// 复选框
+//					checkbox : true,
+//					width : 25,
+//					align : 'center'
+//				}, 
 //				{
 //					field : 'id',
 //					title : 'ID',
@@ -333,6 +339,10 @@ var Task = function() {
 				}, {
 					field : 'shipName',
 					title : '船名',
+					align : 'center'
+				}, {
+					field : 'enterPortTime',
+					title : '预靠时间',
 					align : 'center'
 				}, {
 					field : 'berthingTime',
@@ -516,6 +526,44 @@ var Task = function() {
 		},
 		returnList:function(){
 			window.location.href = BasePath + "/task/tasklist";
+		},
+		/**
+		 * 点击查看信息
+		 */
+		modifyCabinPosition_click : function(taskId) {
+			window.location.href = BasePath + "/cabin/modifyCabinPosition?taskId="
+					+ taskId;
+		},
+		/**
+		 * 点击设置船舶状态
+		 */
+		setShipStatus_click : function(taskId, status) {
+			var con = confirm(status == '0' ? '请确认是否船舶靠泊！' : (status == '1' ? '请确认是否完成卸船！' : ""));
+			if (con == true) {
+				var pageParam = {};
+				pageParam.taskId = taskId;
+				pageParam.status = status;
+				var url = BasePath + "/task/doSetShipStatus";
+				$.post(url, pageParam, function(result) {
+					if (result && Cl.successInt == result.code) {
+						alert(result.msg);
+						if (status == '1') {
+							window.location.href = BasePath + "/task/tasklist?type=2";
+						} else {
+							window.location.href = BasePath + "/task/tasklist";
+						}
+					} else {
+						alert(result.msg);
+					}
+				});
+			}
+		},
+		/**
+		 * 点击查看船舶信息
+		 */
+		view_ship_click : function(taskId) {
+			window.location.href = BasePath + "/task/view?taskId="
+					+ taskId;
 		}
 
 	};

@@ -69,9 +69,10 @@ public class TaskServiceImpl implements ITaskService {
 			jo = new JSONObject();
 			jo.put("berth", t.getBerth() == 1 ? "矿一":(t.getBerth() == 2 ? "矿二" :""));
 			jo.put("endTime", t.getEndTime() == null ? "" : DateTimeUtils.date2StrDateTime(t.getEndTime()));
+			jo.put("enterPortTime", t.getEnterPortTime() == null ? "" : DateTimeUtils.date2StrDateTime(t.getEnterPortTime()));
 			jo.put("departureTime", t.getDepartureTime() == null ? "" : DateTimeUtils.date2StrDateTime(t.getDepartureTime()));
-			
-			jo.put("shipName", t.getShip().getShipName());
+//			jo.put("shipName", t.getShip().getShipName());
+			jo.put("shipName", "<a href='javascript:Task.view_ship_click(" + t.getId() + ");'> "+ t.getShip().getShipName() +"</a>");
 			jo.put("berthingTime", t.getBerthingTime() == null ? "" : DateTimeUtils.date2StrDateTime(t.getBerthingTime()));
 			jo.put("beginTime", t.getBeginTime() == null ? "" : DateTimeUtils.date2StrDateTime(t.getBeginTime()));
 			jo.put("updateUser", t.getUpdateUser());
@@ -79,7 +80,10 @@ public class TaskServiceImpl implements ITaskService {
 			String operation = "<a href='javascript:Task.update_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i> 修改</a>";
 			switch (status) {
 			case 0:
-				operation += "<a href='javascript:Task.unshipInfo_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>卸船情况</a>";
+				//operation += "<a href='javascript:Task.unshipInfo_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>卸船情况</a>";
+				
+				operation += "<a href='javascript:Task.modifyCabinPosition_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>舱口标定</a>";
+				operation += "<a href='javascript:Task.setShipStatus_click(\"" + t.getId() + "\",\"0\");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>船舶靠泊</a>";
 				operation += "<a href='javascript:Task.remove(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-times'></i> 删除</a>";
 				break;
 			case 1:
