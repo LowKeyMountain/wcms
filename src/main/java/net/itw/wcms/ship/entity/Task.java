@@ -34,21 +34,23 @@ public class Task implements Entityable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer id; // 编号
-	
-	@DateTimeFormat( pattern = "yyyy-MM-dd HH:mm:ss" )
-	private Date berthingTime; // 预靠时间
-	@DateTimeFormat( pattern = "yyyy-MM-dd HH:mm:ss" )
-	private Date departureTime; // 离泊时间
-	@DateTimeFormat( pattern = "yyyy-MM-dd HH:mm:ss" )
-	private Date beginTime; // 开始卸货时间
-	@DateTimeFormat( pattern = "yyyy-MM-dd HH:mm:ss" )
-	private Date endTime; // 结束卸货时间
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date enterPortTime; // 预靠时间（由计划员网页端录入）
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date berthingTime; // 靠泊时间（由指导员手机端手动录入）
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date departureTime; // 离泊时间（由计划员网页端录入）
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date beginTime; // 开工时间（由系统自动计算，以船舶的靠泊时间为起始点，判断卸船机第一斗的时间为开工时间）
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date endTime; // 完工时间(由指导员点击“完成卸船”按钮的时间来生成)
 	private Integer status; // 作业状态 （预靠船舶|0、作业船舶|1、 离港船舶|2）
 	private Float cargoLoad; // 货物总重（单位：吨）
 	private Integer berth; // 泊位（矿一|1、矿二|2）
 	private String depth; // 吃水
 	private String freeboardDepth; // 干舷高度
-	private Float offset; // 船偏移量 
+	private Float offset; // 船偏移量
 
 	private String updateUser;
 	private Date updateTime;
@@ -151,7 +153,7 @@ public class Task implements Entityable {
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
 	}
-	
+
 	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
 	public Set<Cargo> getCargos() {
 		return cargos;
@@ -179,7 +181,7 @@ public class Task implements Entityable {
 	public void setBerth(Integer berth) {
 		this.berth = berth;
 	}
-	
+
 	@Column(name = "depth")
 	public String getDepth() {
 		return depth;
@@ -188,7 +190,7 @@ public class Task implements Entityable {
 	public void setDepth(String depth) {
 		this.depth = depth;
 	}
-	
+
 	@Column(name = "freeboard_depth")
 	public String getFreeboardDepth() {
 		return freeboardDepth;
@@ -198,13 +200,23 @@ public class Task implements Entityable {
 		this.freeboardDepth = freeboardDepth;
 	}
 
-	@Column(name="offset")
+	@Column(name = "offset")
 	public Float getOffset() {
 		return offset;
 	}
 
 	public void setOffset(Float offset) {
 		this.offset = offset;
+	}
+	
+	@Column(name = "enter_port_time")
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date getEnterPortTime() {
+		return enterPortTime;
+	}
+
+	public void setEnterPortTime(Date enterPortTime) {
+		this.enterPortTime = enterPortTime;
 	}
 	
 }

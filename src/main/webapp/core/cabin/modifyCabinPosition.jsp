@@ -133,7 +133,7 @@ License: You must have a valid license purchased only from themeforest(the above
 											class="table table-striped table-bordered table-hover editable">
 											<thead>
 												<tr>
-													<th>船舱名</th>
+													<th>船舱号</th>
 													<th>起点</th>
 													<th>终点</th>
 												</tr>

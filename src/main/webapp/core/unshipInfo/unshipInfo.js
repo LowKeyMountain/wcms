@@ -42,7 +42,8 @@ var UnshipInfo = function() {
 //						<td><a href="#" onclick="javascript:var con;con=confirm('请确认是否清舱！');if(con==true){alert('操作成功！');}">清舱</a></td>
 						
 						//0|卸货;1|清舱;2|完成
-						var status = res.status==0?'卸货':(res.status==1?'清舱':(res.status == 2?'完成':''));
+//						var status = res.status==0?'卸货':(res.status==1?'清舱':(res.status == 2?'完成':''));
+						var status = res.status==0?'卸货':(res.status==1?'清舱':(res.status == 2?'':''));
 						var tr = ""
 							+ "<tr>"
 							+ "<td><a href='javascript:UnshipInfo.view_unship_click(\""+taskId+"\",\""+res.cabinNo+"\")'>"+res.cabinNo+"</a></td>"
@@ -60,11 +61,12 @@ var UnshipInfo = function() {
 										+ res.cabinNo
 										+ "\",\"1\")'>清舱</a>";
 							} else if (res.status == 1) {
-								tr += "<a href='#' onclick='UnshipInfo.setCabinStatus_click(\""
-										+ taskId
-										+ "\",\""
-										+ res.cabinNo
-										+ "\",\"2\")'>完成</a>";
+//								tr += "<a href='#' onclick='UnshipInfo.setCabinStatus_click(\""
+//										+ taskId
+//										+ "\",\""
+//										+ res.cabinNo
+//										+ "\",\"2\")'>完成</a>";
+								tr += "";
 							}
 							tr += "&nbsp;&nbsp;"
 							+ "</td>" 

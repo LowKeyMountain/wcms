@@ -58,7 +58,7 @@
 		        align: 'center',
 		        width: '12%',
 		        formatter: function (value, row, index) {
-                    var html = '<a href="javascript:initDetailTable(' + row.task_id + ',&quot;' + row.cmsid + '&quot;)" class="btn btn-success">' + row.unloaderName + '</a>';
+                    var html = '<a href="javascript:initDetailTable(' + row.task_id + ',&quot;' + row.cmsid + '&quot;)" class="font-weight-normal">' + row.unloaderName + '</a>';
                     return html;
                 }
 		    }, {

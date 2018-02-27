@@ -122,7 +122,13 @@ License: You must have a valid license purchased only from themeforest(the above
 						                <div class="col-md-12 col-sm-2">
 									        <div class="panel panel-primary">
 									            <div class="panel-heading">
-									            		<h3 class="panel-title"><a href="javascript:view_ship(${taskId})">${shipName}</a></h3></div>
+									            		<h3 class="panel-title"><a href="javascript:view_ship(${taskId})">${shipName}</a></h3>
+									            </div>
+										        <div id="toolbar" class="btn-group">
+										            <button id="btn_add" type="button" onclick="javascript:history.back(-1);" class="btn btn-primary btn-default" >
+										                <span class="fa fa-reply" aria-hidden="true"></span>返回
+										            </button>
+										        </div>												
 									            <div class="panel-body">
 									                <table id="unloadProgress" class="table table-striped table-bordered table-hover table-checkable order-column"></table>												            
 									            </div>								            
