@@ -67,7 +67,7 @@
 							</div>
 						</div>
 						 -->
-						 
+						<!-- 
 						<div class="form-group  margin-top-20">
 							<label class="control-label col-md-3">Àë²´Ê±¼ä <span
 								class="required"> </span>
@@ -79,6 +79,7 @@
 								</div>
 							</div>
 						</div>
+						 -->
 						<div class="form-group  margin-top-20">
 							<label class="control-label col-md-3">Í£¿¿²´Î» <span
 								class="required"> *</span>
