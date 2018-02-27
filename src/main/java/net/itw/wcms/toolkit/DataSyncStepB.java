@@ -279,6 +279,17 @@ public class DataSyncStepB extends JdbcDaoSupport {
 				try {
 					// 【任务子表】将临时表作业信息插入子表
 					if (1 == operationType) {
+						
+						// 维护开工时间（由系统自动计算，以船舶的靠泊时间为起始点，判断卸船机第一斗的时间为开工时间）-- start
+						String beginTime = this.getJdbcTemplate().queryForObject(
+								" SELECT t.begin_time from tab_task t WHERE t.id = ? ", String.class, taskId);
+						if (beginTime == null) {
+							this.getJdbcTemplate().update(
+									"UPDATE tab_task t SET t.begin_time = ? WHERE t.id = ?",
+									new Object[] { time, taskId });
+						}
+						// -- end
+						
 						args = new Object[] { groupId, id, cmsid };
 						this.getJdbcTemplate().update(sqlMap.getSql("03", taskId), args);
 					}

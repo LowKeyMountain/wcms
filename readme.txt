@@ -7,7 +7,8 @@
 
 v_cabin_info 新增 taskStatus字段
 
-
+-- 20180227
+维护query_interface_config表FN_003数据
 
 2018-02-08 测试
 
