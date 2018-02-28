@@ -147,12 +147,12 @@
 					ELSE end_time
 				END AS 'endTime'
 				, CASE 
-					WHEN MIN(start_position) - MIN(end_position) < 0 THEN MIN(start_position)
-					WHEN MIN(end_position) - MIN(start_position) < 0 THEN MIN(end_position)
+					WHEN MIN(start_position) - MIN(end_position) <= 0 THEN MIN(start_position)
+					WHEN MIN(end_position) - MIN(start_position) <= 0 THEN MIN(end_position)
 				END AS 'minPosition'
 				, CASE 
-					WHEN MAX(start_position) - MAX(end_position) < 0 THEN MAX(end_position)
-					WHEN MAX(end_position) - MAX(start_position) < 0 THEN MAX(start_position)
+					WHEN MAX(start_position) - MAX(end_position) <= 0 THEN MAX(end_position)
+					WHEN MAX(end_position) - MAX(start_position) <= 0 THEN MAX(start_position)
 				END AS 'maxPosition'
 			FROM v_cabin_info
 			WHERE `taskStatus` = 1

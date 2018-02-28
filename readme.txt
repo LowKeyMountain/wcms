@@ -10,6 +10,9 @@ v_cabin_info 新增 taskStatus字段
 -- 20180227
 维护query_interface_config表FN_003数据
 
+--20180228
+v_cabin_info 新增 berthing_time 字段
+
 2018-02-08 测试
 
 1. 一票货最后一铲作业时间为结束时间
