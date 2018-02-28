@@ -63,7 +63,7 @@ public class TaskServiceImpl implements ITaskService {
 		if (page == null || page.getTotalPages() == 0) {
 			return "{\"total\":0,\"rows\":[],}";
 		}
-		int total = page.getTotalPages();
+		Long total = page.getTotalElements();
 		JSONArray jsonArray = new JSONArray();
 		for (Task t : page) {
 			jo = new JSONObject();

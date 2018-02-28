@@ -148,7 +148,11 @@ public class TaskController {
 	 */
 	@RequestMapping(value = "/getTaskList", produces = "text/json;charset=UTF-8")
 	public String getUserDataTables(@RequestParam Map<String, String> params, @RequestParam("status") Integer status, ModelMap map) {
-		Pageable pageable = PageUtils.buildPageRequest(params);
+		int pageSize = Integer.parseInt(params.get("limit"));
+		int pageNum = Integer.parseInt(params.get("offset"));
+		String sortType = params.get("sortName");
+		String direction = params.get("sortOrder");
+		Pageable pageable = PageUtils.buildPageRequest(pageNum, pageSize, sortType, direction);
 		return taskService.getTaskList(pageable, status, params);
 	}
 	
