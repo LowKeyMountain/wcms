@@ -49,12 +49,12 @@
 						
 						<div class="form-group  margin-top-20">
 							<label class="control-label col-md-3">Ô¤¿¿Ê±¼ä<span
-								class="required"> </span>
+								class="required">* </span>
 							</label>
 							<div class="col-md-8">
 								<div class="input-icon right">
 									<i class="fa"></i> 
-									<input size="16" type="text" id="enterPortTime" name="enterPortTime" readonly class="form_datetime form-control">
+									<input size="16" type="text" id="enterPortTime" name="enterPortTime" value="${task.enterPortTime}" pattern="yyy-MM-dd HH:mm:ss" readonly class="form_datetime form-control">
 								</div>
 							</div>
 						</div>
