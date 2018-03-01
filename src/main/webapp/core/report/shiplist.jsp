@@ -78,7 +78,26 @@ License: You must have a valid license purchased only from themeforest(the above
 				<div class="row">
 					<div class="col-md-12">
 						<!-- BEGIN PAGE TITLE & BREADCRUMB-->
-						<h3 class="page-title icon-settings">&nbsp;&nbsp;作业船舶查询</h3>
+						<c:choose>
+							<c:when test="${reportType == 1}">
+								<h3 class="page-title icon-settings">&nbsp;&nbsp;船舶货物进度统计</h3>
+							</c:when>
+							<c:when test="${reportType == 2}">
+								<h3 class="page-title icon-settings">&nbsp;&nbsp;船舶舱口卸货统计</h3>
+							</c:when>
+							<c:when test="${reportType == 3}">
+								<h3 class="page-title icon-settings">&nbsp;&nbsp;船舶卸船机作业量统计</h3>
+							</c:when>
+							<c:when test="${reportType == 4}">
+								<h3 class="page-title icon-settings">&nbsp;&nbsp;船舶班次作业量统计</h3>
+							</c:when>
+							<c:when test="${reportType == 5}">
+								<h3 class="page-title icon-settings">&nbsp;&nbsp;船舶舱口效率统计</h3>
+							</c:when>
+							<c:otherwise>
+								<h3 class="page-title icon-settings">&nbsp;&nbsp;船舶货物效率统计</h3>
+							</c:otherwise>
+						</c:choose>
 						<ul class="page-breadcrumb breadcrumb">
 							<li><i class="fa fa-home"></i> <a
 								href="${BasePath}/web/main"> 主页 </a> <i
@@ -86,7 +105,26 @@ License: You must have a valid license purchased only from themeforest(the above
 							<li>管理中心 <i class="fa fa-angle-right"></i>
 							<li><a href="${IncPath}/report/reportview">报表统计 </a><i class="fa fa-angle-right"></i>
 							</li>
-							<li>作业船舶查询</li>
+							<c:choose>
+								<c:when test="${reportType == 1}">
+									<li>船舶货物进度统计</li>
+								</c:when>
+								<c:when test="${reportType == 2}">
+									<li>船舶舱口卸货统计</li>
+								</c:when>
+								<c:when test="${reportType == 3}">
+									<li>船舶卸船机作业量统计</li>
+								</c:when>
+								<c:when test="${reportType == 4}">
+									<li>船舶班次作业量统计</li>
+								</c:when>
+								<c:when test="${reportType == 5}">
+									<li>船舶舱口效率统计</li>
+								</c:when>
+								<c:otherwise>
+									<li>船舶货物效率统计</li>
+								</c:otherwise>
+							</c:choose>
 						</ul>
 						<!-- END PAGE TITLE & BREADCRUMB-->
 					</div>

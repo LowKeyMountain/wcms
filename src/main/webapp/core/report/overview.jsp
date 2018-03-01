@@ -78,18 +78,18 @@ License: You must have a valid license purchased only from themeforest(the above
 				<div class="row">
 					<div class="col-md-12">
 						<!-- BEGIN PAGE TITLE & BREADCRUMB-->
-						<h3 class="page-title icon-settings">&nbsp;&nbsp;船舶卸船机作业量总览</h3>
+						<h3 class="page-title icon-settings">&nbsp;&nbsp;船舶卸船机作业量统计</h3>
 						<ul class="page-breadcrumb breadcrumb">
 							<li><i class="fa fa-home"></i> <a
 								href="${BasePath}/web/main"> 主页 </a> <i
 								class="fa fa-angle-right"></i></li>
 							<li>管理中心 <i class="fa fa-angle-right"></i>
 							</li>
-							<li><a href="${IncPath}/report/shiplist">报表统计 </a><i class="fa fa-angle-right"></i>
+							<li><a href="${IncPath}/report/reportview">报表统计 </a><i class="fa fa-angle-right"></i>
 							</li>
 							<li><a href="${IncPath}/report/shiplist?reportType=3">船舶卸船机作业量统计</a><i class="fa fa-angle-right"></i>
 							</li>
-							<li>船舶卸船机作业量统计</li>
+							<li>统计结果</li>
 						</ul>
 						<!-- END PAGE TITLE & BREADCRUMB-->
 					</div>
@@ -166,7 +166,7 @@ License: You must have a valid license purchased only from themeforest(the above
 						                <div class="col-md-12">
 									        <div class="panel panel-primary">
 									            <div class="panel-heading">
-									            		<h3 class="panel-title">船舶卸船机作业量统计</h3></div>
+									            		<h3 class="panel-title">统计结果</h3></div>
 									            <div class="panel-body">
 									                <form id="formSearch" class="form-horizontal">
 <!-- 						                

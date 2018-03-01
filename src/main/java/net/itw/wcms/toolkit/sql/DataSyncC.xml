@@ -31,7 +31,7 @@
 		</entry>
 		<entry>
 			<key>04</key>
-			<description>重新同步任务子表数据</description>
+			<description>重新同步任务子表数据(begin_time > berthing_time)</description>
 			<value>
 			<![CDATA[
 			SELECT *
@@ -39,7 +39,7 @@
 			WHERE (b.operationType = 0
 					OR b.operationType = 1)
 				AND b.Time >= (
-					SELECT t.begin_time
+					SELECT t.berthing_time
 					FROM tab_task t
 					WHERE t.id = ?
 				)
@@ -56,8 +56,8 @@
 					FROM (
 						SELECT task_id
 							, CASE 
-								WHEN MIN(start_position) - MIN(end_position) < 0 THEN MIN(start_position)
-								WHEN MIN(end_position) - MIN(start_position) < 0 THEN MIN(end_position)
+								WHEN MIN(start_position) - MIN(end_position) <= 0 THEN MIN(start_position)
+								WHEN MIN(end_position) - MIN(start_position) <= 0 THEN MIN(end_position)
 							END AS 'minPosition'
 						FROM v_cabin_info
 						WHERE task_id = ?
@@ -70,8 +70,8 @@
 					FROM (
 						SELECT task_id
 							, CASE 
-								WHEN MAX(start_position) - MAX(end_position) < 0 THEN MAX(end_position)
-								WHEN MAX(end_position) - MAX(start_position) < 0 THEN MAX(start_position)
+								WHEN MAX(start_position) - MAX(end_position) <= 0 THEN MAX(end_position)
+								WHEN MAX(end_position) - MAX(start_position) <= 0 THEN MAX(start_position)
 							END AS 'maxPosition'
 						FROM v_cabin_info
 						WHERE task_id = ?
@@ -84,7 +84,7 @@
 			</value>
 		</entry>
 		<entry>
-			<key>04_backup_201802112205</key>
+			<key>04_backup_201802112205(begin_time > berthing_time)</key>
 			<description>重新同步任务子表数据</description>
 			<value>
 			<![CDATA[
@@ -93,7 +93,7 @@
 				WHERE (b.operationType = 0
 						OR b.operationType = 1)
 					AND b.Time >= (
-						SELECT t.begin_time
+						SELECT t.berthing_time
 						FROM tab_task t
 						WHERE t.id = ?
 					)
@@ -122,40 +122,40 @@
 		</entry>
 		<entry>
 			<key>06</key>
-			<description>查询卸船机作业数据任务ID、船舱ID</description>
+			<description>查询卸船机作业数据任务ID、船舱ID(begin_time > berthing_time)</description>
 			<value>
 			<![CDATA[
 			 SELECT cabin.id, t.task_id AS 'taskId' FROM tab_cabin cabin LEFT JOIN ( SELECT c.*, task.`offset`, 
-			 task.`status`, task.begin_time, CASE WHEN task.end_time IS NULL THEN CURRENT_TIMESTAMP () ELSE task.end_time 
+			 task.`status`, task.berthing_time, CASE WHEN task.end_time IS NULL THEN CURRENT_TIMESTAMP () ELSE task.end_time 
 			 END AS 'end_time' FROM tab_cargo c LEFT JOIN tab_task task ON c.task_id = task.id ) t ON cabin.cargo_id = 
-			 t.id WHERE cabin.start_position <= ? AND cabin.end_position >= ? AND t.begin_time <= ? AND 
+			 t.id WHERE cabin.start_position <= ? AND cabin.end_position >= ? AND t.berthing_time <= ? AND 
 			 t.end_time >= ? 
 			]]>
 			</value>
 		</entry>
 		<entry>
 			<key>07</key>
-			<description>查询卸船机数据所属的作业任务</description>
+			<description>查询卸船机数据所属的作业任务(begin_time > berthing_time)</description>
 			<value>
 			<![CDATA[
-			SELECT task_id AS taskId, begin_time AS 'beginTime'
+			SELECT task_id AS taskId, berthing_time AS 'berthingTime'
 				, CASE 
 					WHEN end_time IS NULL THEN CURRENT_TIMESTAMP()
 					ELSE end_time
 				END AS 'endTime'
 				, CASE 
-					WHEN MIN(start_position) - MIN(end_position) < 0 THEN MIN(start_position)
-					WHEN MIN(end_position) - MIN(start_position) < 0 THEN MIN(end_position)
+					WHEN MIN(start_position) - MIN(end_position) <= 0 THEN MIN(start_position)
+					WHEN MIN(end_position) - MIN(start_position) <= 0 THEN MIN(end_position)
 				END AS 'minPosition'
 				, CASE 
-					WHEN MAX(start_position) - MAX(end_position) < 0 THEN MAX(end_position)
-					WHEN MAX(end_position) - MAX(start_position) < 0 THEN MAX(start_position)
+					WHEN MAX(start_position) - MAX(end_position) <= 0 THEN MAX(end_position)
+					WHEN MAX(end_position) - MAX(start_position) <= 0 THEN MAX(start_position)
 				END AS 'maxPosition'
 			FROM v_cabin_info
-			GROUP BY task_id, begin_time, end_time
+			GROUP BY task_id, berthing_time, end_time
 			HAVING minPosition <= ?
 			AND maxPosition >= ?
-			AND beginTime <= ?
+			AND berthingTime <= ?
 			AND endTime >= ? 
 			]]>
 			</value>

@@ -17,23 +17,23 @@
 			 sidePagination : 'server',
 			 pageNumber : 1, // 初始化加载第一页，默认第一页			 
 			 pageSize : 10,// 单页记录数
-			 pageList : [10,20,30,50,100],// 分页步进值
-			 showPaginationSwitch : true,// 是否显示选择分页数按钮
+			 pageList : [20, 30, 50],// 分页步进值
+//			 showPaginationSwitch : true,// 是否显示选择分页数按钮
 			 showHeader : true,
-			 showRefresh : true,// 刷新按钮
+//			 showRefresh : true,// 刷新按钮
 			 // showToggle : true,// 是否显示 切换试图（table/card）按钮
-			 showColumns : true,// 是否显示 内容列下拉框
+//			 showColumns : true,// 是否显示 内容列下拉框
 //			 queryParams: getPageMessage,
 //			 search : true, // 显示搜索框
 			 paginationPreText : '上一页',// 指定分页条中上一页按钮的图标或文字,这里是<
 			 paginationNextText : '下一页',// 指定分页条中下一页按钮的图标或文字,这里是>
-			 singleSelect: true,
-			 clickToSelect : true,// 是否启用点击选中行
+//			 singleSelect: true,
+//			 clickToSelect : true,// 是否启用点击选中行
 			 toolbar : '#toolbar',
 			 toolbarAlign : 'right',
 			 buttonsAlign : 'left',// 按钮对齐方式
-			 showExport : true, // 是否显示导出
-			 exportDataType : "basic", // basic', 'all', 'selected'.
+//			 showExport : true, // 是否显示导出
+//			 exportDataType : "basic", // basic', 'all', 'selected'.
 			
 			queryParams: function queryParams(params){//自定义参数，这里的参数是传给后台的，分页使用
 				var params = {//这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
@@ -136,17 +136,17 @@
 		        width: '16%',
 		        formatter: function (value, row, index) {
 		        	if(reportType==1){
-			            return '<a class="btn progressview btn-info glyphicon glyphicon-zoom-in icon-white" >船舶货物进度统计</a>'
+			            return '<a class="btn progressview default" ><i class="fa fa-bar-chart"></i>统计结果</a>'
 		        	}else if(reportType==2){
-			            return '<a class="btn unloadview btn-info glyphicon glyphicon-zoom-in icon-white" >船舶舱口卸货统计</a>'
+			            return '<a class="btn unloadview default" ><i class="fa fa-bar-chart"></i>统计结果</a>'
 		        	}else if(reportType==3){
-			            return '<a class="btn overview btn-info glyphicon glyphicon-zoom-in icon-white" >船舶卸船机作业量统计</a>'
+			            return '<a class="btn overview default" ><i class="fa fa-bar-chart"></i>统计结果</a>'
 		        	}else if(reportType==4){
-			            return '<a class="btn statistics btn-info glyphicon glyphicon-zoom-in icon-white" >船舶班次作业量统计</a>'
+			            return '<a class="btn statistics default" ><i class="fa fa-bar-chart"></i>统计结果</a>'
 		        	}else if(reportType==5){
-			            return '<a class="btn cabinquantity btn-info glyphicon glyphicon-zoom-in icon-white" >船舶舱口效率统计</a>'
+			            return '<a class="btn cabinquantity default" ><i class="fa fa-bar-chart"></i>统计结果</a>'
 		        	}else if(reportType==6){
-			            return '<a class="btn cargoquantity btn-info glyphicon glyphicon-zoom-in icon-white" >船舶货物效率统计</a>'
+			            return '<a class="btn cargoquantity default" ><i class="fa fa-bar-chart"></i>统计结果</a>'
 		        	}
 		        },
 		    	events: {

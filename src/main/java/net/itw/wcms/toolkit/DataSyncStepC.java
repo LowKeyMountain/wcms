@@ -78,6 +78,8 @@ public class DataSyncStepC extends JdbcDaoSupport {
 			this.getJdbcTemplate().update(sqlMap.getSql("02", "tab_temp_b_" + taskId));
 			// 【任务子表】删除任务子表：组信息
 			this.getJdbcTemplate().update(sqlMap.getSql("03", "tab_temp_c_" + taskId));
+			// 删除任务表开工时间
+			this.getJdbcTemplate().update("UPDATE tab_task t SET t.begin_time = null WHERE t.id = ?", new Object[] { taskId });
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			log.error(e.getMessage());
@@ -151,6 +153,17 @@ public class DataSyncStepC extends JdbcDaoSupport {
 				try {
 					// 【任务子表】将临时表作业数据插入子表
 					if ( 1 == operationType) {
+						
+						// 维护开工时间（由系统自动计算，以船舶的靠泊时间为起始点，判断卸船机第一斗的时间为开工时间）-- start
+						String beginTime = this.getJdbcTemplate().queryForObject(
+								" SELECT t.begin_time from tab_task t WHERE t.id = ? ", String.class, taskId);
+						if (beginTime == null) {
+							this.getJdbcTemplate().update(
+									"UPDATE tab_task t SET t.begin_time = ? WHERE t.id = ?",
+									new Object[] { time, taskId });
+						}
+						// -- end
+						
 						this.getJdbcTemplate().update(sqlMap.getSql("05", taskId), groupId, id, cmsid);
 						num++;
 						log.info("数据编号[" + id + "]|卸船机编号[" + cmsid + "] 数据已计算组信息！");

@@ -84,9 +84,9 @@ License: You must have a valid license purchased only from themeforest(the above
 								class="fa fa-angle-right"></i></li>
 							<li>管理中心 <i class="fa fa-angle-right"></i>
 							</li>
-							<li><a href="${IncPath}/report/shiplist">报表统计 </a><i class="fa fa-angle-right"></i>
+							<li><a href="${IncPath}/report/reportview">报表统计 </a><i class="fa fa-angle-right"></i>
 							<li><a href="${IncPath}/report/shiplist?reportType=6">船舶货物效率统计 </a><i class="fa fa-angle-right"></i>
-							<li>船舶货物效率统计</li>
+							<li>统计结果</li>
 						</ul>
 						<!-- END PAGE TITLE & BREADCRUMB-->
 					</div>
@@ -112,7 +112,7 @@ License: You must have a valid license purchased only from themeforest(the above
 							<div class="portlet-title">
 								<div class="caption font-dark">
 									<i class="icon-settings font-dark"></i> <span
-										class="caption-subject bold uppercase">船舶货物效率统计</span>
+										class="caption-subject bold uppercase">统计结果</span>
 								</div>
 
 							</div>

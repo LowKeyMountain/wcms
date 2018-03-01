@@ -44,7 +44,7 @@
 						</div>
 						<div class="form-group  margin-top-20">
 							<label class="control-label col-md-3">Ô¤¿¿Ê±¼ä<span
-								class="required"> </span>
+								class="required">* </span>
 							</label>
 							<div class="col-md-8">
 								<div class="input-icon right">
