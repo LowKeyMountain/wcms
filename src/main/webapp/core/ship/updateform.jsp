@@ -53,8 +53,10 @@
 							</label>
 							<div class="col-md-8">
 								<div class="input-icon right">
-									<i class="fa"></i> 
-									<input size="16" type="text" id="enterPortTime" name="enterPortTime" value="${task.enterPortTime}" readonly class="form_datetime form-control">
+									<i class="fa"></i> <input size="16" type="text"
+										id="enterPortTime" name="enterPortTime"
+										value="<fmt:formatDate value="${task.enterPortTime}" pattern="yyy-MM-dd HH:mm:ss"/>"
+										readonly class="form_datetime form-control">
 								</div>
 							</div>
 						</div>
