@@ -77,6 +77,12 @@
 						</div>
 						-->
 						
+						<input type="hidden" id="berthingTime"
+										name="berthingTime" data-required="1"
+										class="form_datetime form-control" readonly
+										value="<fmt:formatDate value="${task.berthingTime}" pattern="yyy-MM-dd HH:mm:ss"/>" />
+						
+						
 						<c:if test="${task.status == 2}">
 						<div class="form-group  margin-top-20">
 							<label class="control-label col-md-3">¿Î≤¥ ±º‰ <span
