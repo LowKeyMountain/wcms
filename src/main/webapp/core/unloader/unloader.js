@@ -18,7 +18,7 @@
 			 pageNumber : 1, // 初始化加载第一页，默认第一页			 
 			 pageSize : 10,// 单页记录数
 			 pageList : [20,30,50],// 分页步进值
-			 showPaginationSwitch : true,// 是否显示选择分页数按钮
+//			 showPaginationSwitch : true,// 是否显示选择分页数按钮
 			 showHeader : true,
 			 showRefresh : true,// 刷新按钮
 			 // showToggle : true,// 是否显示 切换试图（table/card）按钮
