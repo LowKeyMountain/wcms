@@ -108,7 +108,8 @@ public class DataSyncStepC extends JdbcDaoSupport {
 				Date time = (Date) map.get("Time");
 				Integer id = (Integer) map.get("id");
 				String cmsid = (String) map.get("Cmsid");
-				Double unloaderMove = (Double) map.get("unloaderMove") + 7;
+//				Double unloaderMove = (Double) map.get("unloaderMove") + 7;
+				Double unloaderMove = (Double) map.get("unloaderMove");
 
 				// 查询卸船机作业数据任务ID、船舱ID
 				Object[] args = new Object[] { unloaderMove, unloaderMove, time, time };
