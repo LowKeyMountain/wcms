@@ -235,11 +235,9 @@ License: You must have a valid license purchased only from themeforest(the above
 									                        </div>
 									                    </div>
 												        <div id="toolbar" class="btn-group">
-												        	<!-- 
 												            <button id="btn_add" type="button" class="btn btn-primary btn-default" data-toggle="modal" data-target="#addModal">
 												                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
 												            </button>
-												             -->
 												        </div>
 									                    <table id="unloader" class="table table-striped table-bordered table-hover table-checkable order-column"></table>												            
 									                </form>
