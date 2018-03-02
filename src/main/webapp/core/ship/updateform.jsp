@@ -53,8 +53,10 @@
 							</label>
 							<div class="col-md-8">
 								<div class="input-icon right">
-									<i class="fa"></i> 
-									<input size="16" type="text" id="enterPortTime" name="enterPortTime" value="${task.enterPortTime}" readonly class="form_datetime form-control">
+									<i class="fa"></i> <input size="16" type="text"
+										id="enterPortTime" name="enterPortTime"
+										value="<fmt:formatDate value="${task.enterPortTime}" pattern="yyy-MM-dd HH:mm:ss"/>"
+										readonly class="form_datetime form-control">
 								</div>
 							</div>
 						</div>
@@ -74,6 +76,12 @@
 							</div>
 						</div>
 						-->
+						
+						<input type="hidden" id="berthingTime"
+										name="berthingTime" data-required="1"
+										class="form_datetime form-control" readonly
+										value="<fmt:formatDate value="${task.berthingTime}" pattern="yyy-MM-dd HH:mm:ss"/>" />
+						
 						
 						<c:if test="${task.status == 2}">
 						<div class="form-group  margin-top-20">

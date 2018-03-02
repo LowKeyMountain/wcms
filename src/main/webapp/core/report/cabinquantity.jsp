@@ -77,7 +77,7 @@ License: You must have a valid license purchased only from themeforest(the above
 				<div class="row">
 					<div class="col-md-12">
 						<!-- BEGIN PAGE TITLE & BREADCRUMB-->
-						<h3 class="page-title">船舶分舱作业量统计</h3>
+						<h3 class="page-title icon-settings">&nbsp;&nbsp;船舶舱口效率统计</h3>
 						<ul class="page-breadcrumb breadcrumb">
 							<li><i class="fa fa-home"></i> <a
 								href="${BasePath}/web/main"> 主页 </a> <i
@@ -110,20 +110,13 @@ License: You must have a valid license purchased only from themeforest(the above
 					<div class="col-md-12">
 						<!-- BEGIN EXAMPLE TABLE PORTLET-->
 						<div class="portlet light bordered">
-							<div class="portlet-title">
-								<div class="caption font-dark">
-									<i class="icon-settings font-dark"></i> <span
-										class="caption-subject bold uppercase">统计结果</span>
-								</div>
-
-							</div>
 							<div class="portlet-body">
-
 								<div class="table-toolbar">
-						                <div class="col-md-12 col-sm-2">
+						                <div class="col-md-12">
 									        <div class="panel panel-primary">
 									            <div class="panel-heading">
-									            		<h3 class="panel-title"><a href="javascript:view_ship(${taskId})">${shipName}</a></h3></div>
+									            		<h3 class="panel-title">统计结果</h3>
+									            </div>
 									            <div class="panel-body">
 									                <form id="formSearch" class="form-horizontal">
 							                

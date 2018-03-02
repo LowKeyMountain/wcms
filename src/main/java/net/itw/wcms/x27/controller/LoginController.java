@@ -34,7 +34,6 @@ import net.itw.wcms.x27.utils.SessionUtil;
 @RestController
 @RequestMapping(value = "/web")
 public class LoginController {
-
 	@Autowired
 	private IUserService userService;
 	

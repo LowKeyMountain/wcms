@@ -77,16 +77,17 @@ License: You must have a valid license purchased only from themeforest(the above
 				<div class="row">
 					<div class="col-md-12">
 						<!-- BEGIN PAGE TITLE & BREADCRUMB-->
-						<h3 class="page-title">卸船进度</h3>
+						<h3 class="page-title icon-settings">&nbsp;&nbsp;货物进度</h3>
 						<ul class="page-breadcrumb breadcrumb">
 							<li><i class="fa fa-home"></i> <a
 								href="${BasePath}/web/main"> 主页 </a> <i
 								class="fa fa-angle-right"></i></li>
 							<li>管理中心 <i class="fa fa-angle-right"></i>
 							</li>
-							<li><a href="${BasePath}/task/tasklist"> 工作管理 </a><i
-								class="fa fa-angle-right"></i></li>							
-							<li>卸船进度</li>
+							<li><a href="${BasePath}/task/tasklist">工作管理 </a><i
+								class="fa fa-angle-right"></i></li>
+							<li><a href="${BasePath}/task/unshipInfo?id=${taskId}">卸船情况</a><i class="fa fa-angle-right"></i></li>
+							<li>货物进度</li>
 						</ul>
 						<!-- END PAGE TITLE & BREADCRUMB-->
 					</div>
@@ -109,13 +110,7 @@ License: You must have a valid license purchased only from themeforest(the above
 					<div class="col-md-12">
 						<!-- BEGIN EXAMPLE TABLE PORTLET-->
 						<div class="portlet light bordered">
-							<div class="portlet-title">
-								<div class="caption font-dark">
-									<i class="icon-settings font-dark"></i> <span
-										class="caption-subject bold uppercase">卸船进度</span>
-								</div>
-
-							</div>
+						
 							<div class="portlet-body">
 
 								<div class="table-toolbar">

@@ -18,7 +18,7 @@
 			 pageNumber : 1, // 初始化加载第一页，默认第一页			 
 			 pageSize : 10,// 单页记录数
 			 pageList : [10,20,30,50,100],// 分页步进值
-			 showPaginationSwitch : true,// 是否显示选择分页数按钮
+//			 showPaginationSwitch : true,// 是否显示选择分页数按钮
 			 showHeader : true,
 			 showRefresh : true,// 刷新按钮
 			 // showToggle : true,// 是否显示 切换试图（table/card）按钮
@@ -136,8 +136,8 @@
 		        align: 'center',
 		        width: '16%',
 		        formatter: function (value, row, index) {
-		            return ['<a class="btn cabindetail btn-info glyphicon glyphicon-zoom-in icon-white" >船舱</a>',
-		            	'<a class="btn btn-info mod glyphicon glyphicon-edit icon-white" >船舶</a>'].join('');
+		            return ['<a class="btn default cabindetail" ><i class="fa fa-cog" aria-hidden="true"></i>船舱</a>',
+		            	'<a class="btn default mod" ><i class="fa fa-ship" aria-hidden="true"></i>船舶</a>'].join('');
 		        },
 		    	events: {
 					'click .mod' : function(e, value, row, index) {

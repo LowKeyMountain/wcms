@@ -166,7 +166,8 @@ License: You must have a valid license purchased only from themeforest(the above
 						                <div class="col-md-12">
 									        <div class="panel panel-primary">
 									            <div class="panel-heading">
-									            		<h3 class="panel-title">统计结果</h3></div>
+									            		<h3 class="panel-title">统计结果</h3>
+									            </div>
 									            <div class="panel-body">
 									                <form id="formSearch" class="form-horizontal">
 <!-- 						                

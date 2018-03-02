@@ -85,7 +85,8 @@ License: You must have a valid license purchased only from themeforest(the above
 							<li>管理中心 <i class="fa fa-angle-right"></i>
 							</li>
 							<li><a href="${BasePath}/task/tasklist"> 工作管理 </a><i
-								class="fa fa-angle-right"></i></li>							
+								class="fa fa-angle-right"></i></li>
+							<li><a href="${BasePath}/task/unshipInfo?id=${taskId}">卸船情况</a><i class="fa fa-angle-right"></i></li>
 							<li>卸船机总览</li>
 						</ul>
 						<!-- END PAGE TITLE & BREADCRUMB-->
@@ -127,13 +128,6 @@ License: You must have a valid license purchased only from themeforest(the above
 					<div class="col-md-12">
 						<!-- BEGIN EXAMPLE TABLE PORTLET-->
 						<div class="portlet light bordered">
-							<div class="portlet-title">
-								<div class="caption font-dark">
-									<i class="icon-settings font-dark"></i> <span
-										class="caption-subject bold uppercase">卸船机总览</span>
-								</div>
-
-							</div>
 							<div class="portlet-body">
 
 								<div class="table-toolbar">
