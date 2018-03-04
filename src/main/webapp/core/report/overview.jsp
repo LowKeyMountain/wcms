@@ -168,30 +168,24 @@ License: You must have a valid license purchased only from themeforest(the above
 									            <div class="panel-heading">
 									            		<h3 class="panel-title">统计结果</h3></div>
 									            <div class="panel-body">
-									                <form id="formSearch" class="form-horizontal">
-<!-- 						                
+									                <form id="formSearch" class="form-horizontal"> 						                
 									                    <div class="form-group" style="margin-top:5px;margin-bottom:5px">
-									                        <label class="control-label col-md-1" for="status">船名: </label>
-									                        <div class="col-md-3">
-																<select id="status" name="status" class="form-control select2me">
-																	<option value="">请选择...</option>
-
-																</select>
-									                        </div>
-									                        <label class="control-label col-md-1" for="status">查询范围: </label>
-									                        <div class="col-md-3">
-																<select id="daterange" name="daterange" class="form-control select2me">
-																	<option value="0">最近一周</option>
-																	<option value="1">最近一个月</option>
-																	<option value="1">最近三个月</option>
-																	<option value="1">最近半年</option>
-																	<option value="1">最近一年</option>
-																</select>
-									                        </div>															
+										                        <label class="control-label col-md-1" for="startDate">日期: </label>
+										                        <div class="col-md-2">
+																	<input class="form_datetime form-control" name="startDate" placeholder="请选择查询日期" id="startDate" readonly/>
+										                        </div>
+										                        <label class="control-label col-md-1" for="status">班次: </label>
+										                        <div class="col-md-2">
+																	<select id="shift" name="shift" class="form-control select2me">
+																		<option value="">请选择...</option>
+													   					<option value="0" >白班</option>
+													   					<option value="1" >夜班</option>
+																	</select>
+										                        </div>
 									                    </div>
-									                    <div class="form-group" style="margin-top:5px;margin-left:500px;margin-bottom:5px">
+									                    <div class="form-group" style="margin-top:5px;margin-left:500px;margin-bottom:15px">
 									                        <div class="col-md-2" style="text-align:left;">
-									                            <button type="button" style="margin-left:20px" id="btn_query" class="btn btn-primary btn-sm">查询</button>
+									                            <button type="button" style="margin-left:20px" id="btn_query" class="btn btn-primary btn-sm">筛选</button>
 									                        </div>
 									                        <div class="col-md-2" style="text-align:left;">
 									                            <button type="button" style="margin-left:20px" id="btn_reset" class="btn btn-sm">重置</button>

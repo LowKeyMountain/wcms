@@ -59,7 +59,7 @@
 		        width: '10%'
 		    },*/ {
 		        field: 'cargoName',
-		        title: '货物名称',
+		        title: '货名',
 		        align: 'center',
 		        width: '10%',
 		        formatter: function (value, row, index) {

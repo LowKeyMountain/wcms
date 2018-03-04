@@ -78,15 +78,15 @@
 		        align: 'center',
 		        width: '10%'
 		    }, {
-		        field: 'unloading',
-		        title: '作业量',
-		        align: 'center',
-		        width: '6%'
-		    }, {
 		        field: 'usedTime',
-		        title: '台时',
+		        title: '用时|h',
 		        align: 'center',
 		        width: '12%'
+		    }, {
+		        field: 'unloading',
+		        title: '卸货量|t',
+		        align: 'center',
+		        width: '6%'
 		    }, {
 		        field: 'efficiency',
 		        title: '效率',

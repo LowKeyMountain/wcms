@@ -63,12 +63,12 @@
                 }
 		    }, {
 		        field: 'usedTime',
-		        title: '台时',
+		        title: '用时|h',
 		        align: 'center',
 		        width: '10%',
 		    }, {
 		        field: 'unloading',
-		        title: '作业量',
+		        title: '卸货量|t',
 		        align: 'center',
 		        width: '10%',
 		    }, {
