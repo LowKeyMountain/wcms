@@ -161,7 +161,7 @@ var Task = function() {
 				 // dataField: 'res',//bootstrap table 可以前端分页也可以后端分页
 				 striped : true, // 是否显示行间隔色
 				 pageNumber : 1, // 初始化加载第一页，默认第一页
-				 pagination : true,// 是否分页
+//				 pagination : false,// 是否分页
 		         sortable: true,    //是否启用排序
 		         sortOrder: "asc",  //排序方式
 				 queryParamsType : '',
@@ -186,7 +186,7 @@ var Task = function() {
 				 showExport : true, // 是否显示导出
 				 exportDataType : "basic", // basic', 'all', 'selected'.
 				 
-				 queryParams: function queryParams(params){//自定义参数，这里的参数是传给后台的，分页使用
+/*				 queryParams: function queryParams(params){//自定义参数，这里的参数是传给后台的，分页使用
 						var params = {//这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
 								 limit: params.pageSize,
 								 offset: params.pageNumber,
@@ -195,7 +195,7 @@ var Task = function() {
 
 						};
 						return params; 
-				 },
+				 },*/
 				
 				idField : "id",// 指定主键列
 //				columns : [ {
@@ -244,7 +244,51 @@ var Task = function() {
 					return res;
 				}
 			}
+			var pagination;
+			if (status == '0') {
+				pagination = false;
+			} else if (status == '1') {
+				pagination = false;
+			} else if (status == '2') {
+				pagination = true;
+			}
+			
+			var queryParams;
+			if (status == '0') {
+				queryParams = function queryParams(params){//自定义参数，这里的参数是传给后台的，分页使用
+					var params = {//这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+//							 limit: params.pageSize,
+//							 offset: params.pageNumber,
+//				             sortName: params.sortName,
+//				             sortOrder: params.sortOrder,			             
 
+					};
+					return params; 
+			 };
+			} else if (status == '1') {
+				queryParams = function queryParams(params){//自定义参数，这里的参数是传给后台的，分页使用
+					var params = {//这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+//							 limit: params.pageSize,
+//							 offset: params.pageNumber,
+//				             sortName: params.sortName,
+//				             sortOrder: params.sortOrder,			             
+
+					};
+					return params; 
+			 };
+			} else if (status == '2') {
+				queryParams = function queryParams(params){//自定义参数，这里的参数是传给后台的，分页使用
+					var params = {//这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+							 limit: params.pageSize,
+							 offset: params.pageNumber,
+				             sortName: params.sortName,
+				             sortOrder: params.sortOrder,			             
+
+					};
+					return params; 
+			 };
+			}				
+			
 			var columns = [];
 
 			if (status == '0') {
@@ -377,7 +421,8 @@ var Task = function() {
 
 			}
 			options.columns = columns;
-			
+			options.pagination = pagination;
+			options.queryParams = queryParams;
 //			if (status == '0') {
 //				options.toolbar = '#toolbar';// 指定工作栏
 //			}
