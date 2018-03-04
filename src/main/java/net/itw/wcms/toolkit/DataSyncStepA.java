@@ -10,6 +10,7 @@ import java.util.TimerTask;
 import javax.xml.bind.JAXBException;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.dao.DataAccessException;
@@ -29,6 +30,8 @@ public class DataSyncStepA extends JdbcDaoSupport {
 
 	private static SqlMap sqlMap;
 	public static boolean isContinue = false;
+	@Autowired
+	private DataSyncLogsHelper dataSyncLogsHelper;
 
 	static {
 		try {
@@ -43,83 +46,18 @@ public class DataSyncStepA extends JdbcDaoSupport {
 	/**
 	 * 运行数据同步任务
 	 * 
-	 * @param pattern
-	 *            模式 true|多线程同步、false|单线程同步（默认）
 	 */
-	public void runTask(Boolean pattern) {
-		if (pattern) {
-			new Timer().schedule(new TimerTask() {
-				@Override
-				public void run() {
-					try {
-						start(1);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+	public void runTask() {
+		new Timer().schedule(new TimerTask() {
+			@Override
+			public void run() {
+				try {
+					start();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
-			}, 1000);
-			new Timer().schedule(new TimerTask() {
-				@Override
-				public void run() {
-					try {
-						start(2);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}, 1000);
-			new Timer().schedule(new TimerTask() {
-				@Override
-				public void run() {
-					try {
-						start(3);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}, 1000);
-			new Timer().schedule(new TimerTask() {
-				@Override
-				public void run() {
-					try {
-						start(4);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}, 1000);
-			new Timer().schedule(new TimerTask() {
-				@Override
-				public void run() {
-					try {
-						start(5);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}, 1000);
-			new Timer().schedule(new TimerTask() {
-				@Override
-				public void run() {
-					try {
-						start(6);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}, 1000);
-		} else {
-			new Timer().schedule(new TimerTask() {
-				@Override
-				public void run() {
-					try {
-						start();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}, 1000);
-		}
+			}
+		}, 1000);
 	}
 
 	/**
@@ -130,26 +68,10 @@ public class DataSyncStepA extends JdbcDaoSupport {
 	public void start() throws InterruptedException {
 		while (true) {
 			if (!isContinue) {
-				log.info("同步工具：步骤A 运行中...");
+//				log.info("同步工具：步骤A 运行中...");
 				for (int i = 1; i <= 6; i++) {
 					sync(i);
 				}
-				Thread.sleep(1000);
-			}
-		}
-	}
-
-	/**
-	 * 启动指定指定卸船机同步器
-	 * 
-	 * @param cmsNo
-	 * @throws InterruptedException
-	 */
-	public void start(Integer cmsNo) throws InterruptedException {
-		while (true) {
-			if (!isContinue) {
-				log.info("同步工具：步骤A 运行中...");
-				sync(cmsNo);
 				Thread.sleep(1000);
 			}
 		}
@@ -161,7 +83,7 @@ public class DataSyncStepA extends JdbcDaoSupport {
 	 * @throws InterruptedException
 	 */
 	public void restart() throws InterruptedException {
-		log.info("同步工具：步骤A 重启中...");
+//		log.info("同步工具：步骤A 重启中...");
 		if (isContinue) {
 			isContinue = false;
 		}
@@ -173,7 +95,7 @@ public class DataSyncStepA extends JdbcDaoSupport {
 	 */
 	public void stop() {
 		isContinue = true;
-		log.info("同步工具：步骤A 已关闭...");
+//		log.info("同步工具：步骤A 已关闭...");
 	}
 
 	/**
@@ -221,6 +143,8 @@ public class DataSyncStepA extends JdbcDaoSupport {
 					Object[] args = new Object[] { id, time, cmsid, pushTime, oneTask, direction, unloaderMove,
 							operationType, 0, 0 };
 					this.getJdbcTemplate().update(sqlMap.getSql("03"), args);
+					dataSyncLogsHelper.dataSyncStepbLogs(0, args);
+					log.info("数据编号[" + id + "]|卸船机编号[" + cmsid + "] 数据已插入B表！");
 				} catch (Exception e) {
 					e.printStackTrace();
 					log.error(e.getMessage());

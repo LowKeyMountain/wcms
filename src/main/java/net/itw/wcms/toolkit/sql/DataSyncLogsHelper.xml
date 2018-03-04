@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqlMap>
+	<sqls>
+		<entry>
+			<key>C_01</key>
+			<description>创建表tab_dataSyncStepB_logs语句</description>
+			<value>
+			<![CDATA[
+				CREATE TABLE `tab_dataSyncStepB_logs` (
+				  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+				  `Cmsid` varchar(100) NOT NULL COMMENT 'Cms卸船机编号',
+				  `operationType` int(2) DEFAULT NULL COMMENT '操作类型(0大车位置，1作业量信息。)',
+				  `Time` datetime DEFAULT NULL COMMENT '操作时间(YYYY—MM—dd  HH_mi_SS)',
+				  `PushTime` datetime DEFAULT NULL COMMENT '推送时间',
+				  `direction` varchar(1) DEFAULT NULL COMMENT '方向(0正方向，1反方向，设定编码器一个方向为正方向，如果无需设定，默认正方向)',
+				  `unloaderMove` double DEFAULT NULL COMMENT '卸船机移动位置(移动位置)',
+				  `OneTask` double DEFAULT NULL COMMENT '一次抓钩作业量(一次抓钩作业量)',
+				  `offset` double DEFAULT NULL COMMENT '船舶偏移量',
+				  `groupId` int(11) DEFAULT NULL,
+ 				  `type` int(2) DEFAULT NULL COMMENT '0|默认、1|找到所属船舶、2|未找到所属船舶',
+  				  `remark` varchar(3000) DEFAULT NULL COMMENT '备注',
+				  PRIMARY KEY (`id`,`Cmsid`)
+				) ENGINE=InnoDB AUTO_INCREMENT=35413 DEFAULT CHARSET=utf8;
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>I_01</key>
+			<description></description>
+			<value>
+			<![CDATA[
+					insert into tab_dataSyncStepB_logs 
+					(id, Time, Cmsid, PushTime, OneTask, direction, unloaderMove, operationType, offset, groupId, type) 
+				    values(?,?,?,?,?,?,?,?,?,?,0) 
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>U_01</key>
+			<description>已找到所属船舶</description>
+			<value>
+			<![CDATA[
+				    UPDATE tab_dataSyncStepB_logs t SET t.remark = ?, t.groupId = ?, t.type = 1 WHERE t.id = ? and t.Cmsid = ?  
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>U_02</key>
+			<description>未找到所属船舶</description>
+			<value>
+			<![CDATA[
+				    UPDATE tab_dataSyncStepB_logs t SET t.remark = ? , t.type = 2 WHERE t.id = ? and t.Cmsid = ?  
+			]]>
+			</value>
+		</entry>
+	</sqls>
+</sqlMap>

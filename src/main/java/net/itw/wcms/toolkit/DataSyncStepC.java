@@ -55,7 +55,7 @@ public class DataSyncStepC extends JdbcDaoSupport {
 	 * @throws Exception
 	 */
 	public void start(Integer taskId) throws Exception {
-		log.info("同步工具：步骤C 开始...");
+//		log.info("同步工具：步骤C 开始...");
 		new Timer().schedule(new TimerTask() {
 			@Override
 			public void run() {
@@ -69,7 +69,7 @@ public class DataSyncStepC extends JdbcDaoSupport {
 				resync(taskId);
 			}
 		}, 1000);
-		log.info("同步工具：步骤C 结束...");
+//		log.info("同步工具：步骤C 结束...");
 	}
 
 	private void delete(Integer taskId) {
@@ -97,7 +97,7 @@ public class DataSyncStepC extends JdbcDaoSupport {
 		try {
 			// 查询临时表待处理数据
 			List<Map<String, Object>> list = this.getJdbcTemplate().queryForList(sqlMap.getSql("04"), tid, tid, tid, tid);
-			log.info("待计算数据" + list.size() + "条。");
+//			log.info("待计算数据" + list.size() + "条。");
 			for (Map<String, Object> map : list) {
 
 				Integer operationType = (Integer) map.get("operationType");
@@ -106,7 +106,7 @@ public class DataSyncStepC extends JdbcDaoSupport {
 				Integer cabinId = 0;
 				Integer groupId = 0;
 				Date time = (Date) map.get("Time");
-				Integer id = (Integer) map.get("id");
+				Integer id = (Integer) map.get("uid");
 				String cmsid = (String) map.get("Cmsid");
 //				Double unloaderMove = (Double) map.get("unloaderMove") + 7;
 				Double unloaderMove = (Double) map.get("unloaderMove");
@@ -148,14 +148,15 @@ public class DataSyncStepC extends JdbcDaoSupport {
 					continue;
 				}
 
-				groupId = dataSyncStepB.calc(taskId, cabinId, cmsid, operationType, time);
 
 				// 更新表b数据
 				try {
 					// 【任务子表】将临时表作业数据插入子表
 					if ( 1 == operationType) {
+						// 获取组编号
+						groupId = dataSyncStepB.calc(taskId, cabinId, cmsid, operationType, time);
 						
-						// 维护开工时间（由系统自动计算，以船舶的靠泊时间为起始点，判断卸船机第一斗的时间为开工时间）-- start
+						// 维护开工时间（由系统自动计算，以船舶的靠泊时间为起始点，判断卸船机第一斗的时间为开工时间）
 						String beginTime = this.getJdbcTemplate().queryForObject(
 								" SELECT t.begin_time from tab_task t WHERE t.id = ? ", String.class, taskId);
 						if (beginTime == null) {
@@ -163,11 +164,10 @@ public class DataSyncStepC extends JdbcDaoSupport {
 									"UPDATE tab_task t SET t.begin_time = ? WHERE t.id = ?",
 									new Object[] { time, taskId });
 						}
-						// -- end
 						
 						this.getJdbcTemplate().update(sqlMap.getSql("05", taskId), groupId, id, cmsid);
 						num++;
-						log.info("数据编号[" + id + "]|卸船机编号[" + cmsid + "] 数据已计算组信息！");
+//						log.info("数据编号[" + id + "]|卸船机编号[" + cmsid + "] 数据已计算组信息！");
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -180,7 +180,7 @@ public class DataSyncStepC extends JdbcDaoSupport {
 			e.printStackTrace();
 			log.error(e.getMessage());
 		} finally {
-			log.info("数据已处理" + num + "条。");
+//			log.info("数据已处理" + num + "条。");
 		}
 	}
 

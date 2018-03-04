@@ -115,8 +115,8 @@
 			<value>
 			<![CDATA[
  			 INSERT INTO tab_temp_b_%s (id, Time, Cmsid, PushTime, OneTask, direction, unloaderMove, operationType, offset, groupId)
- 			 SELECT id, Time, Cmsid, PushTime, OneTask, direction, unloaderMove, operationType, 0, ? from tab_unloader_all 
- 			 where id = ? and cmsid = ? 
+ 			 SELECT uid, Time, Cmsid, PushTime, OneTask, direction, unloaderMove, operationType, 0, ? from tab_unloader_all 
+ 			 where uid = ? and cmsid = ? 
 			]]>
 			</value>
 		</entry>
