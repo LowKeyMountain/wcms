@@ -25,8 +25,10 @@ import net.itw.wcms.interfaceApi.http.QueryOptions;
 import net.itw.wcms.ship.entity.Task;
 import net.itw.wcms.ship.service.ITaskService;
 import net.itw.wcms.ship.service.ITaskShipService;
+import net.itw.wcms.toolkit.DateTimeUtils;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
+import net.itw.wcms.x27.exception.X27Exception;
 import net.itw.wcms.x27.utils.ConstantUtil;
 import net.itw.wcms.x27.utils.PageUtils;
 import net.itw.wcms.x27.utils.SessionUtil;
@@ -372,24 +374,28 @@ public class TaskController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getUnloaderOverviewList", produces = "text/json;charset=UTF-8")
-	public String getUnloaderOverviewList(@RequestParam("taskId") Integer taskId) {
+	public String getUnloaderOverviewList(@RequestParam Map<String, String> params) {
 		Map<String, Object> result = null;
+		String startTime=null;
+		String endTime=null;
 		JSONObject json = new JSONObject();
+		String taskId = params.get("taskId");
+		String searchDate = params.get("searchDate");
+		String shift = params.get("shift");
+		if (StringUtils.equals("1", shift)) {
+			startTime = searchDate + " 20:00:00";
+			endTime = DateTimeUtils.getNextDay(searchDate)+ " 08:00:00";
+		} else if (StringUtils.equals("0", shift)){
+			startTime = searchDate + " 08:00:00";
+			endTime = searchDate+ " 20:00:00";			
+		}
 		try {
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("fuctionType", "FN_006");
-			jsonObject.put("order", "asc");
-			jsonObject.put("sort", "startTime");
-			jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "'}"));
-			QueryOptions options = new QueryOptions();
-			options.searchString = "%#";
-			options.replacement = taskId + "";
-			result = infoQueryHelper.doQueryInfo(jsonObject, options);
+			result = taskShipService.doGetUnloaderUnshipInfo(Integer.parseInt(taskId.toString()), startTime, endTime);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		json.put("rows",result.get("data"));
-		json.put("total",result.get("total"));
+//		json.put("total",result.get("total"));
 
 		return json.toString();
 	}

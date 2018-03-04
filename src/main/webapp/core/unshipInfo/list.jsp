@@ -130,12 +130,12 @@ License: You must have a valid license purchased only from themeforest(the above
 										  </ul>
 										</div> -->
 								        <div id="toolbar">
-								        	<!-- 
-								            <button type="button" onclick="javascript:UnshipInfo.unloadProgress_click(${taskId});" class="btn btn-info" >货物进度
+								        	
+								            <button type="button" onclick="javascript:UnshipInfo.unloadProgress_click(${taskId});" class="btn default" >货物进度
 								            </button>
-								            <button type="button" onclick="javascript:UnshipInfo.unloaderOverview_click(${taskId});" class="btn btn-info" >卸船机总览
+								            <button type="button" onclick="javascript:UnshipInfo.unloaderOverview_click(${taskId});" class="btn default" >卸船机总览
 								            </button>
-								             -->								            
+								            								            
 								        </div>
 										<table class="table table-striped table-bordered table-hover editable">
 											<thead>

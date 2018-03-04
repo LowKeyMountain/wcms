@@ -69,28 +69,28 @@
                             </a>
                         </li> --%>
                         
-						<!-- 
+						
                          <li class="nav-item start ">
                             <a href="${IncPath}/report/reportview" class="nav-link ">
                                 <i class="icon-bar-chart"></i>
                                 <span class="title">报表统计</span>
                             </a>
                         </li>
-                        -->
+                       
 						<li class="nav-item start ">
                             <a href="${IncPath}/unloader/list" class="nav-link ">
                                 <i class="icon-magnifier"></i>
                                 <span class="title">卸船机实时数据</span>
                             </a>
                         </li>
-                        <!-- 
+                        
  						<li class="nav-item start ">
                             <a href="${IncPath}/task/maintenance" class="nav-link ">
                                 <i class="icon-settings"></i>
                                 <span class="title">作业船舶维护</span>
                             </a>
                         </li>
-                         -->                          
+                                                  
                         <!-- 
                         <li class="nav-item start active open">
                             <a href="#" class="nav-link ">

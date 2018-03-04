@@ -136,8 +136,8 @@
 		        align: 'center',
 		        width: '16%',
 		        formatter: function (value, row, index) {
-		            return ['<a class="btn cabindetail btn-info glyphicon glyphicon-zoom-in icon-white" >船舱</a>',
-		            	'<a class="btn btn-info mod glyphicon glyphicon-edit icon-white" >船舶</a>'].join('');
+		            return ['<a class="btn cabindetail default" ><i class="fa fa-search"></i>船舱</a>',
+		            	'<a class="btn mod default" ><i class="fa fa-pencil-square-o"></i>船舶</a>'].join('');
 		        },
 		    	events: {
 					'click .mod' : function(e, value, row, index) {

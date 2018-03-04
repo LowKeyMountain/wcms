@@ -77,7 +77,7 @@ License: You must have a valid license purchased only from themeforest(the above
 				<div class="row">
 					<div class="col-md-12">
 						<!-- BEGIN PAGE TITLE & BREADCRUMB-->
-						<h3 class="page-title">卸船机总览</h3>
+						<h3 class="page-title icon-settings">&nbsp;卸船机总览</h3>
 						<ul class="page-breadcrumb breadcrumb">
 							<li><i class="fa fa-home"></i> <a
 								href="${BasePath}/web/main"> 主页 </a> <i
@@ -126,31 +126,44 @@ License: You must have a valid license purchased only from themeforest(the above
 				<div class="row">
 					<div class="col-md-12">
 						<!-- BEGIN EXAMPLE TABLE PORTLET-->
-						<div class="portlet light bordered">
-							<div class="portlet-title">
-								<div class="caption font-dark">
-									<i class="icon-settings font-dark"></i> <span
-										class="caption-subject bold uppercase">卸船机总览</span>
-								</div>
+						<div class="portlet box yellow">
+								<div class="portlet-title">
+									<div class="caption">
+										<i><a href="javascript:view_ship(${taskId})">${shipName}</a></i>
+									</div>
+									<div class="tools">
+										<a onclick="javascript:history.back(-1);" class="fa fa-reply"
+										data-original-title="返回" title="返回"> </a> <a
+										onclick="javascript:initTable(${taskId});" class="reload" data-original-title="刷新"
+										title="刷新"> </a>
+									</div>
+								</div>						
+						
+								<div class="portlet-body" style="display: block;">
+					                <form id="formSearch" class="form-horizontal"> 						                
+					                    <div class="form-group" style="margin-top:5px;margin-bottom:5px">
+					                        <label class="control-label col-md-1" for="searchDate">日期: </label>
+					                        <div class="col-md-2">
+												<input class="form_datetime form-control" name="searchDate" placeholder="请选择查询日期" id="searchDate" readonly/>
+					                        </div>
+					                        <label class="control-label col-md-1" for="status">班次: </label>
+					                        <div class="col-md-2">
+												<select id="shift" name="shift" class="form-control select2me">
+													<option value="">请选择...</option>
+								   					<option value="0" >白班</option>
+								   					<option value="1" >夜班</option>
+												</select>
+					                        </div>
+						                        <div class="col-md-1" style="text-align:left;">
+						                            <button type="button" style="margin-left:20px" id="btn_query" class="btn btn-primary btn-sm">筛选</button>
+						                        </div>
+						                        <div class="col-md-1" style="text-align:left;">
+						                            <button type="button" style="margin-left:20px" id="btn_reset" class="btn btn-sm">重置</button>
+						                        </div>
+					                    </div>
 
-							</div>
-							<div class="portlet-body">
-
-								<div class="table-toolbar">
-						                <div class="col-md-12 col-sm-2">
-									        <div class="panel panel-primary">
-									            <div class="panel-heading">
-									            		<h3 class="panel-title"><a href="javascript:view_ship(${taskId})">${shipName}</a></h3>
-									            </div>
-										        <div id="toolbar" class="btn-group">
-										            <button id="btn_add" type="button" onclick="javascript:history.back(-1);" class="btn btn-primary btn-default" >
-										                <span class="fa fa-reply" aria-hidden="true"></span>返回
-										            </button>
-										        </div>										            
-									            <div class="panel-body">
-									                <table id="overview" class="table table-striped table-bordered table-hover table-checkable order-column"></table>												            
-									            </div>
-									        </div>						                
+										<table id="overview" class="table table-striped table-bordered table-hover table-checkable order-column"></table>
+									</form>
 								</div>
 							</div>
 						</div>
@@ -163,8 +176,6 @@ License: You must have a valid license purchased only from themeforest(the above
 			
 			<!-- END CONTENT -->
 		</div>
-	</div>
-</div>
 	<!-- END CONTAINER -->
 	<jsp:include page="../../footer.jsp" />
 	<!--[if lt IE 9]>
@@ -221,7 +232,18 @@ License: You must have a valid license purchased only from themeforest(the above
 	<script>
 		jQuery(document).ready(function() {
 			// initiate layout and plugins
-			initTable(taskId);       
+     		$(".form_datetime").datetimepicker({
+            	startView: 'month',
+            	minView: 'month',
+   			    language:  'zh-CN',
+   			    format: 'yyyy-mm-dd',
+   			    todayBtn:  true,
+   			    autoclose: true,
+            	clearBtn: true,
+            	todayHighlight: true,
+            	showMeridian: true,
+            	endDate: new Date()
+   			});     
 		});
 	</script>						
 		<!-- BEGIN THEME LAYOUT SCRIPTS -->

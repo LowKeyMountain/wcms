@@ -77,16 +77,16 @@ License: You must have a valid license purchased only from themeforest(the above
 				<div class="row">
 					<div class="col-md-12">
 						<!-- BEGIN PAGE TITLE & BREADCRUMB-->
-						<h3 class="page-title">卸船进度</h3>
+						<h3 class="page-title icon-settings">&nbsp;货物进度</h3>
 						<ul class="page-breadcrumb breadcrumb">
 							<li><i class="fa fa-home"></i> <a
 								href="${BasePath}/web/main"> 主页 </a> <i
 								class="fa fa-angle-right"></i></li>
 							<li>管理中心 <i class="fa fa-angle-right"></i>
 							</li>
-							<li><a href="${BasePath}/task/tasklist"> 工作管理 </a><i
+							<li><a href="${BasePath}/task/tasklist">工作管理 </a><i
 								class="fa fa-angle-right"></i></li>							
-							<li>卸船进度</li>
+							<li>货物进度</li>
 						</ul>
 						<!-- END PAGE TITLE & BREADCRUMB-->
 					</div>
@@ -101,38 +101,23 @@ License: You must have a valid license purchased only from themeforest(the above
 	                        </p>
 	                    </div>
                     	-->
-				<div id="popover_content_wrapper" style="display: none">
-					<div><span style="color:red">Hello</span>
-					</div>
-				</div>
             	<div class="row">
 					<div class="col-md-12">
 						<!-- BEGIN EXAMPLE TABLE PORTLET-->
-						<div class="portlet light bordered">
-							<div class="portlet-title">
-								<div class="caption font-dark">
-									<i class="icon-settings font-dark"></i> <span
-										class="caption-subject bold uppercase">卸船进度</span>
+						<div class="portlet box yellow">
+								<div class="portlet-title">
+									<div class="caption">
+										<i><a href="javascript:view_ship(${taskId})">${shipName}</a></i>
+									</div>
+									<div class="tools">
+										<a onclick="javascript:history.back(-1);" class="fa fa-reply"
+										data-original-title="返回" title="返回"> </a> <a
+										onclick="javascript:initTable(${taskId});" class="reload" data-original-title="刷新"
+										title="刷新"> </a>
+									</div>
 								</div>
-
-							</div>
-							<div class="portlet-body">
-
-								<div class="table-toolbar">
-						                <div class="col-md-12 col-sm-2">
-									        <div class="panel panel-primary">
-									            <div class="panel-heading">
-									            		<h3 class="panel-title"><a href="javascript:view_ship(${taskId})">${shipName}</a></h3>
-									            </div>
-										        <div id="toolbar" class="btn-group">
-										            <button id="btn_add" type="button" onclick="javascript:history.back(-1);" class="btn btn-primary btn-default" >
-										                <span class="fa fa-reply" aria-hidden="true"></span>返回
-										            </button>
-										        </div>												
-									            <div class="panel-body">
-									                <table id="unloadProgress" class="table table-striped table-bordered table-hover table-checkable order-column"></table>												            
-									            </div>								            
-									        </div>				                
+								<div class="portlet-body" style="display: block;">											
+									  <table id="unloadProgress" class="table table-striped table-bordered table-hover table-checkable order-column"></table>												            
 								</div>
 							</div>
 						</div>
@@ -143,8 +128,6 @@ License: You must have a valid license purchased only from themeforest(the above
 			</div>
 			<!-- END CONTENT -->
 		</div>
-	</div>
-</div>	
 	<!-- END CONTAINER -->
 	<jsp:include page="../../footer.jsp" />
 	<!--[if lt IE 9]>

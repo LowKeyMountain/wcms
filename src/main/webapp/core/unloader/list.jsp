@@ -221,9 +221,9 @@ License: You must have a valid license purchased only from themeforest(the above
 													    <div class="form-group"  style="margin-top:10px;margin-bottom:5px">
 															<label class="control-label  col-md-1 cy-pad-hor-s">操作时间：</label>
 													        <div class="col-md-4 input-daterange input-group">
-													            <input class="form-control" name="start" placeholder="请选择开始日期" id="startDate" readonly/>
+													            <input class="form_datetime form-control" name="start" placeholder="请选择开始日期" id="startDate" readonly/>
 													            <span class="input-group-addon">--</span>
-																<input class="form-control" name="end" placeholder="请选择结束日期" id="endDate" readonly/>
+																<input class="form_datetime form-control" name="end" placeholder="请选择结束日期" id="endDate" readonly/>
 															</div>
 														</div>
 									                    <div class="form-group" style="margin-top:5px;margin-left:500px;margin-bottom:5px">
@@ -372,8 +372,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
     	            })
     	        }
-				//$('#operationtime').val=
-    	        DatePicker("#startDate","#endDate");
+    	        //DatePicker("#startDate","#endDate");
  			
             });  
         </script>			
