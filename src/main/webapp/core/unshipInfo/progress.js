@@ -79,7 +79,7 @@
 	                for (var i in value) {
 	                	count += value[i].total;
 	                }
-	                return count;
+	                return count.toFixed(2);
 	            }	        
 		    }, {
 		        field: 'finished',
@@ -91,7 +91,7 @@
 	                for (var i in value) {
 	                	count += value[i].finished;
 	                }
-	                return count;
+	                return count.toFixed(2);
 	            }		        
 		    },{
 		        field: 'remainder',
@@ -103,7 +103,7 @@
 	                for (var i in value) {
 	                	count += value[i].remainder;
 	                }
-	                return count;
+	                return count.toFixed(2);
 	            }        
 		    }, {
 		        field: 'clearance',
@@ -115,7 +115,7 @@
 	                for (var i in value) {
 	                	count += value[i].clearance;
 	                }
-	                return count;
+	                return count.toFixed(2);
 	            } 
 		    }],
 			locale : 'zh-CN',// 中文支持,

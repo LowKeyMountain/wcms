@@ -69,7 +69,7 @@
 	                for (var i in value) {
 	                	count += value[i].usedTime;
 	                }
-	                return count;
+	                return count.toFixed(2);
 	            }	
 		    }, {
 		        field: 'unloading',
@@ -81,7 +81,7 @@
 	                for (var i in value) {
 	                	count += value[i].unloading;
 	                }
-	                return count;
+	                return count.toFixed(2);
 	            }			        
 		    }, {
 		        field: 'efficiency',
@@ -89,11 +89,13 @@
 		        align: 'center',
 		        width: '30%',
 	            footerFormatter: function (value) {
-	                var count = 0;
+	                var t_count = 0;	            	
+	                var h_count = 0;
 	                for (var i in value) {
-	                	count += value[i].efficiency;
+	                	t_count += value[i].usedTime;
+	                	h_count += value[i].unloading;
 	                }
-	                return count;
+	                return (h_count/t_count).toFixed(2);
 	            }		        
 		    }],
 			locale : 'zh-CN',// 中文支持,
@@ -204,10 +206,12 @@
         		"click",function(){
 			//$('#unloader').bootstrapTable('refresh');     
 			if ($("#searchDate").val()!="" && $("#shift").val()==""){
-				alert("请选择班次！")
+				alert("请选择班次！");
+				return;
 			}
 			if ($("#searchDate").val()=="" && $("#shift").val()!=""){
-				alert("请选择查询日期！")
+				alert("请选择查询日期！");
+				return;
 			}
 			initTable(taskId);
         })
