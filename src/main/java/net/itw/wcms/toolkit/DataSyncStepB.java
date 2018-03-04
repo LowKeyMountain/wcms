@@ -40,6 +40,8 @@ public class DataSyncStepB extends JdbcDaoSupport {
 	public static boolean isContinue = false;
 	@Autowired
 	private AutoCreateDBTable autoCreateDBTable;
+	@Autowired
+	private DataSyncLogsHelper dataSyncLogsHelper;
 
 	static {
 		try {
@@ -58,84 +60,18 @@ public class DataSyncStepB extends JdbcDaoSupport {
 	/**
 	 * 运行数据同步任务
 	 * 
-	 * @param pattern
-	 *            模式 true|多线程同步、false|单线程同步（默认）
 	 */
-	public void runTask(Boolean pattern) {
-		if (pattern) {
-			new Timer().schedule(new TimerTask() {
-				@Override
-				public void run() {
-					try {
-						start(1);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+	public void runTask() {
+		new Timer().schedule(new TimerTask() {
+			@Override
+			public void run() {
+				try {
+					start();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
-			}, 1000);
-			new Timer().schedule(new TimerTask() {
-				@Override
-				public void run() {
-					try {
-						start(2);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}, 1000);
-			new Timer().schedule(new TimerTask() {
-				@Override
-				public void run() {
-					try {
-						start(3);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}, 1000);
-			new Timer().schedule(new TimerTask() {
-				@Override
-				public void run() {
-					try {
-						start(4);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}, 1000);
-			new Timer().schedule(new TimerTask() {
-				@Override
-				public void run() {
-					try {
-						start(5);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}, 1000);
-			new Timer().schedule(new TimerTask() {
-				@Override
-				public void run() {
-					try {
-						start(6);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}, 1000);
-
-		} else {
-			new Timer().schedule(new TimerTask() {
-				@Override
-				public void run() {
-					try {
-						start();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}, 1000);
-		}
+			}
+		}, 1000);
 	}
 
 	/**
@@ -146,24 +82,8 @@ public class DataSyncStepB extends JdbcDaoSupport {
 	public void start() throws InterruptedException {
 		while (true) {
 			if (!isContinue) {
-				log.info("同步工具：步骤B 运行中...");
+//				log.info("同步工具：步骤B 运行中...");
 				sync();
-				Thread.sleep(1000);
-			}
-		}
-	}
-
-	/**
-	 * 启动(按照卸船机分别同步)
-	 * 
-	 * @param cmsNo
-	 * @throws InterruptedException
-	 */
-	public void start(Integer cmsNo) throws InterruptedException {
-		while (true) {
-			if (!isContinue) {
-				log.info("同步工具：步骤B 运行中...");
-				sync(cmsNo);
 				Thread.sleep(1000);
 			}
 		}
@@ -175,7 +95,7 @@ public class DataSyncStepB extends JdbcDaoSupport {
 	 * @throws InterruptedException
 	 */
 	public void restart() throws InterruptedException {
-		log.info("同步工具：步骤B 重启中...");
+//		log.info("同步工具：步骤B 重启中...");
 		if (isContinue) {
 			isContinue = false;
 		}
@@ -187,36 +107,18 @@ public class DataSyncStepB extends JdbcDaoSupport {
 	 */
 	public void stop() {
 		isContinue = true;
-		log.info("同步工具：步骤B 已关闭...");
+//		log.info("同步工具：步骤B 已关闭...");
 	}
 
 	/**
 	 * 将临时表数据计算后同步到各船舶任务子表
 	 * 
-	 * @param cmsNo
-	 */
-	public void sync() {
-		sync(null);
-	}
-
-	/**
-	 * 将临时表数据计算后同步到各船舶任务子表
-	 * 
-	 * @param cmsNo
 	 */
 	@Transactional
-	public void sync(Integer cmsNo) {
-		int num = 0;
+	public void sync() {
 		try {
-			List<Map<String, Object>> list = null;
-			if (cmsNo == null) {
-				// 查询临时表所有卸船机待处理数据
-				list = this.getJdbcTemplate().queryForList(sqlMap.getSql("01"));
-			} else {
-				// 查询临时表指定卸船机待处理数据
-				list = this.getJdbcTemplate().queryForList(sqlMap.getSql("17"), "ABB_GSU_" + cmsNo);
-			}
-			log.info("待计算数据" + list.size() + "条。");
+			List<Map<String, Object>> list = this.getJdbcTemplate().queryForList(sqlMap.getSql("01"));
+//			log.info("待计算数据" + list.size() + "条。");
 			for (Map<String, Object> map : list) {
 
 				Integer operationType = (Integer) map.get("operationType");
@@ -254,6 +156,10 @@ public class DataSyncStepB extends JdbcDaoSupport {
 							this.getJdbcTemplate().update(sql, args);
 						}
 					}
+					
+					args = new Object[] { "未找到所属船舶！", id, cmsid };
+					dataSyncLogsHelper.dataSyncStepbLogs(2, args);
+					
 					// 删除临时表作业数据
 					args = new Object[] { id, cmsid };
 					this.getJdbcTemplate().update(sqlMap.getSql("04"), args);
@@ -261,7 +167,7 @@ public class DataSyncStepB extends JdbcDaoSupport {
 				}
 
 				if (cabinNums.size() > 1) {
-					log.error("数据异常：数据编号[" + id + "]|卸船机编号[" + cmsid + "] 匹配到多个船舱信息！");
+//					log.error("数据异常：数据编号[" + id + "]|卸船机编号[" + cmsid + "] 匹配到多个船舱信息！");
 				}
 				cabinId = (Integer) cabinNums.get(0).get("id");
 				taskId = (Integer) cabinNums.get(0).get("taskId");
@@ -273,14 +179,14 @@ public class DataSyncStepB extends JdbcDaoSupport {
 					e.printStackTrace();
 				}
 
-				groupId = calc(taskId, cabinId, cmsid, operationType, time);
-
 				// 更新表b数据
 				try {
 					// 【任务子表】将临时表作业信息插入子表
 					if (1 == operationType) {
+						// 获取组编号
+						groupId = calc(taskId, cabinId, cmsid, operationType, time);
 						
-						// 维护开工时间（由系统自动计算，以船舶的靠泊时间为起始点，判断卸船机第一斗的时间为开工时间）-- start
+						// 维护开工时间（由系统自动计算，以船舶的靠泊时间为起始点，判断卸船机第一斗的时间为开工时间）
 						String beginTime = this.getJdbcTemplate().queryForObject(
 								" SELECT t.begin_time from tab_task t WHERE t.id = ? ", String.class, taskId);
 						if (beginTime == null) {
@@ -288,15 +194,17 @@ public class DataSyncStepB extends JdbcDaoSupport {
 									"UPDATE tab_task t SET t.begin_time = ? WHERE t.id = ?",
 									new Object[] { time, taskId });
 						}
-						// -- end
 						
 						args = new Object[] { groupId, id, cmsid };
 						this.getJdbcTemplate().update(sqlMap.getSql("03", taskId), args);
 					}
+					
+					args = new Object[] { "已找到所属船舶！", groupId, id, cmsid };
+					dataSyncLogsHelper.dataSyncStepbLogs(1, args);
+					
 					// 删除临时表作业数据
 					args = new Object[] { id, cmsid };
 					this.getJdbcTemplate().update(sqlMap.getSql("04"), args);
-					num++;
 					log.info("数据编号[" + id + "]|卸船机编号[" + cmsid + "] 数据已计算组信息！");
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -308,9 +216,7 @@ public class DataSyncStepB extends JdbcDaoSupport {
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			log.error(e.getMessage());
-		} finally {
-			log.info("数据已处理" + num + "条。");
-		}
+		} finally {}
 	}
 
 	/**
@@ -406,7 +312,7 @@ public class DataSyncStepB extends JdbcDaoSupport {
 			default:
 				break;
 			}
-			log.error("数据异常：船舱编号[" + cabinId + "]|卸船机编号[" + cmsid + "] >> 查到多条未关闭的组信息！");
+//			log.error("数据异常：船舱编号[" + cabinId + "]|卸船机编号[" + cmsid + "] >> 查到多条未关闭的组信息！");
 		}
 
 		return groupId;
