@@ -341,7 +341,8 @@ public class TaskController {
 			jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "'}"));
 			QueryOptions options = new QueryOptions();
 			options.args = new Object[] { taskId, taskId, taskId, taskId };
-			result = infoQueryHelper.doQueryInfo(jsonObject, options);		} catch (Exception e) {
+			result = infoQueryHelper.doQueryInfo(jsonObject, options);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		json.put("rows",result.get("data"));

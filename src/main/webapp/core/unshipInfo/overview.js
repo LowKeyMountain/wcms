@@ -17,7 +17,7 @@
 			 sidePagination : 'server',
 			 pageNumber : 1, // 初始化加载第一页，默认第一页			 
 			 pageSize : 10,// 单页记录数
-			 pageList : [20,30,50],// 分页步进值
+			 pageList : [10,20,30,50],// 分页步进值
 //			 showPaginationSwitch : true,// 是否显示选择分页数按钮
 			 showHeader : true,
 //			 showRefresh : true,// 刷新按钮
@@ -63,12 +63,12 @@
                 }
 		    }, {
 		        field: 'usedTime',
-		        title: '台时',
+		        title: '用时|h',
 		        align: 'center',
 		        width: '10%',
 		    }, {
 		        field: 'unloading',
-		        title: '作业量',
+		        title: '卸货量|t',
 		        align: 'center',
 		        width: '10%',
 		    }, {

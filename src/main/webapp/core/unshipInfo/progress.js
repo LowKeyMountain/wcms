@@ -17,9 +17,9 @@
 			 sidePagination : 'server',
 			 pageNumber : 1, // 初始化加载第一页，默认第一页			 
 			 pageSize : 10,// 单页记录数
-			 pageList : [10,20,30,50],// 分页步进值
+//			 pageList : [10,20,30,50],// 分页步进值
 //			 showPaginationSwitch : true,// 是否显示选择分页数按钮
-			 showHeader : true,
+//			 showHeader : true,
 //			 showRefresh : true,// 刷新按钮
 			 // showToggle : true,// 是否显示 切换试图（table/card）按钮
 //			 showColumns : true,// 是否显示 内容列下拉框
@@ -60,9 +60,9 @@
 		        width: '10%'
 		    },*/ {
 		        field: 'cargoName',
-		        title: '货物名称',
+		        title: '货名',
 		        align: 'center',
-		        width: '10%',
+//		        width: '10%',
 		        formatter: function (value, row, index) {
                     //var html = '<a href="#" data-toggle="popover" data-original-title="货物详情" class="btn btn-success pop addon">'+row.cargoName+'</a>';
                     var html = '<a href="javascript:view_click(' + row.cargoId + ')" class="font-weight-normal">' + row.cargoName + '</a>';
@@ -73,43 +73,50 @@
 		        field: 'total',
 		        title: '总量',
 		        align: 'center',
-		        width: '10%',
-	            footerFormatter: function (value1) {
-	                var tcount = 0;
-	                for (var t in value1) {
-	                	tcount += value1[t].total;
+//		        width: '10%',
+	            footerFormatter: function (value) {
+	                var count = 0;
+	                for (var i in value) {
+	                	count += value[i].total;
 	                }
-	                return tcount;
+	                return count;
 	            }	        
 		    }, {
 		        field: 'finished',
 		        title: '已完成',
 		        align: 'center',
-		        width: '10%',
-	            footerFormatter: function (value2) {
-	                var fcount = 0;
-	                for (var f in value2) {
-	                	fcount += value2[f].total;
+//		        width: '10%',
+	            footerFormatter: function (value) {
+	                var count = 0;
+	                for (var i in value) {
+	                	count += value[i].finished;
 	                }
-	                return fcount;
+	                return count;
 	            }		        
 		    },{
 		        field: 'remainder',
 		        title: '剩余量',
 		        align: 'center',
-		        width: '10%',
-	            footerFormatter: function (value3) {
-	                var rcount = 0;
-	                for (var r in value3) {
-	                	rcount += value3[r].total;
+//		        width: '10%',
+	            footerFormatter: function (value) {
+	                var count = 0;
+	                for (var i in value) {
+	                	count += value[i].remainder;
 	                }
-	                return rcount;
-	            }		        
+	                return count;
+	            }        
 		    }, {
 		        field: 'clearance',
 		        title: '清舱量',
 		        align: 'center',
-		        width: '10%'	        
+//		        width: '10%',
+	            footerFormatter: function (value) {
+	                var count = 0;
+	                for (var i in value) {
+	                	count += value[i].clearance;
+	                }
+	                return count;
+	            } 
 		    }],
 			locale : 'zh-CN',// 中文支持,
 			responseHandler : function(res) {

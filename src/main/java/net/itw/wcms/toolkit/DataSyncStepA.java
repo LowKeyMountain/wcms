@@ -216,7 +216,9 @@ public class DataSyncStepA extends JdbcDaoSupport {
 
 				// 卸船机数据插入表b
 				try {
-					Object[] args = new Object[] { id, time, cmsid, pushTime, oneTask, direction, unloaderMove + 7,
+//					Object[] args = new Object[] { id, time, cmsid, pushTime, oneTask, direction, unloaderMove + 7,
+//							operationType, 0, 0 };
+					Object[] args = new Object[] { id, time, cmsid, pushTime, oneTask, direction, unloaderMove,
 							operationType, 0, 0 };
 					this.getJdbcTemplate().update(sqlMap.getSql("03"), args);
 				} catch (Exception e) {
