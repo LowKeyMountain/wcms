@@ -1,4 +1,5 @@
 	function initTable(){
+		
 		$('#unloader').bootstrapTable("destroy").bootstrapTable({  // init via javascript
 			
 			method : 'post',
