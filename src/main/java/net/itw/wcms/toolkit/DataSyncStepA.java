@@ -29,7 +29,6 @@ public class DataSyncStepA extends JdbcDaoSupport {
 	private final Logger log = Logger.getLogger("dataSyncInfo");
 
 	private static SqlMap sqlMap;
-	public static boolean isContinue = false;
 	@Autowired
 	private DataSyncLogsHelper dataSyncLogsHelper;
 
@@ -52,50 +51,19 @@ public class DataSyncStepA extends JdbcDaoSupport {
 			@Override
 			public void run() {
 				try {
-					start();
+					while (true) {
+						if (!DataSyncStepC.isStartStepC()) {
+							for (int i = 1; i <= 6; i++) {
+								sync(i);
+							}
+							Thread.sleep(1000);
+						}
+					}
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
 		}, 1000);
-	}
-
-	/**
-	 * 启动
-	 * 
-	 * @throws InterruptedException
-	 */
-	public void start() throws InterruptedException {
-		while (true) {
-			if (!isContinue) {
-//				log.info("同步工具：步骤A 运行中...");
-				for (int i = 1; i <= 6; i++) {
-					sync(i);
-				}
-				Thread.sleep(1000);
-			}
-		}
-	}
-
-	/**
-	 * 重启
-	 * 
-	 * @throws InterruptedException
-	 */
-	public void restart() throws InterruptedException {
-//		log.info("同步工具：步骤A 重启中...");
-		if (isContinue) {
-			isContinue = false;
-		}
-	}
-
-	/**
-	 * 关闭
-	 * 
-	 */
-	public void stop() {
-		isContinue = true;
-//		log.info("同步工具：步骤A 已关闭...");
 	}
 
 	/**
@@ -138,8 +106,9 @@ public class DataSyncStepA extends JdbcDaoSupport {
 
 				// 卸船机数据插入表b
 				try {
-//					Object[] args = new Object[] { id, time, cmsid, pushTime, oneTask, direction, unloaderMove + 7,
-//							operationType, 0, 0 };
+					// Object[] args = new Object[] { id, time, cmsid, pushTime,
+					// oneTask, direction, unloaderMove + 7,
+					// operationType, 0, 0 };
 					Object[] args = new Object[] { id, time, cmsid, pushTime, oneTask, direction, unloaderMove,
 							operationType, 0, 0 };
 					this.getJdbcTemplate().update(sqlMap.getSql("03"), args);
@@ -173,7 +142,7 @@ public class DataSyncStepA extends JdbcDaoSupport {
 		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
 		if (ctx != null) {
 			DataSyncStepA helper = (DataSyncStepA) ctx.getBean("dataSyncStepA");
-			helper.start();
+			// helper.start();
 		}
 	}
 

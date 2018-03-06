@@ -19,8 +19,7 @@
 			 SELECT cabin.id, t.task_id AS 'taskId' FROM tab_cabin cabin LEFT JOIN ( SELECT c.*, task.`offset`, 
 			 task.`status`, task.berthing_time, CASE WHEN task.end_time IS NULL THEN CURRENT_TIMESTAMP () ELSE task.end_time 
 			 END AS 'end_time' FROM tab_cargo c LEFT JOIN tab_task task ON c.task_id = task.id ) t ON cabin.cargo_id = 
-			 t.id WHERE t.`status` = 1 AND cabin.start_position <= ? AND cabin.end_position >= ? AND t.berthing_time <= ? AND 
-			 t.end_time >= ? 
+			 t.id WHERE t.`status` = 1 AND cabin.start_position <= ? AND cabin.end_position >= ? AND t.berthing_time <= ? 
 			]]>
 			</value>
 		</entry>

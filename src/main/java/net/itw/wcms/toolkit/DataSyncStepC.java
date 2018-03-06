@@ -3,6 +3,7 @@ package net.itw.wcms.toolkit;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
@@ -29,13 +30,20 @@ public class DataSyncStepC extends JdbcDaoSupport {
 	private final Logger log = Logger.getLogger("dataSyncInfo");
 
 	private static SqlMap sqlMap;
-	@Autowired
-	private DataSyncStepB dataSyncStepB;
-	@Autowired
-	private AutoCreateDBTable autoCreateDBTable;
+	private static Map<Object, Object> taskCache = new HashMap<>();
 
-	public List<Map<String, Object>> queryForList(String sql, Object... args) {
-		return this.getJdbcTemplate().queryForList(sql, args);
+	/**
+	 * 是否启动步骤C <br>
+	 * 
+	 * 启动步骤C时，步骤A、B需暂停；步骤C执行完后，重启步骤A、B
+	 * 
+	 * @return
+	 */
+	public static boolean isStartStepC() {
+		if (taskCache.isEmpty()) {
+			return false;
+		}
+		return true;
 	}
 
 	static {
@@ -48,6 +56,15 @@ public class DataSyncStepC extends JdbcDaoSupport {
 		}
 	}
 
+	@Autowired
+	private DataSyncStepB dataSyncStepB;
+	@Autowired
+	private AutoCreateDBTable autoCreateDBTable;
+
+	public List<Map<String, Object>> queryForList(String sql, Object... args) {
+		return this.getJdbcTemplate().queryForList(sql, args);
+	}
+
 	/**
 	 * 启动
 	 * 
@@ -55,10 +72,10 @@ public class DataSyncStepC extends JdbcDaoSupport {
 	 * @throws Exception
 	 */
 	public void start(Integer taskId) throws Exception {
-//		log.info("同步工具：步骤C 开始...");
 		new Timer().schedule(new TimerTask() {
 			@Override
 			public void run() {
+				taskCache.put(taskId, taskId);
 				try {
 					// 自动创建任务子表
 					autoCreateDBTable.createTable(taskId);
@@ -67,9 +84,9 @@ public class DataSyncStepC extends JdbcDaoSupport {
 				}
 				delete(taskId);
 				resync(taskId);
+				taskCache.remove(taskId);
 			}
 		}, 1000);
-//		log.info("同步工具：步骤C 结束...");
 	}
 
 	private void delete(Integer taskId) {
@@ -79,7 +96,8 @@ public class DataSyncStepC extends JdbcDaoSupport {
 			// 【任务子表】删除任务子表：组信息
 			this.getJdbcTemplate().update(sqlMap.getSql("03", "tab_temp_c_" + taskId));
 			// 删除任务表开工时间
-			this.getJdbcTemplate().update("UPDATE tab_task t SET t.begin_time = null WHERE t.id = ?", new Object[] { taskId });
+			this.getJdbcTemplate().update("UPDATE tab_task t SET t.begin_time = null WHERE t.id = ?",
+					new Object[] { taskId });
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			log.error(e.getMessage());
@@ -96,8 +114,8 @@ public class DataSyncStepC extends JdbcDaoSupport {
 		int num = 0;
 		try {
 			// 查询临时表待处理数据
-			List<Map<String, Object>> list = this.getJdbcTemplate().queryForList(sqlMap.getSql("04"), tid, tid, tid, tid);
-//			log.info("待计算数据" + list.size() + "条。");
+			List<Map<String, Object>> list = this.getJdbcTemplate().queryForList(sqlMap.getSql("04"), tid, tid, tid,
+					tid);
 			for (Map<String, Object> map : list) {
 
 				Integer operationType = (Integer) map.get("operationType");
@@ -108,18 +126,16 @@ public class DataSyncStepC extends JdbcDaoSupport {
 				Date time = (Date) map.get("Time");
 				Integer id = (Integer) map.get("uid");
 				String cmsid = (String) map.get("Cmsid");
-//				Double unloaderMove = (Double) map.get("unloaderMove") + 7;
+				// Double unloaderMove = (Double) map.get("unloaderMove") + 7;
 				Double unloaderMove = (Double) map.get("unloaderMove");
 
 				// 查询卸船机作业数据任务ID、船舱ID
 				Object[] args = new Object[] { unloaderMove, unloaderMove, time, time };
-				List<Map<String, Object>> cabinNums = this.getJdbcTemplate()
-						.queryForList(sqlMap.getSql("06"), args);
+				List<Map<String, Object>> cabinNums = this.getJdbcTemplate().queryForList(sqlMap.getSql("06"), args);
 
 				if (cabinNums == null || cabinNums.isEmpty()) {
 					log.error("数据异常：数据编号[" + id + "]|卸船机编号[" + cmsid + "] 未找到船舱信息！");
-					List<Map<String, Object>> tasks = this.getJdbcTemplate()
-							.queryForList(sqlMap.getSql("07"), args);
+					List<Map<String, Object>> tasks = this.getJdbcTemplate().queryForList(sqlMap.getSql("07"), args);
 					if (tasks != null && !tasks.isEmpty()) {
 						String sql = "";
 						taskId = (Integer) tasks.get(0).get("taskId");
@@ -148,26 +164,23 @@ public class DataSyncStepC extends JdbcDaoSupport {
 					continue;
 				}
 
-
 				// 更新表b数据
 				try {
 					// 【任务子表】将临时表作业数据插入子表
-					if ( 1 == operationType) {
+					if (1 == operationType) {
 						// 获取组编号
 						groupId = dataSyncStepB.calc(taskId, cabinId, cmsid, operationType, time);
-						
+
 						// 维护开工时间（由系统自动计算，以船舶的靠泊时间为起始点，判断卸船机第一斗的时间为开工时间）
 						String beginTime = this.getJdbcTemplate().queryForObject(
 								" SELECT t.begin_time from tab_task t WHERE t.id = ? ", String.class, taskId);
 						if (beginTime == null) {
-							this.getJdbcTemplate().update(
-									"UPDATE tab_task t SET t.begin_time = ? WHERE t.id = ?",
+							this.getJdbcTemplate().update("UPDATE tab_task t SET t.begin_time = ? WHERE t.id = ?",
 									new Object[] { time, taskId });
 						}
-						
+
 						this.getJdbcTemplate().update(sqlMap.getSql("05", taskId), groupId, id, cmsid);
 						num++;
-//						log.info("数据编号[" + id + "]|卸船机编号[" + cmsid + "] 数据已计算组信息！");
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -180,7 +193,6 @@ public class DataSyncStepC extends JdbcDaoSupport {
 			e.printStackTrace();
 			log.error(e.getMessage());
 		} finally {
-//			log.info("数据已处理" + num + "条。");
 		}
 	}
 
