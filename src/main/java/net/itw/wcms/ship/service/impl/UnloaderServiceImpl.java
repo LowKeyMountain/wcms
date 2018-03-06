@@ -71,7 +71,7 @@ public class UnloaderServiceImpl implements IUnloaderService {
 					+ " (Time, Cmsid, PushTime, OneTask, direction, unloaderMove, "
 					+ "operationType) values(?,?,?,?,?,?,?) ";
 			Object[] args = new Object[] {unloader.getTime(), unloader.getCmsId(),
-					unloader.getPushTime(),unloader.getOneTask(), unloader.getDirection(), 
+					unloader.getPushTime(),unloader.getOneTask(), 0, 
 					unloader.getUnloaderMove(), unloader.getOperationType() };
 			result = jdbcTemplate.update(sql, args);
 		} catch (Exception e) {

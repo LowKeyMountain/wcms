@@ -96,6 +96,11 @@ public class UnloaderController {
 		JSONObject jsonObject = new JSONObject();
 		String tableName="";
 		String cmsId= params.get("fcmsid");
+		unloader.setOperationType(params.get("operationtype"));		
+		unloader.setTime(DateTimeUtils.strDateTime2Date(params.get("operationtime")));
+		unloader.setPushTime(new Date());
+//		unloader.setDirection(params.get("direction"));
+		unloader.setUnloaderMove(Float.parseFloat(params.get("move")));	
 		if("1".equals(cmsId)) {
 			unloader.setCmsId("ABB_GSU_1");
 			tableName="tab_unloader_1";
@@ -115,12 +120,12 @@ public class UnloaderController {
 			unloader.setCmsId("ABB_GSU_6");
 			tableName="tab_unloader_6";
 		}
-		unloader.setTime(DateTimeUtils.strDateTime2Date(params.get("operationtime")));
-		unloader.setPushTime(new Date());
-		unloader.setOneTask(Float.parseFloat(params.get("onetask")));
-		unloader.setUnloaderMove(Float.parseFloat(params.get("move")));
-		unloader.setOperationType(params.get("operationtype"));
-		unloader.setDirection(params.get("direction"));
+
+		if ("0".equals(params.get("operationtype"))) {
+			unloader.setOneTask(0f);
+		}else if("1".equals(params.get("operationtype"))){
+			unloader.setOneTask(Float.parseFloat(params.get("onetask")));
+		}
 		
 		try {
 			int val = unloaderService.addUnloader(unloader , tableName);

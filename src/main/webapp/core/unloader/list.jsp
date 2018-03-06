@@ -71,77 +71,77 @@ License: You must have a valid license purchased only from themeforest(the above
 
 		<!-- BEGIN CONTENT -->
 
-								<!-- 模态对话框 -->
-								<div id="addModal" class="modal fade" role="dialog" tabindex="-1" aria-hidden="true" aria-labelledby="myModalLabel" backdrop=false style="display: block;">
-								    <div class="modal-dialog">
-								        <div class="modal-content">
-								            <div class="modal-header bg-primary">
-								                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-								                <h4 class="modal-title">
-								                    <i class="icon-pencil"></i>
-								                    <a class="close" data-dismiss="modal">×</a>
-								                    
-								                    <span id="lblAddTitle" style="font-weight:bold">卸船机数据推送模拟</span>
-								                </h4>
-								            </div>
-								                <div class="modal-body" style="text-align:left;">
-								                    <form  id ='addForm' class="bs-example bs-example-form" role = "form">
-								                    <div class="modal-body" >
-														<div class="alert alert-danger display-hide">
-															<button class="close" data-close="alert"></button>
-															数据格式异常. 请重新输入.
-														</div>
-														<div class="alert alert-success display-hide">
-															<button class="close" data-close="alert"></button>
-															数据校验通过!
-														</div>
-								                            <div class = "input-group" >
-								                                <span class="input-group-addon text-center"><b class="icon-td">Cms卸船机编号</b><span class="required"> *</span></span>
-																<select id="fcmsid" name="fcmsid" class="form-control select2me" style="width:240px;">
-												   					<option value="1" >ABB_GSU_1</option>
-												   					<option value="2" >ABB_GSU_2</option>
-												   					<option value="3" >ABB_GSU_3</option>
-												   					<option value="4" >ABB_GSU_4</option>
-												   					<option value="5" >ABB_GSU_5</option>
-												   					<option value="6" >ABB_GSU_6</option>
-																</select>								                                
-								                            </div>
-								                            <div class = "input-group" >
-								                                <span class="input-group-addon text-center"><b class="icon-td">操作类型</b></span>
-																<select id="operationtype" name="operation_type" class="form-control select2me"  style="width:240px;">
-												   					<option value="1" >作业量信息</option>
-												   					<option value="0" >大车位置</option>
-																</select>
-								                            </div>
-								                            <div class = "input-group" >
-								                                <span class="input-group-addon text-center"><b class="icon-td">操作时间</b></span>
-																<input type = "text" id="operationtime" name="operationtime" class="form_datetime form-control" placeholder="请选择操作时间" style="width:240px;" readonly/>
-								                            </div>								                            
-															<div class = "input-group" >
-								                                <span class="input-group-addon text-center"><b class="icon-td">位移方向</b></span>
-																<select id="direction" name="operation_type" class="form-control select2me"  style="width:120px;">
-												   					<option value="0" >正方向</option>
-												   					<option value="1" >反方向</option>
-																</select>
-															</div>
-															<div class = "input-group" >
-								                                <span class="input-group-addon text-center"><b class="icon-td">卸船机移动位置</b></span>
-								                                <input type = "text"  class=" form-control"  name="move" id="move"  placeholder="请输入移动位置"  style="width:240px;">
-								                            </div>								                            
-															<div class = "input-group" >
-								                                <span class="input-group-addon text-center"><b class="icon-td">一次抓钩作业量</b></span>
-								                                <input type = "text"  class=" form-control"  name="onetask" id="onetask"  placeholder="请输入作业量"  style="width:240px;">
-								                            </div>
-								                    </div>                            
-								                    </form>
-								                </div>
-												<div class="modal-footer bg-info"  style="width:500px;">
-													<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭</button>
-													<button type="button" id="btn_submit" class="btn btn-primary" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存</button>
-												</div>
-								        </div>
-								    </div>
-								</div>
+			<!-- 模态对话框 -->
+			<div id="addModal" class="modal fade" role="dialog" tabindex="-1" aria-hidden="true" aria-labelledby="myModalLabel" backdrop=false style="display: block;">
+			    <div class="modal-dialog">
+			        <div class="modal-content">
+			            <div class="modal-header bg-primary">
+			                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+			                <h4 class="modal-title">
+			                    <i class="icon-pencil"></i>
+			                    <a class="close" data-dismiss="modal">×</a>
+			                    
+			                    <span id="lblAddTitle" style="font-weight:bold">卸船机数据推送模拟</span>
+			                </h4>
+			            </div>
+			                <div class="modal-body" style="text-align:left;">
+			                    <form  id ='addForm' class="bs-example bs-example-form" role = "form">
+			                    <div class="modal-body" >
+									<div class="alert alert-danger display-hide">
+										<button class="close" data-close="alert"></button>
+										数据格式异常. 请重新输入.
+									</div>
+									<div class="alert alert-success display-hide">
+										<button class="close" data-close="alert"></button>
+										数据校验通过!
+									</div>
+			                            <div class = "input-group" >
+			                                <span class="input-group-addon text-center"><b class="icon-td">Cms卸船机编号</b></span>
+											<select id="fcmsid" name="fcmsid" class="form-control select2me" style="width:240px;">
+							   					<option value="1" >ABB_GSU_1</option>
+							   					<option value="2" >ABB_GSU_2</option>
+							   					<option value="3" >ABB_GSU_3</option>
+							   					<option value="4" >ABB_GSU_4</option>
+							   					<option value="5" >ABB_GSU_5</option>
+							   					<option value="6" >ABB_GSU_6</option>
+											</select>								                                
+			                            </div>
+			                            <div class = "input-group" >
+			                                <span class="input-group-addon text-center"><b class="icon-td">操作类型</b></span>
+											<select id="operationtype" name="operationtype" class="form-control select2me"  style="width:240px;">
+							   					<option value="1" >作业量信息</option>
+							   					<option value="0" >大车位置</option>
+											</select>
+			                            </div>
+			                            <div class = "input-group" >
+			                                <span class="input-group-addon text-center"><b class="icon-td">操作时间</b></span>
+											<input type = "text" id="operationtime" name="operationtime" class="form_datetime form-control" placeholder="请选择操作时间" style="width:240px;" readonly/>
+			                            </div>								                            
+<!-- 										<div class = "input-group" >
+			                                <span class="input-group-addon text-center"><b class="icon-td">位移方向</b></span>
+											<select id="direction" name="direction" class="form-control select2me"  style="width:120px;">
+							   					<option value="0" >正方向</option>
+							   					<option value="1" >反方向</option>
+											</select>
+										</div> -->
+										<div class = "input-group" id="move_div">
+			                                <span class="input-group-addon text-center"><b class="icon-td">卸船机移动位置</b></span>
+			                                <input type = "text"  class=" form-control"  name="move" id="move"  placeholder="请输入移动位置" value="0" style="width:240px;">
+			                            </div>								                            
+										<div class = "input-group" id="onetask_div">
+			                                <span class="input-group-addon text-center"><b class="icon-td">一次抓钩作业量</b></span>
+			                                <input type = "text"  class=" form-control"  name="onetask" id="onetask"  placeholder="请输入作业量" value="0" style="width:240px;">
+			                            </div>
+			                    </div>                            
+			                    </form>
+			                </div>
+							<div class="modal-footer bg-info"  style="width:500px;">
+								<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭</button>
+								<button type="button" id="btn_submit" class="btn btn-primary" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存</button>
+							</div>
+			        </div>
+			    </div>
+			</div>
 		<div class="page-content-wrapper">
 			<!-- BEGIN CONTENT BODY -->
 			<div class="page-content">
@@ -253,6 +253,7 @@ License: You must have a valid license purchased only from themeforest(the above
 			</div>
 			<!-- END CONTENT -->
 		</div>
+	</div>
 	</div>
 	<!-- END CONTAINER -->
 	<jsp:include page="../../footer.jsp" />
