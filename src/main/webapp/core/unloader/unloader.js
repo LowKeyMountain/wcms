@@ -17,7 +17,7 @@
 			 sidePagination : 'server',
 			 pageNumber : 1, // 初始化加载第一页，默认第一页			 
 			 pageSize : 10,// 单页记录数
-			 pageList : [20,30,50],// 分页步进值
+			 pageList : [10,20,30,50],// 分页步进值
 //			 showPaginationSwitch : true,// 是否显示选择分页数按钮
 			 showHeader : true,
 			 showRefresh : true,// 刷新按钮
@@ -122,13 +122,26 @@
 
 $(function(){
 		initTable();
-		
+		$("#operationtype").change(function(){ 
+			if($('#operationtype').val() == "0"){
+	       		$('#onetask_div').hide();
+			}else{
+	       		$('#onetask_div').show();
+			}
+		}) 		
 		//查询按钮
         $("#btn_query").off().on(
         		"click",function(){
         			//$('#unloader').bootstrapTable('refresh');     
         			initTable();
         })
+
+        $("#btn_add").off().on(
+        		"click",function(){
+         	    $('#addForm')[0].reset();
+	       		$('#onetask_div').show();
+        })
+              
         //重置按钮事件  
         $("#btn_reset").off().on("click",function(){  
             $("#startDate").val("");
@@ -146,6 +159,10 @@ $(function(){
         $('#btn_submit').modal({backdrop: 'static', show:false,  keyboard: false});
         
         $('#btn_submit').off().on("click", function () {
+        	if ($("#operationtime").val() == ""){
+        		alert('请选择操作时间！');
+        		return;
+        	}
         	var data={
         			fcmsid:$("#fcmsid").val(),
         			operationtype:$("#operationtype").val(),
