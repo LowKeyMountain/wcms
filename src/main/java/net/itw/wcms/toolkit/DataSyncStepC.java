@@ -79,12 +79,13 @@ public class DataSyncStepC extends JdbcDaoSupport {
 				try {
 					// 自动创建任务子表
 					autoCreateDBTable.createTable(taskId);
+					delete(taskId);
+					resync(taskId);
 				} catch (SQLException e) {
 					e.printStackTrace();
+				} finally {
+					taskCache.remove(taskId);
 				}
-				delete(taskId);
-				resync(taskId);
-				taskCache.remove(taskId);
 			}
 		}, 1000);
 	}
@@ -168,9 +169,17 @@ public class DataSyncStepC extends JdbcDaoSupport {
 				try {
 					// 【任务子表】将临时表作业数据插入子表
 					if (1 == operationType) {
+						
+						// 查询临时表数据是否存在
+						args = new Object[] { id, cmsid };
+						List<?> list2 = this.getJdbcTemplate().queryForList(sqlMap.getSql("05-1", taskId), args);
+						if (!list2.isEmpty()) {
+							continue;
+						}
+						
 						// 获取组编号
 						groupId = dataSyncStepB.calc(taskId, cabinId, cmsid, operationType, time);
-
+						
 						// 维护开工时间（由系统自动计算，以船舶的靠泊时间为起始点，判断卸船机第一斗的时间为开工时间）
 						String beginTime = this.getJdbcTemplate().queryForObject(
 								" SELECT t.begin_time from tab_task t WHERE t.id = ? ", String.class, taskId);
@@ -178,9 +187,9 @@ public class DataSyncStepC extends JdbcDaoSupport {
 							this.getJdbcTemplate().update("UPDATE tab_task t SET t.begin_time = ? WHERE t.id = ?",
 									new Object[] { time, taskId });
 						}
-
 						this.getJdbcTemplate().update(sqlMap.getSql("05", taskId), groupId, id, cmsid);
 						num++;
+						
 					}
 				} catch (Exception e) {
 					e.printStackTrace();

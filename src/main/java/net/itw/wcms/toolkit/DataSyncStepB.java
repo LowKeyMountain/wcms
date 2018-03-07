@@ -101,9 +101,12 @@ public class DataSyncStepB extends JdbcDaoSupport {
 				// 查询卸船机作业数据任务ID、船舱ID
 				Object[] args = new Object[] { unloaderMove, unloaderMove, time };
 				List<Map<String, Object>> cabinNums = this.getJdbcTemplate().queryForList(sqlMap.getSql("02"), args);
+				String dbTime = this.getJdbcTemplate().queryForObject(" select now() time ", String.class);
 
 				if (cabinNums == null || cabinNums.isEmpty()) {
 					log.error("数据异常：数据编号[" + id + "]|卸船机编号[" + cmsid + "] 未找到船舱信息！");
+					log.error("数据异常：数据编号[" + id + "]|卸船机编号[" + cmsid + "] 入参数据：位移|" + unloaderMove + "、操作时间|" + time
+							+ "、当前时间|" + dbTime);
 					args = new Object[] { unloaderMove, unloaderMove, time, time };
 					List<Map<String, Object>> tasks = this.getJdbcTemplate().queryForList(sqlMap.getSql("18"), args);
 					if (tasks != null && !tasks.isEmpty()) {
@@ -152,19 +155,27 @@ public class DataSyncStepB extends JdbcDaoSupport {
 				try {
 					// 【任务子表】将临时表作业信息插入子表
 					if (1 == operationType) {
-						// 获取组编号
-						groupId = calc(taskId, cabinId, cmsid, operationType, time);
-
-						// 维护开工时间（由系统自动计算，以船舶的靠泊时间为起始点，判断卸船机第一斗的时间为开工时间）
-						String beginTime = this.getJdbcTemplate().queryForObject(
-								" SELECT t.begin_time from tab_task t WHERE t.id = ? ", String.class, taskId);
-						if (beginTime == null) {
-							this.getJdbcTemplate().update("UPDATE tab_task t SET t.begin_time = ? WHERE t.id = ?",
-									new Object[] { time, taskId });
+						
+						// 查询临时表数据是否存在
+						args = new Object[] { id, cmsid };
+						List<?> list2 = this.getJdbcTemplate().queryForList(sqlMap.getSql("03-1", taskId), args);
+						
+						if (list2.isEmpty()) {
+							// 获取组编号
+							groupId = calc(taskId, cabinId, cmsid, operationType, time);
+							
+							// 维护开工时间（由系统自动计算，以船舶的靠泊时间为起始点，判断卸船机第一斗的时间为开工时间）
+							String beginTime = this.getJdbcTemplate().queryForObject(
+									" SELECT t.begin_time from tab_task t WHERE t.id = ? ", String.class, taskId);
+							if (beginTime == null) {
+								this.getJdbcTemplate().update("UPDATE tab_task t SET t.begin_time = ? WHERE t.id = ?",
+										new Object[] { time, taskId });
+							}
+							
+							args = new Object[] { groupId, id, cmsid };
+							this.getJdbcTemplate().update(sqlMap.getSql("03", taskId), args);
 						}
-
-						args = new Object[] { groupId, id, cmsid };
-						this.getJdbcTemplate().update(sqlMap.getSql("03", taskId), args);
+						
 					}
 
 					args = new Object[] { "已找到所属船舶！", groupId, id, cmsid };
