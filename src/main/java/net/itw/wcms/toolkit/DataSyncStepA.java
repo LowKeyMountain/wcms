@@ -10,7 +10,6 @@ import java.util.TimerTask;
 import javax.xml.bind.JAXBException;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.dao.DataAccessException;
@@ -29,8 +28,7 @@ public class DataSyncStepA extends JdbcDaoSupport {
 	private final Logger log = Logger.getLogger("dataSyncInfo");
 
 	private static SqlMap sqlMap;
-	@Autowired
-	private DataSyncLogsHelper dataSyncLogsHelper;
+	public static boolean isBreak = false;
 
 	static {
 		try {
@@ -43,27 +41,48 @@ public class DataSyncStepA extends JdbcDaoSupport {
 	}
 
 	/**
-	 * 运行数据同步任务
+	 * 启动
 	 * 
 	 */
-	public void runTask() {
+	public void start() {
 		new Timer().schedule(new TimerTask() {
 			@Override
 			public void run() {
 				try {
 					while (true) {
-						if (!DataSyncStepC.isStartStepC()) {
-							for (int i = 1; i <= 6; i++) {
-								sync(i);
-							}
-							Thread.sleep(1000);
+						if (isBreak) {
+							this.cancel();
+							break;
 						}
+						for (int i = 1; i <= 6; i++) {
+							sync(i);
+						}
+						Thread.sleep(1000);
 					}
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
 		}, 1000);
+	}
+
+	/**
+	 * 重启
+	 * 
+	 */
+	public void restart() {
+		isBreak = false;
+		start();
+		log.info("同步工具：步骤A 已重启。");
+	}
+
+	/**
+	 * 关闭
+	 * 
+	 */
+	public void stop() {
+		isBreak = true;
+		log.info("同步工具：步骤A 已关闭。");
 	}
 
 	/**
@@ -112,7 +131,7 @@ public class DataSyncStepA extends JdbcDaoSupport {
 					Object[] args = new Object[] { id, time, cmsid, pushTime, oneTask, direction, unloaderMove,
 							operationType, 0, 0 };
 					this.getJdbcTemplate().update(sqlMap.getSql("03"), args);
-					dataSyncLogsHelper.dataSyncStepbLogs(0, args);
+					// dataSyncLogsHelper.dataSyncStepbLogs(0, args);
 					log.info("数据编号[" + id + "]|卸船机编号[" + cmsid + "] 数据已插入B表！");
 				} catch (Exception e) {
 					e.printStackTrace();

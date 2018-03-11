@@ -37,8 +37,8 @@ public class OnStartupServlet {
 			e1.printStackTrace();
 		}
 		
-		dataSyncStepA.runTask();
-		dataSyncStepB.runTask();
+		dataSyncStepA.start();
+		dataSyncStepB.start();
 	}
 	
 	public void dispose() {
