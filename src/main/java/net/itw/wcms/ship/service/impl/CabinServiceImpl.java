@@ -1,6 +1,8 @@
 package net.itw.wcms.ship.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -45,6 +47,7 @@ public class CabinServiceImpl implements ICabinService {
 		return ConstantUtil.SuccessInt;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, Object> getCabinList(Pageable pageable, Integer taskId, Map<String, String> params) {
 		Map<String, Object> map = new HashMap<>();
@@ -56,6 +59,16 @@ public class CabinServiceImpl implements ICabinService {
 			return map;
 		}
 		int total = page.size();
+		
+		// 降序排列
+		Collections.sort(page, new Comparator<Cabin>() {
+			public int compare(Cabin c1, Cabin c2) {
+				if (c1.getCabinNo() == null || c2.getCabinNo() == null) {
+					return 0;
+				}
+				return c1.getCabinNo().compareTo(c2.getCabinNo());
+			}
+		});
 		
 		Map<Integer, String> cargoMap = new HashMap<>();
 		List<Cargo> cargos = cargoRepository.findAllByTaskId(taskId);
