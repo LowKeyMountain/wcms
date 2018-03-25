@@ -1,5 +1,6 @@
 package net.itw.wcms.ship.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.Pageable;
@@ -58,6 +59,13 @@ public interface ICabinService {
 	 * @return
 	 */
 	Map<String, Object> getCabinList(Pageable pageable, Integer taskId, Map<String, String> params);
+	
+	/**
+	 * 根据任务ID获取船舱编号
+	 * @param taskId
+	 * @return
+	 */
+	List<Cabin> findAllByTaskId(Integer taskId);
 	
 	/**
 	 * 更新

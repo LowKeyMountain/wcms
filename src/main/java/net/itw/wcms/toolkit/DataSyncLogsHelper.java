@@ -4,12 +4,15 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.xml.bind.JAXBException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.jdbc.core.support.JdbcDaoSupport;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import net.itw.wcms.toolkit.sql.SqlMap;
 
@@ -18,10 +21,16 @@ import net.itw.wcms.toolkit.sql.SqlMap;
  * 
  * @author Michael 4 Mar 2018 15:52:26
  */
-public class DataSyncLogsHelper extends JdbcDaoSupport {
+@Service
+@Transactional
+public class DataSyncLogsHelper {
 
 	private static SqlMap sqlMap;
 	private Map<String, String> cache = new HashMap<>();
+	
+	@Resource(name = "jdbcTemplate")
+	private JdbcTemplate jdbcTemplate;
+	
 	@Autowired
 	private AutoCreateDBTable autoCreateDBTable;
 	static {
@@ -51,20 +60,20 @@ public class DataSyncLogsHelper extends JdbcDaoSupport {
 		String tabName = "tab_dataSyncStepB_logs";
 		if (!cache.containsKey(tabName)) {
 			if (!autoCreateDBTable.isExistsTable(tabName)) {
-				this.getJdbcTemplate().update(sqlMap.getSql("C_01"));
+				this.jdbcTemplate.update(sqlMap.getSql("C_01"));
 				cache.put(tabName, tabName);
 			}
 		}
 		
 		switch (type) {
 		case 0: // 插入数据
-			this.getJdbcTemplate().update(sqlMap.getSql("I_01"), args);
+			this.jdbcTemplate.update(sqlMap.getSql("I_01"), args);
 			break;
 		case 1: // 找到所属船舶
-			this.getJdbcTemplate().update(sqlMap.getSql("U_01"), args);
+			this.jdbcTemplate.update(sqlMap.getSql("U_01"), args);
 			break;
 		case 2: // 未找到所属船舶
-			this.getJdbcTemplate().update(sqlMap.getSql("U_02"), args);
+			this.jdbcTemplate.update(sqlMap.getSql("U_02"), args);
 			break;
 		default:
 			break;

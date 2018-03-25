@@ -7,10 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.xml.bind.JAXBException;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,8 +55,11 @@ public class TaskShipServiceImpl implements ITaskShipService {
 	
 	@Autowired
 	private DataSyncStepB dataSyncStepB;
-	@Autowired
+	@Resource(name="dataSyncStepCIndigo")
 	private DataSyncStepC dataSyncStepC;
+	
+	@Resource(name = "jdbcTemplate")
+	private JdbcTemplate jdbcTemplate;
 	
 	private static SqlMap sqlMap;
 
@@ -407,7 +412,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 				sql = sqlMap.getSql("FN_009_1", taskId, taskId);
 				System.out.println(taskId);
 			}
-			List<Map<String, Object>> data = this.dataSyncStepC.queryForList(sql.toString(), args);
+			List<Map<String, Object>> data = this.jdbcTemplate.queryForList(sql.toString(), args);
 			System.out.println(sql.toString());
 			result.put("msg", msg);
 			result.put("data", data);
@@ -442,7 +447,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 				args = new Object[] { taskId, unloaderId };
 				System.out.println(taskId + "|" + unloaderId);
 			}
-			List<Map<String, Object>> data = this.dataSyncStepC.queryForList(sql.toString(), args);
+			List<Map<String, Object>> data = this.jdbcTemplate.queryForList(sql.toString(), args);
 			System.out.println(sql.toString());
 			result.put("msg", msg);
 			result.put("data", data);

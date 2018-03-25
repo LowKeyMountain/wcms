@@ -49,26 +49,6 @@
 	<bean id="onStartupServlet" class="net.itw.wcms.toolkit.OnStartupServlet"
 		lazy-init="false" init-method="init" destroy-method="dispose" />
 		
-	<bean id="dataSyncStepA" class="net.itw.wcms.toolkit.DataSyncStepA">
-		<property name="dataSource" ref="dataSource"></property>
-	</bean>
-	
-	<bean id="dataSyncStepB" class="net.itw.wcms.toolkit.DataSyncStepB">
-		<property name="dataSource" ref="dataSource"></property>
-	</bean>
-	
-	<bean id="dataSyncStepC" class="net.itw.wcms.toolkit.DataSyncStepC">
-		<property name="dataSource" ref="dataSource"></property>
-	</bean>
-	
-	<bean id="autoCreateDBTable" class="net.itw.wcms.toolkit.AutoCreateDBTable">
-		<property name="dataSource" ref="dataSource"></property>
-	</bean>
-	
-	<bean id="dataSyncLogsHelper" class="net.itw.wcms.toolkit.DataSyncLogsHelper">
-		<property name="dataSource" ref="dataSource"></property>
-	</bean>
-	
 	<!-- 2.配置JPA EntityManagerFactory -->
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">

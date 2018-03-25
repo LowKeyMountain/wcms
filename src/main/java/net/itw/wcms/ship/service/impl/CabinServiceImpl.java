@@ -47,7 +47,6 @@ public class CabinServiceImpl implements ICabinService {
 		return ConstantUtil.SuccessInt;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, Object> getCabinList(Pageable pageable, Integer taskId, Map<String, String> params) {
 		Map<String, Object> map = new HashMap<>();
