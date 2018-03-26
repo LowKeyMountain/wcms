@@ -133,13 +133,11 @@ License: You must have a valid license purchased only from themeforest(the above
 										</div>
 										<div class = "input-group" id="begintime-div">
 												<span class="input-group-addon text-center"><b class="icon-td">开工时间</b></span>
-										        <input class="form-control form_datetime" name="begintime"  placeholder="请选择开工时间" id="begintime" style="width:240px;" readonly />
-										        <span class="required">&nbsp;*&nbsp;</span>
+										        <input class="form-control form_datetime" name="beginTime"  placeholder="请选择开工时间" id="beginTime" style="width:240px;" readonly />
 										</div>
 										<div class = "input-group" id="endtime-div">
 												<span class="input-group-addon text-center"><b class="icon-td">完工时间</b></span>
-										        <input class="form-control form_datetime" name="endtime" placeholder="请选择完工时间" id="endtime" style="width:240px;" readonly />
-										        <span class="required">&nbsp;*&nbsp;</span>
+										        <input class="form-control form_datetime" name="endTime" placeholder="请选择完工时间" id="endTime" style="width:240px;" readonly />
 										</div>										
 										<input type="hidden" class="form-control" name="taskId" placeholder="taskId" id="taskId" />
 										

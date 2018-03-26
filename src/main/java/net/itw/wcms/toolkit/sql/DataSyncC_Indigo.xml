@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqlMap>
+	<sqls>
+		<entry>
+			<key>02</key>
+			<description>【任务子表】删除任务子表：卸船作业信息</description>
+			<value>
+			<![CDATA[
+ 			DELETE FROM %s
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>03</key>
+			<description>【任务子表】删除任务子表：组信息</description>
+			<value>
+			<![CDATA[
+			DELETE FROM %s
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>04</key>
+			<description></description>
+			<value>
+			<![CDATA[
+				SELECT
+					*
+				FROM
+					tab_unloader_all t
+				WHERE
+					t.operationType = 1
+				AND t.Cmsid = ?
+				AND t.Time > ?
+				AND t.Time <= ?
+				AND t.unloaderMove >= ?
+				AND t.unloaderMove <= ?
+				ORDER BY
+					t.Time ASC
+				LIMIT 1
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>05</key>
+			<description>重新同步任务子表数据</description>
+			<value>
+			<![CDATA[
+							SELECT
+					*
+				FROM
+					tab_unloader_all t
+				WHERE
+					t.operationType = 1
+				AND t.Cmsid = ?
+				AND t.Time > ?
+				AND t.Time <= ?
+				AND 
+				(
+				(t.unloaderMove >= ?
+				AND t.unloaderMove < ?)
+				OR
+				 (t.unloaderMove > ?
+				AND t.unloaderMove <= ?)
+				)
+				ORDER BY
+					t.Time ASC
+				LIMIT 1
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>06</key>
+			<description></description>
+			<value>
+			<![CDATA[
+				UPDATE tab_task t SET t.begin_time = null WHERE t.id = ?
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>07</key>
+			<description></description>
+			<value>
+			<![CDATA[
+			INSERT INTO tab_temp_b_%s (
+				id,
+				Time,
+				Cmsid,
+				PushTime,
+				OneTask,
+				direction,
+				unloaderMove,
+				operationType,
+				OFFSET,
+				groupId
+			) SELECT
+				uid,
+				Time,
+				Cmsid,
+				PushTime,
+				OneTask,
+				direction,
+				unloaderMove,
+				operationType,
+				0,
+				?
+			FROM
+				tab_unloader_all
+			WHERE
+				cmsid = ?
+			AND Time >= ?
+			AND Time <= ?
+			AND unloaderMove >= ?
+			AND unloaderMove <= ?
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>08</key>
+			<description></description>
+			<value>
+			<![CDATA[
+				SELECT t.begin_time from tab_task t WHERE t.id = ?
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>09</key>
+			<description></description>
+			<value>
+			<![CDATA[
+				UPDATE tab_task t SET t.begin_time = ? WHERE t.id = ?
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>10</key>
+			<description></description>
+			<value>
+			<![CDATA[
+				 insert into tab_temp_c_%s (cabinId, Cmsid, startTime, firstTime, endTime,
+				 status)  values(?,?,?,?,?,?) 
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>11</key>
+			<description></description>
+			<value>
+			<![CDATA[
+				select * from tab_temp_c_%s t  
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>12</key>
+			<description></description>
+			<value>
+			<![CDATA[
+				SELECT
+				uid,
+				Time,
+				Cmsid,
+				PushTime,
+				OneTask,
+				direction,
+				unloaderMove,
+				operationType,
+				0,
+				?
+			FROM
+				tab_unloader_all
+			WHERE
+				cmsid = ?
+			AND Time >= ?
+			AND Time <= ?
+			AND unloaderMove >= ?
+			AND unloaderMove <= ? 
+			ORDER BY
+			Time DESC
+			LIMIT 1
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>13</key>
+			<description></description>
+			<value>
+			<![CDATA[
+				UPDATE tab_temp_c_%s t SET t.lastTime = ?, t.endTime = ? WHERE t.id = ?   
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>14</key>
+			<description></description>
+			<value>
+			<![CDATA[
+				 insert into tab_temp_c_%s (cabinId, Cmsid, startTime, firstTime, 
+				 status)  values(?,?,?,?,?) 
+			]]>
+			</value>
+		</entry>
+		
+	</sqls>
+</sqlMap>

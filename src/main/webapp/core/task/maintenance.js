@@ -17,8 +17,8 @@
 			 sidePagination : 'server',
 			 pageNumber : 1, // 初始化加载第一页，默认第一页			 
 			 pageSize : 10,// 单页记录数
-			 pageList : [10,20,30,50,100],// 分页步进值
-			 showPaginationSwitch : true,// 是否显示选择分页数按钮
+			 pageList : [10,20,30,50],// 分页步进值
+//			 showPaginationSwitch : true,// 是否显示选择分页数按钮
 			 showHeader : true,
 			 showRefresh : true,// 刷新按钮
 			 // showToggle : true,// 是否显示 切换试图（table/card）按钮
@@ -90,12 +90,14 @@
 		        field: 'berthingTime',
 		        title: '靠泊时间',
 		        align: 'center',
-		        width: '12%'
+		        width: '12%',
+		        sortable:true
 		    }, {
 		        field: 'departureTime',
 		        title: '离泊时间',
 		        align: 'center',
-		        width: '12%'
+		        width: '12%',
+		        sortable:true
 		    }, {
 		        field: 'beginTime',
 		        title: '开工时间',
@@ -141,7 +143,7 @@
 		        },
 		    	events: {
 					'click .mod' : function(e, value, row, index) {
-	                	if(row.status==0){
+	                	if(row.status==0 || row.status==2){
 	                		$("#modiStatus").empty();
 	                		$("#modiStatus").append("<option value='1'>作业中</option>");
 							$('#begintime-div').show();
@@ -155,13 +157,7 @@
 							}else{
 								$('#endtime-div').show();
 							}
-	                	}else if(row.status==2){
-	                		$("#modiStatus").empty();
-	                		$("#modiStatus").append("<option value='1'>作业中</option>");
-							$('#begintime-div').show();
-							$('#endtime-div').hide();
-						}else{
-							alert("1");
+	                	}else{
 	                	}
 						$('#taskId').val(row.id);
 						$('#shipStatus').modal('show');
@@ -212,15 +208,32 @@ $(function(){
     		$("#endBerthDate").datetimepicker('setStartDate', null);
     		$("#endBerthDate").datetimepicker('setEndDate', new Date());
         });
-        $('#btn_submit').modal({backdrop: 'static', show:false,  keyboard: false});
         
+        $("#mod").off().on(
+        		"click",function(){
+         	    $('#addForm')[0].reset();
+        })
+        
+        $('#btn_submit').modal({backdrop: 'static', show:false,  keyboard: false});
+
         $('#btn_submit').off().on("click", function () {
+        	
+        	if($("#modiStatus").val()==1 && $("#beginTime").val()==""){
+				alert("请选择开工时间！");
+				return;        		
+        	}
+        	if($("#modiStatus").val()==2 && $("#endTime").val()==""){
+				alert("请选择完工时间！");
+				return;        		
+        	}
         	var data={
         			status:$("#modiStatus").val(),
-        			taskId:$("#taskId").val()
+        			taskId:$("#taskId").val(),
+        			endTime:$("#endTime").val(),
+        			beginTime:$("#beginTime").val(),        			
         	}
             $.ajax({
-                url: BasePath + "/task/doSetShipStatus",
+                url: BasePath + "/task/doModifyShipStatus",
                 type: "post",
                 dataType: "json",
                 cache: false,
@@ -229,10 +242,10 @@ $(function(){
                 success: function (data) {
                 	if (data.success == true){
                 		alert(data.msg);
-                    	$('#maintenance').bootstrapTable("refresh");
                 	} else {
                 		alert(data.msg);                		
                 	}
+            		initTable();              	
                 },
                 failure: function(data){
                     alert("修改失败!");

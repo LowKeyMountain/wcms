@@ -129,7 +129,7 @@ License: You must have a valid license purchased only from themeforest(the above
 										    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:UnshipInfo.unloaderOverview_click(${taskId})">卸船机总览</a></li>
 										  </ul>
 										</div> -->
-								        <div id="toolbar">
+								        <div id="toolbar" align="right">
 								        	
 								            <button type="button" onclick="javascript:UnshipInfo.unloadProgress_click(${taskId});" class="btn default" >货物进度
 								            </button>

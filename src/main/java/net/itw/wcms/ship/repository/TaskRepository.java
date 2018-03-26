@@ -48,47 +48,60 @@ public interface TaskRepository extends JpaRepository<Task, Integer>, JpaSpecifi
 		return this.findAll(new Specification<Task>() {
 			public Predicate toPredicate(Root<Task> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				Path<String> shipStatus = root.get("status");
-				return cb.equal(shipStatus, status);
+				if (status == 0 || status == 1) {
+					return cb.equal(shipStatus, status);
+				} else {
+					query.where(cb.equal(shipStatus, status));
+					// 添加排序的功能
+					query.orderBy(cb.desc(root.get("endTime")));
+					return query.getRestriction();
+				}
 			}
 		}, pageable);
 	}
 
-	default Page<Task> findAllByParams(Pageable pageable,  Map<String, String> params) {
+	default Page<Task> findAllByParams(Pageable pageable, Map<String, String> params) {
 		return this.findAll(new Specification<Task>() {
 			public Predicate toPredicate(Root<Task> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				Predicate predicate = null;
 				List<Predicate> predicates = new ArrayList<Predicate>();
-				String startDepartureDate = (params.get("startDepartureDate") == null ? "" : params.get("startDepartureDate"));
-				String endDepartureDate = (params.get("endDepartureDate") == null ? "" : params.get("endDepartureDate"));
+				String startDepartureDate = (params.get("startDepartureDate") == null ? ""
+						: params.get("startDepartureDate"));
+				String endDepartureDate = (params.get("endDepartureDate") == null ? ""
+						: params.get("endDepartureDate"));
 				String startBerthDate = (params.get("startBerthDate") == null ? "" : params.get("startBerthDate"));
 				String endBerthDate = (params.get("endBerthDate") == null ? "" : params.get("endBerthDate"));
 				String status = (params.get("status") == null ? "" : params.get("status"));
 
-				if(StringUtils.isNotEmpty(startDepartureDate)) {
-					predicates.add(cb.greaterThanOrEqualTo(root.get("departureTime"), DateTimeUtils.strDateTime2Date(startDepartureDate)));
+				if (StringUtils.isNotEmpty(startDepartureDate)) {
+					predicates.add(cb.greaterThanOrEqualTo(root.get("departureTime"),
+							DateTimeUtils.strDateTime2Date(startDepartureDate)));
 				}
-				if(StringUtils.isNotEmpty(endDepartureDate)) {
-					predicates.add(cb.lessThanOrEqualTo(root.get("departureTime"), DateTimeUtils.strDateTime2Date(endDepartureDate)));
+				if (StringUtils.isNotEmpty(endDepartureDate)) {
+					predicates.add(cb.lessThanOrEqualTo(root.get("departureTime"),
+							DateTimeUtils.strDateTime2Date(endDepartureDate)));
 				}
 
-				if(StringUtils.isNotEmpty(startBerthDate)) {
-					predicates.add(cb.greaterThanOrEqualTo(root.get("berthingTime"), DateTimeUtils.strDateTime2Date(startBerthDate)));
+				if (StringUtils.isNotEmpty(startBerthDate)) {
+					predicates.add(cb.greaterThanOrEqualTo(root.get("berthingTime"),
+							DateTimeUtils.strDateTime2Date(startBerthDate)));
 				}
-				if(StringUtils.isNotEmpty(endBerthDate)) {
-					predicates.add(cb.lessThanOrEqualTo(root.get("berthingTime"), DateTimeUtils.strDateTime2Date(endBerthDate)));
+				if (StringUtils.isNotEmpty(endBerthDate)) {
+					predicates.add(cb.lessThanOrEqualTo(root.get("berthingTime"),
+							DateTimeUtils.strDateTime2Date(endBerthDate)));
 				}
-				if(StringUtils.isNotEmpty(status)) {
+				if (StringUtils.isNotEmpty(status)) {
 					predicates.add(cb.equal(root.get("status"), status));
 				}
-				predicate = cb.and(predicates.toArray(new Predicate[predicates.size()]));				
-		        query.where(predicate);  
-		        //添加排序的功能  
-		        query.orderBy(cb.desc(root.get("updateTime")));
-		        return query.getRestriction();  
-				//return predicate;
+				predicate = cb.and(predicates.toArray(new Predicate[predicates.size()]));
+				query.where(predicate);
+				// 添加排序的功能
+				query.orderBy(cb.desc(root.get("updateTime")));
+				return query.getRestriction();
+				// return predicate;
 			}
 		}, pageable);
-	}	
+	}
 
 	default Page<Task> findAll(Pageable pageable, Map<String, String> params) {
 		return this.findAll(new Specification<Task>() {

@@ -7,14 +7,15 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.annotation.Resource;
 import javax.xml.bind.JAXBException;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.support.JdbcDaoSupport;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import net.itw.wcms.toolkit.sql.SqlMap;
@@ -24,15 +25,18 @@ import net.itw.wcms.toolkit.sql.SqlMap;
  * 
  * @author Michael 29 Jan 2018 21:45:54
  */
-public class DataSyncStepA extends JdbcDaoSupport {
+@Service
+@Transactional
+public class DataSyncStepA {
 
 	private final Logger log = Logger.getLogger("dataSyncInfo");
 
 	private static SqlMap sqlMap;
-	public static boolean isContinue = false;
-	@Autowired
-	private DataSyncLogsHelper dataSyncLogsHelper;
-
+	public static boolean isBreak = false;
+	
+	@Resource(name = "jdbcTemplate")
+	private JdbcTemplate jdbcTemplate;
+	
 	static {
 		try {
 			sqlMap = SqlMap.load(SqlMap.class.getResourceAsStream("./DataSyncA.xml"));
@@ -44,15 +48,24 @@ public class DataSyncStepA extends JdbcDaoSupport {
 	}
 
 	/**
-	 * 运行数据同步任务
+	 * 启动
 	 * 
 	 */
-	public void runTask() {
+	public void start() {
 		new Timer().schedule(new TimerTask() {
 			@Override
 			public void run() {
 				try {
-					start();
+					while (true) {
+						if (isBreak) {
+							this.cancel();
+							break;
+						}
+						for (int i = 1; i <= 6; i++) {
+							sync(i);
+						}
+						Thread.sleep(1000);
+					}
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -61,32 +74,13 @@ public class DataSyncStepA extends JdbcDaoSupport {
 	}
 
 	/**
-	 * 启动
-	 * 
-	 * @throws InterruptedException
-	 */
-	public void start() throws InterruptedException {
-		while (true) {
-			if (!isContinue) {
-//				log.info("同步工具：步骤A 运行中...");
-				for (int i = 1; i <= 6; i++) {
-					sync(i);
-				}
-				Thread.sleep(1000);
-			}
-		}
-	}
-
-	/**
 	 * 重启
 	 * 
-	 * @throws InterruptedException
 	 */
-	public void restart() throws InterruptedException {
-//		log.info("同步工具：步骤A 重启中...");
-		if (isContinue) {
-			isContinue = false;
-		}
+	public void restart() {
+		isBreak = false;
+		start();
+		log.info("同步工具：步骤A 已重启。");
 	}
 
 	/**
@@ -94,8 +88,8 @@ public class DataSyncStepA extends JdbcDaoSupport {
 	 * 
 	 */
 	public void stop() {
-		isContinue = true;
-//		log.info("同步工具：步骤A 已关闭...");
+		isBreak = true;
+		log.info("同步工具：步骤A 已关闭。");
 	}
 
 	/**
@@ -110,7 +104,7 @@ public class DataSyncStepA extends JdbcDaoSupport {
 		boolean isUpdateData = false;
 		try {
 			// 查询卸船机增量数据
-			List<Map<String, Object>> list = this.getJdbcTemplate().queryForList(sqlMap.getSql("01", cmsNum),
+			List<Map<String, Object>> list = this.jdbcTemplate.queryForList(sqlMap.getSql("01", cmsNum),
 					"ABB_GSU_" + cmsNum);
 			for (Map<String, Object> map : list) {
 
@@ -124,7 +118,7 @@ public class DataSyncStepA extends JdbcDaoSupport {
 				String cmsid = (String) map.get("Cmsid");
 
 				// 检查数据是否存在
-				List<?> list2 = this.getJdbcTemplate().queryForList(sqlMap.getSql("02"), id, cmsid);
+				List<?> list2 = this.jdbcTemplate.queryForList(sqlMap.getSql("02"), id, cmsid);
 				if (!list2.isEmpty()) {
 					continue;
 				}
@@ -138,12 +132,13 @@ public class DataSyncStepA extends JdbcDaoSupport {
 
 				// 卸船机数据插入表b
 				try {
-//					Object[] args = new Object[] { id, time, cmsid, pushTime, oneTask, direction, unloaderMove + 7,
-//							operationType, 0, 0 };
+					// Object[] args = new Object[] { id, time, cmsid, pushTime,
+					// oneTask, direction, unloaderMove + 7,
+					// operationType, 0, 0 };
 					Object[] args = new Object[] { id, time, cmsid, pushTime, oneTask, direction, unloaderMove,
 							operationType, 0, 0 };
-					this.getJdbcTemplate().update(sqlMap.getSql("03"), args);
-					dataSyncLogsHelper.dataSyncStepbLogs(0, args);
+					this.jdbcTemplate.update(sqlMap.getSql("03"), args);
+					// dataSyncLogsHelper.dataSyncStepbLogs(0, args);
 					log.info("数据编号[" + id + "]|卸船机编号[" + cmsid + "] 数据已插入B表！");
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -158,7 +153,7 @@ public class DataSyncStepA extends JdbcDaoSupport {
 		} finally {
 			// 记录卸船机数据增量标识
 			if (isUpdateData && max > 0) {
-				this.getJdbcTemplate().update(sqlMap.getSql("04"), new Object[] { max, "ABB_GSU_" + cmsNum });
+				this.jdbcTemplate.update(sqlMap.getSql("04"), new Object[] { max, "ABB_GSU_" + cmsNum });
 			}
 		}
 	}
@@ -173,7 +168,7 @@ public class DataSyncStepA extends JdbcDaoSupport {
 		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
 		if (ctx != null) {
 			DataSyncStepA helper = (DataSyncStepA) ctx.getBean("dataSyncStepA");
-			helper.start();
+			// helper.start();
 		}
 	}
 

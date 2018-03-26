@@ -396,11 +396,13 @@ var Task = function() {
 				}, {
 					field : 'enterPortTime',
 					title : '预靠时间',
-					align : 'center'
+					align : 'center',
+			        sortable:true
 				}, {
 					field : 'berthingTime',
 					title : '靠泊时间',
-					align : 'center'
+					align : 'center',
+			        sortable:true
 				}, {
 					field : 'beginTime',
 					title : '开工时间',
@@ -409,11 +411,13 @@ var Task = function() {
 				}, {
 					field : 'endTime',
 					title : '完工时间',
-					align : 'center'
+					align : 'center',
+			        sortable:true
 				}, {
 					field : 'departureTime',
 					title : '离泊时间',
-					align : 'center'
+					align : 'center',
+			        sortable:true
 				}, {
 					field : 'operation',
 					title : '操作'

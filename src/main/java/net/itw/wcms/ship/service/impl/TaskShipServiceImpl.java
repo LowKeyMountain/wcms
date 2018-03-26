@@ -7,10 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.xml.bind.JAXBException;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +26,7 @@ import net.itw.wcms.ship.repository.TaskRepository;
 import net.itw.wcms.ship.service.ITaskShipService;
 import net.itw.wcms.toolkit.DataSyncStepB;
 import net.itw.wcms.toolkit.DataSyncStepC;
+import net.itw.wcms.toolkit.DateTimeUtils;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.toolkit.sql.SqlMap;
 import net.itw.wcms.x27.entity.User;
@@ -53,8 +56,11 @@ public class TaskShipServiceImpl implements ITaskShipService {
 	
 	@Autowired
 	private DataSyncStepB dataSyncStepB;
-	@Autowired
+	@Resource(name="dataSyncStepCIndigo")
 	private DataSyncStepC dataSyncStepC;
+	
+	@Resource(name = "jdbcTemplate")
+	private JdbcTemplate jdbcTemplate;
 	
 	private static SqlMap sqlMap;
 
@@ -314,6 +320,94 @@ public class TaskShipServiceImpl implements ITaskShipService {
 		return mo;
 	}
 
+	/**
+	 * 设置船舶状态
+	 * 
+	 * @param taskId
+	 * @param userName
+	 * @return
+	 */
+	@Override
+	@Transactional
+	public MessageOption remedyShipStatus(Map<String, String> params, String userName) {
+
+		// 需求：设置船舶状态
+		// 前置条件：
+		// 【开始卸船】
+		// 1.检查当前船舶状态，只有“预靠船舶|0”状态才能设置“开始卸船”，其它状态不能进行设定；
+		// 【结束卸船】
+		// 1.检查当前船舶状态，只有“作业船舶|1”状态才能设置“结束卸船”，其它状态不能进行设定；
+		// 2.检查各船舱是否为完成状态,各舱均为完成状态时才可设置"结束卸船"；
+		String taskId = params.get("taskId");
+		String status = params.get("status");
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
+		try {
+			User operator = userService.getUserByUserName(userName);
+			Task task = taskRepository.findOne(Integer.parseInt(taskId));
+			if (task == null) {
+				throw new X27Exception("操作失败：[taskId]未找到指定作业船舶 ！");
+			}
+
+			// 作业状态 （预靠船舶|0、 作业船舶|1、离港船舶|2）
+			// 1.检查当前船舶状态，只有“作业船舶|1”状态才能设置“结束卸船”，其它状态不能进行设定；
+			Integer shipStatus = task.getStatus();
+			switch (shipStatus) {
+			// 1.船舶若为预靠状态，则为APP端忘记点击"开始卸船"，需要设置开工时间；
+			case 0:
+					// 开始卸船
+					task.setStatus(1);
+					task.setBeginTime(DateTimeUtils.strDateTime2Date(params.get("beginTime")));					
+					task.setUpdateTime(new Date());
+					task.setUpdateUser(operator.getUserName());
+					// 更新所有船舱状态为卸货|0
+					for (Cargo cargo : task.getCargos()) {
+						for (Cabin cabin : cargo.getCabins()) {
+							cabin.setStatus(0);
+						}
+					}
+					taskRepository.saveAndFlush(task);
+				break;
+			case 1:
+				// 2.当前为作业状态时，可以修改状态为预靠或离港状态；
+				if ("0".equals(status)) {
+					// 设置为预靠状态
+					task.setStatus(0);
+					task.setUpdateTime(new Date());
+					task.setUpdateUser(operator.getUserName());
+					taskRepository.saveAndFlush(task);
+				} else if ("2".equals(status)) {
+					// 设置为离港状态
+					task.setStatus(2);
+					task.setEndTime(DateTimeUtils.strDateTime2Date(params.get("endTime")));
+					task.setUpdateTime(new Date());
+					task.setUpdateUser(operator.getUserName());
+					taskRepository.saveAndFlush(task);
+					// 更新组结束时间
+//					dataSyncStepB.updateGroupEndTime(task.getId());
+				} else {
+					throw new X27Exception("操作失败: 船舶状态参数有误！");
+				}
+				break;
+			case 2:
+				// 3.当前状态为离港状态时，仅能修改为作业状态并设置开工时间；
+				task.setStatus(1);
+				task.setBeginTime(DateTimeUtils.strDateTime2Date(params.get("beginTime")));
+				task.setUpdateTime(new Date());
+				task.setUpdateUser(operator.getUserName());
+				taskRepository.saveAndFlush(task);
+			default:
+				break;
+			}
+
+		} catch (Exception e) {
+			mo.msg = e.getMessage();
+			mo.code = ConstantUtil.FailInt;
+		}
+
+		return mo;
+	}	
+	
+	
 	@Override
 	public Map<String, Object> doGetCargoDetail(Integer taskId, Integer cabinNo) {
 		String msg = "操作成功！";
@@ -407,7 +501,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 				sql = sqlMap.getSql("FN_009_1", taskId, taskId);
 				System.out.println(taskId);
 			}
-			List<Map<String, Object>> data = this.dataSyncStepC.queryForList(sql.toString(), args);
+			List<Map<String, Object>> data = this.jdbcTemplate.queryForList(sql.toString(), args);
 			System.out.println(sql.toString());
 			result.put("msg", msg);
 			result.put("data", data);
@@ -442,7 +536,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 				args = new Object[] { taskId, unloaderId };
 				System.out.println(taskId + "|" + unloaderId);
 			}
-			List<Map<String, Object>> data = this.dataSyncStepC.queryForList(sql.toString(), args);
+			List<Map<String, Object>> data = this.jdbcTemplate.queryForList(sql.toString(), args);
 			System.out.println(sql.toString());
 			result.put("msg", msg);
 			result.put("data", data);

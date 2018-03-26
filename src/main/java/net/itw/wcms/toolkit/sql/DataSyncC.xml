@@ -121,6 +121,15 @@
 			</value>
 		</entry>
 		<entry>
+			<key>05-1</key>
+			<description>【任务子表】 查询临时表数据是否存在</description>
+			<value>
+			<![CDATA[
+ 			 SELECT * FROM tab_temp_b_%s t where id = ? and cmsid = ? 
+			]]>
+			</value>
+		</entry>
+		<entry>
 			<key>06</key>
 			<description>查询卸船机作业数据任务ID、船舱ID(begin_time > berthing_time)</description>
 			<value>

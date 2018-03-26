@@ -110,7 +110,7 @@ var ModifyCabin = function() {
 						+ "<td>"
 						+ "<input id=\"" + res.cabinNo + "_cabinNo\" type=\"hidden\" value=\""
 						+ res.cabinNo
-						+ "\"/> #"
+						+ "\"/> "
 						+ res.cabinNo
 						+ "</td>"
 						+ "<td>"

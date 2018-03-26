@@ -134,8 +134,8 @@ License: You must have a valid license purchased only from themeforest(the above
 											<thead>
 												<tr>
 													<th>船舱号</th>
-													<th>起点</th>
-													<th>终点</th>
+													<th>后橄</th>
+													<th>前橄</th>
 												</tr>
 											</thead>
 											<tbody id="cabin_tbody">

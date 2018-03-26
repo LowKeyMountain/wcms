@@ -24,7 +24,7 @@ public interface CabinRepository extends JpaRepository<Cabin, Integer>, JpaSpeci
 	@Query(value = " select cabin.* from tab_cabin cabin where cabin.cargo_id  =?1 ", nativeQuery = true)
 	List<Cabin> getCabinByCargoId(Integer cargoId);
 
-	@Query(value = " select * from tab_cabin c where c.cargo_id in (select cargo.id from tab_cargo cargo where cargo.task_id = ?1) ORDER BY cabin_no ASC ", nativeQuery = true)
+	@Query(value = " select * from tab_cabin c where c.cargo_id in (select cargo.id from tab_cargo cargo where cargo.task_id = ?1) ORDER BY cabin_no DESC ", nativeQuery = true)
 	List<Cabin> findAllByTaskId(Integer taskId);
 
 }
