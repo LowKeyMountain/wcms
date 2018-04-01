@@ -365,5 +365,31 @@ public class CabinController {
 			return result;
 		}
 	}
-	
+
+	/**
+	 * 设置船舶状态
+	 * 
+	 * @param taskId
+	 * @param cabinNo
+	 * @param status
+	 * @return
+	 */
+	@RequestMapping(value = "/remendyCabinStatus")
+	public Map<String, Object> remendyCabinStatus(@RequestParam("taskId") String taskId,
+			@RequestParam("cabinNo") String cabinNo, @RequestParam("status") String status) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			// 从session取出User对象
+			User operator = SessionUtil.getSessionUser(req);
+			MessageOption mo = this.taskShipService.remendyCabinStatus(taskId, operator.getUserName(), cabinNo, status);
+			result.put("msg", mo.msg);
+			result.put("code", mo.isSuccess() ? "1" : "0");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", "0");
+			result.put("msg", e.getMessage());
+			return result;
+		}
+	}
 }

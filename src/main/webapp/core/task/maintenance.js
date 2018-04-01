@@ -143,21 +143,31 @@
 		        },
 		    	events: {
 					'click .mod' : function(e, value, row, index) {
-	                	if(row.status==0 || row.status==2){
+		         	    $('#addForm')[0].reset();
+	                	if(row.status==0){
 	                		$("#modiStatus").empty();
 	                		$("#modiStatus").append("<option value='1'>作业中</option>");
-							$('#begintime-div').show();
+//							$('#begintime-div').hide();
+							$('#berthingTime-div').show();
 							$('#endtime-div').hide();
-	                	}else if(row.status==1){
+	                	}else if(row.status == 1){
 	                		$("#modiStatus").empty();
 	                		$("#modiStatus").append("<option value='0'>预靠</option>").append("<option value='2'>已离港</option>");
 							if($("#modiStatus").val() == 0){
-								$('#begintime-div').hide();
+								$('#berthingTime-div').hide();
+//								$('#begintime-div').hide();
 								$('#endtime-div').hide();
 							}else{
 								$('#endtime-div').show();
+//								$('#begintime-div').hide();
+								$('#berthingTime-div').hide();
 							}
-	                	}else{
+	                	}else if(row.status == 2){
+	                		$("#modiStatus").empty();
+	                		$("#modiStatus").append("<option value='1'>作业中</option>");
+//							$('#begintime-div').hide();
+							$('#berthingTime-div').hide();
+							$('#endtime-div').hide();	                		
 	                	}
 						$('#taskId').val(row.id);
 						$('#shipStatus').modal('show');
@@ -218,9 +228,11 @@ $(function(){
 
         $('#btn_submit').off().on("click", function () {
         	
-        	if($("#modiStatus").val()==1 && $("#beginTime").val()==""){
-				alert("请选择开工时间！");
-				return;        		
+        	if($("#berthingTime").is(':visible')){
+	        	if($("#modiStatus").val()==1 && $("#berthingTime").val()==""){
+					alert("请选择靠泊时间！");
+					return;        		
+	        	}
         	}
         	if($("#modiStatus").val()==2 && $("#endTime").val()==""){
 				alert("请选择完工时间！");
@@ -230,7 +242,8 @@ $(function(){
         			status:$("#modiStatus").val(),
         			taskId:$("#taskId").val(),
         			endTime:$("#endTime").val(),
-        			beginTime:$("#beginTime").val(),        			
+//        			beginTime:$("#beginTime").val(),
+        			berthingTime:$("#berthingTime").val(),
         	}
             $.ajax({
                 url: BasePath + "/task/doModifyShipStatus",

@@ -37,13 +37,15 @@ public interface TaskRepository extends JpaRepository<Task, Integer>, JpaSpecifi
 	List<Task> getTaskByStatus(Integer status);
 
 	Task getTaskById(Integer id);
+	
+	Task findFirstByOrderByEndTimeDesc();
 
 	@Modifying(clearAutomatically = true)
 	@Query("update Task t set " + "t.status = :status " + ", t.updateTime=:updateTime " + ", t.updateUser=:updateUser "
 			+ "where t.id =:id")
 	void updateStatusById(@Param("id") Integer id, @Param("status") String status, @Param("updateTime") Date updateTime,
 			@Param("updateUser") String updateUser);
-
+	
 	default Page<Task> findAllByStatus(Pageable pageable, Integer status) {
 		return this.findAll(new Specification<Task>() {
 			public Predicate toPredicate(Root<Task> root, CriteriaQuery<?> query, CriteriaBuilder cb) {

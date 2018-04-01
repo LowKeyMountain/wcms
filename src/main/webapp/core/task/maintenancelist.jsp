@@ -131,13 +131,17 @@ License: You must have a valid license purchased only from themeforest(the above
 								   					<option value="2" >已离港</option>
 												</select>
 										</div>
-										<div class = "input-group" id="begintime-div">
+<!-- 										<div class = "input-group" id="begintime-div">
 												<span class="input-group-addon text-center"><b class="icon-td">开工时间</b></span>
 										        <input class="form-control form_datetime" name="beginTime"  placeholder="请选择开工时间" id="beginTime" style="width:240px;" readonly />
-										</div>
+										</div> -->
 										<div class = "input-group" id="endtime-div">
 												<span class="input-group-addon text-center"><b class="icon-td">完工时间</b></span>
 										        <input class="form-control form_datetime" name="endTime" placeholder="请选择完工时间" id="endTime" style="width:240px;" readonly />
+										</div>
+										<div class = "input-group" id="berthingTime-div">
+												<span class="input-group-addon text-center"><b class="icon-td">靠泊时间</b></span>
+										        <input class="form-control form_datetime" name="berthingTime" placeholder="请选择靠泊时间" id="berthingTime" style="width:240px;" readonly />
 										</div>										
 										<input type="hidden" class="form-control" name="taskId" placeholder="taskId" id="taskId" />
 										
@@ -280,7 +284,7 @@ License: You must have a valid license purchased only from themeforest(the above
             $(document).ready(function(){
       			$(".form_datetime").datetimepicker({
 	            	startView: 'month',
-	            	minView: 'month',
+	            	minView: 'hour',
     			    language:  'zh-CN',
     			    format: 'yyyy-mm-dd hh:ii:ss',
     			    todayBtn:  true,
@@ -346,14 +350,13 @@ License: You must have a valid license purchased only from themeforest(the above
             		$('#begintime').attr('disabled', 'true');
             		$('#departuretime').attr('disabled', 'false');     	        	
     	        } */
-    		    $("#modiStatus").change(function(){
-		            if($("#modiStatus").val()==0){
-						$('#begintime-div').hide();
-						$('#endtime-div').hide();
-					}else{
+     		    $("#modiStatus").change(function(){
+		            if($("#modiStatus").val()==2){
 						$('#endtime-div').show();
+					}else{
+						$('#endtime-div').hide();
 		            }
-		    });    	        
+		    	});
     	        
             });  
         </script>			
