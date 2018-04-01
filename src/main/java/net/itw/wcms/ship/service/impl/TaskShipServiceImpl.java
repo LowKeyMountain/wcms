@@ -55,7 +55,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 	
 	@Autowired
 	private DataSyncStepB dataSyncStepB;
-	@Resource(name="dataSyncStepCIndigo")
+	@Resource(name="dataSyncStepCImpl")
 	private DataSyncStepC dataSyncStepC;
 	
 	@Resource(name = "jdbcTemplate")
@@ -104,7 +104,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			// 1. "离港船舶|2"不能设置舱位；
 			Integer status = task.getStatus();
 			if (2 == status) {
-				throw new X27Exception("操作失败： 离港船舶不能设置舱位！");
+//				throw new X27Exception("操作失败： 离港船舶不能设置舱位！");
 			}
 
 			Map<String, Cabin> cabins = new HashMap<>();

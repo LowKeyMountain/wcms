@@ -181,8 +181,9 @@ public class DataSyncStepCIndigo implements DataSyncStepC {
 
 		// 批量更新任务子表数据
 		List<Map<String, Object>> result = this.jdbcTemplate.queryForList(sqlMap.getSql("11", taskId));
+		log.info("[" + taskId + "] 共创建组 " + result.size() + "条");
+		System.out.println("[" + taskId + "] 共创建组 " + result.size() + "条");
 		for (Map<String, Object> m : result) {
-
 			Integer groupId = (Integer) m.get("id");
 			String cmsid = (String) m.get("Cmsid");
 			Integer cabinId = (Integer) m.get("cabinId");
@@ -195,14 +196,17 @@ public class DataSyncStepCIndigo implements DataSyncStepC {
 			Object[] args = new Object[] { groupId, cmsid, g_startTime, g_endTime, cabin.getStartPosition(),
 					cabin.getEndPosition() };
 			batchArgs.add(args);
-
+			
+			// 更新组最后一次作业时间、组结束时间
 			List<Map<String, Object>> result1 = this.jdbcTemplate.queryForList(sqlMap.getSql("12"), args);
 			if (!result1.isEmpty()) {
 				Date time = (Date) result1.get(0).get("Time");
 				this.jdbcTemplate.update(sqlMap.getSql("13", taskId), new Object[] { time, time, groupId });
 			}
-
-			this.jdbcTemplate.batchUpdate(sqlMap.getSql("07", taskId), batchArgs);
+			// 从卸船机总表批量拷贝作业信息到任务子表
+			int [] batchResult = this.jdbcTemplate.batchUpdate(sqlMap.getSql("07", taskId), batchArgs);
+			log.info("[" + taskId + "] ["+groupId+"]组 更新数据 " + batchResult[0] + "条");
+			System.out.println("[" + taskId + "] ["+groupId+"]组 更新数据 " + batchResult[0] + "条");
 		}
 	}
 
@@ -216,7 +220,13 @@ public class DataSyncStepCIndigo implements DataSyncStepC {
 			Date newStartTime = (Date) result1.get(0).get("Time");
 			args = new Object[] { cmsid, newStartTime, endTime, p1, p2, p3, p4 };
 			List<Map<String, Object>> result2 = this.jdbcTemplate.queryForList(sqlMap.getSql("05"), args);
-
+			
+			// 维护开工时间（由系统自动计算，以船舶的靠泊时间为起始点，判断卸船机第一斗的时间为开工时间）
+			String beginTime = this.jdbcTemplate.queryForObject(sqlMap.getSql("08"), String.class, taskId);
+			if (beginTime == null) {
+				this.jdbcTemplate.update(sqlMap.getSql("09"), new Object[] { newStartTime, taskId });
+			}
+			
 			if (result2.isEmpty()) {
 				KeyHolder keyHolder = new GeneratedKeyHolder();
 				this.jdbcTemplate.update(new PreparedStatementCreator() {
@@ -233,11 +243,7 @@ public class DataSyncStepCIndigo implements DataSyncStepC {
 				}, keyHolder);
 			} else {
 				Date newEndTime = (Date) result2.get(0).get("Time");
-				// 维护开工时间（由系统自动计算，以船舶的靠泊时间为起始点，判断卸船机第一斗的时间为开工时间）
-				String beginTime = this.jdbcTemplate.queryForObject(sqlMap.getSql("08"), String.class, taskId);
-				if (beginTime == null) {
-					this.jdbcTemplate.update(sqlMap.getSql("09"), new Object[] { newStartTime, taskId });
-				}
+
 				// 新建组信息
 				KeyHolder keyHolder = new GeneratedKeyHolder();
 				this.jdbcTemplate.update(new PreparedStatementCreator() {
