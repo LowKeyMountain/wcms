@@ -77,14 +77,14 @@ License: You must have a valid license purchased only from themeforest(the above
 				<div class="row">
 					<div class="col-md-12">
 						<!-- BEGIN PAGE TITLE & BREADCRUMB-->
-						<h3 class="page-title">船舱信息</h3>
+						<h3 class="page-title icon-settings">&nbsp;作业船舶维护</h3>
 						<ul class="page-breadcrumb breadcrumb">
 							<li><i class="fa fa-home"></i> <a
 								href="${BasePath}/web/main"> 主页 </a> <i
 								class="fa fa-angle-right"></i></li>
 							<li>管理中心 <i class="fa fa-angle-right"></i>
 							</li>
-							<li><a href="${BasePath}/task/maintenance">船舶作业管理 </a><i
+							<li><a href="${BasePath}/task/maintenance">作业船舶维护 </a><i
 								class="fa fa-angle-right"></i></li>							
 							<li>船舱信息</li>
 						</ul>

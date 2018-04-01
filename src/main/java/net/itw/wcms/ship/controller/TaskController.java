@@ -315,6 +315,30 @@ public class TaskController {
 			return result;
 		}
 	}
+
+	/**
+	 * 设置船舶状态（用于APP端因误操作或忘记操作时的船舶状态维护）
+	 * 
+	 * @param taskId
+	 * @param params
+	 * @return
+	 */
+	@RequestMapping(value = "/doModifyShipStatus")
+	public Map<String, Object> doModifyShipStatus(@RequestParam Map<String, String> params) {
+		User operator = SessionUtil.getSessionUser(req);
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			MessageOption mo = this.taskShipService.remedyShipStatus(params, operator.getUserName());
+			result.put("msg", mo.msg);
+			result.put("code", mo.isSuccess() ? "1" : "0");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", "0");
+			result.put("msg", e.getMessage());
+			return result;
+		}
+	}
 	
 	/**
 	 * 卸船进度
