@@ -148,11 +148,28 @@
 		    	events: {
 					'click .mod' : function(e, value, row, index) {
 		         	    $('#addForm')[0].reset();
-						if($("#status").val() == 1){
+	                	if(row.status==0){
+	                		$("#status").empty();
+	                		$("#status").append("<option value='1'>清舱</option>");
+							$('#cleartime-div').show();
+	                	}else if(row.status == 1){
+	                		$("#status").empty();
+	                		$("#status").append("<option value='0'>卸货</option>");
+							$('#cleartime-div').hide();
+	                	}else{
+	                		$("#status").empty();
+	                		$("#status").append("<option value='1'>清舱</option>").append("<option value='0'>卸货</option>");
+		                	if($("#status").val() == 1){
+								$('#cleartime-div').show();
+							}else{
+								$('#cleartime-div').hide();
+							}
+	                	}	         	    
+/*						if($("#status").val() == 1){
 							$('#cleartime-div').show();
 						}else{
 							$('#cleartime-div').hide();
-						}
+						}*/
 						$('#cabinNo').val(row.cabinNo);
 						$('#cabinStatus').modal('show');
 					}
