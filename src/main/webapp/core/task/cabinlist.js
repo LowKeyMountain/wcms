@@ -125,6 +125,11 @@
 		        align: 'center',
 		        width: '5%'
 		    }, {
+		        field: 'clearTime',
+		        title: '清舱时间',
+		        align: 'center',
+		        width: '5%'
+		    }, {
 		        field: 'status',
 		        title: '状态',
 		        align: 'center',
@@ -142,11 +147,29 @@
 		        },
 		    	events: {
 					'click .mod' : function(e, value, row, index) {
-						if($("#status").val() == 1){
+		         	    $('#addForm')[0].reset();
+	                	if(row.status==0){
+	                		$("#status").empty();
+	                		$("#status").append("<option value='1'>清舱</option>");
+							$('#cleartime-div').show();
+	                	}else if(row.status == 1){
+	                		$("#status").empty();
+	                		$("#status").append("<option value='0'>卸货</option>");
+							$('#cleartime-div').hide();
+	                	}else{
+	                		$("#status").empty();
+	                		$("#status").append("<option value='1'>清舱</option>").append("<option value='0'>卸货</option>");
+		                	if($("#status").val() == 1){
+								$('#cleartime-div').show();
+							}else{
+								$('#cleartime-div').hide();
+							}
+	                	}	         	    
+/*						if($("#status").val() == 1){
 							$('#cleartime-div').show();
 						}else{
 							$('#cleartime-div').hide();
-						}
+						}*/
 						$('#cabinNo').val(row.cabinNo);
 						$('#cabinStatus').modal('show');
 					}
@@ -162,13 +185,19 @@
     $('#btn_submit').modal({backdrop: 'static', show:false,  keyboard: false});
     
     $('#btn_submit').off().on("click", function () {
+    	
+    	if($("#status").val()==1 && $("#clearTime").val()==""){
+			alert("请选择清舱时间！");
+			return;        		
+    	}
     	var data={
     			status: $("#status").val(),
     			taskId: taskId,
-    			cabinNo: $("#cabinNo").val()
+    			cabinNo: $("#cabinNo").val(),
+    			clearTime: $("#clearTime").val()
     	}
         $.ajax({
-            url: BasePath + "/cabin/updateCabinStatus",
+            url: BasePath + "/cabin/remendyCabinStatus",
             type: "post",
             dataType: "json",
             cache: false,
@@ -177,11 +206,11 @@
             success: function (data) {
             	if (data.success == true){
             		alert(data.msg);
-            		initTable(taskId);
-                	//$('#cabinDetail').bootstrapTable("refresh");
+            		//initTable(taskId);
             	} else {
             		alert(data.msg);                		
             	}
+        		initTable(taskId);
             },
             failure: function(data){
                 alert("修改失败!");

@@ -134,13 +134,12 @@ License: You must have a valid license purchased only from themeforest(the above
 												<select id="status" name="status" class="form-control select2me"  style="width:240px;">
 								   					<option value="0" >卸货</option>
 								   					<option value="1" >清舱</option>
-								   					<option value="2" >完成</option>
 												</select>											
 												<input type="hidden" name="cabinNo" placeholder="cabinNo" id="cabinNo" />
 										</div>
 										<div class = "input-group" id="cleartime-div" >
 												<span class="input-group-addon text-center"><b class="icon-td">清舱时间</b></span>
-										        <input class="form-control form_datetime" name="cleartime" placeholder="请选择清舱时间" id="cleartime" style="width:240px;" readonly />
+										        <input class="form-control form_datetime" name="clearTime" placeholder="请选择清舱时间" id="clearTime" style="width:240px;" readonly />
 										</div>
 				                    </div>                            
 				                    </form>
@@ -155,24 +154,19 @@ License: You must have a valid license purchased only from themeforest(the above
             	<div class="row">
 					<div class="col-md-12">
 						<!-- BEGIN EXAMPLE TABLE PORTLET-->
-						<div class="portlet light bordered">
-<!-- 							<div class="portlet-title">
-								<div class="caption font-dark">
-									<i class="icon-settings font-dark"></i> <span
-										class="caption-subject bold uppercase">船舱信息</span>
-								</div>
-							</div> -->
-							<div class="portlet-body">
-
-								<div class="table-toolbar">
-						                <div class="col-md-12 col-sm-2">
-									        <div class="panel panel-primary">
-									            <div class="panel-heading">
-									            		<h3 class="panel-title"><a href="javascript:view_ship(${taskId})">${shipName}</a></h3></div>
-									            <div class="panel-body">
-									                <table id="cabinDetail" class="table table-striped table-bordered table-hover table-checkable order-column"></table>												            
-									            </div>								            
-									        </div>				                
+						<div class="portlet box yellow">
+								<div class="portlet-title">
+									<div class="caption">
+										<i><a href="javascript:view_ship(${taskId})">${shipName}</a></i>
+									</div>
+									<div class="tools">
+										<a onclick="javascript:history.back(-1);" class="fa fa-reply"
+										data-original-title="返回" title="返回"> </a>
+										<a onclick="javascript:initTable(${taskId});" class="reload" data-original-title="刷新" title="刷新"> </a>
+									</div>
+								</div>		
+								<div class="portlet-body" style="display: block;">
+									<table id="cabinDetail" class="table table-striped table-bordered table-hover table-checkable order-column"></table>												            
 								</div>
 							</div>
 						</div>
@@ -182,8 +176,6 @@ License: You must have a valid license purchased only from themeforest(the above
 				<!-- END CONTENT BODY -->
 			</div>
 			<!-- END CONTENT -->
-		</div>
-	</div>
 </div>
 	<!-- END CONTAINER -->
 	<jsp:include page="../../footer.jsp" />
@@ -227,7 +219,10 @@ License: You must have a valid license purchased only from themeforest(the above
         <script src="${IncPath}/assets/layouts/layout/scripts/demo.min.js" type="text/javascript"></script>
         <script src="${IncPath}/assets/layouts/global/scripts/quick-sidebar.min.js" type="text/javascript"></script>
 		<script src="${IncPath}/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
-		<script src="${IncPath}/assets/global/plugins/knockout/knockout-3.4.2.js" type="text/javascript"></script>
+		<script src="${IncPath}/assets/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" type="text/javascript"></script>
+		
+		<script src="${IncPath}/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js" type="text/javascript"></script>
+		<script src="${IncPath}/assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.min.js" type="text/javascript"></script>		<script src="${IncPath}/assets/global/plugins/knockout/knockout-3.4.2.js" type="text/javascript"></script>
         
 		<script type="text/javascript">
 			var IncPath = '${IncPath}';
@@ -243,7 +238,7 @@ License: You must have a valid license purchased only from themeforest(the above
 			// initiate layout and plugins
 			$(".form_datetime").datetimepicker({
 					startView : 'month',
-					minView : 'month',
+					minView : 'hour',
 					language : 'zh-CN',
 					format : 'yyyy-mm-dd hh:ii:ss',
 					todayBtn : true,

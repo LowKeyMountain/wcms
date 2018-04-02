@@ -115,7 +115,7 @@
 					FROM (
 						SELECT cabin.task_id, cabin.cargo_id AS 'cargoId', cabin.cabin_id AS 'cabinId', cabin.cabin_no AS 'cabinNo', cabin.cargo_type AS 'cargoName'
 							, round(cabin.preunloading, 1) AS 'total', cabin.start_position AS 'startPosition'
-							, cabin.end_position AS 'endPosition', cabin.STATUS AS 'status'
+							, cabin.end_position AS 'endPosition', cabin.STATUS AS 'status', cabin.clear_time AS 'clearTime'
 						FROM v_cabin_info cabin
 					) z_xcqk
 						LEFT JOIN (

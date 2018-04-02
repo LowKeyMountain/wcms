@@ -40,7 +40,7 @@ public interface ITaskShipService {
 	 * @param userName
 	 * @return
 	 */	
-	MessageOption remedyShipStatus(Map<String, String> taskId, String userName);	
+	MessageOption remedyShipStatus(Map<String, String> params, String userName);	
 	
 	/**
 	 * 修改船舱状态
@@ -89,6 +89,15 @@ public interface ITaskShipService {
 	 * @return
 	 */
 	Map<String, Object> doGetCargoDetailById(Integer cargoId);
+	
+	/**
+	 * 修改船舱状态（用于APP端因误操作或忘记操作时的船舱状态维护）
+	 * 
+	 * @param params
+	 * @param userName
+	 * @return
+	 */
+	MessageOption remendyCabinStatus(String taskId, String userName, String cabinNo, String status);
 
 	
 }
