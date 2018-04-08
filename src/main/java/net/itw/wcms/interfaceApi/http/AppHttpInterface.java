@@ -166,15 +166,33 @@ public class AppHttpInterface {
 				throw new X27Exception("操作失败：参数[shipStatus]不能为空！");
 			}
 			checkUser(jsonObject); // 验证用户是否存在
-
+			
+			jsonObject.put("fuctionType", "FN_001");
+			
+			String criteria = "";
+			
 			Integer shipStatus = (Integer) jsonObject.get("shipStatus");
-			if (shipStatus == 0) {
-				jsonObject.put("fuctionType", "FN_001_1");
-			} else if (shipStatus == 1) {
-				jsonObject.put("fuctionType", "FN_001_2");
-			} else if (shipStatus == 2) {
-				jsonObject.put("fuctionType", "FN_001_3");
+			if (shipStatus != 3) {
+				criteria = "'$t.status':" + shipStatus + "";
 			}
+			
+			if (jsonObject.containsKey("startTime") && StringUtils.isNotBlank(jsonObject.getString("startTime"))) {
+				criteria = ",'$enter_port_time|>=':'" + jsonObject.getString("startTime") + " 00:00:00'";
+			}
+			
+			if (jsonObject.containsKey("endTime") && StringUtils.isNotBlank(jsonObject.getString("endTime"))) {
+				criteria = ",'$enter_port_time|<=':'" + jsonObject.getString("endTime") + " 00:00:00'";
+			}
+			
+			jsonObject.put("criteria", JSONObject.parseObject("{"+criteria+"}"));
+			
+//			if (shipStatus == 0) {
+//				jsonObject.put("fuctionType", "FN_001_1");
+//			} else if (shipStatus == 1) {
+//				jsonObject.put("fuctionType", "FN_001_2");
+//			} else if (shipStatus == 2) {
+//				jsonObject.put("fuctionType", "FN_001_3");
+//			}
 			return infoQueryHelper.doQueryInfo(jsonObject);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -717,5 +735,97 @@ public class AppHttpInterface {
 		}
 	}
 	
+	/**
+	 * 统计货物信息[FN_011] <br>
+	 * @param json
+	 * @return
+	 */
+	@RequestMapping(value = "/ship/doCargoInfoStatistics")
+	public Map<String, Object> doCargoInfoStatistics(@RequestParam("json") String json) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			JSONObject jsonObject = JSONObject.parseObject(json);
+			if (!jsonObject.containsKey("userId")) {
+				throw new X27Exception("操作失败：参数[userId]不能为空！");
+			}
+			if (!jsonObject.containsKey("taskId")) {
+				throw new X27Exception("操作失败：参数[taskId]不能为空！");
+			}
+			checkUser(jsonObject); // 验证用户是否存在
+
+			jsonObject.put("fuctionType", "FN_011");
+
+			String taskId = jsonObject.getString("taskId");
+			if (StringUtils.isBlank(taskId)) {
+				throw new X27Exception("操作失败：作业船舶[taskId]不能为空！");
+			}
+
+			jsonObject.put("order", "asc");
+			jsonObject.put("sort", "CARGOID");
+			
+			String criteria = "'$t.task_id':'" + taskId + "'";
+			if (jsonObject.containsKey("cargoId") && StringUtils.isNotBlank(jsonObject.getString("cargoId"))) {
+				criteria += ",'$t.cargoId':'" + jsonObject.getString("cargoId") + "'";
+			}
+			
+			jsonObject.put("criteria", JSONObject.parseObject("{"+criteria+"}"));
+			QueryOptions options = new QueryOptions();
+			options.args = new Object[] { taskId, taskId, taskId, taskId };
+			return infoQueryHelper.doQueryInfo(jsonObject, options);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", "0");
+			result.put("msg", e.getMessage());
+			return result;
+		}
+	}
+	
+	/**
+	 * 统计船舱信息[FN_012] <br>
+	 * @param json
+	 * @return
+	 */
+	@RequestMapping(value = "/ship/doCabinInfoStatistics")
+	public Map<String, Object> doCabinInfoStatistics (@RequestParam("json") String json) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			JSONObject jsonObject = JSONObject.parseObject(json);
+			if (!jsonObject.containsKey("userId")) {
+				throw new X27Exception("操作失败：参数[userId]不能为空！");
+			}
+			if (!jsonObject.containsKey("taskId")) {
+				throw new X27Exception("操作失败：参数[taskId]不能为空！");
+			}
+			checkUser(jsonObject); // 验证用户是否存在
+
+			jsonObject.put("fuctionType", "FN_012");
+
+			String taskId = jsonObject.getString("taskId");
+			if (StringUtils.isBlank(taskId)) {
+				throw new X27Exception("操作失败：作业船舶[taskId]不能为空！");
+			}
+
+			jsonObject.put("order", "asc");
+			jsonObject.put("sort", "CABINNO");
+			
+			String criteria = "'$t.task_id':'" + taskId + "'";
+			if (jsonObject.containsKey("cargoId") && StringUtils.isNotBlank(jsonObject.getString("cargoId"))) {
+				criteria += ",'$t.cargoId':'" + jsonObject.getString("cargoId") + "'";
+			}
+			if (jsonObject.containsKey("cabinNo") && StringUtils.isNotBlank(jsonObject.getString("cabinNo"))) {
+				criteria += ",'$t.cabinNo':'" + jsonObject.getString("cabinNo") + "'";
+			}
+			
+			jsonObject.put("criteria", JSONObject.parseObject("{"+criteria+"}"));
+			QueryOptions options = new QueryOptions();
+			options.args = new Object[] { taskId, taskId, taskId, taskId };
+			return infoQueryHelper.doQueryInfo(jsonObject, options);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", "0");
+			result.put("msg", e.getMessage());
+			return result;
+		}
+	}
 	
 }

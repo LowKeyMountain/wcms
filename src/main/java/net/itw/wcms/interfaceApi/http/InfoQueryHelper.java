@@ -165,6 +165,9 @@ public class InfoQueryHelper {
 					if (StringUtils.isBlank(_SQL)) {
 						_SQL = rs.getString("SQL");
 					}
+					if (StringUtils.isBlank(_SQL)) {
+						_SQL = sqlMap.getSql(fuctionType);
+					}
 					config.put("SQL", _SQL);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -284,11 +287,19 @@ public class InfoQueryHelper {
 										+ "] > [PARAM_CHECK] > [CRITERIA] > [" + key + "]查询条件不存在，请确认。");
 							}
 							key = key.startsWith("$") ? key.substring(1, key.length()) : key;
+							
+							String symbol = "=";  
+							int index = key.indexOf("|");
+							if (index > -1) {
+								symbol = key.substring(index + 1, key.length());
+								key = key.substring(0, index);
+							}
+							
 							Object fieldType = queryFieldsJson.getString(key);
-							if (fieldType != null && StringUtils.equalsIgnoreCase("string", (String)fieldType)) {
-								buff.append(" and " + key + " = '" + value + "'");
+							if (fieldType != null && StringUtils.equalsIgnoreCase("string", (String) fieldType)) {
+								buff.append(" and " + key + " " + symbol + " '" + value + "'");
 							} else {
-								buff.append(" and " + key + " = " + value);
+								buff.append(" and " + key + " " + symbol + " " + value);
 							}
 						}
 					}
@@ -443,11 +454,19 @@ public class InfoQueryHelper {
 										+ "] > [PARAM_CHECK] > [CRITERIA] > [" + key + "]查询条件不存在，请确认。");
 							}
 							key = key.startsWith("$") ? key.substring(1, key.length()) : key;
+							
+							String symbol = "=";  
+							int index = key.indexOf("|");
+							if (index > -1) {
+								symbol = key.substring(index + 1, key.length());
+								key = key.substring(0, index);
+							}
+							
 							Object fieldType = queryFieldsJson.getString(key);
-							if (fieldType != null && StringUtils.equalsIgnoreCase("string", (String)fieldType)) {
-								buff.append(" and " + key + " = '" + value + "'");
+							if (fieldType != null && StringUtils.equalsIgnoreCase("string", (String) fieldType)) {
+								buff.append(" and " + key + " " + symbol + " '" + value + "'");
 							} else {
-								buff.append(" and " + key + " = " + value);
+								buff.append(" and " + key + " " + symbol + " " + value);
 							}
 						}
 					}
