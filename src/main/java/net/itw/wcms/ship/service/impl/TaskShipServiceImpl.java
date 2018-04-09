@@ -11,7 +11,6 @@ import javax.annotation.Resource;
 import javax.xml.bind.JAXBException;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -28,7 +27,6 @@ import net.itw.wcms.ship.repository.TaskRepository;
 import net.itw.wcms.ship.service.ITaskShipService;
 import net.itw.wcms.toolkit.DataSyncStepB;
 import net.itw.wcms.toolkit.DataSyncStepC;
-import net.itw.wcms.toolkit.DataSyncStepCIndigo;
 import net.itw.wcms.toolkit.DateTimeUtils;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.toolkit.sql.SqlMap;
@@ -614,7 +612,51 @@ public class TaskShipServiceImpl implements ITaskShipService {
 		}
 		return result;
 	}
-
+	
+	@Override
+	public Map<String, Object> doUnloaderInfoStatistics(Map<String, Object> argsMap) {
+		String msg = "操作成功！";
+		Integer isSuccess = ConstantUtil.SuccessInt;
+		Map<String, Object> result = new HashMap<>();
+		try {
+			StringBuffer sql = new StringBuffer();
+			List<Object> args = new ArrayList<>();
+			int taskId = (Integer) argsMap.get("taskId");
+			if (argsMap.get("endTime") != null && argsMap.get("startTime") != null) {
+				String piece = " AND UNIX_TIMESTAMP(c.Time) BETWEEN UNIX_TIMESTAMP(?) AND UNIX_TIMESTAMP(?) ";
+				sql.append(sqlMap.getSql("FN_013", taskId, taskId, piece));
+				args.add(argsMap.get("startTime"));
+				args.add(argsMap.get("endTime"));
+			} else {
+				sql.append(sqlMap.getSql("FN_013", taskId, taskId));
+			}
+			
+			sql.append(" AND task_id = ? ");
+			args.add(taskId);
+			
+			if (argsMap.get("cabinNo") != null) {
+				sql.append(" AND cabin_no = ? ");
+				args.add(argsMap.get("cabinNo"));
+			}
+			if (argsMap.get("cargoId") != null) {
+				sql.append(" AND cargo_id = ? ");
+				args.add(argsMap.get("cargoId"));
+			}
+			sql.append(" ORDER BY cmsid ASC ");
+			
+			List<Map<String, Object>> data = this.jdbcTemplate.queryForList(sql.toString(), args.toArray());
+			result.put("msg", msg);
+			result.put("data", data);
+			result.put("code", isSuccess);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", ConstantUtil.FailInt);
+			result.put("msg", e.getMessage());
+			return result;
+		}
+		return result;
+	}
+	
 	@Override
 	public Map<String, Object> doGetUnloaderUnshipDetailList(int taskId, String unloaderId, String startTime,
 			String endTime) {

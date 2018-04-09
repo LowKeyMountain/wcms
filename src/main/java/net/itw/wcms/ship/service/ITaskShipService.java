@@ -70,6 +70,13 @@ public interface ITaskShipService {
 	 * @return
 	 */
 	Map<String, Object> doGetUnloaderUnshipInfo(int parseInt, String startTime, String endTime);
+	
+	/**
+	 * 统计卸船机信息
+	 * @param args
+	 * @return
+	 */
+	Map<String, Object> doUnloaderInfoStatistics(Map<String, Object> args);
 
 	/**
 	 * 查询卸船机卸船明细列表信息（以卸船机为维度）

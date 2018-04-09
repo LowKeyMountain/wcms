@@ -671,7 +671,7 @@
 			]]>
 			</value>
 		</entry>
-				<entry>
+		<entry>
 			<key>FN_012</key>
 			<description>统计船舱信息(doCabinInfoStatistics)</description>
 			<value>
@@ -754,6 +754,45 @@
 					AND xcqk.cabin_id = wcl.cabin_id
 			) t
 			WHERE 1 = 1
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>FN_013</key>
+			<description>统计卸船机信息(doUnloaderInfoStatistics)</description>
+			<value>
+			<![CDATA[
+			SELECT c.task_id, w.cmsid  AS 'unloaderId'
+				, CASE w.cmsid
+					WHEN 'ABB_GSU_1' THEN '#1'
+					WHEN 'ABB_GSU_2' THEN '#2'
+					WHEN 'ABB_GSU_3' THEN '#3'
+					WHEN 'ABB_GSU_4' THEN '#4'
+					WHEN 'ABB_GSU_5' THEN '#5'
+					WHEN 'ABB_GSU_6' THEN '#6'
+					ELSE w.cmsid
+				END AS 'unloaderName', round(w.usedTime, 2) AS 'usedTime'
+				, round(w.unloading, 2) AS 'unloading'
+				, round(w.unloading / w.usedTime, 2) AS 'efficiency'
+			FROM (
+				SELECT c.cabinId, c.cmsid, MIN(c.Time) AS 'startTime'
+					, MAX(c.Time) AS 'endTime'
+					, timestampdiff(SECOND, MIN(c.Time), MAX(c.Time)) / 3600 AS 'usedTime'
+					, SUM(c.OneTask) AS 'unloading'
+				FROM (
+					SELECT `cc`.`cabinId` AS `cabinId`, `bb`.`groupId` AS `groupId`, `bb`.`Cmsid` AS `Cmsid`, `bb`.`Time` AS `Time`, `bb`.`unloaderMove` AS `unloaderMove`
+						, `bb`.`OneTask` AS `OneTask`, `bb`.`operationType` AS `operationType`
+					FROM `tab_temp_c_%s` `cc`
+						JOIN `tab_temp_b_%s` `bb`
+					WHERE `cc`.`id` = `bb`.`groupId`
+						AND `bb`.`operationType` = 1
+				) c
+				WHERE 1 = 1
+					%s
+				GROUP BY c.Cmsid
+			) w
+				LEFT JOIN v_cabin_info c ON w.cabinId = c.cabin_id
+			WHERE 1 = 1 
 			]]>
 			</value>
 		</entry>
