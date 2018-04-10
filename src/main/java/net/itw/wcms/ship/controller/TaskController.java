@@ -300,11 +300,11 @@ public class TaskController {
 	 */
 	@RequestMapping(value = "/doSetShipStatus")
 	public Map<String, Object> doSetShipStatus(@RequestParam("taskId") String taskId,
-			@RequestParam("status") String status) {
+			@RequestParam("status") String status, @RequestParam("time") String time) {
 		User operator = SessionUtil.getSessionUser(req);
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			MessageOption mo = this.taskShipService.updateShipStatus(taskId, operator.getUserName(), status);
+			MessageOption mo = this.taskShipService.updateShipStatusWeb(taskId, operator.getUserName(), status, time);
 			result.put("msg", mo.msg);
 			result.put("code", mo.isSuccess() ? "1" : "0");
 			return result;

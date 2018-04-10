@@ -53,6 +53,7 @@ var UnshipInfo = function() {
 							+ "<td>"+res.remainder+"</td>"
 							+ "<td>"+res.clearance+"</td>"
 							+ "<td>"+status+"</td>"
+							+ "<td>"+res.clearTime+"</td>"
 							+ "<td>";
 							if (res.status == 0) {
 								tr += "<a href='#' onclick='javascript:UnshipInfo.setCabinStatus_click(\""
@@ -145,7 +146,10 @@ var UnshipInfo = function() {
 		 * 点击设置船舶状态
 		 */
 		setShipStatus_click : function(taskId, status) {
-			var con = confirm(status == '0' ? '请确认是否开始卸船！' : (status == '1' ? '请确认是否完成卸船！' : ""));
+			$('#taskId').val(taskId);
+			$('#status').val(status);
+			$('#taskStatus').modal('show');
+/*			var con = confirm(status == '0' ? '请确认是否开始卸船！' : (status == '1' ? '请确认是否完成卸船！' : ""));
 			if (con == true) {
 				var pageParam = {};
 				pageParam.taskId = taskId;
@@ -163,13 +167,17 @@ var UnshipInfo = function() {
 						alert(result.msg);
 					}
 				});
-			}
+			}*/
 		},
 		/**
 		 * 点击设置船舱状态
 		 */
 		setCabinStatus_click : function(taskId, cabinNo, status) {
-			var con = confirm(status == '1' ? '请确认是否清舱！！' : (status == '2' ? '请确认是否完成！！' : ""));
+			$('#taskId').val(taskId);
+			$('#cabinNo').val(cabinNo);
+			$('#status').val(status);
+			$('#cabinStatus').modal('show');
+/*			var con = confirm(status == '1' ? '请确认是否清舱！！' : (status == '2' ? '请确认是否完成！！' : ""));
 			if (con == true) {
 				//（0|卸货;1|清舱;2|完成）
 				var pageParam = {};
@@ -185,7 +193,7 @@ var UnshipInfo = function() {
 						alert(result.msg);
 					}
 				});
-			}
+			}*/
 		}
 	};
 }();

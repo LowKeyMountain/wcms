@@ -349,12 +349,12 @@ public class CabinController {
 	 */
 	@RequestMapping(value = "/updateCabinStatus")
 	public Map<String, Object> updateCabinStatus(@RequestParam("taskId") String taskId,
-			@RequestParam("cabinNo") String cabinNo, @RequestParam("status") String status) {
+			@RequestParam("cabinNo") String cabinNo, @RequestParam("status") String status, @RequestParam("clearTime") String clearTime) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			// 从session取出User对象
 			User operator = SessionUtil.getSessionUser(req);
-			MessageOption mo = this.taskShipService.updateCabinStatus(taskId, operator.getUserName(), cabinNo, status);
+			MessageOption mo = this.taskShipService.updateCabinStatusWeb(taskId, operator.getUserName(), cabinNo, status, clearTime);
 			result.put("msg", mo.msg);
 			result.put("code", mo.isSuccess() ? "1" : "0");
 			return result;

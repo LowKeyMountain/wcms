@@ -154,7 +154,7 @@ License: You must have a valid license purchased only from themeforest(the above
 								</div>
 				        </div>
 				    </div>
-				</div>                    	
+				</div>
                     	
 				<div class="row">
 					<div class="col-md-12">

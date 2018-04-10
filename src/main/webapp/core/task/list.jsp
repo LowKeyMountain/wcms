@@ -75,6 +75,7 @@ License: You must have a valid license purchased only from themeforest(the above
 	rel="stylesheet" type="text/css" id="style_color" />
 <link href="${IncPath}/assets/layouts/layout/css/custom.min.css"
 	rel="stylesheet" type="text/css" />
+<link href="${IncPath}/assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" type="text/css" />
 
 <!-- END THEME LAYOUT STYLES -->
 <link rel="shortcut icon" href="favicon.ico" />
@@ -142,6 +143,55 @@ License: You must have a valid license purchased only from themeforest(the above
 									</div>
 								</div>
 							</div>
+							<div id="taskStatus" class="modal fade" role="dialog" tabindex="-1" aria-hidden="true" aria-labelledby="myModalLabel" style="display: block;">
+							    <div class="modal-dialog">
+							        <div class="modal-content">
+							            <div class="modal-header bg-primary">
+							                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+							                <h4 class="modal-title">
+							                    <i class="icon-pencil"></i>
+							                    <a class="close" data-dismiss="modal">×</a>
+							                    
+							                    <span id="lblAddTitle" style="font-weight:bold">船舶靠泊</span>
+							                </h4>
+							            </div>
+						                <div class="modal-body" style="text-align:left;">
+						                    <form  id ='updateForm' class="bs-example bs-example-form" role = "form">
+						                    <div class="modal-body" >
+<!-- 												<div class = "input-group" >
+						                                <span class="input-group-addon text-center"><b class="icon-td">作业状态</b></span>
+														<select id="modiStatus" name="modiStatus" class="form-control select2me"  style="width:240px;">
+										   					<option value="0" >预靠</option>
+										   					<option value="1" >作业中</option>
+										   					<option value="2" >已离港</option>
+														</select>
+												</div> -->
+		<!-- 										<div class = "input-group" id="begintime-div">
+														<span class="input-group-addon text-center"><b class="icon-td">开工时间</b></span>
+												        <input class="form-control form_datetime" name="beginTime"  placeholder="请选择开工时间" id="beginTime" style="width:240px;" readonly />
+												</div> 
+												<div class = "input-group" id="endtime-div">
+														<span class="input-group-addon text-center"><b class="icon-td">完工时间</b></span>
+												        <input class="form-control form_datetime" name="endTime" placeholder="请选择完工时间" id="endTime" style="width:240px;" readonly />
+												</div>-->
+												<div class = "input-group" id="berthingTime-div">
+														<span class="input-group-addon text-center"><b class="icon-td">靠泊时间</b></span>
+												        <input class="form-control form_datetime" name="berthingTime" placeholder="请选择靠泊时间" id="berthingTime" style="width:240px;" readonly />
+												</div>										
+												<input type="hidden" class="form-control" name="taskId" placeholder="taskId" id="taskId" />
+												<input type="hidden" class="form-control" name="status" placeholder="status" id="status" />
+												
+						                    </div>                            
+						                    </form>
+						                </div>
+										<div class="modal-footer bg-info"  style="width:500px;">
+											<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>取消</button>
+											<button type="button" id="btn_submit" class="btn btn-primary" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>提交</button>
+										</div>
+							        </div>
+							    </div>
+							</div>	
+
 							<div class="portlet-body">
 								<div class="table-toolbar">
 									<div class="col-md-12 col-sm-6">
@@ -276,6 +326,8 @@ License: You must have a valid license purchased only from themeforest(the above
 	<script
 		src="${IncPath}/assets/layouts/global/scripts/quick-sidebar.min.js"
 		type="text/javascript"></script>
+	<script src="${IncPath}/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
+	<script src="${IncPath}/assets/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" type="text/javascript"></script>		
 	<script type="text/javascript">
 		var IncPath = '${IncPath}';
 		var BasePath = '${BasePath}';
@@ -287,7 +339,7 @@ License: You must have a valid license purchased only from themeforest(the above
 	<!-- END THEME LAYOUT SCRIPTS -->
 	<script>
 		jQuery(document).ready(function() {
-			// initiate layout and plugins
+			// initiate layout and plugins		
 			App.init();
 			Cl.initModal();
 			$('#ykcbship').bootstrapTable("destroy").bootstrapTable(Task.options('0'));
@@ -303,6 +355,63 @@ License: You must have a valid license purchased only from themeforest(the above
 				$('#li_zycb').addClass("active");
 				$('#zycb').addClass("active in");
 			}
+     		$(".form_datetime").datetimepicker({
+            	startView: 'month',
+            	minView: 'hour',
+   			    language:  'zh-CN',
+   			    format: 'yyyy-mm-dd hh:ii:ss',
+   			    todayBtn:  true,
+   			    autoclose: true,
+            	clearBtn: true,
+            	todayHighlight: true,
+            	showMeridian: true,
+            	endDate: new Date()
+   			});
+    		
+            $('#btn_submit').modal({backdrop: 'static', show:false,  keyboard: false});
+
+            $('#btn_submit').off().on("click", function () {
+            	
+            	if($("#berthingTime").is(':visible')){
+    	        	if($("#berthingTime").val()==""){
+    					alert("请选择靠泊时间！");
+    					return;        		
+    	        	}
+            	}
+    /*        	if($("#modiStatus").val()==2 && $("#endTime").val()==""){
+    				alert("请选择完工时间！");
+    				return;        		
+            	}*/
+            	var data={
+            			status:$("#status").val(),
+            			taskId:$("#taskId").val(),
+//            			endTime:$("#endTime").val(),
+//            			beginTime:$("#beginTime").val(),
+            			time:$("#berthingTime").val(),
+            	}
+                $.ajax({
+                    url: BasePath + "/task/doSetShipStatus",
+                    type: "post",
+                    dataType: "json",
+                    cache: false,
+                    async:false,
+                    data: data,
+                    success: function (data) {
+                    	if (data.success == true){
+    						if (status == '1') {
+    							window.location.href = BasePath + "/task/tasklist?type=2";
+    						} else {
+    							window.location.href = BasePath + "/task/tasklist";
+    						}
+    					} else {
+                    		alert(data.msg);                		
+                    	}
+                    },
+                    failure: function(data){
+                        alert("修改失败!");
+                    }                
+                });
+            });
 		});
 	</script>
 </body>
