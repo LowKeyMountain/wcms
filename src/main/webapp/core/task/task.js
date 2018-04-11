@@ -596,7 +596,10 @@ var Task = function() {
 		 * 点击设置船舶状态
 		 */
 		setShipStatus_click : function(taskId, status) {
-			var con = confirm(status == '0' ? '请确认是否船舶靠泊！' : (status == '1' ? '请确认是否完成卸船！' : ""));
+			$('#taskId').val(taskId);
+			$('#status').val(status);
+			$('#taskStatus').modal('show');
+/*			var con = confirm(status == '0' ? '请确认是否船舶靠泊！' : (status == '1' ? '请确认是否完成卸船！' : ""));
 			if (con == true) {
 				var pageParam = {};
 				pageParam.taskId = taskId;
@@ -614,7 +617,7 @@ var Task = function() {
 						alert(result.msg);
 					}
 				});
-			}
+			}*/
 		},
 		/**
 		 * 点击查看船舶信息
@@ -622,7 +625,7 @@ var Task = function() {
 		view_ship_click : function(taskId) {
 			window.location.href = BasePath + "/task/view?taskId="
 					+ taskId;
-		}
+		}		
 
 	};
 }();

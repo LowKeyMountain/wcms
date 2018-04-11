@@ -102,7 +102,80 @@ License: You must have a valid license purchased only from themeforest(the above
 				<!-- END PAGE HEADER-->
 				<div class="row">
 					<div class="col-md-12">
-			            
+						<div id="cabinStatus" class="modal fade" role="dialog" tabindex="-1" aria-hidden="true" aria-labelledby="myModalLabel" style="display: block;">
+						    <div class="modal-dialog">
+						        <div class="modal-content">
+						            <div class="modal-header bg-primary">
+						                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+						                <h4 class="modal-title">
+						                    <i class="icon-pencil"></i>
+						                    <a class="close" data-dismiss="modal">×</a>
+						                    
+						                    <span id="lblAddTitle" style="font-weight:bold">清舱</span>
+						                </h4>
+						            </div>
+					                <div class="modal-body" style="text-align:left;">
+					                    <form  id ='updateForm' class="bs-example bs-example-form" role = "form">
+					                    <div class="modal-body" >
+											<div class = "input-group" id="cleartime-div">
+													<span class="input-group-addon text-center"><b class="icon-td">清舱时间</b></span>
+											        <input class="form-control form_datetime" name="clearTime" placeholder="请选择清舱时间" id="clearTime" style="width:240px;" readonly />
+											</div>
+<!-- 											<div class = "input-group" id="berthingTime-div">
+													<span class="input-group-addon text-center"><b class="icon-td">靠泊时间</b></span>
+											        <input class="form-control form_datetime" name="berthingTime" placeholder="请选择靠泊时间" id="berthingTime" style="width:240px;" readonly />
+											</div> -->										
+											<input type="hidden" class="form-control" name="taskId" placeholder="taskId" id="taskId" />
+											<input type="hidden" class="form-control" name="cabinNo" placeholder="cabinNo" id="cabinNo" />											
+											<input type="hidden" class="form-control" name="status" placeholder="status" id="status" />
+											
+					                    </div>                            
+					                    </form>
+					                </div>
+									<div class="modal-footer bg-info"  style="width:500px;">
+										<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>取消</button>
+										<button type="button" id="btn_submit_qc" class="btn btn-primary" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>提交</button>
+									</div>
+						        </div>
+						    </div>
+						</div>
+
+						<div id="taskStatus" class="modal fade" role="dialog" tabindex="-1" aria-hidden="true" aria-labelledby="myModalLabel" style="display: block;">
+						    <div class="modal-dialog">
+						        <div class="modal-content">
+						            <div class="modal-header bg-primary">
+						                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+						                <h4 class="modal-title">
+						                    <i class="icon-pencil"></i>
+						                    <a class="close" data-dismiss="modal">×</a>
+						                    
+						                    <span id="lblAddTitle" style="font-weight:bold">完成卸船</span>
+						                </h4>
+						            </div>
+					                <div class="modal-body" style="text-align:left;">
+					                    <form  id ='updateForm' class="bs-example bs-example-form" role = "form">
+					                    <div class="modal-body" >
+											<div class = "input-group" id="endtime-div">
+													<span class="input-group-addon text-center"><b class="icon-td">完工时间</b></span>
+											        <input class="form-control form_datetime" name="endTime" placeholder="请选择完工时间" id="endTime" style="width:240px;" readonly />
+											</div>
+<!-- 											<div class = "input-group" id="berthingTime-div">
+													<span class="input-group-addon text-center"><b class="icon-td">靠泊时间</b></span>
+											        <input class="form-control form_datetime" name="berthingTime" placeholder="请选择靠泊时间" id="berthingTime" style="width:240px;" readonly />
+											</div> -->										
+											<input type="hidden" class="form-control" name="taskId" placeholder="taskId" id="taskId" />
+											<input type="hidden" class="form-control" name="status" placeholder="status" id="status" />
+											
+					                    </div>                            
+					                    </form>
+					                </div>
+									<div class="modal-footer bg-info"  style="width:500px;">
+										<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>取消</button>
+										<button type="button" id="btn_submit_wg" class="btn btn-primary" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>提交</button>
+									</div>
+						        </div>
+						    </div>
+						</div>			            
 						<!-- BEGIN EXAMPLE TABLE PORTLET-->
 						<div class="tab-pane" id="cabin">
 							<div class="portlet box yellow">
@@ -147,6 +220,7 @@ License: You must have a valid license purchased only from themeforest(the above
 													<th>剩余量</th>
 													<th>清舱量</th>
 													<th>状态</th>
+													<th>清舱时间</th>
 													<th>操作</th>
 												</tr>
 											</thead>
@@ -239,6 +313,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <script src="${IncPath}/assets/layouts/layout/scripts/layout.min.js" type="text/javascript"></script>
 <script src="${IncPath}/assets/layouts/layout/scripts/demo.min.js" type="text/javascript"></script>
 <script src="${IncPath}/assets/layouts/global/scripts/quick-sidebar.min.js" type="text/javascript"></script>
+<script src="${IncPath}/assets/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" type="text/javascript"></script>
 		
 	<script type="text/javascript">
 		var IncPath = '${IncPath}';
@@ -256,6 +331,92 @@ License: You must have a valid license purchased only from themeforest(the above
 			App.init();
 			Cl.initModal();
 			UnshipInfo.list();
+			
+     		$(".form_datetime").datetimepicker({
+            	startView: 'month',
+            	minView: 'hour',
+   			    language:  'zh-CN',
+   			    format: 'yyyy-mm-dd hh:ii:ss',
+   			    todayBtn:  true,
+   			    autoclose: true,
+            	clearBtn: true,
+            	todayHighlight: true,
+            	showMeridian: true,
+            	endDate: new Date()
+   			});			
+			
+            $('#btn_submit_wg').modal({backdrop: 'static', show:false,  keyboard: false});
+
+            $('#btn_submit_wg').off().on("click", function () {
+            	
+	        	if($("#endTime").val()==""){
+    				alert("请选择完工时间！");
+    				return;        		
+            	}
+            	var data={
+            			status:$("#status").val(),
+            			taskId:$("#taskId").val(),
+            			time:$("#endTime").val(),
+//            			beginTime:$("#beginTime").val(),
+//            			time:$("#berthingTime").val(),
+            	}
+                $.ajax({
+                    url: BasePath + "/task/doSetShipStatus",
+                    type: "post",
+                    dataType: "json",
+                    cache: false,
+                    async:false,
+                    data: data,
+                    success: function (data) {
+                    	if (data.code == Cl.successInt){
+    						if (status == '1') {
+    							window.location.href = BasePath + "/task/tasklist?type=2";
+    						} else {
+    							window.location.href = BasePath + "/task/tasklist";
+    						}
+    					} else {
+                    		alert(data.msg);                		
+                    	}
+                    },
+                    failure: function(data){
+                        alert("修改失败!");
+                    }                
+                });
+            });
+            $('#btn_submit_qc').modal({backdrop: 'static', show:false,  keyboard: false});
+
+            $('#btn_submit_qc').off().on("click", function () {
+            	
+	        	if($("#clearTime").val()==""){
+    				alert("请选择清舱时间！");
+    				return;        		
+            	}
+            	var data={
+            			status:$("#status").val(),
+            			taskId:$("#taskId").val(),
+            			cabinNo:$("#cabinNo").val(),
+            			clearTime:$("#clearTime").val()
+            	}
+                $.ajax({
+                    url: BasePath + "/cabin/updateCabinStatus",
+                    type: "post",
+                    dataType: "json",
+                    cache: false,
+                    async:false,
+                    data: data,
+                    success: function (data) {
+                    	if (data.code == Cl.successInt){
+                    		alert(data.msg);                		
+    						UnshipInfo.list();
+    					} else {
+                    		alert(data.msg);                		
+                    	}
+                    },
+                    failure: function(data){
+                        alert("修改失败!");
+                    }                
+                });
+            });	            
 		});
 	</script>
 </body>

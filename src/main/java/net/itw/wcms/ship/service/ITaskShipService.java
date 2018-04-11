@@ -105,6 +105,25 @@ public interface ITaskShipService {
 	 * @return
 	 */
 	MessageOption remendyCabinStatus(String taskId, String userName, String cabinNo, String status);
+	
+	/**
+	 * 修改船舶状态（用于网页端）
+	 * 
+	 * @param params
+	 * @param userName
+	 * @return
+	 */	
+	MessageOption updateShipStatusWeb(String taskId, String userName, String status, String time);
+	
+	/**
+	 * 修改船舱状态（用于网页端）
+	 * 
+	 * @param taskId
+	 * @param cabinNo
+	 * @param status
+	 * @return
+	 */
+	MessageOption updateCabinStatusWeb(String taskId, String userName, String cabinNo, String status,  String clearTime);
 
 	/**
 	 * 统计飘到舱外的作业量统计
