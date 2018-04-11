@@ -796,7 +796,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 				args.add(argsMap.get("startTime"));
 				args.add(argsMap.get("endTime"));
 			} else {
-				sql.append(sqlMap.getSql("FN_013", taskId, taskId));
+				sql.append(sqlMap.getSql("FN_013", taskId, taskId, ""));
 			}
 			
 			sql.append(" AND task_id = ? ");
@@ -871,6 +871,37 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			System.out.println(e.getMessage());
 			throw e;
 		}
+	}
+
+	@Override
+	public Map<String, Object> doOutboardInfoStatistics(Map<String, Object> argsMap) {
+		String msg = "操作成功！";
+		Integer isSuccess = ConstantUtil.SuccessInt;
+		Map<String, Object> result = new HashMap<>();
+		try {
+
+			int taskId = (Integer) argsMap.get("taskId");
+			List<Map<String, Object>> datas = new ArrayList<>();
+			List<Cabin> cabins = this.cabinRepository.findAllByTaskId(taskId);
+			for (int i = 0; i < cabins.size(); i++) {
+				Cabin cabin = cabins.get(i);
+				if (cabin.getStartPosition() == 0 
+						&& cabin.getEndPosition() == 0) {
+					continue;
+				}
+				Map<String, Object> data = new HashMap<>();
+				data.put("cabinNo", cabin.getCabinNo());
+			}
+			result.put("msg", msg);
+			result.put("data", datas);
+			result.put("code", isSuccess);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", ConstantUtil.FailInt);
+			result.put("msg", e.getMessage());
+			return result;
+		}
+		return result;
 	}	
 	
 }

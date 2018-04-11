@@ -596,6 +596,7 @@ var Task = function() {
 		 * 点击设置船舶状态
 		 */
 		setShipStatus_click : function(taskId, status) {
+     	    $('#updateForm')[0].reset();
 			$('#taskId').val(taskId);
 			$('#status').val(status);
 			$('#taskStatus').modal('show');

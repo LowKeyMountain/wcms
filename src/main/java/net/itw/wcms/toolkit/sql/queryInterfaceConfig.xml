@@ -762,7 +762,7 @@
 			<description>统计卸船机信息(doUnloaderInfoStatistics)</description>
 			<value>
 			<![CDATA[
-			SELECT c.task_id, w.cmsid  AS 'unloaderId'
+			SELECT c.task_id, c.cabin_id AS 'cabinId', c.cabin_no AS 'cabinNo',c.cargo_id AS 'cargoId', c.cargo_type AS 'cargoName', w.cmsid  AS 'unloaderId'
 				, CASE w.cmsid
 					WHEN 'ABB_GSU_1' THEN '#1'
 					WHEN 'ABB_GSU_2' THEN '#2'

@@ -146,6 +146,7 @@ var UnshipInfo = function() {
 		 * 点击设置船舶状态
 		 */
 		setShipStatus_click : function(taskId, status) {
+     	    $('#wgForm')[0].reset();			
 			$('#taskId').val(taskId);
 			$('#status').val(status);
 			$('#taskStatus').modal('show');
@@ -173,6 +174,7 @@ var UnshipInfo = function() {
 		 * 点击设置船舱状态
 		 */
 		setCabinStatus_click : function(taskId, cabinNo, status) {
+     	    $('#qcForm')[0].reset();
 			$('#taskId').val(taskId);
 			$('#cabinNo').val(cabinNo);
 			$('#status').val(status);

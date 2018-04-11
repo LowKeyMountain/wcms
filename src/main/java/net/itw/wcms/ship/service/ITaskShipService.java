@@ -125,5 +125,12 @@ public interface ITaskShipService {
 	 */
 	MessageOption updateCabinStatusWeb(String taskId, String userName, String cabinNo, String status,  String clearTime);
 
+	/**
+	 * 统计飘到舱外的作业量统计
+	 * @param args
+	 * @return
+	 */
+	Map<String, Object> doOutboardInfoStatistics(Map<String, Object> args);
+
 	
 }

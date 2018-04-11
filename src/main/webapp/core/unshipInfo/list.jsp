@@ -115,7 +115,7 @@ License: You must have a valid license purchased only from themeforest(the above
 						                </h4>
 						            </div>
 					                <div class="modal-body" style="text-align:left;">
-					                    <form  id ='updateForm' class="bs-example bs-example-form" role = "form">
+					                    <form  id ='qcForm' class="bs-example bs-example-form" role = "form">
 					                    <div class="modal-body" >
 											<div class = "input-group" id="cleartime-div">
 													<span class="input-group-addon text-center"><b class="icon-td">清舱时间</b></span>
@@ -153,7 +153,7 @@ License: You must have a valid license purchased only from themeforest(the above
 						                </h4>
 						            </div>
 					                <div class="modal-body" style="text-align:left;">
-					                    <form  id ='updateForm' class="bs-example bs-example-form" role = "form">
+					                    <form  id ='wgForm' class="bs-example bs-example-form" role = "form">
 					                    <div class="modal-body" >
 											<div class = "input-group" id="endtime-div">
 													<span class="input-group-addon text-center"><b class="icon-td">完工时间</b></span>
