@@ -106,5 +106,12 @@ public interface ITaskShipService {
 	 */
 	MessageOption remendyCabinStatus(String taskId, String userName, String cabinNo, String status);
 
+	/**
+	 * 统计飘到舱外的作业量统计
+	 * @param args
+	 * @return
+	 */
+	Map<String, Object> doOutboardInfoStatistics(Map<String, Object> args);
+
 	
 }

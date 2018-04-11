@@ -869,5 +869,39 @@ public class AppHttpInterface {
 		}
 	}
 	
+	/**
+	 * 统计飘到舱外的作业量统计 <br>
+	 * 
+	 * @param json
+	 * @return
+	 */
+	@RequestMapping(value = "/ship/doOutboardInfoStatistics")
+	public Map<String, Object> doOutboardInfoStatistics(@RequestParam("json") String json) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			JSONObject jsonObject = JSONObject.parseObject(json);
+			if (!jsonObject.containsKey("userId")) {
+				 throw new X27Exception("操作失败：参数[userId]不能为空！");
+			}
+			if (!jsonObject.containsKey("taskId")) {
+				throw new X27Exception("操作失败：参数[taskId]不能为空！");
+			}
+			
+			checkUser(jsonObject); // 验证用户是否存在
+
+			String taskId = jsonObject.getString("taskId");
+			if (StringUtils.isBlank(taskId)) {
+				throw new X27Exception("操作失败：作业船舶[taskId]不能为空！");
+			}
+			Map<String, Object> args = new HashMap<>();
+			args.put("taskId", Integer.parseInt(taskId.toString()));
+			return taskShipService.doOutboardInfoStatistics(args);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", "0");
+			result.put("msg", e.getMessage());
+			return result;
+		}
+	}
 	
 }
