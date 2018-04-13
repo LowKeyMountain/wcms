@@ -6,10 +6,22 @@
 			<description></description>
 			<value>
 			<![CDATA[
-			SELECT t.id AS 'id', s.ship_cname AS 'shipName', s.ship_ename AS 'shipEname', s.imo_no AS 'imoNo', t.berth AS 'berthName'
-			, t.enter_port_time FROM tab_task t
-				LEFT JOIN tab_ship s ON t.`ship_id` = s.`id`
-			WHERE 1 = 1
+			SELECT
+				t.id AS 'id',
+				s.ship_cname AS 'shipName',
+				s.ship_ename AS 'shipEname',
+				s.imo_no AS 'imoNo',
+				t.berth AS 'berthName',
+				t.enter_port_time AS 'enterPortTime',
+			  	t.berthing_time AS 'berthingTime',
+			  	t.begin_time AS 'beginTime',
+			  	t.end_time AS 'endTime',
+			  	t.departure_time AS 'departureTime'
+			FROM
+				tab_task t
+			LEFT JOIN tab_ship s ON t.`ship_id` = s.`id`
+			WHERE
+				1 = 1
 			]]>
 			</value>
 		</entry>
