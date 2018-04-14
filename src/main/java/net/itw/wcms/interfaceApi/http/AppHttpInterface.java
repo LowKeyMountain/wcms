@@ -173,15 +173,15 @@ public class AppHttpInterface {
 			
 			Integer shipStatus = (Integer) jsonObject.get("shipStatus");
 			if (shipStatus != 3) {
-				criteria = "'$t.status':" + shipStatus + "";
+				criteria += "'$t.status':" + shipStatus + "";
 			}
 			
 			if (jsonObject.containsKey("startTime") && StringUtils.isNotBlank(jsonObject.getString("startTime"))) {
-				criteria = ",'$enter_port_time|>=':'" + jsonObject.getString("startTime") + " 00:00:00'";
+				criteria += ",'$enter_port_time|>=':'" + jsonObject.getString("startTime") + " 00:00:00'";
 			}
 			
 			if (jsonObject.containsKey("endTime") && StringUtils.isNotBlank(jsonObject.getString("endTime"))) {
-				criteria = ",'$enter_port_time|<=':'" + jsonObject.getString("endTime") + " 00:00:00'";
+				criteria += ",'$enter_port_time|<=':'" + jsonObject.getString("endTime") + " 00:00:00'";
 			}
 			
 			jsonObject.put("criteria", JSONObject.parseObject("{"+criteria+"}"));

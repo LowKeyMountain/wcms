@@ -13,6 +13,7 @@
 				s.imo_no AS 'imoNo',
 				t.berth AS 'berthName',
 				t.enter_port_time AS 'enterPortTime',
+				t.enter_port_time AS 'enter_port_time',
 			  	t.berthing_time AS 'berthingTime',
 			  	t.begin_time AS 'beginTime',
 			  	t.end_time AS 'endTime',
