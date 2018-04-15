@@ -172,7 +172,9 @@ public class AppHttpInterface {
 			String criteria = "";
 			
 			Integer shipStatus = (Integer) jsonObject.get("shipStatus");
-			if (shipStatus != 3) {
+			if (shipStatus == 3) {
+				criteria += "'$t.status|!=':0";
+			} else {
 				criteria += "'$t.status':" + shipStatus + "";
 			}
 			

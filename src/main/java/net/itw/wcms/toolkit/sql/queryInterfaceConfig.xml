@@ -17,7 +17,8 @@
 			  	t.berthing_time AS 'berthingTime',
 			  	t.begin_time AS 'beginTime',
 			  	t.end_time AS 'endTime',
-			  	t.departure_time AS 'departureTime'
+			  	t.departure_time AS 'departureTime',
+				t.`status` AS 'shipStatus'
 			FROM
 				tab_task t
 			LEFT JOIN tab_ship s ON t.`ship_id` = s.`id`
