@@ -186,15 +186,10 @@ public class AppHttpInterface {
 				criteria += ",'$enter_port_time|<=':'" + jsonObject.getString("endTime") + " 24:59:59'";
 			}
 			
+			jsonObject.put("order", "desc");
+			jsonObject.put("sort", "berthing_time");
 			jsonObject.put("criteria", JSONObject.parseObject("{"+criteria+"}"));
 			
-//			if (shipStatus == 0) {
-//				jsonObject.put("fuctionType", "FN_001_1");
-//			} else if (shipStatus == 1) {
-//				jsonObject.put("fuctionType", "FN_001_2");
-//			} else if (shipStatus == 2) {
-//				jsonObject.put("fuctionType", "FN_001_3");
-//			}
 			return infoQueryHelper.doQueryInfo(jsonObject);
 		} catch (Exception e) {
 			e.printStackTrace();

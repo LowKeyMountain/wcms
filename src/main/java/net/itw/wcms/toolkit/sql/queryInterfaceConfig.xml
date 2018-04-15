@@ -810,5 +810,47 @@
 			]]>
 			</value>
 		</entry>
+		<entry>
+			<key>FN_014_1</key>
+			<description>统计飘到舱外的作业量统计-计算舱左数据(doOutboardInfoStatistics )</description>
+			<value>
+			<![CDATA[
+			SELECT
+				MIN(t.unloaderMove) AS 'leftOffset',
+				COUNT(*) AS 'leftShovelNumber',
+				SUM(t.OneTask) AS 'leftUnloading'
+			FROM
+				tab_unloader_all t
+			WHERE
+				1 = 1
+			AND t.operationType = 1
+			AND t.unloaderMove <= ?
+			AND t.unloaderMove >= ?
+			AND t.Time >= ?
+			AND t.Time <= ?
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>FN_014_2</key>
+			<description>统计飘到舱外的作业量统计-计算舱右数据(doOutboardInfoStatistics )</description>
+			<value>
+			<![CDATA[
+			SELECT
+				MAX(t.unloaderMove) AS 'rightOffset',
+				COUNT(*) AS 'rightShovelNumber',
+				SUM(t.OneTask) AS 'rightUnloading'
+			FROM
+				tab_unloader_all t
+			WHERE
+				1 = 1
+			AND t.operationType = 1
+			AND t.unloaderMove <= ?
+			AND t.unloaderMove >= ?
+			AND t.Time >= ?
+			AND t.Time <= ?
+			]]>
+			</value>
+		</entry>
 	</sqls>
 </sqlMap>
