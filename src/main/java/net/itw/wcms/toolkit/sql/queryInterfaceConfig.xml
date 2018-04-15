@@ -846,7 +846,7 @@
 				1 = 1
 			AND t.operationType = 1
 			AND t.unloaderMove <= ?
-			AND t.unloaderMove >= ?
+			AND t.unloaderMove > ?
 			AND t.Time >= ?
 			AND t.Time <= ?
 			]]>

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -921,7 +922,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			// 计算舱左、右边偏移距离
 			for (int i = 1; i <= cabinMap.size(); i++) {
 				Cabin cabin = cabinMap.get(i);
-
+				
 				// cabinNo 船舱号 数值 例如：1-20
 				// leftOffset 舱左边最远偏移距离(单位：米) 浮点
 				// rightOffset 舱右边最远偏移距离(单位：米) 浮点
@@ -930,22 +931,23 @@ public class TaskShipServiceImpl implements ITaskShipService {
 				// rightShovelNumber 右边舱外作业铲数 数值
 				// rightUnloading 右边舱外作业量 浮点
 
-				Map<String, Object> data = new HashMap<>();
+				float startPosition = cabin.getStartPosition();
+				float endPosition = cabin.getEndPosition();
+					
+				Map<String, Object> data = new LinkedHashMap<>();
 				data.put("cabinNo", cabin.getCabinNo());
-
+				data.put("startPosition", startPosition);
+				data.put("endPosition", endPosition);
 				if (cabin.getStartPosition() == 0 && cabin.getEndPosition() == 0) {
 					data.put("leftOffset", 0.0);
-					data.put("rightOffset", 0.0);
 					data.put("leftShovelNumber", 0);
 					data.put("leftUnloading", 0.0);
+					data.put("rightOffset", 0.0);
 					data.put("rightShovelNumber", 0);
 					data.put("rightUnloading", 0.0);
 					datas.add(data);
 					continue;
 				}
-
-				float startPosition = cabin.getStartPosition();
-				float endPosition = cabin.getEndPosition();
 
 				float leftOffset = 0;
 				float leftOffsetPosition = 0;
@@ -955,9 +957,13 @@ public class TaskShipServiceImpl implements ITaskShipService {
 
 				if (direction == 1) { // 正方向
 					// 计算舱左长度
-					if (startPosition != 0) {
+					if (startPosition > 0) {
 						float lastStartPosition = startPosition;
-						for (int j = i; j > 0; j--) {
+						if (i == 1) {
+							averageMark = false;
+							leftOffset += ConstantUtil.CabinOffset;
+						}
+						for (int j = i-1; j > 0; j--) {
 							Cabin lastCabin = cabinMap.get(j);
 							if (lastCabin.getStartPosition() == 0 && lastCabin.getEndPosition() == 0) {
 								if (j == 1) {
@@ -979,7 +985,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 					// 计算舱右长度
 					averageMark = true; // 状态复位
 					float lastEndPosition = endPosition;
-					for (int j = i; j <= cabinMap.size(); j++) {
+					for (int j = i+1; j <= cabinMap.size(); j++) {
 						Cabin nextCabin = cabinMap.get(j);
 						if (nextCabin.getStartPosition() == 0 && nextCabin.getEndPosition() == 0) {
 							if (j == cabinMap.size()) {
@@ -1005,7 +1011,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 				} else { // 反方向
 					// 计算舱左长度
 					float lastStartPosition = startPosition;
-					for (int j = i; j <= cabinMap.size(); j++) {
+					for (int j = i+1; j <= cabinMap.size(); j++) {
 						Cabin nextCabin = cabinMap.get(j);
 						if (nextCabin.getStartPosition() == 0 && nextCabin.getEndPosition() == 0) {
 							if (j == cabinMap.size()) {
@@ -1025,7 +1031,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 					// 计算舱右长度
 					averageMark = true; // 状态复位
 					float lastEndPosition = endPosition;
-					for (int j = i; j > 0; j--) {
+					for (int j = i-1; j > 0; j--) {
 						Cabin lastCabin = cabinMap.get(j);
 						if (lastCabin.getStartPosition() == 0 && lastCabin.getEndPosition() == 0) {
 							if (j == 1) {
@@ -1049,21 +1055,24 @@ public class TaskShipServiceImpl implements ITaskShipService {
 					rightOffset = averageMark ? rightOffset / 2 : rightOffset;
 					rightOffsetPosition = cabin.getEndPosition() + rightOffset;
 				}
-
+				
+				Date startTime = task.getBeginTime() == null ? task.getBerthingTime() : task.getBeginTime();
 				Date endTime = task.getEndTime() == null ? new Date() : task.getEndTime();
-				Object[] args = new Object[] { cabin.getStartPosition(), leftOffsetPosition, task.getBeginTime(),
-						endTime };
+				Object[] args = new Object[] { cabin.getStartPosition(), leftOffsetPosition, startTime, endTime };
 				Map<String, Object> leftMap = this.jdbcTemplate.queryForMap(sqlMap.getSql("FN_014_1"), args);
 
-				data.put("leftOffset", leftMap.get("leftOffset"));
-				data.put("leftUnloading", leftMap.get("leftUnloading"));
+				data.put("leftOffset", leftMap.get("leftOffset") != null ? leftMap.get("leftOffset") : 0.0);
+				data.put("leftUnloading", leftMap.get("leftUnloading") != null ? leftMap.get("leftUnloading") : 0.0);
 				data.put("leftShovelNumber", leftMap.get("leftShovelNumber"));
-
-				args = new Object[] { rightOffsetPosition, cabin.getEndPosition(), task.getBeginTime(), endTime };
+				
+				args = new Object[] { rightOffsetPosition, cabin.getEndPosition(), startTime, endTime };
 				Map<String, Object> rightMap = this.jdbcTemplate.queryForMap(sqlMap.getSql("FN_014_2"), args);
-				data.put("rightOffset", rightMap.get("rightOffset"));
-				data.put("rightUnloading", rightMap.get("rightUnloading"));
+				
+				data.put("rightOffset", rightMap.get("rightOffset") != null ? rightMap.get("rightOffset") : 0.0);
+				data.put("rightUnloading",
+						rightMap.get("rightUnloading") != null ? rightMap.get("rightUnloading") : 0.0);
 				data.put("rightShovelNumber", rightMap.get("rightShovelNumber"));
+				
 				datas.add(data);
 			}
 			result.put("msg", msg);
