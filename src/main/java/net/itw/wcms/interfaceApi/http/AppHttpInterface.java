@@ -181,7 +181,7 @@ public class AppHttpInterface {
 			}
 			
 			if (jsonObject.containsKey("endTime") && StringUtils.isNotBlank(jsonObject.getString("endTime"))) {
-				criteria += ",'$enter_port_time|<=':'" + jsonObject.getString("endTime") + " 00:00:00'";
+				criteria += ",'$enter_port_time|<=':'" + jsonObject.getString("endTime") + " 24:59:59'";
 			}
 			
 			jsonObject.put("criteria", JSONObject.parseObject("{"+criteria+"}"));
