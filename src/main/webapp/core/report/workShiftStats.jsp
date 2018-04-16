@@ -21,7 +21,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
     <head>
         <meta charset="utf-8" />
-        <title>京唐港  | 卸船机 - 船舶班次作业量统计</title>
+        <title>京唐港  | 报表统计</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         <meta content="" name="description" />
@@ -78,7 +78,7 @@ License: You must have a valid license purchased only from themeforest(the above
 				<div class="row">
 					<div class="col-md-12">
 						<!-- BEGIN PAGE TITLE & BREADCRUMB-->
-						<h3 class="page-title icon-settings">&nbsp;&nbsp;船舶班次作业量统计</h3>
+						<h3 class="page-title icon-settings">&nbsp;&nbsp;船舶卸船机作业量统计</h3>
 						<ul class="page-breadcrumb breadcrumb">
 							<li><i class="fa fa-home"></i> <a
 								href="${BasePath}/web/main"> 主页 </a> <i
@@ -87,8 +87,8 @@ License: You must have a valid license purchased only from themeforest(the above
 							</li>
 							<li><a href="${IncPath}/report/reportview">报表统计 </a><i class="fa fa-angle-right"></i>
 							</li>
-							<li><a href="${IncPath}/report/shiplist?reportType=4">船舶班次作业量统计</a><i class="fa fa-angle-right"></i>
-							</li>														
+							<li><a href="${IncPath}/report/shiplist?reportType=3">船舶卸船机作业量统计</a><i class="fa fa-angle-right"></i>
+							</li>
 							<li>统计结果</li>
 						</ul>
 						<!-- END PAGE TITLE & BREADCRUMB-->
@@ -116,43 +116,6 @@ License: You must have a valid license purchased only from themeforest(the above
 				                    <span id="lblAddTitle" style="font-weight:bold">修改作业状态</span>
 				                </h4>
 				            </div>
-				                <div class="modal-body" style="text-align:left;">
-				                    <form  id ='addForm' class="bs-example bs-example-form" role = "form">
-				                    <div class="modal-body" >
-										<div class="alert alert-danger display-hide">
-											<button class="close" data-close="alert"></button>
-											数据格式异常. 请重新输入.
-										</div>
-										<div class="alert alert-success display-hide">
-											<button class="close" data-close="alert"></button>
-											数据校验通过!
-										</div>
-										<div class = "input-group" >
-				                                <span class="input-group-addon text-center"><b class="icon-td">作业状态</b></span>
-												<select id="shipStatus" name="shipStatus" class="form-control select2me"  style="width:240px;">
-								   					<option value="0" >预靠</option>
-								   					<option value="1" >作业中</option>
-								   					<option value="2" >已离港</option>
-												</select>												
-												<!-- <div class="btn-group" id="status" data-toggle="buttons">
-												       <label class="btn btn-info">
-												         <input type="radio" class="toggle" value="0">卸货
-												       </label>
-												       <label class="btn btn-info">
-												         <input type="radio" class="toggle" value="1">清舱
-												       </label>
-												       <label class="btn btn-info">
-												         <input type="radio" class="toggle" value="2">完成
-												       </label>
-												</div> -->
-											</div>							                            
-				                    </div>                            
-				                    </form>
-				                </div>
-								<div class="modal-footer bg-info"  style="width:500px;">
-									<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>取消</button>
-									<button type="button" id="btn_submit" class="btn btn-primary" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>提交</button>
-								</div>
 				        </div>
 				    </div>
 				</div>                    	
@@ -160,77 +123,54 @@ License: You must have a valid license purchased only from themeforest(the above
 				<div class="row">
 					<div class="col-md-12">
 						<!-- BEGIN EXAMPLE TABLE PORTLET-->
-						<div class="portlet light bordered">
-							<div class="portlet-body">
-								<div class="table-toolbar">
-						                <div class="col-md-12">
-									        <div class="panel panel-primary">
-									            <div class="panel-heading">
-									            		<h3 class="panel-title">统计结果</h3></div>
-									            <div class="panel-body">
-									                <form id="formSearch" class="form-horizontal">
-<!-- 							                
-									                    <div class="form-group" style="margin-top:5px;margin-bottom:5px">
-									                        <label class="control-label col-md-1" for="status">船名: </label>
-									                        <div class="col-md-3">
-																<select id="status" name="status" class="form-control select2me">
-																	<option value="">请选择...</option>
-
-																</select>
-									                        </div>
-													    	<label class="control-label  col-md-1 cy-pad-hor-s">日期：</label>
-													        <div class="col-md-2">
-																<input class="form-control form_datetime" name="queryDate" placeholder="请选择查询日期" id="queryDate" readonly/>
-															</div>									                        
-									                        <label class="control-label col-md-1" for="status">班次: </label>
-									                        <div class="col-md-2">
-																<select id="shift" name="shift" class="form-control select2me">
-																	<option value="">请选择...</option>
-												   					<option value="0" >白班</option>
-												   					<option value="1" >夜班</option>
-																</select>
-									                        </div>																	
-									                    </div>
-									                    <div class="form-group" style="margin-top:5px;margin-bottom:5px">
-									                        <label class="control-label col-md-1" for="status">查询范围: </label>
-									                        <div class="col-md-3">
-																<select id="daterange" name="daterange" class="form-control select2me">
-																	<option value="0">最近一周</option>
-																	<option value="1">最近一个月</option>
-																	<option value="1">最近三个月</option>
-																	<option value="1">最近半年</option>
-																	<option value="1">最近一年</option>
-																</select>
-									                        </div>									                    
-									                    </div>
-									                    <div class="form-group" style="margin-top:5px;margin-left:500px;margin-bottom:5px">
-									                        <div class="col-md-2" style="text-align:left;">
-									                            <button type="button" style="margin-left:20px" id="btn_query" class="btn btn-primary btn-sm">查询</button>
-									                        </div>
-									                        <div class="col-md-2" style="text-align:left;">
-									                            <button type="button" style="margin-left:20px" id="btn_reset" class="btn btn-sm">重置</button>
-									                        </div>
-									                    </div>
-<!-- 												        <div id="toolbar" class="btn-group">
-												            <button id="btn_add" type="button" class="btn btn-primary btn-default" data-toggle="modal" data-target="#addModal">
-												                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
-												            </button>
-												        </div> -->
-									                    <table id="statistics" class="table table-striped table-bordered table-hover table-checkable order-column"></table>												            
-									                </form>
-									            </div>
-									        </div>						                
+						<div class="portlet box yellow">
+								<div class="portlet-title">
+									<div class="caption">
+										<i><a href="javascript:view_ship(${taskId})">${shipName}</a></i>
+									</div>
+									<div class="tools">
+										<a onclick="javascript:history.back(-1);" class="fa fa-reply"
+										data-original-title="返回" title="返回"> </a> <a
+										onclick="javascript:initTable();" class="reload" data-original-title="刷新"
+										title="刷新"> </a>
+									</div>
 								</div>
-							</div>
-						</div>
+						<div class="portlet-body" style="display: block;">
+			            	<div class="table-toolbar">
+								<form id="formSearch" class="form-horizontal">
+				                    <div class="form-group" style="margin-top:5px;margin-bottom:5px">
+				                        <label class="control-label col-md-1" for="searchDate">日期: </label>
+				                        <div class="col-md-2">
+											<input class="form_datetime form-control" name="searchDate" placeholder="请选择查询日期" id="searchDate" readonly/>
+				                        </div>
+				                        <label class="control-label col-md-1" for="status">班次: </label>
+				                        <div class="col-md-2">
+											<select id="shift" name="shift" class="form-control select2me">
+												<option value="">请选择...</option>
+							   					<option value="0" >白班</option>
+							   					<option value="1" >夜班</option>
+											</select>
+				                        </div>
+					                        <div class="col-md-1" style="text-align:left;">
+					                            <button type="button" style="margin-left:20px" id="btn_query" class="btn btn-primary btn-sm">筛选</button>
+					                        </div>
+					                        <div class="col-md-1" style="text-align:left;">
+					                            <button type="button" style="margin-left:20px" id="btn_reset" class="btn btn-sm">重置</button>
+					                        </div>
+				                    </div>								
+	                    			<table id="workShiftStats" class="table table-striped table-bordered table-hover table-checkable order-column"></table>
+		                    	</form>
+		                    </div>								            
+			            </div>
 						<!-- END EXAMPLE TABLE PORTLET-->
+						</div>
 					</div>
 				</div>
 				<!-- END CONTENT BODY -->
 			</div>
 			<!-- END CONTENT -->
 		</div>
-	</div>
+</div>
 	<!-- END CONTAINER -->
 	<jsp:include page="../../footer.jsp" />
 	<!--[if lt IE 9]>
@@ -283,14 +223,16 @@ License: You must have a valid license purchased only from themeforest(the above
 		<script type="text/javascript">
 			var IncPath = '${IncPath}';
 			var BasePath = '${BasePath}';
+			var taskId = '${taskId}';
 		</script>
 		<script src="${IncPath}/cl.js?v=${jsVersion}"
 			type="text/javascript"></script>
-		<script src="${IncPath}/core/report/statistics.js?v=${jsVersion}"
+		<script src="${IncPath}/core/report/workShiftStats.js?v=${jsVersion}"
 			type="text/javascript"></script>
 			
         <script>  
             $(document).ready(function(){
+      	        initTable();          	
       			$(".form_datetime").datetimepicker({
 	            	startView: 'month',
 	            	minView: 'month',
@@ -303,54 +245,6 @@ License: You must have a valid license purchased only from themeforest(the above
 	            	showMeridian: true,
 	            	endDate: new Date()
     			});
-
-     			function DatePicker(beginSelector,endSelector){
-    	            // 仅选择日期
-    	            $(beginSelector).datetimepicker(
-    	            {
-    	            	language:  "zh-CN",
-    	            	autoclose: true,
-    	            	startView: 'month',
-    	            	minView: 'month',
-    	            	format: "yyyy-mm-dd hh:ii:ss",
-    	            	clearBtn: true,
-    	            	//todayBtn: true,
-    	            	todayHighlight: true,
-    	            	showMeridian: true,
-    	            	endDate: new Date()
-    	            }).on('changeDate', function(s){
-    	            	var startTime = s.date;     	            	
-    	            	if(s.date){
-    	            		$(endSelector).datetimepicker('setStartDate', startTime)
-    	            	}else{
-    	            		$(endSelector).datetimepicker('setStartDate',null);
-    	            	}
-    	            })
-
-    	            $(endSelector).datetimepicker(
-    	            {
-    	            	language:  "zh-CN",
-    	            	autoclose: true,
-    	            	startView: 'month',
-    	            	minView: 'month',
-    	            	format: "yyyy-mm-dd hh:ii:ss",
-    	            	clearBtn: true,
-    	            	//todayBtn: true,
-    	            	todayHighlight: true,
-    	            	showMeridian: true,
-    	            	endDate: new Date()
-    	            }).on('changeDate', function(e){
-    	            	var endTime = e.date; 
-    	            	if(e.date){
-    	            		$(beginSelector).datetimepicker('setEndDate', endTime)
-    	            	}else{
-    	            		$(beginSelector).datetimepicker('setEndDate', new Date());
-    	            	} 
-
-    	            })
-    	        }
-    	        DatePicker("#startDepartureDate","#endDepartureDate");
-    	        DatePicker("#startBerthDate","#endBerthDate");			
             });  
         </script>			
 		<!-- BEGIN THEME LAYOUT SCRIPTS -->

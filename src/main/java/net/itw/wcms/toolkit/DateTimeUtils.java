@@ -8,11 +8,11 @@ import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 import org.springframework.util.Assert;
 
 public class DateTimeUtils {
-    public static final Logger log = Logger.getLogger(DateTimeUtils.class);
+//    public static final Logger log = Logger.getLogger(DateTimeUtils.class);
 
     public final static String FORMAT_yyyy_MM_dd = "yyyy-MM-dd";
     public final static String FORMAT_yyyy_M_d = "yyyy-M-d";
@@ -24,9 +24,9 @@ public class DateTimeUtils {
     public final static String FORMAT_yyyy_nian_M_yue_m_ri = "yyyy年M月d日";
     
     public static void main(String[] args) {
-        System.out.println(convertChar2ChineseChar("2008-10-20"));
+/*        System.out.println(convertChar2ChineseChar("2008-10-20"));
         System.out.println(convertChar2ChineseChar("2008-11-21"));
-        System.out.println(convertChar2ChineseChar("2008-01-29"));
+        System.out.println(convertChar2ChineseChar("2008-01-29"));*/      
     }
     
     /**日期显示中文
@@ -334,4 +334,31 @@ public class DateTimeUtils {
     	  return sfstr;
 	 }
     
+	/**
+	 * 得到n天前的时间
+	 * 
+	 * @param d
+	 * @param day
+	 * @return
+	 */
+	public static String getDateBefore(int day) {
+		Calendar now = Calendar.getInstance();
+		now.setTime(new Date());
+		now.roll(Calendar.DATE,  - day);
+		return DateFormatUtils.format(now.getTime(), FORMAT_yyyy_MM_dd_HH_mm_ss);
+	}
+	
+	/**
+	 * 得到n天前的时间
+	 * 
+	 * @param d
+	 * @param day
+	 * @return
+	 */
+	public static String getMonthBefore(int month) {
+		Calendar now = Calendar.getInstance();
+		now.setTime(new Date());
+		now.add(Calendar.MONTH,  - month);
+		return DateFormatUtils.format(now.getTime(), FORMAT_yyyy_MM_dd_HH_mm_ss);
+	}	
 }

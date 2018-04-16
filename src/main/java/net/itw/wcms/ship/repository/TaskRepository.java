@@ -74,7 +74,8 @@ public interface TaskRepository extends JpaRepository<Task, Integer>, JpaSpecifi
 				String startBerthDate = (params.get("startBerthDate") == null ? "" : params.get("startBerthDate"));
 				String endBerthDate = (params.get("endBerthDate") == null ? "" : params.get("endBerthDate"));
 				String status = (params.get("status") == null ? "" : params.get("status"));
-
+				String dateRange = (params.get("dateRange") == null ? "" : params.get("dateRange"));
+				String queryDate = "";
 				if (StringUtils.isNotEmpty(startDepartureDate)) {
 					predicates.add(cb.greaterThanOrEqualTo(root.get("departureTime"),
 							DateTimeUtils.strDateTime2Date(startDepartureDate)));
@@ -95,6 +96,30 @@ public interface TaskRepository extends JpaRepository<Task, Integer>, JpaSpecifi
 				if (StringUtils.isNotEmpty(status)) {
 					predicates.add(cb.equal(root.get("status"), status));
 				}
+				if (StringUtils.isNotEmpty(dateRange)) {
+					switch (dateRange){
+					case "0":
+						queryDate = DateTimeUtils.getDateBefore(7);
+						break;					
+					case "1":
+						queryDate = DateTimeUtils.getMonthBefore(1);
+						break;
+					case "2":
+						queryDate = DateTimeUtils.getMonthBefore(3);
+						break;
+					case "3":
+						queryDate = DateTimeUtils.getMonthBefore(6);
+						break;
+					case "4":
+						queryDate = DateTimeUtils.getMonthBefore(12);
+						break;		
+					default:
+						break;
+					}
+					
+					predicates.add(cb.greaterThanOrEqualTo(root.get("endTime"),
+							DateTimeUtils.strDateTime2Date(queryDate)));
+				}				
 				predicate = cb.and(predicates.toArray(new Predicate[predicates.size()]));
 				query.where(predicate);
 				// 添加排序的功能

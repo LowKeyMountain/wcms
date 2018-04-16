@@ -153,12 +153,12 @@ License: You must have a valid license purchased only from themeforest(the above
 									                <form id="formSearch" class="form-horizontal">
 							                
 									                    <div class="form-group" style="margin-top:5px;margin-bottom:5px">
-										                        <label class="control-label col-md-1" for="status">船名: </label>
+										                        <!--<label class="control-label col-md-1" for="shipName">船名: </label>
 										                        <div class="col-md-3">
-																	<select id="status" name="status" class="form-control select2me">
+																	<select id="shipName" name="shipName" class="form-control select2me">
 																		<option value="">请选择...</option>
 																	</select>
-										                        </div>									                    
+										                        </div>-->									                    
 										                        <label class="control-label col-md-1" for="status">状态: </label>
 										                        <div class="col-md-2">
 																	<select id="status" name="status" class="form-control select2me">
@@ -168,18 +168,19 @@ License: You must have a valid license purchased only from themeforest(the above
 													   					<option value="2" >已离港</option>
 																	</select>
 										                        </div>
-										                        <label class="control-label col-md-1" for="status">查询范围: </label>
+										                        <label class="control-label col-md-1" for="dateRange">查询范围: </label>
 										                        <div class="col-md-3">
-																	<select id="daterange" name="daterange" class="form-control select2me">
+																	<select id="dateRange" name="dateRange" class="form-control select2me">
 																		<option value="0">最近一周</option>
 																		<option value="1">最近一个月</option>
-																		<option value="1">最近三个月</option>
-																		<option value="1">最近半年</option>
-																		<option value="1">最近一年</option>
+																		<option value="2">最近三个月</option>
+																		<option value="3">最近半年</option>
+																		<option value="4">最近一年</option>
+																		<option value="">全部</option>																		
 																	</select>
 										                        </div>
 									                        </div>
-									                        <div class="form-group" style="margin-top:5px;margin-bottom:5px" id="shift-div">
+<!-- 									                        <div class="form-group" style="margin-top:5px;margin-bottom:5px" id="shift-div">
 										                        <label class="control-label col-md-1" for="status">班次: </label>
 										                        <div class="col-md-2">
 																	<select id="shift" name="shift" class="form-control select2me">
@@ -190,7 +191,7 @@ License: You must have a valid license purchased only from themeforest(the above
 										                        </div>
 									                    	</div>
 									                        										                        
-<!-- 													    	<label class="control-label  col-md-1 cy-pad-hor-s">靠泊时间：</label>
+													    	<label class="control-label  col-md-1 cy-pad-hor-s">靠泊时间：</label>
 													        <div class="col-md-4 input-daterange input-group">
 													            <input class="form-control" name="startBerthDate" placeholder="请选择靠泊起始时间" id="startBerthDate" readonly/>
 													            <span class="input-group-addon">--</span>
@@ -229,7 +230,7 @@ License: You must have a valid license purchased only from themeforest(the above
 														    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:view_report(6)">船舶分货作业量统计</a></li>
 														  </ul>
 														</div> -->													        
-									                    <table id="maintenance" class="table table-striped table-bordered table-hover table-checkable order-column"></table>												            
+									                    <table id="shiplist" class="table table-striped table-bordered table-hover table-checkable order-column"></table>												            
 									                </form>
 									            </div>
 									        </div>						                

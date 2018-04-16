@@ -116,43 +116,6 @@ License: You must have a valid license purchased only from themeforest(the above
 				                    <span id="lblAddTitle" style="font-weight:bold">修改作业状态</span>
 				                </h4>
 				            </div>
-				                <div class="modal-body" style="text-align:left;">
-				                    <form  id ='addForm' class="bs-example bs-example-form" role = "form">
-				                    <div class="modal-body" >
-										<div class="alert alert-danger display-hide">
-											<button class="close" data-close="alert"></button>
-											数据格式异常. 请重新输入.
-										</div>
-										<div class="alert alert-success display-hide">
-											<button class="close" data-close="alert"></button>
-											数据校验通过!
-										</div>
-										<div class = "input-group" >
-				                                <span class="input-group-addon text-center"><b class="icon-td">作业状态</b></span>
-												<select id="shipStatus" name="shipStatus" class="form-control select2me"  style="width:240px;">
-								   					<option value="0" >预靠</option>
-								   					<option value="1" >作业中</option>
-								   					<option value="2" >已离港</option>
-												</select>												
-												<!-- <div class="btn-group" id="status" data-toggle="buttons">
-												       <label class="btn btn-info">
-												         <input type="radio" class="toggle" value="0">卸货
-												       </label>
-												       <label class="btn btn-info">
-												         <input type="radio" class="toggle" value="1">清舱
-												       </label>
-												       <label class="btn btn-info">
-												         <input type="radio" class="toggle" value="2">完成
-												       </label>
-												</div> -->
-											</div>							                            
-				                    </div>                            
-				                    </form>
-				                </div>
-								<div class="modal-footer bg-info"  style="width:500px;">
-									<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>取消</button>
-									<button type="button" id="btn_submit" class="btn btn-primary" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>提交</button>
-								</div>
 				        </div>
 				    </div>
 				</div>                    	
@@ -160,57 +123,33 @@ License: You must have a valid license purchased only from themeforest(the above
 				<div class="row">
 					<div class="col-md-12">
 						<!-- BEGIN EXAMPLE TABLE PORTLET-->
-						<div class="portlet light bordered">
-							<div class="portlet-body">
-								<div class="table-toolbar">
-						                <div class="col-md-12">
-									        <div class="panel panel-primary">
-									            <div class="panel-heading">
-									            		<h3 class="panel-title">统计结果</h3></div>
-									            <div class="panel-body">
-									                <form id="formSearch" class="form-horizontal"> 						                
-									                    <div class="form-group" style="margin-top:5px;margin-bottom:5px">
-										                        <label class="control-label col-md-1" for="startDate">日期: </label>
-										                        <div class="col-md-2">
-																	<input class="form_datetime form-control" name="startDate" placeholder="请选择查询日期" id="startDate" readonly/>
-										                        </div>
-										                        <label class="control-label col-md-1" for="status">班次: </label>
-										                        <div class="col-md-2">
-																	<select id="shift" name="shift" class="form-control select2me">
-																		<option value="">请选择...</option>
-													   					<option value="0" >白班</option>
-													   					<option value="1" >夜班</option>
-																	</select>
-										                        </div>
-									                    </div>
-									                    <div class="form-group" style="margin-top:5px;margin-left:500px;margin-bottom:15px">
-									                        <div class="col-md-2" style="text-align:left;">
-									                            <button type="button" style="margin-left:20px" id="btn_query" class="btn btn-primary btn-sm">筛选</button>
-									                        </div>
-									                        <div class="col-md-2" style="text-align:left;">
-									                            <button type="button" style="margin-left:20px" id="btn_reset" class="btn btn-sm">重置</button>
-									                        </div>
-									                    </div>
-<!-- 												        <div id="toolbar" class="btn-group">
-												            <button id="btn_add" type="button" class="btn btn-primary btn-default" data-toggle="modal" data-target="#addModal">
-												                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
-												            </button>
-												        </div> -->
-									                    <table id="statistics" class="table table-striped table-bordered table-hover table-checkable order-column"></table>												            
-									                </form>
-									            </div>
-									        </div>						                
+						<div class="portlet box yellow">
+								<div class="portlet-title">
+									<div class="caption">
+										<i><a href="javascript:view_ship(${taskId})">${shipName}</a></i>
+									</div>
+									<div class="tools">
+										<a onclick="javascript:history.back(-1);" class="fa fa-reply"
+										data-original-title="返回" title="返回"> </a> <a
+										onclick="javascript:initTable(${taskId});" class="reload" data-original-title="刷新"
+										title="刷新"> </a>
+									</div>
 								</div>
-							</div>
-						</div>
+						<div class="portlet-body" style="display: block;">
+			            	<div class="table-toolbar">
+								<form id="formSearch" class="form-horizontal">
+		                    		<table id="unloaderStats" class="table table-striped table-bordered table-hover table-checkable order-column"></table>
+		                    	</form>
+		                    </div>								            
+			            </div>
 						<!-- END EXAMPLE TABLE PORTLET-->
+						</div>
 					</div>
 				</div>
 				<!-- END CONTENT BODY -->
 			</div>
 			<!-- END CONTENT -->
 		</div>
-	</div>
 </div>
 	<!-- END CONTAINER -->
 	<jsp:include page="../../footer.jsp" />
@@ -264,10 +203,11 @@ License: You must have a valid license purchased only from themeforest(the above
 		<script type="text/javascript">
 			var IncPath = '${IncPath}';
 			var BasePath = '${BasePath}';
+			var taskId = '${taskId}';
 		</script>
 		<script src="${IncPath}/cl.js?v=${jsVersion}"
 			type="text/javascript"></script>
-		<script src="${IncPath}/core/report/overview.js?v=${jsVersion}"
+		<script src="${IncPath}/core/report/unloaderStats.js?v=${jsVersion}"
 			type="text/javascript"></script>
 			
         <script>  
@@ -331,7 +271,8 @@ License: You must have a valid license purchased only from themeforest(the above
     	            })
     	        }
     	        DatePicker("#startDepartureDate","#endDepartureDate");
-    	        DatePicker("#startBerthDate","#endBerthDate");			
+    	        DatePicker("#startBerthDate","#endBerthDate");
+    	        initTable();
             });  
         </script>			
 		<!-- BEGIN THEME LAYOUT SCRIPTS -->
