@@ -1075,6 +1075,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 				
 				datas.add(data);
 			}
+			
 			result.put("msg", msg);
 			result.put("data", datas);
 			result.put("code", isSuccess);
