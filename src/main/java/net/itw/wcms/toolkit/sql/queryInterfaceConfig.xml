@@ -6,10 +6,24 @@
 			<description></description>
 			<value>
 			<![CDATA[
-			SELECT t.id AS 'id', s.ship_cname AS 'shipName', s.ship_ename AS 'shipEname', s.imo_no AS 'imoNo', t.berth AS 'berthName'
-			, t.enter_port_time FROM tab_task t
-				LEFT JOIN tab_ship s ON t.`ship_id` = s.`id`
-			WHERE 1 = 1
+			SELECT
+				t.id AS 'id',
+				s.ship_cname AS 'shipName',
+				s.ship_ename AS 'shipEname',
+				s.imo_no AS 'imoNo',
+				t.berth AS 'berthName',
+				t.enter_port_time AS 'enterPortTime',
+				t.enter_port_time AS 'enter_port_time',
+			  	t.berthing_time AS 'berthingTime',
+			  	t.begin_time AS 'beginTime',
+			  	t.end_time AS 'endTime',
+			  	t.departure_time AS 'departureTime',
+				t.`status` AS 'shipStatus'
+			FROM
+				tab_task t
+			LEFT JOIN tab_ship s ON t.`ship_id` = s.`id`
+			WHERE
+				1 = 1
 			]]>
 			</value>
 		</entry>
@@ -793,6 +807,48 @@
 			) w
 				LEFT JOIN v_cabin_info c ON w.cabinId = c.cabin_id
 			WHERE 1 = 1 
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>FN_014_1</key>
+			<description>统计飘到舱外的作业量统计-计算舱左数据(doOutboardInfoStatistics )</description>
+			<value>
+			<![CDATA[
+			SELECT
+				MIN(t.unloaderMove) AS 'leftOffset',
+				COUNT(*) AS 'leftShovelNumber',
+				SUM(t.OneTask) AS 'leftUnloading'
+			FROM
+				tab_unloader_all t
+			WHERE
+				1 = 1
+			AND t.operationType = 1
+			AND t.unloaderMove <= ?
+			AND t.unloaderMove >= ?
+			AND t.Time >= ?
+			AND t.Time <= ?
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>FN_014_2</key>
+			<description>统计飘到舱外的作业量统计-计算舱右数据(doOutboardInfoStatistics )</description>
+			<value>
+			<![CDATA[
+			SELECT
+				MAX(t.unloaderMove) AS 'rightOffset',
+				COUNT(*) AS 'rightShovelNumber',
+				SUM(t.OneTask) AS 'rightUnloading'
+			FROM
+				tab_unloader_all t
+			WHERE
+				1 = 1
+			AND t.operationType = 1
+			AND t.unloaderMove <= ?
+			AND t.unloaderMove > ?
+			AND t.Time >= ?
+			AND t.Time <= ?
 			]]>
 			</value>
 		</entry>

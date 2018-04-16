@@ -1,10 +1,9 @@
-	function initTable(taskId){
-		
-		$('#unloadProgress').bootstrapTable("destroy").bootstrapTable({  // init via javascript
+	function initTable(taskId, unloaderId){
+		$('#unloaderdetail').bootstrapTable("destroy").bootstrapTable({  // init via javascript
 			
 			method : 'post',
 			contentType : "application/x-www-form-urlencoded",
-			url:BasePath + "/task/getUnloadProgressList?taskId=" + taskId,
+			url:BasePath + "/task/getUnloaderDetailList?taskId=" + taskId + "&unloaderId=" + unloaderId,
 			dataType : 'json',
 //			 dataField: 'res',//bootstrap table 可以前端分页也可以后端分页
 			 striped : true, // 是否显示行间隔色
@@ -16,12 +15,12 @@
 			 queryParams : 'queryParams',
 			 sidePagination : 'server',
 			 pageNumber : 1, // 初始化加载第一页，默认第一页			 
-//			 pageSize : 10,// 单页记录数
-//			 pageList : [10,20,30,50],// 分页步进值
+			 pageSize : 10,// 单页记录数
+			 pageList : [10,20,30],// 分页步进值
 //			 showPaginationSwitch : true,// 是否显示选择分页数按钮
 			 showHeader : true,
 //			 showRefresh : true,// 刷新按钮
-//			 showToggle : true,// 是否显示 切换试图（table/card）按钮
+			 // showToggle : true,// 是否显示 切换试图（table/card）按钮
 //			 showColumns : true,// 是否显示 内容列下拉框
 //			 queryParams: getPageMessage,
 //			 search : true, // 显示搜索框
@@ -52,80 +51,47 @@
 			},
 			 			
 //			idField : "id",// 指定主键列
-		    columns: [/*{
-		        field: 'cargoId',
-		        title: '货物编号',
+		    columns: [{
+		        field: 'cabinNo',
+		        title: '船舱号',
 		        align: 'center',
-		        width: '10%'
-		    },*/ {
-		        field: 'cargoName',
-		        title: '货名',
-		        align: 'center',
-		        width: '10%',
+		        width: '7%',
 		        formatter: function (value, row, index) {
-                    //var html = '<a href="#" data-toggle="popover" data-original-title="货物详情" class="btn btn-success pop addon">'+row.cargoName+'</a>';
-                    var html = '<a href="javascript:view_click(' + row.cargoId + ')" class="btn btn-success pop addon">' + row.cargoName + '</a>';
+                    var html = '<a href="javascript:view_unship(' + taskId + ',' + row.cabinNo + ')" class="font-weight-normal">' + row.cabinNo + '</a>';
                     return html;
-                }/*,
-                events: {
-                    'mouseenter .addon': function (e, value, row, index) {
-//                        alert(row.cargoName);
-                    	$(".pop").popover({
-            			    trigger: "hover focus",
-            			    html: true,
-                            content: function() {
-                                return $('#popover_content_wrapper').html();
-                            },    
-            			    animation: false
-            			  })
-            			  .on("mouseenter", function() {
-            			    var _this = this;
-            			    $(this).popover("show");
-            			    $(".popover").on("mouseleave", function() {
-            			      $(_this).popover('hide');
-            			    });
-            			  }).on("mouseleave", function() {
-            			    var _this = this;
-            			    setTimeout(function() {
-            			      if (!$(".popover:hover").length) {
-            			        $(_this).popover("hide");
-            			      }
-            			    }, 300);
-            			  });                  	
-                     }
-                }*/
+                },
 		    }, {
-		        field: 'total',
-		        title: '总量',
+		        field: 'startTime',
+		        title: '开始时间',
 		        align: 'center',
-		        width: '10%'
-/*		        formatter:function(value,row,index) {
-		            return [
-		                '<a class="pop" data-toggle="popover" href="#">'+row.total+"("+row.total+')</a>'
-		            ]
-		        }*/		        
+		        width: '6%',
+		    },  {
+		        field: 'endTime',
+		        title: '结束时间',
+		        align: 'center',
+		        width: '6%',
+		    },  {
+		        field: 'usedTime',
+		        title: '用时|h',
+		        align: 'center',
+		        width: '3%',
 		    }, {
-		        field: 'finished',
-		        title: '已完成',
+		        field: 'unloading',
+		        title: '卸货量|t',
 		        align: 'center',
-		        width: '10%',
-		    },{
-		        field: 'remainder',
-		        title: '剩余量',
-		        align: 'center',
-		        width: '10%'
+		        width: '3%',
 		    }, {
-		        field: 'clearance',
-		        title: '清舱量',
+		        field: 'efficiency',
+		        title: '效率',
 		        align: 'center',
-		        width: '10%'
+		        width: '3%',
 		    }],
 			locale : 'zh-CN',// 中文支持,
 			responseHandler : function(res) {
 				// 在ajax获取到数据，渲染表格之前，修改数据源
 				return res;
 			}
-	});
+	});	
 	
 }
 	/**
@@ -140,4 +106,11 @@
 	 */
 	function view_ship(taskId) {
 		window.location.href = BasePath + "/task/view?taskId="+ taskId;
-	}	
+	}
+	
+	/**
+	 * 查看船舱卸货详情
+	 */
+	function view_unship(taskId, cabinNo) {
+		window.location.href = BasePath + "/cabin/view?taskId=" + taskId + '&cabinNo=' + cabinNo;
+	}

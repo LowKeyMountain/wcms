@@ -191,7 +191,7 @@
 	function view_ship(taskId) {
 		window.location.href = BasePath + "/task/view?taskId="+ taskId;
 	}	
-$(function(){
+	$(function(){
 		initTable();
 		
 	
@@ -265,4 +265,4 @@ $(function(){
                 }                
             });
         });        
-});
+	});

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -54,15 +55,15 @@ public class TaskShipServiceImpl implements ITaskShipService {
 	private CabinRepository cabinRepository;
 	@Autowired
 	private CargoRepository cargoRepository;
-	
+
 	@Autowired
 	private DataSyncStepB dataSyncStepB;
-	@Resource(name="dataSyncStepCImpl")
+	@Resource(name = "dataSyncStepCImpl")
 	private DataSyncStepC dataSyncStepC;
-	
+
 	@Resource(name = "jdbcTemplate")
 	private JdbcTemplate jdbcTemplate;
-	
+
 	private static SqlMap sqlMap;
 
 	static {
@@ -74,7 +75,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * 设置船舱位置
 	 * 
@@ -106,11 +107,11 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			// 1. "离港船舶|2"不能设置舱位；
 			Integer status = task.getStatus();
 			if (2 == status) {
-//				throw new X27Exception("操作失败： 离港船舶不能设置舱位！");
+				// throw new X27Exception("操作失败： 离港船舶不能设置舱位！");
 			}
 
 			Map<String, Cabin> cabins = new HashMap<>();
-			
+
 			if (task.getCargos() != null) {
 				for (Cargo cargo : task.getCargos()) {
 					for (Cabin e : cargo.getCabins()) {
@@ -207,11 +208,11 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			task.setUpdateTime(new Date());
 			task.setUpdateUser(operator.getUserName());
 			taskRepository.saveAndFlush(task);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			mo.msg = e.getMessage();
 			mo.code = ConstantUtil.FailInt;
 		}
-		
+
 		return mo;
 	}
 
@@ -224,7 +225,8 @@ public class TaskShipServiceImpl implements ITaskShipService {
 	 * @return
 	 */
 	@Override
-	public MessageOption updateCabinStatusWeb(String taskId, String userName, String cabinNo, String status, String clearTime) {
+	public MessageOption updateCabinStatusWeb(String taskId, String userName, String cabinNo, String status,
+			String clearTime) {
 		// 需求：作业船舶设置船舱状态（0|卸货;1|清舱;2|完成）
 		// 前置条件：
 		// 1. 检查该船舱货物是否快卸完；
@@ -270,14 +272,14 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			task.setUpdateTime(new Date());
 			task.setUpdateUser(operator.getUserName());
 			taskRepository.saveAndFlush(task);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			mo.msg = e.getMessage();
 			mo.code = ConstantUtil.FailInt;
 		}
-		
+
 		return mo;
 	}
-	
+
 	/**
 	 * 修改船舱状态
 	 * 
@@ -332,14 +334,14 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			task.setUpdateTime(new Date());
 			task.setUpdateUser(operator.getUserName());
 			taskRepository.saveAndFlush(task);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			mo.msg = e.getMessage();
 			mo.code = ConstantUtil.FailInt;
 		}
-		
+
 		return mo;
 	}
-	
+
 	/**
 	 * 设置船舶状态
 	 * 
@@ -406,19 +408,19 @@ public class TaskShipServiceImpl implements ITaskShipService {
 					throw new X27Exception("操作失败: 当前船舶为作业状态！");
 				} else if ("1".equals(status)) {
 					// 检查各船舱是否为完成状态,各舱均为完成状态时才可设置结束卸船；
-//					List<Cabin> cabins = new ArrayList<>();
-//					for (Cargo cargo : task.getCargos()) {
-//						for (Cabin cabin : cargo.getCabins()) {
-//							cabins.add(cabin);
-//						}
-//					}
-//					for (Cabin cabin : cabins) {
-//						if (cabin.getStatus() == 2) {
-//							continue;
-//						} else {
-//							throw new X27Exception("操作失败：当前船舶存在未完成卸货的船舱!");
-//						}
-//					}
+					// List<Cabin> cabins = new ArrayList<>();
+					// for (Cargo cargo : task.getCargos()) {
+					// for (Cabin cabin : cargo.getCabins()) {
+					// cabins.add(cabin);
+					// }
+					// }
+					// for (Cabin cabin : cabins) {
+					// if (cabin.getStatus() == 2) {
+					// continue;
+					// } else {
+					// throw new X27Exception("操作失败：当前船舶存在未完成卸货的船舱!");
+					// }
+					// }
 					// 结束卸船
 					task.setStatus(2);
 					task.setEndTime(new Date());
@@ -511,19 +513,19 @@ public class TaskShipServiceImpl implements ITaskShipService {
 					throw new X27Exception("操作失败: 当前船舶为作业状态！");
 				} else if ("1".equals(status)) {
 					// 检查各船舱是否为完成状态,各舱均为完成状态时才可设置结束卸船；
-//					List<Cabin> cabins = new ArrayList<>();
-//					for (Cargo cargo : task.getCargos()) {
-//						for (Cabin cabin : cargo.getCabins()) {
-//							cabins.add(cabin);
-//						}
-//					}
-//					for (Cabin cabin : cabins) {
-//						if (cabin.getStatus() == 2) {
-//							continue;
-//						} else {
-//							throw new X27Exception("操作失败：当前船舶存在未完成卸货的船舱!");
-//						}
-//					}
+					// List<Cabin> cabins = new ArrayList<>();
+					// for (Cargo cargo : task.getCargos()) {
+					// for (Cabin cabin : cargo.getCabins()) {
+					// cabins.add(cabin);
+					// }
+					// }
+					// for (Cabin cabin : cabins) {
+					// if (cabin.getStatus() == 2) {
+					// continue;
+					// } else {
+					// throw new X27Exception("操作失败：当前船舶存在未完成卸货的船舱!");
+					// }
+					// }
 					// 结束卸船
 					task.setStatus(2);
 					task.setEndTime(DateTimeUtils.strDateTime2Date(time));
@@ -548,8 +550,8 @@ public class TaskShipServiceImpl implements ITaskShipService {
 		}
 
 		return mo;
-	}	
-	
+	}
+
 	/**
 	 * 调整船舶状态
 	 * 
@@ -576,28 +578,27 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			switch (shipStatus) {
 			// 一、船舶为预靠状态；
 			case 0:
-					// 1.检查当前泊位是否被占用，作业船舶最多两条船矿一、矿二；
-					List<Task> tasks = taskRepository.getTaskByStatus(1);
-					for (Task e : tasks) {
-						if (task.getBerth() == e.getBerth()) {
-							throw new X27Exception("操作失败: " + "矿"
-									+ (e.getBerth() == 1 ? "一" : (e.getBerth() == 2 ? "二" : "其他")) + "已被占用！");
-						}
+				// 1.检查当前泊位是否被占用，作业船舶最多两条船矿一、矿二；
+				List<Task> tasks = taskRepository.getTaskByStatus(1);
+				for (Task e : tasks) {
+					if (task.getBerth() == e.getBerth()) {
+						throw new X27Exception("操作失败: " + "矿"
+								+ (e.getBerth() == 1 ? "一" : (e.getBerth() == 2 ? "二" : "其他")) + "已被占用！");
 					}
-					// 2.更新靠泊时间、状态改为作业船舶状态
-					task.setStatus(1);
-					task.setBerthingTime(DateTimeUtils.strDateTime2Date(params.get("berthingTime")));					
-					task.setUpdateTime(new Date());
-					task.setUpdateUser(operator.getUserName());
-					// 更新所有船舱状态为卸货|0
-/*					for (Cargo cargo : task.getCargos()) {
-						for (Cabin cabin : cargo.getCabins()) {
-							cabin.setStatus(0);
-						}
-					}*/
-					taskRepository.saveAndFlush(task);
-					//3.重新计算作业量
-					dataSyncStepC.start(Integer.parseInt(taskId));
+				}
+				// 2.更新靠泊时间、状态改为作业船舶状态
+				task.setStatus(1);
+				task.setBerthingTime(DateTimeUtils.strDateTime2Date(params.get("berthingTime")));
+				task.setUpdateTime(new Date());
+				task.setUpdateUser(operator.getUserName());
+				// 更新所有船舱状态为卸货|0
+				/*
+				 * for (Cargo cargo : task.getCargos()) { for (Cabin cabin :
+				 * cargo.getCabins()) { cabin.setStatus(0); } }
+				 */
+				taskRepository.saveAndFlush(task);
+				// 3.重新计算作业量
+				dataSyncStepC.start(Integer.parseInt(taskId));
 
 				break;
 			// 二、当前为作业状态时，可以修改状态为预靠或离港状态；
@@ -610,7 +611,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 							throw new X27Exception("操作失败: " + "矿"
 									+ (e.getBerth() == 1 ? "一" : (e.getBerth() == 2 ? "二" : "其他")) + "已被占用！");
 						}
-					}					
+					}
 					// 2.状态改为预靠状态，清空靠泊时间及开工时间
 					task.setStatus(0);
 					task.setBerthingTime(null);
@@ -651,7 +652,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 					task.setStatus(1);
 					task.setEndTime(null);
 					task.setDepartureTime(null);
-//					task.setBeginTime(DateTimeUtils.strDateTime2Date(params.get("beginTime")));
+					// task.setBeginTime(DateTimeUtils.strDateTime2Date(params.get("beginTime")));
 					task.setUpdateTime(new Date());
 					task.setUpdateUser(operator.getUserName());
 					taskRepository.saveAndFlush(task);
@@ -671,9 +672,8 @@ public class TaskShipServiceImpl implements ITaskShipService {
 		}
 
 		return mo;
-	}	
-	
-	
+	}
+
 	@Override
 	public Map<String, Object> doGetCargoDetail(Integer taskId, Integer cabinNo) {
 		String msg = "操作成功！";
@@ -681,7 +681,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 
 		Map<String, Object> result = new HashMap<>();
 		try {
-			
+
 			Cargo cargo = cargoRepository.getCargoByTaskIdAndCabinNo(taskId, cabinNo);
 			if (cargo == null) {
 				result.put("code", ConstantUtil.FailInt);
@@ -699,7 +699,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			data.put("stowage", cargo.getStowage());
 			String warehouse = cargoRepository.getCargoWarehouse(cargo.getId());
 			data.put("warehouse", warehouse);
-			
+
 			result.put("msg", msg);
 			result.put("data", data);
 			result.put("code", isSuccess);
@@ -719,7 +719,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 
 		Map<String, Object> result = new HashMap<>();
 		try {
-			
+
 			Cargo cargo = cargoRepository.findOne(cargoId);
 			if (cargo == null) {
 				result.put("code", ConstantUtil.FailInt);
@@ -737,7 +737,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			data.put("stowage", cargo.getStowage());
 			String warehouse = cargoRepository.getCargoWarehouse(cargo.getId());
 			data.put("warehouse", warehouse);
-			
+
 			result.put("msg", msg);
 			result.put("data", data);
 			result.put("code", isSuccess);
@@ -749,7 +749,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 		}
 		return result;
 	}
-	
+
 	@Override
 	public Map<String, Object> doGetUnloaderUnshipInfo(int taskId, String startTime, String endTime) {
 		String msg = "操作成功！";
@@ -780,7 +780,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 		}
 		return result;
 	}
-	
+
 	@Override
 	public Map<String, Object> doUnloaderInfoStatistics(Map<String, Object> argsMap) {
 		String msg = "操作成功！";
@@ -798,10 +798,10 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			} else {
 				sql.append(sqlMap.getSql("FN_013", taskId, taskId, ""));
 			}
-			
+
 			sql.append(" AND task_id = ? ");
 			args.add(taskId);
-			
+
 			if (argsMap.get("cabinNo") != null) {
 				sql.append(" AND cabin_no = ? ");
 				args.add(argsMap.get("cabinNo"));
@@ -811,7 +811,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 				args.add(argsMap.get("cargoId"));
 			}
 			sql.append(" ORDER BY cmsid ASC ");
-			
+
 			List<Map<String, Object>> data = this.jdbcTemplate.queryForList(sql.toString(), args.toArray());
 			result.put("msg", msg);
 			result.put("data", data);
@@ -824,7 +824,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 		}
 		return result;
 	}
-	
+
 	@Override
 	public Map<String, Object> doGetUnloaderUnshipDetailList(int taskId, String unloaderId, String startTime,
 			String endTime) {
@@ -839,7 +839,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 				sql = StringUtils.replace(sql, "%#", taskId + "");
 				args = new Object[] { startTime, endTime, taskId, unloaderId };
 				System.out.println(startTime + "|" + endTime + "|" + taskId + "|" + unloaderId);
-				
+
 			} else {
 				sql = sqlMap.getSql("FN_010_1");
 				sql = StringUtils.replace(sql, "%#", taskId + "");
@@ -859,7 +859,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 		}
 		return result;
 	}
-	
+
 	private void deleteTempData(Integer taskId) {
 		try {
 			// 【任务子表】删除任务子表：卸船作业信息
@@ -881,16 +881,199 @@ public class TaskShipServiceImpl implements ITaskShipService {
 		try {
 
 			int taskId = (Integer) argsMap.get("taskId");
+			Task task = this.taskRepository.getTaskById(taskId);
 			List<Map<String, Object>> datas = new ArrayList<>();
 			List<Cabin> cabins = this.cabinRepository.findAllByTaskId(taskId);
-			for (int i = 0; i < cabins.size(); i++) {
-				Cabin cabin = cabins.get(i);
-				if (cabin.getStartPosition() == 0 
-						&& cabin.getEndPosition() == 0) {
+			Map<Integer, Cabin> cabinMap = new HashMap<>();
+			for (Cabin c : cabins) {
+				cabinMap.put(c.getCabinNo(), c);
+			}
+
+			// 获取船舶方向
+			int direction = this.getShipDirection(cabinMap);
+
+			// 计算平均舱长、舱间距
+			int cabinNum = 0;
+			float cabinLength = 0;
+			int spaceBetween = 0;
+			float cabinSpaceBetween = 0;
+			float averageCabinLength = 0; // 平均舱长
+			float averageCabinSpaceBetween = 0; // 平均舱间距
+			for (int i = 1; i <= cabinMap.size(); i++) {
+				Cabin cabin = cabinMap.get(i);
+				if (cabin.getStartPosition() == 0 && cabin.getEndPosition() == 0) {
 					continue;
 				}
-				Map<String, Object> data = new HashMap<>();
+				cabinLength += cabin.getEndPosition() - cabin.getStartPosition();
+				cabinNum++;
+				Cabin nextCabin = cabinMap.get(i + 1);
+				if (nextCabin != null && nextCabin.getStartPosition() != 0 && nextCabin.getEndPosition() != 0) {
+					if (direction == 1) { // 正方向
+						cabinSpaceBetween += nextCabin.getStartPosition() - cabin.getEndPosition();
+					} else { // 反方向
+						cabinSpaceBetween += nextCabin.getEndPosition() - cabin.getStartPosition();
+					}
+					spaceBetween++;
+				}
+			}
+			averageCabinLength = cabinLength / cabinNum;
+			averageCabinSpaceBetween = cabinSpaceBetween / spaceBetween;
+
+			// 计算舱左、右边偏移距离
+			for (int i = 1; i <= cabinMap.size(); i++) {
+				Cabin cabin = cabinMap.get(i);
+				
+				// cabinNo 船舱号 数值 例如：1-20
+				// leftOffset 舱左边最远偏移距离(单位：米) 浮点
+				// rightOffset 舱右边最远偏移距离(单位：米) 浮点
+				// leftShovelNumber 左边舱外作业铲数 数值
+				// leftUnloading 左边舱外作业量 浮点
+				// rightShovelNumber 右边舱外作业铲数 数值
+				// rightUnloading 右边舱外作业量 浮点
+
+				float startPosition = cabin.getStartPosition();
+				float endPosition = cabin.getEndPosition();
+					
+				Map<String, Object> data = new LinkedHashMap<>();
 				data.put("cabinNo", cabin.getCabinNo());
+				data.put("startPosition", startPosition);
+				data.put("endPosition", endPosition);
+				if (cabin.getStartPosition() == 0 && cabin.getEndPosition() == 0) {
+					data.put("leftOffset", 0.0);
+					data.put("leftShovelNumber", 0);
+					data.put("leftUnloading", 0.0);
+					data.put("rightOffset", 0.0);
+					data.put("rightShovelNumber", 0);
+					data.put("rightUnloading", 0.0);
+					datas.add(data);
+					continue;
+				}
+
+				float leftOffset = 0;
+				float leftOffsetPosition = 0;
+				float rightOffset = 0;
+				float rightOffsetPosition = 0;
+				boolean averageMark = true; // 偏移量是否需要平均（除以2）
+
+				if (direction == 1) { // 正方向
+					// 计算舱左长度
+					if (startPosition > 0) {
+						float lastStartPosition = startPosition;
+						if (i == 1) {
+							averageMark = false;
+							leftOffset += ConstantUtil.CabinOffset;
+						}
+						for (int j = i-1; j > 0; j--) {
+							Cabin lastCabin = cabinMap.get(j);
+							if (lastCabin.getStartPosition() == 0 && lastCabin.getEndPosition() == 0) {
+								if (j == 1) {
+									averageMark = false;
+								}
+								leftOffset += averageCabinLength;
+								leftOffset += averageCabinSpaceBetween;
+								lastStartPosition = 0;
+								continue;
+							}
+							leftOffset += lastStartPosition == 0 ? averageCabinSpaceBetween
+									: lastStartPosition - lastCabin.getEndPosition();
+							break;
+						}
+						leftOffset = averageMark ? leftOffset / 2 : leftOffset;
+					}
+					leftOffsetPosition = cabin.getStartPosition() - leftOffset;
+
+					// 计算舱右长度
+					averageMark = true; // 状态复位
+					float lastEndPosition = endPosition;
+					for (int j = i+1; j <= cabinMap.size(); j++) {
+						Cabin nextCabin = cabinMap.get(j);
+						if (nextCabin.getStartPosition() == 0 && nextCabin.getEndPosition() == 0) {
+							if (j == cabinMap.size()) {
+								averageMark = false;
+								rightOffset += ConstantUtil.CabinOffset;
+							}
+							rightOffset += averageCabinLength;
+							rightOffset += averageCabinSpaceBetween;
+							lastEndPosition = 0;
+							continue;
+						}
+						if (j == cabinMap.size()) {
+							averageMark = false;
+							rightOffset += ConstantUtil.CabinOffset;
+							break;
+						}
+						rightOffset += lastEndPosition == 0 ? averageCabinSpaceBetween
+								: nextCabin.getStartPosition() - lastEndPosition;
+						break;
+					}
+					rightOffset = averageMark ? rightOffset / 2 : rightOffset;
+					rightOffsetPosition = cabin.getEndPosition() + rightOffset;
+				} else { // 反方向
+					// 计算舱左长度
+					float lastStartPosition = startPosition;
+					for (int j = i+1; j <= cabinMap.size(); j++) {
+						Cabin nextCabin = cabinMap.get(j);
+						if (nextCabin.getStartPosition() == 0 && nextCabin.getEndPosition() == 0) {
+							if (j == cabinMap.size()) {
+								averageMark = false;
+							}
+							leftOffset += averageCabinLength;
+							leftOffset += averageCabinSpaceBetween;
+							lastStartPosition = 0;
+							continue;
+						}
+						leftOffset += lastStartPosition == 0 ? averageCabinSpaceBetween
+								: lastStartPosition - nextCabin.getEndPosition();
+						break;
+					}
+					leftOffset = averageMark ? leftOffset / 2 : leftOffset;
+					leftOffsetPosition = cabin.getStartPosition() - leftOffset;
+					// 计算舱右长度
+					averageMark = true; // 状态复位
+					float lastEndPosition = endPosition;
+					for (int j = i-1; j > 0; j--) {
+						Cabin lastCabin = cabinMap.get(j);
+						if (lastCabin.getStartPosition() == 0 && lastCabin.getEndPosition() == 0) {
+							if (j == 1) {
+								averageMark = false;
+								rightOffset += ConstantUtil.CabinOffset;
+							}
+							rightOffset += averageCabinLength;
+							rightOffset += averageCabinSpaceBetween;
+							lastStartPosition = 0;
+							continue;
+						}
+						if (j == 1) {
+							averageMark = false;
+							rightOffset += ConstantUtil.CabinOffset;
+							break;
+						}
+						rightOffset += lastStartPosition == 0 ? averageCabinSpaceBetween
+								: lastCabin.getStartPosition() - lastEndPosition;
+						break;
+					}
+					rightOffset = averageMark ? rightOffset / 2 : rightOffset;
+					rightOffsetPosition = cabin.getEndPosition() + rightOffset;
+				}
+				
+				Date startTime = task.getBeginTime() == null ? task.getBerthingTime() : task.getBeginTime();
+				Date endTime = task.getEndTime() == null ? new Date() : task.getEndTime();
+				Object[] args = new Object[] { cabin.getStartPosition(), leftOffsetPosition, startTime, endTime };
+				Map<String, Object> leftMap = this.jdbcTemplate.queryForMap(sqlMap.getSql("FN_014_1"), args);
+
+				data.put("leftOffset", leftMap.get("leftOffset") != null ? leftMap.get("leftOffset") : 0.0);
+				data.put("leftUnloading", leftMap.get("leftUnloading") != null ? leftMap.get("leftUnloading") : 0.0);
+				data.put("leftShovelNumber", leftMap.get("leftShovelNumber"));
+				
+				args = new Object[] { rightOffsetPosition, cabin.getEndPosition(), startTime, endTime };
+				Map<String, Object> rightMap = this.jdbcTemplate.queryForMap(sqlMap.getSql("FN_014_2"), args);
+				
+				data.put("rightOffset", rightMap.get("rightOffset") != null ? rightMap.get("rightOffset") : 0.0);
+				data.put("rightUnloading",
+						rightMap.get("rightUnloading") != null ? rightMap.get("rightUnloading") : 0.0);
+				data.put("rightShovelNumber", rightMap.get("rightShovelNumber"));
+				
+				datas.add(data);
 			}
 			result.put("msg", msg);
 			result.put("data", datas);
@@ -902,6 +1085,34 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			return result;
 		}
 		return result;
-	}	
-	
+	}
+
+	/**
+	 * 获取船舶方向 1|正、-1|负
+	 * 
+	 * @param cabinMap
+	 * @return
+	 */
+	private int getShipDirection(Map<Integer, Cabin> cabinMap) {
+		final int count = cabinMap.size(); // 船舱数
+		Cabin x = null;
+		for (int i = 1; i <= count; i++) {
+			Cabin cabin = cabinMap.get(i);
+			if (cabin.getStartPosition() == 0 && cabin.getEndPosition() == 0) {
+				continue;
+			}
+			if (x == null) {
+				x = cabin;
+				continue;
+			}
+			Float value = cabin.getStartPosition() - x.getStartPosition();
+			if (value > 0) {
+				return 1;
+			} else {
+				return -1;
+			}
+		}
+		return 1;
+	}
+
 }

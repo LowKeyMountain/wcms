@@ -172,27 +172,24 @@ public class AppHttpInterface {
 			String criteria = "";
 			
 			Integer shipStatus = (Integer) jsonObject.get("shipStatus");
-			if (shipStatus != 3) {
-				criteria = "'$t.status':" + shipStatus + "";
+			if (shipStatus == 3) {
+				criteria += "'$t.status|!=':0";
+			} else {
+				criteria += "'$t.status':" + shipStatus + "";
 			}
 			
 			if (jsonObject.containsKey("startTime") && StringUtils.isNotBlank(jsonObject.getString("startTime"))) {
-				criteria = ",'$enter_port_time|>=':'" + jsonObject.getString("startTime") + " 00:00:00'";
+				criteria += ",'$enter_port_time|>=':'" + jsonObject.getString("startTime") + " 00:00:00'";
 			}
 			
 			if (jsonObject.containsKey("endTime") && StringUtils.isNotBlank(jsonObject.getString("endTime"))) {
-				criteria = ",'$enter_port_time|<=':'" + jsonObject.getString("endTime") + " 00:00:00'";
+				criteria += ",'$enter_port_time|<=':'" + jsonObject.getString("endTime") + " 24:59:59'";
 			}
 			
+			jsonObject.put("order", "desc");
+			jsonObject.put("sort", "berthing_time");
 			jsonObject.put("criteria", JSONObject.parseObject("{"+criteria+"}"));
 			
-//			if (shipStatus == 0) {
-//				jsonObject.put("fuctionType", "FN_001_1");
-//			} else if (shipStatus == 1) {
-//				jsonObject.put("fuctionType", "FN_001_2");
-//			} else if (shipStatus == 2) {
-//				jsonObject.put("fuctionType", "FN_001_3");
-//			}
 			return infoQueryHelper.doQueryInfo(jsonObject);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -405,8 +405,8 @@ public class TaskController {
 	@RequestMapping(value = "/getUnloaderOverviewList", produces = "text/json;charset=UTF-8")
 	public String getUnloaderOverviewList(@RequestParam Map<String, String> params) {
 		Map<String, Object> result = null;
-		String startTime=null;
-		String endTime=null;
+		String startTime="";
+		String endTime="";
 		JSONObject json = new JSONObject();
 		String taskId = params.get("taskId");
 		String searchDate = params.get("searchDate");
@@ -417,6 +417,8 @@ public class TaskController {
 		} else if (StringUtils.equals("0", shift)){
 			startTime = searchDate + " 08:00:00";
 			endTime = searchDate+ " 20:00:00";			
+		} else {
+			
 		}
 		try {
 			result = taskShipService.doGetUnloaderUnshipInfo(Integer.parseInt(taskId.toString()), startTime, endTime);

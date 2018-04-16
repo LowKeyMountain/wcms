@@ -17,4 +17,6 @@ public class ConstantUtil {
 	
 	public static final String DefaultMd5Password = "63a9f0ea7bb98050796b649e85481845";	//root
 	
+	public static final float CabinOffset = 5; // 偏移量（用于计算飘到舱外数据统计）
+	
 }

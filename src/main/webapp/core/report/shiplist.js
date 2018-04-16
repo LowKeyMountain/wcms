@@ -1,6 +1,6 @@
 	function initTable(){
 		
-		$('#maintenance').bootstrapTable("destroy").bootstrapTable({  // init via javascript
+		$('#shiplist').bootstrapTable("destroy").bootstrapTable({  // init via javascript
 			
 			method : 'post',
 			contentType : "application/x-www-form-urlencoded",
@@ -46,13 +46,11 @@
 //			             maxrows: params.limit,
 //			             pageindex:params.pageNumber,
 //						 order: params.order,
-//						 sort: params.sort,
-			             startDepartureDate:$("#startDepartureDate").val(),
-			             endDepartureDate:$("#endDepartureDate").val(),
-			             startBerthDate:$("#startBerthDate").val(),
-			             endBerthDate:$("#endBerthDate").val(),			             
+//						 sort: params.sort,		             
 //						 cmsId: $("#cmsid").val(),
-						 status: $("#status").val()
+						 status: $("#status").val(),
+						 dateRange: $("#dateRange").val()
+
 				};
 				return params; 
 			},
@@ -151,22 +149,22 @@
 		        },
 		    	events: {
 	                'click .progressview' : function(e, value, row, index) {
-	        			window.location.href = BasePath + "/report/progressview";
+	        			window.location.href = BasePath + "/report/cargoInfoStats?taskId=" + row.id;
 	                 },
 	                'click .unloadview' : function(e, value, row, index) {
-	        			window.location.href = BasePath + "/report/unloadview";
+	        			window.location.href = BasePath + "/report/cabinUnloadStats?taskId=" + row.id;
 	                 },
 	                'click .overview' : function(e, value, row, index) {
-	        			window.location.href = BasePath + "/report/overview";
+	        			window.location.href = BasePath + "/report/unloaderStats?taskId=" + row.id;
 	                 },
 	                'click .statistics' : function(e, value, row, index) {
-	        			window.location.href = BasePath + "/report/statistics";
+	        			window.location.href = BasePath + "/report/workShiftStats?taskId=" + row.id;
 	                 },
 	                'click .cabinquantity' : function(e, value, row, index) {
-	        			window.location.href = BasePath + "/report/cabinquantity";
+	        			window.location.href = BasePath + "/report/cabinquantity?taskId=" + row.id;
 	                 },
 	                'click .cargoquantity' : function(e, value, row, index) {
-	        			window.location.href = BasePath + "/report/cargoquantity";
+	        			window.location.href = BasePath + "/report/cargoquantity?taskId=" + row.id;
 	                 }
 	        	}
 		    }],
@@ -201,11 +199,11 @@
 	$(function(){
 		initTable();
 		
-		if(reportType == 3){
+/*		if(reportType == 4){
        		$('#shift-div').show();
 	    }else{
        		$('#shift-div').hide();
-	    }
+	    }*/
 		//查询按钮
         $("#btn_query").off().on("click",function(){
 			//$('#unloader').bootstrapTable('refresh');     
@@ -213,19 +211,7 @@
         })
         //重置按钮事件  
         $("#btn_reset").off().on("click",function(){
-            $("#startDepartureDate").val("");
-            $("#endDepartureDate").val("");
-            $("#startBerthDate").val("");
-            $("#endBerthDate").val("");
+            $("#daterange").val("0");
             $("#status").val("");
-    		$("#startDepartureDate").datetimepicker('setStartDate', null);
-    		$("#startDepartureDate").datetimepicker('setEndDate', new Date());
-    		$("#endDepartureDate").datetimepicker('setStartDate', null);
-    		$("#endDepartureDate").datetimepicker('setEndDate', new Date());
-    		
-    		$("#startBerthDate").datetimepicker('setStartDate', null);
-    		$("#startBerthDate").datetimepicker('setEndDate', new Date());
-    		$("#endBerthDate").datetimepicker('setStartDate', null);
-    		$("#endBerthDate").datetimepicker('setEndDate', new Date());
         });      
 	});
