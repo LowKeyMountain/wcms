@@ -116,10 +116,11 @@ public interface TaskRepository extends JpaRepository<Task, Integer>, JpaSpecifi
 					default:
 						break;
 					}
-					
-					predicates.add(cb.greaterThanOrEqualTo(root.get("endTime"),
+
+					predicates.add(cb.greaterThanOrEqualTo(root.get("updateTime"),
 							DateTimeUtils.strDateTime2Date(queryDate)));
-				}				
+				}
+				predicates.add(cb.notEqual(root.get("status"), "0"));
 				predicate = cb.and(predicates.toArray(new Predicate[predicates.size()]));
 				query.where(predicate);
 				// 添加排序的功能

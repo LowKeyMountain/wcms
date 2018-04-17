@@ -211,7 +211,7 @@
         })
         //重置按钮事件  
         $("#btn_reset").off().on("click",function(){
-            $("#daterange").val("0");
+            $("#dateRange").val("0");
             $("#status").val("");
         });      
 	});
