@@ -142,13 +142,28 @@ License: You must have a valid license purchased only from themeforest(the above
 				<div class="row">
 					<div class="col-md-12">
 						<!-- BEGIN EXAMPLE TABLE PORTLET-->
-						<div class="portlet light bordered">
-							<div class="portlet-body">
+<!-- 						<div class="portlet light bordered">
+							<div class="portlet-body"> -->
+							
+						<div class="portlet box yellow">
+								<div class="portlet-title">
+									<div class="caption">
+										<i>查询条件</i>
+									</div>
+									<div class="tools">
+										<a onclick="javascript:history.back(-1);" class="fa fa-reply"
+										data-original-title="返回" title="返回"> </a> <a
+										onclick="javascript:initTable(${taskId});" class="reload" data-original-title="刷新"
+										title="刷新"> </a>
+									</div>
+								</div>	
+								<div class="portlet-body" style="display: block;">							
 								<div class="table-toolbar">
 						                <div class="col-md-12">
 									        <div class="panel panel-primary">
-									            <div class="panel-heading">
-									            		<h3 class="panel-title">查询条件</h3></div>
+<!-- 									            <div class="panel-heading">
+									            		<h3 class="panel-title">查询条件</h3>
+									            </div> -->
 									            <div class="panel-body">
 									                <form id="formSearch" class="form-horizontal">
 							                
@@ -163,7 +178,6 @@ License: You must have a valid license purchased only from themeforest(the above
 										                        <div class="col-md-2">
 																	<select id="status" name="status" class="form-control select2me">
 																		<option value="">请选择...</option>
-													   					<option value="0" >预靠</option>
 													   					<option value="1" >作业中</option>
 													   					<option value="2" >已离港</option>
 																	</select>
