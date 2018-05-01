@@ -791,7 +791,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			List<Object> args = new ArrayList<>();
 			int taskId = (Integer) argsMap.get("taskId");
 			if (argsMap.get("endTime") != null && argsMap.get("startTime") != null) {
-				String piece = " AND UNIX_TIMESTAMP(c.Time) BETWEEN UNIX_TIMESTAMP(?) AND UNIX_TIMESTAMP(?) ";
+				String piece = " AND UNIX_TIMESTAMP(Time) BETWEEN UNIX_TIMESTAMP(?) AND UNIX_TIMESTAMP(?) ";
 				sql.append(sqlMap.getSql("FN_013", taskId, taskId, piece));
 				args.add(argsMap.get("startTime"));
 				args.add(argsMap.get("endTime"));
