@@ -317,22 +317,72 @@ public class ReportController {
 	}
 	
 	/**
-	 * 跳转至船舶舱口卸货统计页面
+	 * 跳转至船舶舱口效率统计页面
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/cabinquantity")
-	public ModelAndView cabinQuantity() {
-		return new ModelAndView(PATH_REPORT + "cabinquantity");
-	}	
+	@RequestMapping(value = "/cabinEffStats")
+	public ModelAndView cabinEffStats(@RequestParam("taskId") Integer taskId, @RequestParam("cargoId") Integer cargoId) {
+		Task task = taskService.getTaskById(taskId);
+		modelMap.put("taskId", taskId);
+		if (cargoId != null) {
+			modelMap.put("cargoId", cargoId);
+			Cargo cargo = cargoService.findOne(cargoId);
+			modelMap.put("cargoName", cargo != null && cargo.getCargoType() != null ? cargo.getCargoType() : "");
+		}
+		modelMap.put("shipName", task != null && task.getShip() != null ? task.getShip().getShipName() : "");
+		return new ModelAndView(PATH_REPORT + "cabinEffStats");
+	}
 	
 	/**
-	 * 跳转至船舶舱口卸货统计页面
+	 * 跳转至船舶货物效率统计页面
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/cargoquantity")
-	public ModelAndView cargoquantity() {
-		return new ModelAndView(PATH_REPORT + "cargoquantity");
-	}	
+	@RequestMapping(value = "/cargoEffStats")
+	public ModelAndView cargoEffStats(@RequestParam("taskId") Integer taskId) {
+		Task task = taskService.getTaskById(taskId);
+		modelMap.put("taskId", taskId);
+		modelMap.put("shipName", task != null && task.getShip() != null ? task.getShip().getShipName() : "");
+		return new ModelAndView(PATH_REPORT + "cargoEffStats");
+	}
+	
+	/**
+	 * 跳转至船舶货物效率统计子页面
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/cargoEffStatsSub")
+	public ModelAndView cargoEffStatsSub(@RequestParam("taskId") Integer taskId, @RequestParam("cargoId") Integer cargoId) {
+		Task task = taskService.getTaskById(taskId);
+		modelMap.put("taskId", taskId);
+		if (cargoId != null) {
+			modelMap.put("cargoId", cargoId);
+			Cargo cargo = cargoService.findOne(cargoId);
+			modelMap.put("cargoName", cargo != null && cargo.getCargoType() != null ? cargo.getCargoType() : "");
+		}
+		modelMap.put("shipName", task != null && task.getShip() != null ? task.getShip().getShipName() : "");
+		return new ModelAndView(PATH_REPORT + "cargoEffStatsSub");
+	}
+	
+	/**
+	 * 查看船舱信息
+	 * 
+	 * @param taskId
+	 * @param cabinNo
+	 * @return
+	 */
+	@RequestMapping(value = "/cabinDetail")
+	public ModelAndView viewCabinInfo(Integer taskId, Integer cabinNo) {
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("fuctionType", "FN_013");
+		jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "','$cabinNo':'" + cabinNo + "'}"));
+		QueryOptions options = new QueryOptions();
+		options.args = new Object[] { taskId, taskId, taskId, taskId };
+		Map<String, Object> result = infoQueryHelper.doQueryInfo(jsonObject,options);
+		modelMap.put("cabin", result.get("data"));
+		modelMap.put("taskId", taskId);
+		modelMap.put("cabinNo", cabinNo);
+		return new ModelAndView(PATH + "view");
+	}
 }

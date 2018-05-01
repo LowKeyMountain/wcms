@@ -77,7 +77,7 @@ License: You must have a valid license purchased only from themeforest(the above
 				<div class="row">
 					<div class="col-md-12">
 						<!-- BEGIN PAGE TITLE & BREADCRUMB-->
-						<h3 class="page-title">船舶分舱作业量统计</h3>
+						<h3 class="page-title icon-settings">&nbsp;&nbsp;船舶舱口效率统计</h3>
 						<ul class="page-breadcrumb breadcrumb">
 							<li><i class="fa fa-home"></i> <a
 								href="${BasePath}/web/main"> 主页 </a> <i
@@ -109,32 +109,30 @@ License: You must have a valid license purchased only from themeforest(the above
             	<div class="row">
 					<div class="col-md-12">
 						<!-- BEGIN EXAMPLE TABLE PORTLET-->
-						<div class="portlet light bordered">
-							<div class="portlet-title">
-								<div class="caption font-dark">
-									<i class="icon-settings font-dark"></i> <span
-										class="caption-subject bold uppercase">统计结果</span>
-								</div>
-
-							</div>
-							<div class="portlet-body">
-
-								<div class="table-toolbar">
-						                <div class="col-md-12 col-sm-2">
-									        <div class="panel panel-primary">
-									            <div class="panel-heading">
-									            		<h3 class="panel-title"><a href="javascript:view_ship(${taskId})">${shipName}</a></h3></div>
-									            <div class="panel-body">
+						<div class="portlet box yellow">
+								<div class="portlet-title">
+									<div class="caption">
+										<i><a href="javascript:view_ship(${taskId})">${shipName}</a></i>
+									</div>
+									<div class="tools">
+										<a onclick="javascript:history.back(-1);" class="fa fa-reply"
+										data-original-title="返回" title="返回"> </a> <a
+										onclick="javascript:initTable(${taskId});" class="reload" data-original-title="刷新"
+										title="刷新"> </a>
+									</div>
+								</div>		
+								<div class="portlet-body" style="display: block;">
+										<div class="table-toolbar">
+									            
 									                <form id="formSearch" class="form-horizontal">
-							                
-<!-- 								                    <div class="form-group" style="margin-top:5px;margin-bottom:5px">
+<!-- 						                
+									                    <div class="form-group" style="margin-top:5px;margin-bottom:5px">
 									                        <label class="control-label col-md-1" for="status">船名: </label>
 									                        <div class="col-md-3">
 																<select id="status" name="status" class="form-control select2me">
 																	<option value="">请选择...</option>
 																</select>
-									                        </div>							                        
-
+									                        </div>
 									                        <label class="control-label col-md-1" for="status">查询范围: </label>
 									                        <div class="col-md-3">
 																<select id="daterange" name="daterange" class="form-control select2me">
@@ -144,7 +142,10 @@ License: You must have a valid license purchased only from themeforest(the above
 																	<option value="1">最近半年</option>
 																	<option value="1">最近一年</option>
 																</select>
-									                        </div>									                        
+									                        </div>
+									                    </div>
+									                    <div class="form-group" style="margin-top:5px;margin-bottom:5px">
+
 									                    </div>
 									                    <div class="form-group" style="margin-top:5px;margin-left:500px;margin-bottom:5px">
 									                        <div class="col-md-2" style="text-align:left;">
@@ -154,18 +155,17 @@ License: You must have a valid license purchased only from themeforest(the above
 									                            <button type="button" style="margin-left:20px" id="btn_reset" class="btn btn-sm">重置</button>
 									                        </div>
 									                    </div> -->	
-									                	<table id="cabinquantity" class="table table-striped table-bordered table-hover table-checkable order-column"></table>												            
+														<table id="cabinEffStats" class="table table-striped table-bordered table-hover table-checkable order-column"></table>
 													</form>
-									            </div>								            
-									        </div>				                
-								</div>
-							</div>
+										</div>
 						</div>
 						<!-- END EXAMPLE TABLE PORTLET-->
 					</div>
 				</div>
 				<!-- END CONTENT BODY -->
 			</div>
+			
+			
 			<!-- END CONTENT -->
 		</div>
 	</div>
@@ -218,20 +218,17 @@ License: You must have a valid license purchased only from themeforest(the above
 			var IncPath = '${IncPath}';
 			var BasePath = '${BasePath}';
 			var taskId = '${taskId}';
+			var cargoId = '${cargoId}';
 		</script>
 		<script src="${IncPath}/cl.js?v=${jsVersion}"
 			type="text/javascript"></script>
-		<script src="${IncPath}/core/report/cabinquantity.js?v=${jsVersion}"
+		<script src="${IncPath}/core/report/cabinEffStats.js?v=${jsVersion}"
 			type="text/javascript"></script>
 	<script>
 		jQuery(document).ready(function() {
 			// initiate layout and plugins
-			
 			initTable(taskId);
-			
 			Cl.initModal();
-
-		
 		});
 	</script>						
 		<!-- BEGIN THEME LAYOUT SCRIPTS -->

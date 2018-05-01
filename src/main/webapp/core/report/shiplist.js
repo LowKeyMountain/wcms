@@ -161,10 +161,10 @@
 	        			window.location.href = BasePath + "/report/workShiftStats?taskId=" + row.id;
 	                 },
 	                'click .cabinquantity' : function(e, value, row, index) {
-	        			window.location.href = BasePath + "/report/cabinquantity?taskId=" + row.id;
+	        			window.location.href = BasePath + "/report/cabinEffStats?cargoId=&taskId=" + row.id;
 	                 },
 	                'click .cargoquantity' : function(e, value, row, index) {
-	        			window.location.href = BasePath + "/report/cargoquantity?taskId=" + row.id;
+	        			window.location.href = BasePath + "/report/cargoEffStats?taskId=" + row.id;
 	                 }
 	        	}
 		    }],
