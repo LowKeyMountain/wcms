@@ -1,10 +1,10 @@
 	function initTable(taskId){
 		
-		$('#cabinInfoStats').bootstrapTable("destroy").bootstrapTable({  // init via javascript
+		$('#outBoardStats').bootstrapTable("destroy").bootstrapTable({  // init via javascript
 			
 			method : 'post',
 			contentType : "application/x-www-form-urlencoded",
-			url:BasePath + "/report/getCabinInfoStats",
+			url:BasePath + "/report/getOutboardInfoStatistics",
 			dataType : 'json',
 //			 dataField: 'res',//bootstrap table 可以前端分页也可以后端分页
 			 striped : true, // 是否显示行间隔色
@@ -34,8 +34,8 @@
 //			 buttonsAlign : 'left',// 按钮对齐方式
 //			 showExport : true, // 是否显示导出
 //			 exportDataType : "basic", // basic', 'all', 'selected'.
-			 showFooter: true,
-
+//			 showFooter : true,
+			
 			queryParams: function queryParams(params){//自定义参数，这里的参数是传给后台的，分页使用
 				var params = {//这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
 //						 limit: params.limit,   //页面大小
@@ -47,93 +47,62 @@
 //			             maxrows: params.limit,
 //			             pageindex:params.pageNumber,
 //						 order: params.order,
-			             taskId: taskId,
-			             cargoId: cargoId
+			             taskId: taskId
 				};
 				return params; 
 			},
 			 			
 //			idField : "id",// 指定主键列
-		    columns: [{
+		    columns: [/*{
+		        field: 'cargoId',
+		        title: '货物编号',
+		        align: 'center',
+		        width: '10%'
+		    },*/ {
 		        field: 'cabinNo',
 		        title: '船舱号',
 		        align: 'center',
-		        width: '12%',
-		        formatter: function (value, row, index) {
-                    var html = '<a href="javascript:view_unship(' + taskId + ',' + row.cabinNo + ')" class="font-weight-normal">' + row.cabinNo + '</a>';
-                    return html;
-                },
-                footerFormatter: '合计'
-		    }, /*{
-		        field: 'cargoName',
-		        title: '货名',
-		        align: 'center',
-		        width: '10%',
-		        formatter: function (value, row, index) {
-                    //var html = '<a href="#" data-toggle="popover" data-original-title="货物详情" class="btn btn-success pop addon">'+row.cargoName+'</a>';
-                    var html = '<a href="javascript:view_cargo(' + taskId + ',' + row.cargoId + ')" class="font-weight-normal">' + row.cargoName + '</a>';
-                    return html;
-                }
-		    }, */{
-		        field: 'total',
-		        title: '总量',
-		        align: 'center',
-		        width: '18%',
-	            footerFormatter: function (value) {
-	                var count = 0;
-	                for (var i in value) {
-	                	count += value[i].total;
-	                }
-	                return count.toFixed(2);
-	            }
+		        width: '6%'
 		    }, {
-		        field: 'finished',
-		        title: '已完成',
+		        field: 'startPosition',
+		        title: '开始位置',
 		        align: 'center',
-		        width: '18%',
-	            footerFormatter: function (value) {
-	                var count = 0;
-	                for (var i in value) {
-	                	count += value[i].finished;
-	                }
-	                return count.toFixed(2);
-	            }
+		        width: '11%'
 		    }, {
-		    	field: 'finishedBeforeClearance',
-		        title: '清舱前已卸载量',
+		        field: 'endPosition',
+		        title: '结束位置',
 		        align: 'center',
-		        width: '18%',
-	            footerFormatter: function (value) {
-	                var count = 0;
-	                for (var i in value) {
-	                	count += value[i].finishedBeforeClearance;
-	                }
-	                return count.toFixed(2);
-	            }
+		        width: '11%'
+		    },{
+		        field: 'leftOffset',
+		        title: '舱左边最远偏移距离|米',
+		        align: 'center',
+		        width: '12%'
 		    }, {
-		        field: 'remainder',
-		        title: '剩余量',
+		        field: 'leftShovelNumber',
+		        title: '左边舱外作业铲数',
 		        align: 'center',
-		        width: '18%',
-	            footerFormatter: function (value) {
-	                var count = 0;
-	                for (var i in value) {
-	                	count += value[i].remainder;
-	                }
-	                return count.toFixed(2);
-	            }
+		        width: '12%'
 		    }, {
-		        field: 'clearance',
-		        title: '清舱量',
+		        field: 'leftUnloading',
+		        title: '左边舱外作业量',
 		        align: 'center',
-		        width: '14%',
-	            footerFormatter: function (value) {
-	                var count = 0;
-	                for (var i in value) {
-	                	count += value[i].clearance;
-	                }
-	                return count.toFixed(2);
-	            }
+		        width: '12%'
+		    }, {
+		        field: 'rightOffset',
+		        title: '舱右边最远偏移距离|米',
+		        align: 'center',
+		        width: '12%'
+		    }, {
+		        field: 'rightShovelNumber',
+		        title: '右边舱外作业铲数',
+		        align: 'center',
+		        width: '12%'
+		    }, {
+		        field: 'rightUnloading',
+		        title: '右边舱外作业量',
+		        align: 'center',
+		        width: '12%'
 		    }],
 			locale : 'zh-CN',// 中文支持,
 			responseHandler : function(res) {
@@ -158,8 +127,8 @@
 	}
 	
 	/**
-	 * 查看船舱卸货详情
+	 * 查看货物进度详情
 	 */
-	function view_unship(taskId, cabinNo) {
-		window.location.href = BasePath + "/cabin/view?taskId=" + taskId + '&cabinNo=' + cabinNo;
+	function view_cargo(taskId, cargoId) {
+		window.location.href = BasePath + "/report/cabinInfoStats?taskId="+ taskId + "&cargoId=" + cargoId;
 	}

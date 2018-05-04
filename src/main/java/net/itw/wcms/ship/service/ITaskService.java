@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import net.itw.wcms.ship.entity.Task;
+import net.itw.wcms.toolkit.AuthorizeOptions;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
 
@@ -24,9 +25,10 @@ public interface ITaskService {
 	 * @param pageable
 	 * @param status
 	 * @param params
+	 * @param options
 	 * @return
 	 */
-	String getTaskList(Pageable pageable, Integer status, Map<String, String> params);
+	String getTaskList(Pageable pageable, Integer status, Map<String, String> params, AuthorizeOptions options);
 	
 	/**
 	 * 获取船舶作业列表

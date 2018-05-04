@@ -24,10 +24,13 @@ import net.itw.wcms.ship.entity.UnloaderAll;
 import net.itw.wcms.ship.repository.CabinRepository;
 import net.itw.wcms.ship.repository.TaskRepository;
 import net.itw.wcms.ship.service.ITaskService;
+import net.itw.wcms.toolkit.AuthorizeOptions;
 import net.itw.wcms.toolkit.AutoCreateDBTable;
 import net.itw.wcms.toolkit.DateTimeUtils;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
+import net.itw.wcms.x27.security.tag.AuthorizeTag;
+import net.itw.wcms.x27.security.tag.AuthorizeUtils;
 import net.itw.wcms.x27.utils.ConstantUtil;
 
 
@@ -35,6 +38,8 @@ import net.itw.wcms.x27.utils.ConstantUtil;
 @Transactional
 public class TaskServiceImpl implements ITaskService {
 	
+	@Autowired
+	private AuthorizeUtils authorizeUtils;
 	@Autowired
 	private TaskRepository taskRepository;
 	@Autowired
@@ -57,7 +62,7 @@ public class TaskServiceImpl implements ITaskService {
 	}
 	
 	@Override
-	public String getTaskList(Pageable pageable, Integer status, Map<String, String> params) {
+	public String getTaskList(Pageable pageable, Integer status, Map<String, String> params, AuthorizeOptions options) {
 		Page<Task> page = findAllByStatus(pageable, status);
 		JSONObject jo=null;
 		if (page == null || page.getTotalPages() == 0) {
@@ -80,19 +85,32 @@ public class TaskServiceImpl implements ITaskService {
 			String operation = "";
 			switch (status) {
 			case 0:
-				operation = "<a href='javascript:Task.update_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i> 修改</a>";
-				//operation += "<a href='javascript:Task.unshipInfo_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>卸船情况</a>";
-				
-				operation += "<a href='javascript:Task.modifyCabinPosition_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>舱口标定</a>";
-				operation += "<a href='javascript:Task.setShipStatus_click(\"" + t.getId() + "\",\"0\");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>船舶靠泊</a>";
-				operation += "<a href='javascript:Task.remove(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-times'></i> 删除</a>";
+				if (authorizeUtils.authorize(options.request, "3")){
+					operation = "<a href='javascript:Task.update_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i> 修改</a>";
+					//operation += "<a href='javascript:Task.unshipInfo_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>卸船情况</a>";
+				}
+				if (authorizeUtils.authorize(options.request, "6")){
+					operation += "<a href='javascript:Task.modifyCabinPosition_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>舱口标定</a>";
+				}
+				if (authorizeUtils.authorize(options.request, "5")){
+					operation += "<a href='javascript:Task.setShipStatus_click(\"" + t.getId() + "\",\"0\");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>船舶靠泊</a>";
+				}
+				if (authorizeUtils.authorize(options.request, "3")){
+					operation += "<a href='javascript:Task.remove(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-times'></i> 删除</a>";
+				}
 				break;
 			case 1:
-				operation += "<a href='javascript:Task.unshipInfo_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>卸船情况</a>";
+				if (authorizeUtils.authorize(options.request, "17")){
+					operation += "<a href='javascript:Task.unshipInfo_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>卸船情况</a>";
+				}
 				break;	
 			case 2:
-				operation = "<a href='javascript:Task.update_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i> 修改</a>";
-				operation += "<a href='javascript:Task.unshipInfo_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>卸船情况</a>";
+				if (authorizeUtils.authorize(options.request, "3")){
+					operation = "<a href='javascript:Task.update_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i> 修改</a>";
+				}
+				if (authorizeUtils.authorize(options.request, "17")){
+					operation += "<a href='javascript:Task.unshipInfo_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>卸船情况</a>";
+				}
 				break;	
 			default:
 				break;

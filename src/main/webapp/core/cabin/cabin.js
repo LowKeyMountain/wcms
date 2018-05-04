@@ -137,7 +137,7 @@ var Cabin = function() {
 					// 加载列表数据
 					var obj = result.rows;
 					mapping = result.mapping;
-
+					var authorize_2 = authorize('2');
 					for (var i = 0; i < obj.length; i++) {
 						var res = obj[i];
 						var id = i + 1;
@@ -148,11 +148,13 @@ var Cabin = function() {
 //								+ "<td>"+res.startPosition+"</td>"
 //								+ "<td>"+res.endPosition+"</td>"
 								+ "<td>"+res.preunloading+"</td>"
-								+ "<td>"
-								+ "<a href='javascript:Cabin.update_click(" + res.id + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i> 修改</a>"
-								+ "&nbsp;&nbsp;"
-//								+ "<a href='javascript:Cabin.remove(" + res.id + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i> 删除</a>"
-								+ "</td>" 
+								+ "<td>";
+								if (authorize_2) {
+									tr+= "<a href='javascript:Cabin.update_click(" + res.id + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i> 修改</a>"
+									+ "&nbsp;&nbsp;"
+	//								+ "<a href='javascript:Cabin.remove(" + res.id + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i> 删除</a>";
+								}
+								tr+= "</td>"
 								+ "</tr>";
 
 						$("#cabin_tbody").append(tr);

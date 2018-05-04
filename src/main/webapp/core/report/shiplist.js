@@ -134,37 +134,42 @@
 		        width: '16%',
 		        formatter: function (value, row, index) {
 		        	if(reportType==1){
-			            return '<a class="btn progressview default" ><i class="fa fa-bar-chart"></i>统计结果</a>'
+			            return '<a class="btn cargoInfoStats default" ><i class="fa fa-bar-chart"></i>统计结果</a>'
 		        	}else if(reportType==2){
-			            return '<a class="btn unloadview default" ><i class="fa fa-bar-chart"></i>统计结果</a>'
+			            return '<a class="btn cabinUnloadStats default" ><i class="fa fa-bar-chart"></i>统计结果</a>'
 		        	}else if(reportType==3){
-			            return '<a class="btn overview default" ><i class="fa fa-bar-chart"></i>统计结果</a>'
+			            return '<a class="btn unloaderStats default" ><i class="fa fa-bar-chart"></i>统计结果</a>'
 		        	}else if(reportType==4){
-			            return '<a class="btn statistics default" ><i class="fa fa-bar-chart"></i>统计结果</a>'
+			            return '<a class="btn workShiftStats default" ><i class="fa fa-bar-chart"></i>统计结果</a>'
 		        	}else if(reportType==5){
-			            return '<a class="btn cabinquantity default" ><i class="fa fa-bar-chart"></i>统计结果</a>'
+			            return '<a class="btn cabinEffStats default" ><i class="fa fa-bar-chart"></i>统计结果</a>'
 		        	}else if(reportType==6){
-			            return '<a class="btn cargoquantity default" ><i class="fa fa-bar-chart"></i>统计结果</a>'
+			            return '<a class="btn cargoEffStats default" ><i class="fa fa-bar-chart"></i>统计结果</a>'
+		        	}else if(reportType==7){
+			            return '<a class="btn outboardStats default" ><i class="fa fa-bar-chart"></i>统计结果</a>'
 		        	}
 		        },
 		    	events: {
-	                'click .progressview' : function(e, value, row, index) {
+	                'click .cargoInfoStats' : function(e, value, row, index) {
 	        			window.location.href = BasePath + "/report/cargoInfoStats?taskId=" + row.id;
 	                 },
-	                'click .unloadview' : function(e, value, row, index) {
+	                'click .cabinUnloadStats' : function(e, value, row, index) {
 	        			window.location.href = BasePath + "/report/cabinUnloadStats?taskId=" + row.id;
 	                 },
-	                'click .overview' : function(e, value, row, index) {
+	                'click .unloaderStats' : function(e, value, row, index) {
 	        			window.location.href = BasePath + "/report/unloaderStats?taskId=" + row.id;
 	                 },
-	                'click .statistics' : function(e, value, row, index) {
+	                'click .workShiftStats' : function(e, value, row, index) {
 	        			window.location.href = BasePath + "/report/workShiftStats?taskId=" + row.id;
 	                 },
-	                'click .cabinquantity' : function(e, value, row, index) {
+	                'click .cabinEffStats' : function(e, value, row, index) {
 	        			window.location.href = BasePath + "/report/cabinEffStats?cargoId=&taskId=" + row.id;
 	                 },
-	                'click .cargoquantity' : function(e, value, row, index) {
+	                'click .cargoEffStats' : function(e, value, row, index) {
 	        			window.location.href = BasePath + "/report/cargoEffStats?taskId=" + row.id;
+	                 },
+	                'click .outboardStats' : function(e, value, row, index) {
+	        			window.location.href = BasePath + "/report/outboardStats?taskId=" + row.id;
 	                 }
 	        	}
 		    }],

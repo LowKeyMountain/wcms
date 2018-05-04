@@ -1,5 +1,6 @@
 package net.itw.wcms.ship.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +27,7 @@ import net.itw.wcms.ship.service.ICargoService;
 import net.itw.wcms.ship.service.ITaskService;
 import net.itw.wcms.ship.service.ITaskShipService;
 import net.itw.wcms.ship.service.IUnloaderService;
+import net.itw.wcms.x27.exception.X27Exception;
 
 @RestController
 @RequestMapping(value = "/report")
@@ -372,10 +374,10 @@ public class ReportController {
 	 * @param cabinNo
 	 * @return
 	 */
-	@RequestMapping(value = "/cabinDetail")
-	public ModelAndView viewCabinInfo(Integer taskId, Integer cabinNo) {
+	@RequestMapping(value = "/getCabinDetail")
+	public ModelAndView getCabinDetail(Integer taskId, Integer cabinNo) {
 		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("fuctionType", "FN_013");
+		jsonObject.put("fuctionType", "FN_002");
 		jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "','$cabinNo':'" + cabinNo + "'}"));
 		QueryOptions options = new QueryOptions();
 		options.args = new Object[] { taskId, taskId, taskId, taskId };
@@ -383,6 +385,61 @@ public class ReportController {
 		modelMap.put("cabin", result.get("data"));
 		modelMap.put("taskId", taskId);
 		modelMap.put("cabinNo", cabinNo);
-		return new ModelAndView(PATH + "view");
+		return new ModelAndView(PATH_REPORT + "cabinDetail");
+	}
+
+	/**
+	 * 查看船舱信息
+	 * 
+	 * @param taskId
+	 * @param cabinNo
+	 * @return
+	 */
+	@RequestMapping(value = "/getUnloaderDetail")
+	public Map<String, Object> getUnloaderDetail(@RequestParam("taskId") Integer taskId, @RequestParam("cabinNo") Integer cabinNo) {
+		Map<String, Object> args = new HashMap<>();
+		args.put("taskId", taskId);
+		args.put("cabinNo", cabinNo);
+		Map<String, Object> result = taskShipService.doUnloaderInfoStatistics(args);
+		return result;
+	}
+	
+	/**
+	 * 跳转至舱外作业量统计页面
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/outboardStats")
+	public ModelAndView outboardStats(@RequestParam("taskId") Integer taskId) {
+		Task task = taskService.getTaskById(taskId);
+		modelMap.put("taskId", taskId);
+		modelMap.put("shipName", task != null && task.getShip() != null ? task.getShip().getShipName() : "");
+		return new ModelAndView(PATH_REPORT + "outboardStats");
+	}
+	
+	/**
+	 * 统计飘到舱外的作业量统计 
+	 * 
+	 * @param json
+	 * @return
+	 */
+	@RequestMapping(value = "/getOutboardInfoStatistics", produces = "text/json;charset=UTF-8")
+	public String getOutboardInfoStatistics(@RequestParam Map<String, String> params) {
+		String taskId =  params.get("taskId");
+		if (StringUtils.isBlank("taskId")) {
+			throw new X27Exception("操作失败：参数[taskId]不能为空！");
+		}
+		JSONObject json = new JSONObject();
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			Map<String, Object> args = new HashMap<>();
+			args.put("taskId", Integer.parseInt(taskId.toString()));
+			result =  taskShipService.doOutboardInfoStatistics(args);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		json.put("rows",result.get("data"));
+		return json.toString();
+		
 	}
 }

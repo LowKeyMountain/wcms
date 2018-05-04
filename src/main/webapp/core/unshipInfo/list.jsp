@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springsecurity.org/jsp" prefix="security"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <!-- 
@@ -230,10 +231,12 @@ License: You must have a valid license purchased only from themeforest(the above
 										<div style="text-align: center">
 											<c:choose>
 												<c:when test="${task.status == 0 || task.status == 1}">
+													<security:authorize buttonUrl="6">
 													<button id="sample_editable_1_new" class="btn default"
 														onclick="javascript:UnshipInfo.modifyCabinPosition_click(${taskId});">
 														舱口标定 <i class="fa"></i>
 													</button>
+													</security:authorize>
 												</c:when>
 											</c:choose>
 											<c:choose>
@@ -244,10 +247,12 @@ License: You must have a valid license purchased only from themeforest(the above
 													</button>
 												</c:when>
 												<c:when test="${task.status == 1}">
+												<security:authorize buttonUrl="9">
 													<button id="sample_editable_1_new" class="btn default"
 														onclick="javascript:UnshipInfo.setShipStatus_click('${taskId}','1');">
 														完成卸船 <i class="fa"></i>
 													</button>
+												</security:authorize>
 												</c:when>
 											</c:choose>
 										</div>

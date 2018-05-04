@@ -163,3 +163,29 @@ var Cl = function() {
         }
     };
 }();
+
+/**
+ * 验证权限
+ */
+var authorize = function(buttonUrl) {
+	var result;
+	$.ajax({
+		url : BasePath + "/authorize/authorize",
+		type : "POST",
+		data : {
+			buttonUrl : buttonUrl
+		},
+		async : false,
+		success : function(data) {
+			if (data.code == '1') {
+				result = true;
+			} else {
+				result = false;
+			}
+		},
+		failure : function(data) {
+			Ext.Msg.alert('操作', "authorize error!");
+		}
+	});
+	return result;
+}

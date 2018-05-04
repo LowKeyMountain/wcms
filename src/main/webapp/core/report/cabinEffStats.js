@@ -89,6 +89,11 @@
 		        align: 'center',
 		        width: '8%'
 		    }, {
+		    	field: 'finishedBeforeClearance',
+		        title: '清舱前已卸载量',
+		        align: 'center',
+		        width: '8%'
+		    }, {
 		        field: 'clearance',
 		        title: '清舱量',
 		        align: 'center',

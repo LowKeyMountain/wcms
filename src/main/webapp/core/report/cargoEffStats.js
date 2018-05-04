@@ -89,6 +89,18 @@
 		        align: 'center',
 		        width: '8%'
 		    }, {
+		    	field: 'finishedBeforeClearance',
+		        title: '清舱前已卸载量',
+		        align: 'center',
+		        width: '8%',
+	            footerFormatter: function (value) {
+	                var count = 0;
+	                for (var i in value) {
+	                	count += value[i].finishedBeforeClearance;
+	                }
+	                return count.toFixed(2);
+	            }
+		    }, {
 		        field: 'clearance',
 		        title: '清舱量',
 		        align: 'center',

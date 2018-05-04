@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib uri="http://www.springsecurity.org/jsp" prefix="security"%>  
 
 <div class="tab-pane fade active in" id="ship">
 	<!-- BEGIN FORM-->
@@ -83,7 +84,8 @@
 										value="<fmt:formatDate value="${task.berthingTime}" pattern="yyy-MM-dd HH:mm:ss"/>" />
 						
 						
-						<c:if test="${task.status == 2}">
+						<!--<c:if test="${task.status == 2}">-->
+						<security:authorize buttonUrl="4">
 						<div class="form-group  margin-top-20">
 							<label class="control-label col-md-3">Àë²´Ê±¼ä <span
 								class="required"> </span>
@@ -97,7 +99,8 @@
 								</div>
 							</div>
 						</div>
-					    </c:if>
+						</security:authorize>
+					    <!--</c:if>-->
 					    
 						<div class="form-group  margin-top-20">
 							<label class="control-label col-md-3">Í£¿¿²´Î» <span

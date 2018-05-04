@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://www.springsecurity.org/jsp" prefix="security"%>  
 <!-- BEGIN SIDEBAR -->
  <div class="page-sidebar-wrapper">
      <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
@@ -49,6 +51,7 @@
                         
                     </a>
                 </li>
+                
                 <li class="nav-item  ">
                     <a href="javascript:;" class="nav-link nav-toggle">
                         <i class="icon-diamond"></i>
@@ -69,13 +72,14 @@
                             </a>
                         </li> --%>
                         
-						
+                        <security:authorize buttonUrl="18">
                          <li class="nav-item start ">
                             <a href="${IncPath}/report/reportview" class="nav-link ">
                                 <i class="icon-bar-chart"></i>
                                 <span class="title">报表统计</span>
                             </a>
                         </li>
+                       </security:authorize>
                        
 						<li class="nav-item start ">
                             <a href="${IncPath}/unloader/list" class="nav-link ">
@@ -83,14 +87,14 @@
                                 <span class="title">卸船机实时数据</span>
                             </a>
                         </li>
-                        
+                        <security:authorize buttonUrl="14">
  						<li class="nav-item start ">
                             <a href="${IncPath}/task/maintenance" class="nav-link ">
                                 <i class="icon-settings"></i>
                                 <span class="title">作业船舶维护</span>
                             </a>
                         </li>
-                                                  
+                        </security:authorize>                          
                         <!-- 
                         <li class="nav-item start active open">
                             <a href="#" class="nav-link ">
@@ -102,6 +106,7 @@
                          -->
                     </ul>
                 </li>
+                <security:authorize buttonUrl="19">
                 <li class="nav-item  ">
                     <a href="javascript:;" class="nav-link nav-toggle">
                         <i class="icon-diamond"></i>
@@ -115,13 +120,11 @@
                              <span class="title">用户管理</span>
                          </a>
                      </li>
-                     <!-- 
                      <li class="nav-item  ">
                          <a href="${IncPath}/role/list" class="nav-link ">
                              <span class="title">角色管理</span>
                          </a>
                      </li>
-                     -->
                      <li class="nav-item  ">
                          <a href="${IncPath}/resource/list" class="nav-link ">
                              <span class="title">资源管理</span>
@@ -136,6 +139,7 @@
                       -->
                  </ul>
              </li>
+             </security:authorize>
          </ul>
          <!-- END SIDEBAR MENU -->
      </div>

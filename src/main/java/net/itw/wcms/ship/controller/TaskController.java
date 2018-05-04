@@ -25,6 +25,7 @@ import net.itw.wcms.interfaceApi.http.QueryOptions;
 import net.itw.wcms.ship.entity.Task;
 import net.itw.wcms.ship.service.ITaskService;
 import net.itw.wcms.ship.service.ITaskShipService;
+import net.itw.wcms.toolkit.AuthorizeOptions;
 import net.itw.wcms.toolkit.DateTimeUtils;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
@@ -160,7 +161,7 @@ public class TaskController {
 		}else {
 			pageable = PageUtils.buildPageRequest(1, 10, null, "asc");			
 		}
-		return taskService.getTaskList(pageable, status, params);
+		return taskService.getTaskList(pageable, status, params, AuthorizeOptions.createAuthorizeOptions(req));
 	}
 	
 	/**

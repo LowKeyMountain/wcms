@@ -120,7 +120,10 @@ License: You must have a valid license purchased only from themeforest(the above
  						</div>
 						<div class="col-md-6" style="margin-top:5px;margin-bottom:5px">
  							<a href="${IncPath}/report/shiplist?reportType=6" class="btn btn-info btn-lg btn-block" role="button">船舶货物效率统计</a>	
- 						</div> 						
+ 						</div>
+ 						<div class="col-md-6" style="margin-top:5px;margin-bottom:5px">
+ 							<a href="${IncPath}/report/shiplist?reportType=7" class="btn btn-info btn-lg btn-block" role="button">舱外作业量统计</a>	
+ 						</div>
 						<!-- END EXAMPLE TABLE PORTLET-->
 					</div>
 				</div>

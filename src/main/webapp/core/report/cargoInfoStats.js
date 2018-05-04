@@ -101,7 +101,7 @@
 		        field: 'total',
 		        title: '总量',
 		        align: 'center',
-		        width: '22%',
+		        width: '18%',
 	            footerFormatter: function (value) {
 	                var count = 0;
 	                for (var i in value) {
@@ -113,7 +113,7 @@
 		        field: 'finished',
 		        title: '已完成',
 		        align: 'center',
-		        width: '22%',
+		        width: '18%',
 	            footerFormatter: function (value) {
 	                var count = 0;
 	                for (var i in value) {
@@ -121,11 +121,23 @@
 	                }
 	                return count.toFixed(2);
 	            }		        
-		    },{
+		    }, {
+		    	field: 'finishedBeforeClearance',
+		        title: '清舱前已卸载量',
+		        align: 'center',
+		        width: '18%',
+	            footerFormatter: function (value) {
+	                var count = 0;
+	                for (var i in value) {
+	                	count += value[i].finishedBeforeClearance;
+	                }
+	                return count.toFixed(2);
+	            }
+		    }, {
 		        field: 'remainder',
 		        title: '剩余量',
 		        align: 'center',
-		        width: '22%',
+		        width: '18%',
 	            footerFormatter: function (value) {
 	                var count = 0;
 	                for (var i in value) {
@@ -137,7 +149,7 @@
 		        field: 'clearance',
 		        title: '清舱量',
 		        align: 'center',
-		        width: '22%',
+		        width: '16%',
 	            footerFormatter: function (value) {
 	                var count = 0;
 	                for (var i in value) {

@@ -94,8 +94,11 @@ License: You must have a valid license purchased only from themeforest(the above
 							<c:when test="${reportType == 5}">
 								<h3 class="page-title icon-settings">&nbsp;&nbsp;船舶舱口效率统计</h3>
 							</c:when>
-							<c:otherwise>
+							<c:when test="${reportType == 6}">
 								<h3 class="page-title icon-settings">&nbsp;&nbsp;船舶货物效率统计</h3>
+							</c:when>
+							<c:otherwise>
+								<h3 class="page-title icon-settings">&nbsp;&nbsp;舱外作业量统计</h3>
 							</c:otherwise>
 						</c:choose>
 						<ul class="page-breadcrumb breadcrumb">
@@ -121,8 +124,11 @@ License: You must have a valid license purchased only from themeforest(the above
 								<c:when test="${reportType == 5}">
 									<li>船舶舱口效率统计</li>
 								</c:when>
-								<c:otherwise>
+								<c:when test="${reportType == 6}">
 									<li>船舶货物效率统计</li>
+								</c:when>
+								<c:otherwise>
+									<li>舱外作业量统计</li>
 								</c:otherwise>
 							</c:choose>
 						</ul>

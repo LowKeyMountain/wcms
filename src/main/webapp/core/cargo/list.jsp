@@ -2,6 +2,7 @@
 	pageEncoding="GBK"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib uri="http://www.springsecurity.org/jsp" prefix="security"%>  
 <div class="tab-pane fade" id="cargo">
 	<div class="portlet box yellow">
 		<div class="portlet-title">
@@ -9,10 +10,12 @@
 				<!-- <i class="fa fa-cogs"></i> -->
 			</div>
 			<div class="tools">
+				<security:authorize buttonUrl="2">
 				<a href="javascript:Cargo.add_click();" data-toggle="modal"
 					class="config" title="ÐÂÔö" title=""> </a> <a
 					href="javascript:Cargo.list();;" class="reload" data-original-title="Ë¢ÐÂ" title="">
 				</a>
+				</security:authorize>
 			</div>
 		</div>
 		<div class="portlet-body" style="display: block;">

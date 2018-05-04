@@ -121,6 +121,7 @@ var Cargo = function() {
 					// 加载列表数据
 //					result.data = ['0','2','3','5','6']
 					var obj = result.rows;
+					var authorize_2 = authorize('2')
 					for (var i = 0; i < obj.length; i++) {
 						var res = obj[i];
 						var id = i + 1;
@@ -133,11 +134,13 @@ var Cargo = function() {
 								+ "<td>"+res.moisture+"</td>"
 								+ "<td>"+res.quality+"</td>"
 								+ "<td>"+res.stowage+"</td>"
-								+ "<td>"
-								+ "<a href='javascript:Cargo.update_click(" + res.id + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i> 修改</a>"
-								+ "&nbsp;&nbsp;"
-								+ "<a href='javascript:Cargo.remove(" + res.id + ");' class='btn btn-xs default btn-editable'><i class='fa fa-times'></i> 删除</a>"
-								+ "</td>" + "</tr>";
+								+ "<td>";
+								if (authorize_2) {
+									tr += "<a href='javascript:Cargo.update_click(" + res.id + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i> 修改</a>"
+									+ "&nbsp;&nbsp;"
+									+ "<a href='javascript:Cargo.remove(" + res.id + ");' class='btn btn-xs default btn-editable'><i class='fa fa-times'></i> 删除</a>";
+								}
+								tr += "</td>" + "</tr>";
 
 						$("#cargo_tbody").append(tr);
 					}

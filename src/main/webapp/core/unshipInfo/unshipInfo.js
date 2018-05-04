@@ -29,6 +29,7 @@ var UnshipInfo = function() {
 					$("#unshipInfo_tbody").children().empty();	
 					// 加载列表数据
 					var obj = result.data;
+					var authorize_11 = authorize('11')
 					for (var i = 0; i < obj.length; i++) {
 						var res = obj[i];
 						
@@ -56,11 +57,13 @@ var UnshipInfo = function() {
 							+ "<td>"+res.clearTime+"</td>"
 							+ "<td>";
 							if (res.status == 0) {
-								tr += "<a href='#' onclick='javascript:UnshipInfo.setCabinStatus_click(\""
-										+ taskId
-										+ "\",\""
-										+ res.cabinNo
-										+ "\",\"1\")'>清舱</a>";
+								if(authorize_11) {
+									tr += "<a href='#' onclick='javascript:UnshipInfo.setCabinStatus_click(\""
+											+ taskId
+											+ "\",\""
+											+ res.cabinNo
+											+ "\",\"1\")'>清舱</a>";
+								}
 							} else if (res.status == 1) {
 //								tr += "<a href='#' onclick='UnshipInfo.setCabinStatus_click(\""
 //										+ taskId
