@@ -1,6 +1,2 @@
-/applicationContext.xml
-/net/
 /db.properties
-/log4j.properties
-/spring-mvc.xml
-/wcms.properties
+/.gitignore
