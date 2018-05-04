@@ -1,20 +1,24 @@
 package net.itw.wcms.x27.service.impl;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
+import javax.xml.bind.JAXBException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import net.itw.wcms.toolkit.sql.SqlMap;
 import net.itw.wcms.x27.entity.Resource;
-import net.itw.wcms.x27.entity.Role;
 import net.itw.wcms.x27.entity.User;
 import net.itw.wcms.x27.exception.X27Exception;
 import net.itw.wcms.x27.repository.ResourceRepository;
@@ -27,16 +31,20 @@ import net.itw.wcms.x27.utils.StringUtil;
 @Transactional
 public class ResourceServiceImpl implements IResourceService {
 
+
 	@Autowired
 	private IUserService userService;
 	@Autowired
 	private ResourceRepository resourceRepository;
-
+	
+	@javax.annotation.Resource(name = "jdbcTemplate")
+	private JdbcTemplate jdbcTemplate;
+	
 	public List<Resource> getResourceListByUserId(Integer userId) {
 		return resourceRepository.getResourceListByUserId(userId);
 	}
 	
-	public List<String> getResourcesByUserName(String userName) {
+	public List<String> getResourcesByUserName_BK(String userName) {
 		User user = userService.getUserByUserName(userName);
 		List<String> ids = new ArrayList<>();
 		if (user != null) {
@@ -45,6 +53,25 @@ public class ResourceServiceImpl implements IResourceService {
 				for (Resource resource : list) {
 					ids.add(resource.getId()+"");
 				}
+			}
+		}
+		return ids;
+	}
+	
+	public List<String> getResourcesByUserName(String userName) {
+		User user = userService.getUserByUserName(userName);
+		List<String> ids = new ArrayList<>();
+		if (user != null) {
+			try {
+				SqlMap sqlMap = SqlMap.load(SqlMap.class.getResourceAsStream("./x27.xml"));
+				Object[] args = new Object[] { user.getUserName() };
+				ids = jdbcTemplate.queryForList(sqlMap.getSql("getUserSecurityMap"), args, String.class);
+			} catch (DataAccessException e) {
+				e.printStackTrace();
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			} catch (JAXBException e) {
+				e.printStackTrace();
 			}
 		}
 		return ids;

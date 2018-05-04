@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://www.springsecurity.org/jsp" prefix="security"%>   
 <!DOCTYPE html>
 <!-- 
 Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.3.5
@@ -134,6 +135,7 @@ License: You must have a valid license purchased only from themeforest(the above
 									<i class="icon-settings font-dark"></i> <span
 										class="caption-subject bold uppercase">工作列表</span>
 								</div>
+								<security:authorize buttonUrl="1">
 								<div class="col-md-6">
 									<div class="btn-group">
 										<button id="sample_editable_1_new" class="btn sbold green"
@@ -142,6 +144,7 @@ License: You must have a valid license purchased only from themeforest(the above
 										</button>
 									</div>
 								</div>
+								</security:authorize>
 							</div>
 							<div id="taskStatus" class="modal fade" role="dialog" tabindex="-1" aria-hidden="true" aria-labelledby="myModalLabel" style="display: block;">
 							    <div class="modal-dialog">

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqlMap>
+	<sqls>
+		<entry>
+			<key>getUserSecurityMap</key>
+			<description>获取权限列表</description>
+			<value>
+			<![CDATA[
+			SELECT
+				r.url
+			FROM
+				x27_resources r
+			WHERE
+				r.id IN (
+					SELECT
+						rr.RESOURCE_ID
+					FROM
+						x27_join_role_resource rr,
+						x27_join_user_role ur
+					WHERE
+						rr.ROLE_ID = ur.ROLUE_ID
+					AND ur.USER_ID = (
+						SELECT
+							u.id
+						FROM
+							x27_users u
+						WHERE
+							u.user_name = ?
+					)
+				)
+			]]>
+			</value>
+		</entry>
+	</sqls>
+</sqlMap>
