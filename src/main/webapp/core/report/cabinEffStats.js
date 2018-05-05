@@ -58,7 +58,7 @@
 		        field: 'cabinNo',
 		        title: '船舱号',
 		        align: 'center',
-		        width: '8%',
+		        width: '7%',
 		        formatter: function (value, row, index) {
                     var html = '<a href="javascript:view_unship(' + taskId + ',' + row.cabinNo + ')" class="font-weight-normal">' + row.cabinNo + '</a>';
                     return html;
@@ -67,42 +67,68 @@
 		        field: 'total',
 		        title: '总量',
 		        align: 'center',
-		        width: '8%'
-		    }, {
-		        field: 'finished',
-		        title: '已完成',
-		        align: 'center',
-		        width: '8%'
-		    }, {
-		        field: 'finishedUsedTime',
-		        title: '作业台时',
-		        align: 'center',
-		        width: '8%'
-		    }, {
-		        field: 'finishedEfficiency',
-		        title: '卸载效率',
-		        align: 'center',
-		        width: '8%'
-		    }, {
-		    	field: 'remainder',
-		        title: '剩余量',
-		        align: 'center',
-		        width: '8%'
+		        width: '7%'
 		    }, {
 		    	field: 'finishedBeforeClearance',
-		        title: '清舱前已卸载量',
+		        title: '清舱前',
 		        align: 'center',
-		        width: '8%'
+		        width: '7%'
+		    }, {
+		    	field: 'finishedUsedTimeBeforeClearance',
+		        title: '清舱前卸载用时',
+		        align: 'center',
+		        width: '9%',
+	            footerFormatter: function (value) {
+	                var count = 0;
+	                for (var i in value) {
+	                	count += value[i].finishedBeforeClearance;
+	                }
+	                return count.toFixed(2);
+	            }
+		    }, {
+		    	field: 'finishedEfficiencyBeforeClearance',
+		        title: '清舱前卸载效率',
+		        align: 'center',
+		        width: '9%',
+	            footerFormatter: function (value) {
+	                var t_count = 0;	            	
+	                var h_count = 0;
+	                for (var i in value) {
+	                	t_count += value[i].finishedUsedTimeBeforeClearance;
+	                	h_count += value[i].finishedBeforeClearance;
+	                }
+	                return (h_count/t_count).toFixed(2);
+	            }
 		    }, {
 		        field: 'clearance',
 		        title: '清舱量',
 		        align: 'center',
-		        width: '8%'
+		        width: '7%'
+		    }, {
+		        field: 'finished',
+		        title: '已完成',
+		        align: 'center',
+		        width: '7%'
+		    }, {
+		        field: 'finishedUsedTime',
+		        title: '作业台时',
+		        align: 'center',
+		        width: '7%'
+		    }, {
+		        field: 'finishedEfficiency',
+		        title: '卸载效率',
+		        align: 'center',
+		        width: '7%'
+		    }, {
+		    	field: 'remainder',
+		        title: '剩余量',
+		        align: 'center',
+		        width: '7%'
 		    }, {
 		        field: 'clearanceUsedTime',
 		        title: '清舱用时',
 		        align: 'center',
-		        width: '8%'
+		        width: '7%'
 		    }, {
 		        field: 'clearanceEfficiency',
 		        title: '清舱效率',
