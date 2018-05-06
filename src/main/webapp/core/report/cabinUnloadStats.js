@@ -86,18 +86,6 @@
 	                return count.toFixed(2);
 	            }
 		    }, {
-		        field: 'finished',
-		        title: '已完成',
-		        align: 'center',
-		        width: '12%',
-	            footerFormatter: function (value) {
-	                var count = 0;
-	                for (var i in value) {
-	                	count += value[i].finished;
-	                }
-	                return count.toFixed(2);
-	            }
-		    }, {
 		    	field: 'finishedBeforeClearance',
 		        title: '清舱前',
 		        align: 'center',
@@ -118,6 +106,18 @@
 	                var count = 0;
 	                for (var i in value) {
 	                	count += value[i].clearance;
+	                }
+	                return count.toFixed(2);
+	            }
+		    }, {
+		        field: 'finished',
+		        title: '完成量',
+		        align: 'center',
+		        width: '12%',
+	            footerFormatter: function (value) {
+	                var count = 0;
+	                for (var i in value) {
+	                	count += value[i].finished;
 	                }
 	                return count.toFixed(2);
 	            }

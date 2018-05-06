@@ -344,7 +344,7 @@ public class DateTimeUtils {
 	public static String getDateBefore(int day) {
 		Calendar now = Calendar.getInstance();
 		now.setTime(new Date());
-		now.roll(Calendar.DATE,  - day);
+		now.add(Calendar.DATE,  - day);
 		return DateFormatUtils.format(now.getTime(), FORMAT_yyyy_MM_dd_HH_mm_ss);
 	}
 	

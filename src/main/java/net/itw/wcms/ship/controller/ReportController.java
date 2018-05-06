@@ -158,8 +158,10 @@ public class ReportController {
 	 */
 	@RequestMapping(value = "/unloaderStatsDetail")
 	public ModelAndView unloaderStatsDetail(@RequestParam("taskId") Integer taskId, @RequestParam("unloaderId") String unloaderId) {
+		Task task = taskService.getTaskById(taskId);
 		modelMap.put("taskId", taskId);
 		modelMap.put("unloaderId", unloaderId);
+		modelMap.put("shipName", task != null && task.getShip() != null ? task.getShip().getShipName() : "");
 		String unloaderNo = "#" + unloaderId.substring(8);
 		modelMap.put("unloaderNo", unloaderNo);
 		return new ModelAndView(PATH_REPORT + "unloaderStatsDetail");

@@ -82,7 +82,7 @@
 	            }
 		    }, {
 		    	field: 'finishedUsedTimeBeforeClearance',
-		        title: '清舱前卸载用时',
+		        title: '清舱前用时',
 		        align: 'center',
 		        width: '10%',
 	            footerFormatter: function (value) {
@@ -94,7 +94,7 @@
 	            }
 		    }, {
 		    	field: 'finishedEfficiencyBeforeClearance',
-		        title: '清舱前卸载效率',
+		        title: '清舱前作业效率',
 		        align: 'center',
 		        width: '10%',
 	            footerFormatter: function (value) {
@@ -112,18 +112,23 @@
 		        align: 'center',
 		        width: '8%'
 		    }, {
+		        field: 'clearanceUsedTime',
+		        title: '清舱用时',
+		        align: 'center',
+		        width: '8%'
+		    }, {
 		        field: 'finished',
-		        title: '已完成',
+		        title: '完成量',
 		        align: 'center',
 		        width: '8%'
 		    }, {
 		        field: 'finishedUsedTime',
-		        title: '作业台时',
+		        title: '整体用时',
 		        align: 'center',
 		        width: '8%'
 		    }, {
 		        field: 'finishedEfficiency',
-		        title: '卸载效率',
+		        title: '整体效率',
 		        align: 'center',
 		        width: '8%'
 		    }, {
@@ -131,17 +136,12 @@
 		        title: '剩余量',
 		        align: 'center',
 		        width: '8%'
-		    }, {
-		        field: 'clearanceUsedTime',
-		        title: '清舱用时',
-		        align: 'center',
-		        width: '8%'
-		    }, {
+		    }/*, {
 		        field: 'clearanceEfficiency',
 		        title: '清舱效率',
 		        align: 'center',
 		        width: '8%'
-		    }],
+		    }*/],
 			locale : 'zh-CN',// 中文支持,
 			responseHandler : function(res) {
 				// 在ajax获取到数据，渲染表格之前，修改数据源

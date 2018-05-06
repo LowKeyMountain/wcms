@@ -112,7 +112,7 @@ License: You must have a valid license purchased only from themeforest(the above
 						<div class="portlet box yellow">
 								<div class="portlet-title">
 									<div class="caption">
-										<i>${unloaderNo}</i>
+										<i><a href="javascript:view_ship(${taskId})">${shipName}</a>&nbsp;&nbsp;(${unloaderNo})</i>
 									</div>
 									<div class="tools">
 										<a onclick="javascript:history.back(-1);" class="fa fa-reply"

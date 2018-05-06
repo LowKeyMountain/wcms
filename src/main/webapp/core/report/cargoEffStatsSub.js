@@ -90,7 +90,7 @@
 	            }
 		    }, {
 		    	field: 'finishedUsedTimeBeforeClearance',
-		        title: '清舱前卸载用时',
+		        title: '清舱前用时',
 		        align: 'center',
 		        width: '9%',
 	            footerFormatter: function (value) {
@@ -102,7 +102,7 @@
 	            }
 		    }, {
 		    	field: 'finishedEfficiencyBeforeClearance',
-		        title: '清舱前卸载效率',
+		        title: '清舱前作业效率',
 		        align: 'center',
 		        width: '9%',
 	            footerFormatter: function (value) {
@@ -127,8 +127,20 @@
 	                return count.toFixed(2);
 	            }
 		    }, {
+		        field: 'clearanceUsedTime',
+		        title: '清舱用时',
+		        align: 'center',
+		        width: '7%',
+	            footerFormatter: function (value) {
+	                var count = 0;
+	                for (var i in value) {
+	                	count += value[i].clearanceUsedTime;
+	                }
+	                return count.toFixed(4);
+	            }
+		    }, {
 		        field: 'finished',
-		        title: '已完成',
+		        title: '完成量',
 		        align: 'center',
 		        width: '7%',
 	            footerFormatter: function (value) {
@@ -140,7 +152,7 @@
 	            }
 		    }, {
 		        field: 'finishedUsedTime',
-		        title: '作业台时',
+		        title: '整体用时',
 		        align: 'center',
 		        width: '7%',
 	            footerFormatter: function (value) {
@@ -152,7 +164,7 @@
 	            }
 		    }, {
 		        field: 'finishedEfficiency',
-		        title: '卸载效率',
+		        title: '整体效率',
 		        align: 'center',
 		        width: '8%',
 	            footerFormatter: function (value) {
@@ -175,18 +187,6 @@
 	                	count += value[i].remainder;
 	                }
 	                return count.toFixed(2);
-	            }
-		    }, {
-		        field: 'clearanceUsedTime',
-		        title: '清舱用时',
-		        align: 'center',
-		        width: '7%',
-	            footerFormatter: function (value) {
-	                var count = 0;
-	                for (var i in value) {
-	                	count += value[i].clearanceUsedTime;
-	                }
-	                return count.toFixed(4);
 	            }
 		    }, {
 		        field: 'clearanceEfficiency',
