@@ -157,8 +157,8 @@ License: You must have a valid license purchased only from themeforest(the above
 												<th>卸船机</th>
 												<th>开始时间</th>
 												<th>结束时间</th>
-												<th>用时</th>
-												<th>卸货量</th>
+												<th>用时|h</th>
+												<th>卸货量|t</th>
 												<th>效率</th>
 											</tr>
 										</thead>

@@ -375,7 +375,7 @@ public class ReportController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getCabinDetail")
-	public ModelAndView getCabinDetail(Integer taskId, Integer cabinNo) {
+	public ModelAndView getCabinDetail(Integer taskId, Integer cabinNo, Integer reportType) {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("fuctionType", "FN_002");
 		jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "','$cabinNo':'" + cabinNo + "'}"));
@@ -385,6 +385,7 @@ public class ReportController {
 		modelMap.put("cabin", result.get("data"));
 		modelMap.put("taskId", taskId);
 		modelMap.put("cabinNo", cabinNo);
+		modelMap.put("reportType", reportType);
 		return new ModelAndView(PATH_REPORT + "cabinDetail");
 	}
 

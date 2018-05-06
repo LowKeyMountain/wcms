@@ -87,38 +87,14 @@
 	                return count.toFixed(2);
 	            }
 		    }, {
-		        field: 'finished',
-		        title: '已完成',
-		        align: 'center',
-		        width: '18%',
-	            footerFormatter: function (value) {
-	                var count = 0;
-	                for (var i in value) {
-	                	count += value[i].finished;
-	                }
-	                return count.toFixed(2);
-	            }
-		    }, {
 		    	field: 'finishedBeforeClearance',
-		        title: '清舱前已卸载量',
+		        title: '清舱前',
 		        align: 'center',
 		        width: '18%',
 	            footerFormatter: function (value) {
 	                var count = 0;
 	                for (var i in value) {
 	                	count += value[i].finishedBeforeClearance;
-	                }
-	                return count.toFixed(2);
-	            }
-		    }, {
-		        field: 'remainder',
-		        title: '剩余量',
-		        align: 'center',
-		        width: '18%',
-	            footerFormatter: function (value) {
-	                var count = 0;
-	                for (var i in value) {
-	                	count += value[i].remainder;
 	                }
 	                return count.toFixed(2);
 	            }
@@ -131,6 +107,30 @@
 	                var count = 0;
 	                for (var i in value) {
 	                	count += value[i].clearance;
+	                }
+	                return count.toFixed(2);
+	            }
+		    }, {
+		        field: 'finished',
+		        title: '已完成',
+		        align: 'center',
+		        width: '18%',
+	            footerFormatter: function (value) {
+	                var count = 0;
+	                for (var i in value) {
+	                	count += value[i].finished;
+	                }
+	                return count.toFixed(2);
+	            }
+		    }, {
+		        field: 'remainder',
+		        title: '剩余量',
+		        align: 'center',
+		        width: '18%',
+	            footerFormatter: function (value) {
+	                var count = 0;
+	                for (var i in value) {
+	                	count += value[i].remainder;
 	                }
 	                return count.toFixed(2);
 	            }
@@ -161,5 +161,5 @@
 	 * 查看船舱卸货详情
 	 */
 	function view_unship(taskId, cabinNo) {
-		window.location.href = BasePath + "/cabin/view?taskId=" + taskId + '&cabinNo=' + cabinNo;
+		window.location.href = BasePath + "/report/getCabinDetail?reportType=1&taskId=" + taskId + '&cabinNo=' + cabinNo;
 	}

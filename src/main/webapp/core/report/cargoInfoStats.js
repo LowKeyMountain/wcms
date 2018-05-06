@@ -110,20 +110,8 @@
 	                return count.toFixed(2);
 	            }	        
 		    }, {
-		        field: 'finished',
-		        title: '已完成',
-		        align: 'center',
-		        width: '18%',
-	            footerFormatter: function (value) {
-	                var count = 0;
-	                for (var i in value) {
-	                	count += value[i].finished;
-	                }
-	                return count.toFixed(2);
-	            }		        
-		    }, {
 		    	field: 'finishedBeforeClearance',
-		        title: '清舱前已卸载量',
+		        title: '清舱前',
 		        align: 'center',
 		        width: '18%',
 	            footerFormatter: function (value) {
@@ -133,18 +121,6 @@
 	                }
 	                return count.toFixed(2);
 	            }
-		    }, {
-		        field: 'remainder',
-		        title: '剩余量',
-		        align: 'center',
-		        width: '18%',
-	            footerFormatter: function (value) {
-	                var count = 0;
-	                for (var i in value) {
-	                	count += value[i].remainder;
-	                }
-	                return count.toFixed(2);
-	            }		        
 		    }, {
 		        field: 'clearance',
 		        title: '清舱量',
@@ -157,6 +133,30 @@
 	                }
 	                return count.toFixed(2);
 	            }
+		    }, {
+		        field: 'finished',
+		        title: '已完成',
+		        align: 'center',
+		        width: '18%',
+	            footerFormatter: function (value) {
+	                var count = 0;
+	                for (var i in value) {
+	                	count += value[i].finished;
+	                }
+	                return count.toFixed(2);
+	            }		        
+		    }, {
+		        field: 'remainder',
+		        title: '剩余量',
+		        align: 'center',
+		        width: '18%',
+	            footerFormatter: function (value) {
+	                var count = 0;
+	                for (var i in value) {
+	                	count += value[i].remainder;
+	                }
+	                return count.toFixed(2);
+	            }		        
 		    }],
 			locale : 'zh-CN',// 中文支持,
 			responseHandler : function(res) {

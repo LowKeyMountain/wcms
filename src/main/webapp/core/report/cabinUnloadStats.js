@@ -57,7 +57,7 @@
 		        field: 'cabinNo',
 		        title: '船舱号',
 		        align: 'center',
-		        width: '12%',
+		        width: '8%',
 		        formatter: function (value, row, index) {
                     var html = '<a href="javascript:view_unship(' + taskId + ',' + row.cabinNo + ')" class="font-weight-normal">' + row.cabinNo + '</a>';
                     return html;
@@ -99,25 +99,13 @@
 	            }
 		    }, {
 		    	field: 'finishedBeforeClearance',
-		        title: '清舱前已卸载量',
+		        title: '清舱前',
 		        align: 'center',
 		        width: '12%',
 	            footerFormatter: function (value) {
 	                var count = 0;
 	                for (var i in value) {
 	                	count += value[i].finishedBeforeClearance;
-	                }
-	                return count.toFixed(2);
-	            }
-		    }, {
-		        field: 'remainder',
-		        title: '剩余量',
-		        align: 'center',
-		        width: '12%',
-	            footerFormatter: function (value) {
-	                var count = 0;
-	                for (var i in value) {
-	                	count += value[i].remainder;
 	                }
 	                return count.toFixed(2);
 	            }
@@ -130,6 +118,18 @@
 	                var count = 0;
 	                for (var i in value) {
 	                	count += value[i].clearance;
+	                }
+	                return count.toFixed(2);
+	            }
+		    }, {
+		        field: 'remainder',
+		        title: '剩余量',
+		        align: 'center',
+		        width: '12%',
+	            footerFormatter: function (value) {
+	                var count = 0;
+	                for (var i in value) {
+	                	count += value[i].remainder;
 	                }
 	                return count.toFixed(2);
 	            }

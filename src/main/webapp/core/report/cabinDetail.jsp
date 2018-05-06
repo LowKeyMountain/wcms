@@ -86,16 +86,58 @@ License: You must have a valid license purchased only from themeforest(the above
 				<div class="row">
 					<div class="col-md-12">
 						<!-- BEGIN PAGE TITLE & BREADCRUMB-->
-						<h3 class="page-title icon-settings">&nbsp;&nbsp;船舶货物效率统计</h3>
-						<ul class="page-breadcrumb breadcrumb">
+						<c:choose>
+							<c:when test="${reportType == 1}">
+								<h3 class="page-title icon-settings">&nbsp;&nbsp;船舶货物进度统计</h3>
+							</c:when>
+							<c:when test="${reportType == 2}">
+								<h3 class="page-title icon-settings">&nbsp;&nbsp;船舶舱口卸货统计</h3>
+							</c:when>
+							<c:when test="${reportType == 3}">
+								<h3 class="page-title icon-settings">&nbsp;&nbsp;船舶卸船机作业量统计</h3>
+							</c:when>
+							<c:when test="${reportType == 4}">
+								<h3 class="page-title icon-settings">&nbsp;&nbsp;船舶班次作业量统计</h3>
+							</c:when>
+							<c:when test="${reportType == 5}">
+								<h3 class="page-title icon-settings">&nbsp;&nbsp;船舶舱口效率统计</h3>
+							</c:when>
+							<c:when test="${reportType == 6}">
+								<h3 class="page-title icon-settings">&nbsp;&nbsp;船舶货物效率统计</h3>
+							</c:when>
+							<c:otherwise>
+								<h3 class="page-title icon-settings">&nbsp;&nbsp;舱外作业量统计</h3>
+							</c:otherwise>
+						</c:choose>						<ul class="page-breadcrumb breadcrumb">
 							<li><i class="fa fa-home"></i> <a
 								href="${BasePath}/web/main"> 主页 </a> <i
 								class="fa fa-angle-right"></i></li>
 							<li>管理中心 <i class="fa fa-angle-right"></i>
 							</li>
 							<li><a href="${IncPath}/report/reportview">报表统计 </a><i class="fa fa-angle-right"></i></li>
-							<li><a href="${IncPath}/report/shiplist?reportType=6">船舶货物效率统计</a><i class="fa fa-angle-right"></i>
-							</li>							
+							<c:choose>
+								<c:when test="${reportType == 1}">
+									<li><a href="${IncPath}/report/shiplist?reportType=1">船舶货物进度统计</a><i class="fa fa-angle-right"></i></li>
+								</c:when>
+								<c:when test="${reportType == 2}">
+									<li><a href="${IncPath}/report/shiplist?reportType=2">船舶舱口卸货统计</a><i class="fa fa-angle-right"></i></li>
+								</c:when>
+								<c:when test="${reportType == 3}">
+									<li><a href="${IncPath}/report/shiplist?reportType=3">船舶卸船机作业量统计</a><i class="fa fa-angle-right"></i></li>
+								</c:when>
+								<c:when test="${reportType == 4}">
+									<li><a href="${IncPath}/report/shiplist?reportType=4">船舶班次作业量统计</a><i class="fa fa-angle-right"></i></li>
+								</c:when>
+								<c:when test="${reportType == 5}">
+									<li><a href="${IncPath}/report/shiplist?reportType=5">船舶舱口效率统计</a><i class="fa fa-angle-right"></i></li>
+								</c:when>
+								<c:when test="${reportType == 6}">
+									<li><a href="${IncPath}/report/shiplist?reportType=6">船舶货物效率统计</a><i class="fa fa-angle-right"></i></li>
+								</c:when>
+								<c:otherwise>
+									<li><a href="${IncPath}/report/shiplist?reportType=7">舱外作业量统计</a><i class="fa fa-angle-right"></i></li>
+								</c:otherwise>
+							</c:choose>						
 							<li>统计结果</li>
 						</ul>
 						<!-- END PAGE TITLE & BREADCRUMB-->
@@ -228,8 +270,9 @@ License: You must have a valid license purchased only from themeforest(the above
 	<script type="text/javascript">
 		var IncPath = '${IncPath}';
 		var BasePath = '${BasePath}';
-		var taskId = ${taskId};
-		var cabinNo = ${cabinNo};
+		var taskId = '${taskId}';
+		var cabinNo = '${cabinNo}';
+		var reportType = '${reportType}';
 	</script>
 	<script src="${IncPath}/cl.js?v=${jsVersion}" type="text/javascript"></script>
 	<script src="${IncPath}/core/report/cabinDetail.js?v=${jsVersion}" type="text/javascript"></script>
