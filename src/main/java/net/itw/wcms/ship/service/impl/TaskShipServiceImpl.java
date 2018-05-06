@@ -985,6 +985,10 @@ public class TaskShipServiceImpl implements ITaskShipService {
 					// 计算舱右长度
 					averageMark = true; // 状态复位
 					float lastEndPosition = endPosition;
+					if (i == cabinMap.size()) {
+						averageMark = false;
+						rightOffset += ConstantUtil.CabinOffset;
+					}
 					for (int j = i+1; j <= cabinMap.size(); j++) {
 						Cabin nextCabin = cabinMap.get(j);
 						if (nextCabin.getStartPosition() == 0 && nextCabin.getEndPosition() == 0) {
