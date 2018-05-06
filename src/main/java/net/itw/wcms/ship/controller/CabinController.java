@@ -41,7 +41,6 @@ import net.itw.wcms.x27.utils.SessionUtil;
 @RestController
 @RequestMapping(value = "/cabin")
 public class CabinController {
-
 	@Autowired
 	private ITaskService taskService;
 	@Autowired
