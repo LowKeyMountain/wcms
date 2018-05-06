@@ -45,7 +45,7 @@
                  <!-- END RESPONSIVE QUICK SEARCH FORM -->
                 </li>
                 <li class="nav-item start active open">
-                    <a href="#" class="nav-link nav-toggle">
+                    <a href="${IncPath}/web/main" class="nav-link nav-toggle">
                         <i class="icon-home"></i>
                         <span class="title">主页</span>
                         

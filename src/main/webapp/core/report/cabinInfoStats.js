@@ -112,7 +112,7 @@
 	            }
 		    }, {
 		        field: 'finished',
-		        title: '已完成',
+		        title: '完成量',
 		        align: 'center',
 		        width: '18%',
 	            footerFormatter: function (value) {
