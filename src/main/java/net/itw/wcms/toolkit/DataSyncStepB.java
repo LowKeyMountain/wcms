@@ -280,6 +280,125 @@ public class DataSyncStepB{
 			}
 
 			// 维护上一组结束时间
+//			List<Map<String, Object>> groups = this.jdbcTemplate.queryForList(sqlMap.getSql("08", taskId), cmsid,
+//					groupId);
+//			if (groups != null) {
+//				for (Map<String, Object> m : groups) {
+//					Integer id = (Integer) m.get("id");
+//					sql = sqlMap.getSql("setFinishTicket", taskId);
+//					args = new Object[] { id };
+//					this.jdbcTemplate.update(sql, args);
+//				}
+//			}
+			
+			List<Map<String, Object>> tasks = this.jdbcTemplate.queryForList(sqlMap.getSql("20"));
+			for (Map<String, Object> task : tasks) {
+				Integer tId = (Integer) task.get("id");
+				List<Map<String, Object>> groups = null;
+				if (tId == taskId) {
+					groups = this.jdbcTemplate.queryForList(sqlMap.getSql("08", tId), cmsid, groupId);
+				} else {
+					groups = this.jdbcTemplate.queryForList(sqlMap.getSql("08_2", tId), cmsid);
+				}
+				if (groups != null) {
+					for (Map<String, Object> m : groups) {
+						Integer id = (Integer) m.get("id");
+						sql = sqlMap.getSql("setFinishTicket", tId);
+						args = new Object[] { id };
+						this.jdbcTemplate.update(sql, args);
+					}
+				}
+			}
+		} else {
+			Map<String, Object> map = list.get(0);
+			groupId = (Integer) map.get("id");
+			Date firstTime = (Date) map.get("firstTime");
+			switch (operationType) {
+			case 0:
+				sql = sqlMap.getSql("updateTicketByDisplacementInfo", taskId);
+				args = new Object[] { time, groupId };
+				this.jdbcTemplate.update(sql, args);
+				break;
+			case 1:
+				if (firstTime == null) {
+					sql = sqlMap.getSql("updateTicketByJobInfoForFirstTimeIsNull", taskId);
+					args = new Object[] { time, time, time, groupId };
+				} else {
+					sql = sqlMap.getSql("updateTicketByJobInfo", taskId);
+					args = new Object[] { time, time, groupId };
+				}
+				this.jdbcTemplate.update(sql, args);
+				break;
+			default:
+				break;
+			}
+			// log.error("数据异常：船舱编号[" + cabinId + "]|卸船机编号[" + cmsid + "] >>
+			// 查到多条未关闭的组信息！");
+		}
+
+		return groupId;
+	}
+	
+	/**
+	 * 计算组编号(重新同步时使用)
+	 * 
+	 * @param taskId
+	 *            任务ID
+	 * @param cabinId
+	 *            船舱ID
+	 * @param cmsid
+	 *            卸船机编号
+	 * @param operationType
+	 *            数据类型
+	 * @param time
+	 *            操作时间
+	 * @return
+	 */
+	Integer resyncCalc(Integer taskId, Integer cabinId, String cmsid, int operationType, Date time) {
+		int groupId = 0;
+		String sql = "";
+		Object[] args = new Object[0];
+		// 查询组信息，根据舱ID、 卸船机ID
+		List<Map<String, Object>> list = this.jdbcTemplate.queryForList(sqlMap.getSql("05", taskId), cabinId,
+				cmsid);
+		int conut = list.size();
+
+		if (conut == 0) {
+			// 新建组信息
+			KeyHolder keyHolder = new GeneratedKeyHolder();
+			this.jdbcTemplate.update(new PreparedStatementCreator() {
+				public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+					String inster_sql = "";
+					if (0 == operationType) {
+						inster_sql = sqlMap.getSql("createTicketByDisplacementInfo", taskId);
+					} else if (1 == operationType) {
+						inster_sql = sqlMap.getSql("createTicketByJobInfo", taskId);
+					}
+					PreparedStatement ps = connection.prepareStatement(inster_sql, Statement.RETURN_GENERATED_KEYS);
+					if (0 == operationType) {
+						ps.setInt(1, cabinId);
+						ps.setString(2, cmsid);
+						ps.setTimestamp(3, (Timestamp) time);
+						ps.setTimestamp(4, (Timestamp) time);
+						ps.setInt(5, 0);
+					} else if (1 == operationType) {
+						ps.setInt(1, cabinId);
+						ps.setString(2, cmsid);
+						ps.setTimestamp(3, (Timestamp) time);
+						ps.setTimestamp(4, (Timestamp) time);
+						ps.setTimestamp(5, (Timestamp) time);
+						ps.setTimestamp(6, (Timestamp) time);
+						ps.setInt(7, 0);
+					}
+					return ps;
+				}
+			}, keyHolder);
+			Long generatenKey = (Long) keyHolder.getKeys().get("GENERATED_KEY");
+			if (generatenKey != null) {
+				groupId = generatenKey.intValue();
+			}
+
+			// 维护上一组结束时间
 			List<Map<String, Object>> groups = this.jdbcTemplate.queryForList(sqlMap.getSql("08", taskId), cmsid,
 					groupId);
 			if (groups != null) {
@@ -319,7 +438,7 @@ public class DataSyncStepB{
 
 		return groupId;
 	}
-
+	
 	/**
 	 * 更新组结束时间
 	 * 

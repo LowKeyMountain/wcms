@@ -194,7 +194,7 @@ public class DataSyncStepCImpl implements DataSyncStepC{
 						}
 
 						// 获取组编号
-						groupId = dataSyncStepB.calc(taskId, cabinId, cmsid, operationType, time);
+						groupId = dataSyncStepB.resyncCalc(taskId, cabinId, cmsid, operationType, time);
 
 						// 维护开工时间（由系统自动计算，以船舶的靠泊时间为起始点，判断卸船机第一斗的时间为开工时间）
 						String beginTime = this.jdbcTemplate.queryForObject(

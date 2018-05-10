@@ -904,14 +904,14 @@ public class TaskShipServiceImpl implements ITaskShipService {
 				if (cabin.getStartPosition() == 0 && cabin.getEndPosition() == 0) {
 					continue;
 				}
-				cabinLength += cabin.getEndPosition() - cabin.getStartPosition();
+				cabinLength += Math.abs(cabin.getEndPosition() - cabin.getStartPosition());
 				cabinNum++;
 				Cabin nextCabin = cabinMap.get(i + 1);
 				if (nextCabin != null && nextCabin.getStartPosition() != 0 && nextCabin.getEndPosition() != 0) {
 					if (direction == 1) { // 正方向
-						cabinSpaceBetween += nextCabin.getStartPosition() - cabin.getEndPosition();
+						cabinSpaceBetween += Math.abs(nextCabin.getStartPosition() - cabin.getEndPosition());
 					} else { // 反方向
-						cabinSpaceBetween += nextCabin.getEndPosition() - cabin.getStartPosition();
+						cabinSpaceBetween += Math.abs(nextCabin.getEndPosition() - cabin.getStartPosition());
 					}
 					spaceBetween++;
 				}
@@ -974,17 +974,21 @@ public class TaskShipServiceImpl implements ITaskShipService {
 								lastStartPosition = 0;
 								continue;
 							}
-							leftOffset += lastStartPosition == 0 ? averageCabinSpaceBetween
-									: lastStartPosition - lastCabin.getEndPosition();
+							leftOffset += Math.abs(lastStartPosition == 0 ? averageCabinSpaceBetween
+									: lastStartPosition - lastCabin.getEndPosition());
 							break;
 						}
 						leftOffset = averageMark ? leftOffset / 2 : leftOffset;
 					}
-					leftOffsetPosition = cabin.getStartPosition() - leftOffset;
+					leftOffsetPosition = Math.abs(cabin.getStartPosition() - leftOffset);
 
 					// 计算舱右长度
 					averageMark = true; // 状态复位
 					float lastEndPosition = endPosition;
+					if (i == cabinMap.size()) {
+						averageMark = false;
+						rightOffset += ConstantUtil.CabinOffset;
+					}
 					for (int j = i+1; j <= cabinMap.size(); j++) {
 						Cabin nextCabin = cabinMap.get(j);
 						if (nextCabin.getStartPosition() == 0 && nextCabin.getEndPosition() == 0) {
@@ -1002,12 +1006,12 @@ public class TaskShipServiceImpl implements ITaskShipService {
 							rightOffset += ConstantUtil.CabinOffset;
 							break;
 						}
-						rightOffset += lastEndPosition == 0 ? averageCabinSpaceBetween
-								: nextCabin.getStartPosition() - lastEndPosition;
+						rightOffset += Math.abs(lastEndPosition == 0 ? averageCabinSpaceBetween
+								: nextCabin.getStartPosition() - lastEndPosition);
 						break;
 					}
 					rightOffset = averageMark ? rightOffset / 2 : rightOffset;
-					rightOffsetPosition = cabin.getEndPosition() + rightOffset;
+					rightOffsetPosition = Math.abs(cabin.getEndPosition() + rightOffset);
 				} else { // 反方向
 					// 计算舱左长度
 					float lastStartPosition = startPosition;
@@ -1022,15 +1026,20 @@ public class TaskShipServiceImpl implements ITaskShipService {
 							lastStartPosition = 0;
 							continue;
 						}
-						leftOffset += lastStartPosition == 0 ? averageCabinSpaceBetween
-								: lastStartPosition - nextCabin.getEndPosition();
+						leftOffset += Math.abs(lastStartPosition == 0 ? averageCabinSpaceBetween
+								: lastStartPosition - nextCabin.getEndPosition());
 						break;
 					}
+					if (i == cabinMap.size()) {
+						averageMark = false;
+						leftOffset += ConstantUtil.CabinOffset;
+					}
 					leftOffset = averageMark ? leftOffset / 2 : leftOffset;
-					leftOffsetPosition = cabin.getStartPosition() - leftOffset;
+					leftOffsetPosition = Math.abs(cabin.getStartPosition() - leftOffset);
 					// 计算舱右长度
 					averageMark = true; // 状态复位
 					float lastEndPosition = endPosition;
+					
 					for (int j = i-1; j > 0; j--) {
 						Cabin lastCabin = cabinMap.get(j);
 						if (lastCabin.getStartPosition() == 0 && lastCabin.getEndPosition() == 0) {
@@ -1048,12 +1057,16 @@ public class TaskShipServiceImpl implements ITaskShipService {
 							rightOffset += ConstantUtil.CabinOffset;
 							break;
 						}
-						rightOffset += lastStartPosition == 0 ? averageCabinSpaceBetween
-								: lastCabin.getStartPosition() - lastEndPosition;
+						rightOffset += Math.abs(lastStartPosition == 0 ? averageCabinSpaceBetween
+								: lastCabin.getStartPosition() - lastEndPosition);
 						break;
 					}
+					if (i == 1) {
+						averageMark = false;
+						rightOffset += ConstantUtil.CabinOffset;
+					}
 					rightOffset = averageMark ? rightOffset / 2 : rightOffset;
-					rightOffsetPosition = cabin.getEndPosition() + rightOffset;
+					rightOffsetPosition = Math.abs(cabin.getEndPosition() + rightOffset);
 				}
 				
 				Date startTime = task.getBeginTime() == null ? task.getBerthingTime() : task.getBeginTime();
@@ -1061,13 +1074,15 @@ public class TaskShipServiceImpl implements ITaskShipService {
 				Object[] args = new Object[] { cabin.getStartPosition(), leftOffsetPosition, startTime, endTime };
 				Map<String, Object> leftMap = this.jdbcTemplate.queryForMap(sqlMap.getSql("FN_014_1"), args);
 
+				System.out.println("船舱号"+i+"|leftOffset|" + cabin.getStartPosition() + "|" + leftOffsetPosition);
+				
 				data.put("leftOffset", leftMap.get("leftOffset") != null ? leftMap.get("leftOffset") : 0.0);
 				data.put("leftUnloading", leftMap.get("leftUnloading") != null ? leftMap.get("leftUnloading") : 0.0);
 				data.put("leftShovelNumber", leftMap.get("leftShovelNumber"));
 				
 				args = new Object[] { rightOffsetPosition, cabin.getEndPosition(), startTime, endTime };
 				Map<String, Object> rightMap = this.jdbcTemplate.queryForMap(sqlMap.getSql("FN_014_2"), args);
-				
+				System.out.println("船舱号"+i+"|rightOffset|" + rightOffsetPosition + "|" + cabin.getEndPosition());
 				data.put("rightOffset", rightMap.get("rightOffset") != null ? rightMap.get("rightOffset") : 0.0);
 				data.put("rightUnloading",
 						rightMap.get("rightUnloading") != null ? rightMap.get("rightUnloading") : 0.0);

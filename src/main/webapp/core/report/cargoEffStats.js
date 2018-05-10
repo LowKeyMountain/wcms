@@ -117,6 +117,11 @@
 		        align: 'center',
 		        width: '8%'
 		    }, {
+		        field: 'clearanceEfficiency',
+		        title: '清舱效率',
+		        align: 'center',
+		        width: '8%'
+		    }, {
 		        field: 'finished',
 		        title: '完成量',
 		        align: 'center',
@@ -136,12 +141,7 @@
 		        title: '剩余量',
 		        align: 'center',
 		        width: '8%'
-		    }/*, {
-		        field: 'clearanceEfficiency',
-		        title: '清舱效率',
-		        align: 'center',
-		        width: '8%'
-		    }*/],
+		    }],
 			locale : 'zh-CN',// 中文支持,
 			responseHandler : function(res) {
 				// 在ajax获取到数据，渲染表格之前，修改数据源
