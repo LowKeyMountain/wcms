@@ -400,11 +400,22 @@ public class ReportController {
 	 */
 	@RequestMapping(value = "/getUnloaderDetail")
 	public Map<String, Object> getUnloaderDetail(@RequestParam("taskId") Integer taskId, @RequestParam("cabinNo") Integer cabinNo) {
-		Map<String, Object> args = new HashMap<>();
-		args.put("taskId", taskId);
-		args.put("cabinNo", cabinNo);
-		Map<String, Object> result = taskShipService.doUnloaderInfoStatistics(args);
-		return result;
+//		Map<String, Object> args = new HashMap<>();
+//		args.put("taskId", taskId);
+//		args.put("cabinNo", cabinNo);
+//		Map<String, Object> result = taskShipService.doUnloaderInfoStatistics(args);
+//		return result;
+		
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("fuctionType", "FN_006");
+		jsonObject.put("order", "DESC");
+		jsonObject.put("sort", "startTime");
+		jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "','$cabinNo':'" + cabinNo + "'}"));
+		QueryOptions options = new QueryOptions();
+		options.searchString = "%#";
+		options.replacement = taskId + "";
+		return infoQueryHelper.doQueryInfo(jsonObject, options);
+		
 	}
 	
 	/**
