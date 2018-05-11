@@ -110,6 +110,11 @@
 		        align: 'center',
 		        width: '7%'
 		    }, {
+		        field: 'clearanceEfficiency',
+		        title: '清舱效率',
+		        align: 'center',
+		        width: '8%'
+		    }, {
 		        field: 'finished',
 		        title: '整舱完成量',
 		        align: 'center',
@@ -130,16 +135,11 @@
 		        align: 'center',
 		        width: '7%'
 		    }, /*{
-		        field: 'clearanceEfficiency',
-		        title: '清舱效率',
-		        align: 'center',
-		        width: '8%'
-		    }, */{
 		        field: 'clearTime',
 		        title: '清舱时间',
 		        align: 'center',
 		        width: '8%'
-		    }, {
+		    }, */{
 		        field: 'status',
 		        title: '状态',
 		        align: 'center',

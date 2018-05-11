@@ -139,8 +139,22 @@
 	                return count.toFixed(4);
 	            }
 		    }, {
+		        field: 'clearanceEfficiency',
+		        title: '清舱效率',
+		        align: 'center',
+		        width: '7%',
+	            footerFormatter: function (value) {
+	                var t_count = 0;	            	
+	                var h_count = 0;
+	                for (var i in value) {
+	                	t_count += value[i].clearanceUsedTime;
+	                	h_count += value[i].clearance;
+	                }
+	                return (h_count/t_count).toFixed(2);
+	            }
+		    }, {
 		        field: 'finished',
-		        title: '完成量',
+		        title: '整舱完成量',
 		        align: 'center',
 		        width: '7%',
 	            footerFormatter: function (value) {
@@ -152,7 +166,7 @@
 	            }
 		    }, {
 		        field: 'finishedUsedTime',
-		        title: '整体用时',
+		        title: '整舱用时',
 		        align: 'center',
 		        width: '7%',
 	            footerFormatter: function (value) {
@@ -164,7 +178,7 @@
 	            }
 		    }, {
 		        field: 'finishedEfficiency',
-		        title: '整体效率',
+		        title: '整舱效率',
 		        align: 'center',
 		        width: '8%',
 	            footerFormatter: function (value) {
@@ -187,20 +201,6 @@
 	                	count += value[i].remainder;
 	                }
 	                return count.toFixed(2);
-	            }
-		    }, {
-		        field: 'clearanceEfficiency',
-		        title: '清舱效率',
-		        align: 'center',
-		        width: '7%',
-	            footerFormatter: function (value) {
-	                var t_count = 0;	            	
-	                var h_count = 0;
-	                for (var i in value) {
-	                	t_count += value[i].clearanceUsedTime;
-	                	h_count += value[i].clearance;
-	                }
-	                return (h_count/t_count).toFixed(2);
 	            }
 		    }, {
 		        field: 'status',
@@ -238,5 +238,5 @@
 	 * 查看船舱卸货详情
 	 */
 	function view_unship(taskId, cabinNo) {
-		window.location.href = BasePath + "/report/getCabinDetail?taskId=" + taskId + '&cabinNo=' + cabinNo;
+		window.location.href = BasePath + "/report/getCabinDetail?reportType=6&taskId=" + taskId + '&cabinNo=' + cabinNo;
 	}

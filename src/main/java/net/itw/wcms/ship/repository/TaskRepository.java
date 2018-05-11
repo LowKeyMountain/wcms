@@ -117,7 +117,7 @@ public interface TaskRepository extends JpaRepository<Task, Integer>, JpaSpecifi
 						break;
 					}
 
-					predicates.add(cb.greaterThanOrEqualTo(root.get("updateTime"),
+					predicates.add(cb.greaterThanOrEqualTo(root.get("berthingTime"),
 							DateTimeUtils.strDateTime2Date(queryDate)));
 				}
 				predicates.add(cb.notEqual(root.get("status"), "0"));

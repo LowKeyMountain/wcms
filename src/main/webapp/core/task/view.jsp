@@ -193,7 +193,26 @@ License: You must have a valid license purchased only from themeforest(the above
 																				</div>
 																			</div>
 																		</div>
-																		
+
+																		<div class="form-group  margin-top-20">
+																			<label class="control-label col-md-3">泊位 <span
+																				class="required"> </span>
+																			</label>
+																			<div class="col-md-8">
+																				<div class="input-icon right">
+																					<i class="fa"></i> <input size="16" type="text"
+																						id="departureTime"
+																						<c:choose>
+																						<c:when test="${reportType == 1}">
+																						</c:when>
+																						</c:choose>
+																						value="${task.berth}"
+																						name="departureTime" readonly
+																						class="form_datetime form-control" readonly="readonly" >
+																				</div>
+																			</div>
+																		</div>
+																																				
 																		<div class="form-group  margin-top-20">
 																			<label class="control-label col-md-3">开工时间 <span
 																				class="required"> </span>
