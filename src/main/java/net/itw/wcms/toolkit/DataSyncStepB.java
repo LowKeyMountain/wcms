@@ -115,13 +115,13 @@ public class DataSyncStepB{
 			List<Map<String, Object>> list = this.jdbcTemplate.queryForList(sqlMap.getSql("01"));
 			for (Map<String, Object> map : list) {
 
-				Integer operationType = (Integer) map.get("operationType");
+				int operationType = (int) map.get("operationType");
 
-				Integer taskId = 0;
-				Integer cabinId = 0;
-				Integer groupId = 0;
+				int taskId = 0;
+				int cabinId = 0;
+				int groupId = 0;
 				Date time = (Date) map.get("Time");
-				Integer id = (Integer) map.get("id");
+				int id = (int) map.get("id");
 				String cmsid = (String) map.get("Cmsid");
 				Double unloaderMove = (Double) map.get("unloaderMove");
 
@@ -137,7 +137,7 @@ public class DataSyncStepB{
 					List<Map<String, Object>> tasks = this.jdbcTemplate.queryForList(sqlMap.getSql("18"), args);
 					if (tasks != null && !tasks.isEmpty()) {
 						String sql = "";
-						taskId = (Integer) tasks.get(0).get("taskId");
+						taskId = (int) tasks.get(0).get("taskId");
 						try {
 							// 自动创建任务子表
 							autoCreateDBTable.createTable(taskId);
@@ -147,7 +147,7 @@ public class DataSyncStepB{
 						List<Map<String, Object>> list2 = this.jdbcTemplate
 								.queryForList(sqlMap.getSql("19", taskId), cmsid);
 						for (Map<String, Object> map2 : list2) {
-							Integer id2 = (Integer) map2.get("id");
+							int id2 = (int) map2.get("id");
 							sql = sqlMap.getSql("setFinishTicket", taskId);
 							args = new Object[] { id2 };
 							this.jdbcTemplate.update(sql, args);
@@ -164,8 +164,8 @@ public class DataSyncStepB{
 					// log.error("数据异常：数据编号[" + id + "]|卸船机编号[" + cmsid + "]
 					// 匹配到多个船舱信息！");
 				}
-				cabinId = (Integer) cabinNums.get(0).get("id");
-				taskId = (Integer) cabinNums.get(0).get("taskId");
+				cabinId = (int) cabinNums.get(0).get("id");
+				taskId = (int) cabinNums.get(0).get("taskId");
 
 				try {
 					// 自动创建任务子表
@@ -235,7 +235,7 @@ public class DataSyncStepB{
 	 *            操作时间
 	 * @return
 	 */
-	Integer calc(Integer taskId, Integer cabinId, String cmsid, int operationType, Date time) {
+	int calc(int taskId, int cabinId, String cmsid, int operationType, Date time) {
 		int groupId = 0;
 		String sql = "";
 		Object[] args = new Object[0];
@@ -284,7 +284,7 @@ public class DataSyncStepB{
 //					groupId);
 //			if (groups != null) {
 //				for (Map<String, Object> m : groups) {
-//					Integer id = (Integer) m.get("id");
+//					int id = (int) m.get("id");
 //					sql = sqlMap.getSql("setFinishTicket", taskId);
 //					args = new Object[] { id };
 //					this.jdbcTemplate.update(sql, args);
@@ -293,7 +293,7 @@ public class DataSyncStepB{
 			
 			List<Map<String, Object>> tasks = this.jdbcTemplate.queryForList(sqlMap.getSql("20"));
 			for (Map<String, Object> task : tasks) {
-				Integer tId = (Integer) task.get("id");
+				int tId = (int) task.get("id");
 				List<Map<String, Object>> groups = null;
 				if (tId == taskId) {
 					groups = this.jdbcTemplate.queryForList(sqlMap.getSql("08", tId), cmsid, groupId);
@@ -302,7 +302,7 @@ public class DataSyncStepB{
 				}
 				if (groups != null) {
 					for (Map<String, Object> m : groups) {
-						Integer id = (Integer) m.get("id");
+						int id = (int) m.get("id");
 						sql = sqlMap.getSql("setFinishTicket", tId);
 						args = new Object[] { id };
 						this.jdbcTemplate.update(sql, args);
@@ -311,7 +311,7 @@ public class DataSyncStepB{
 			}
 		} else {
 			Map<String, Object> map = list.get(0);
-			groupId = (Integer) map.get("id");
+			groupId = (int) map.get("id");
 			Date firstTime = (Date) map.get("firstTime");
 			switch (operationType) {
 			case 0:
@@ -354,7 +354,7 @@ public class DataSyncStepB{
 	 *            操作时间
 	 * @return
 	 */
-	Integer resyncCalc(Integer taskId, Integer cabinId, String cmsid, int operationType, Date time) {
+	int resyncCalc(int taskId, int cabinId, String cmsid, int operationType, Date time) {
 		int groupId = 0;
 		String sql = "";
 		Object[] args = new Object[0];
@@ -403,7 +403,7 @@ public class DataSyncStepB{
 					groupId);
 			if (groups != null) {
 				for (Map<String, Object> m : groups) {
-					Integer id = (Integer) m.get("id");
+					int id = (int) m.get("id");
 					sql = sqlMap.getSql("setFinishTicket", taskId);
 					args = new Object[] { id };
 					this.jdbcTemplate.update(sql, args);
@@ -411,7 +411,7 @@ public class DataSyncStepB{
 			}
 		} else {
 			Map<String, Object> map = list.get(0);
-			groupId = (Integer) map.get("id");
+			groupId = (int) map.get("id");
 			Date firstTime = (Date) map.get("firstTime");
 			switch (operationType) {
 			case 0:
@@ -445,10 +445,10 @@ public class DataSyncStepB{
 	 * @param taskId
 	 * @return
 	 */
-	public void updateGroupEndTime(Integer taskId) {
+	public void updateGroupEndTime(int taskId) {
 		List<Map<String, Object>> list = this.jdbcTemplate.queryForList(sqlMap.getSql("13", taskId), taskId);
 		for (Map<String, Object> m : list) {
-			Integer groupId = (Integer) m.get("id");
+			int groupId = (int) m.get("id");
 			Object[] args = new Object[] { groupId };
 			this.jdbcTemplate.update(sqlMap.getSql("setFinishTicket", taskId), args);
 		}

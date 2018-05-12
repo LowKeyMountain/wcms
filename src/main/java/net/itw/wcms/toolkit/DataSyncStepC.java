@@ -13,6 +13,6 @@ public interface DataSyncStepC {
 	 * @param taskId
 	 * @throws Exception
 	 */
-	public abstract void start(Integer taskId) throws Exception;
+	public abstract void start(int taskId) throws Exception;
 
 }

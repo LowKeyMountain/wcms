@@ -55,7 +55,7 @@ public class DataSyncLogsHelper {
 	 * @param args
 	 *            sql参数
 	 */
-	public void dataSyncStepbLogs(Integer type, Object... args) {
+	public void dataSyncStepbLogs(int type, Object... args) {
 		// 自动创建日志表
 		String tabName = "tab_dataSyncStepB_logs";
 		if (!cache.containsKey(tabName)) {

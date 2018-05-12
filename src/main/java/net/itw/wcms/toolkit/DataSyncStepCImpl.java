@@ -78,7 +78,7 @@ public class DataSyncStepCImpl implements DataSyncStepC{
 	 * @param taskId
 	 * @throws Exception
 	 */
-	public void start(Integer taskId) throws Exception {
+	public void start(int taskId) throws Exception {
 		new Timer().schedule(new TimerTask() {
 			@Override
 			public void run() {
@@ -105,7 +105,7 @@ public class DataSyncStepCImpl implements DataSyncStepC{
 		}, 1000);
 	}
 
-	private void delete(Integer taskId) {
+	private void delete(int taskId) {
 		try {
 			// 【任务子表】删除任务子表：卸船作业信息
 			this.jdbcTemplate.update(sqlMap.getSql("02", "tab_temp_b_" + taskId));
@@ -126,7 +126,7 @@ public class DataSyncStepCImpl implements DataSyncStepC{
 	 * 
 	 * @param tid
 	 */
-	private void resync(Integer tid) {
+	private void resync(int tid) {
 		int num = 0;
 		try {
 			// 查询临时表待处理数据
@@ -135,13 +135,13 @@ public class DataSyncStepCImpl implements DataSyncStepC{
 			log.info("待计算数据" + list.size() + "条。");
 			for (Map<String, Object> map : list) {
 
-				Integer operationType = (Integer) map.get("operationType");
+				int operationType = (int) map.get("operationType");
 
-				Integer taskId = 0;
-				Integer cabinId = 0;
-				Integer groupId = 0;
+				int taskId = 0;
+				int cabinId = 0;
+				int groupId = 0;
 				Date time = (Date) map.get("Time");
-				Integer id = (Integer) map.get("uid");
+				int id = (int) map.get("uid");
 				String cmsid = (String) map.get("Cmsid");
 				// Double unloaderMove = (Double) map.get("unloaderMove") + 7;
 				Double unloaderMove = (Double) map.get("unloaderMove");
@@ -155,14 +155,14 @@ public class DataSyncStepCImpl implements DataSyncStepC{
 					List<Map<String, Object>> tasks = this.jdbcTemplate.queryForList(sqlMap.getSql("07"), args);
 					if (tasks != null && !tasks.isEmpty()) {
 						String sql = "";
-						taskId = (Integer) tasks.get(0).get("taskId");
+						taskId = (int) tasks.get(0).get("taskId");
 						if (taskId != tid) {
 							continue;
 						}
 						List<Map<String, Object>> list2 = this.jdbcTemplate
 								.queryForList(dataSyncStepB.getSqlMap().getSql("19", taskId), cmsid);
 						for (Map<String, Object> map2 : list2) {
-							Integer id2 = (Integer) map2.get("id");
+							int id2 = (int) map2.get("id");
 							sql = dataSyncStepB.getSqlMap().getSql("setFinishTicket", taskId);
 							args = new Object[] { id2 };
 							this.jdbcTemplate.update(sql, args);
@@ -174,8 +174,8 @@ public class DataSyncStepCImpl implements DataSyncStepC{
 				if (cabinNums.size() > 1) {
 					log.error("数据异常：数据编号[" + id + "]|卸船机编号[" + cmsid + "] 匹配到多个船舱信息！还剩数据[" + (list.size() - num) + "]");
 				}
-				cabinId = (Integer) cabinNums.get(0).get("id");
-				taskId = (Integer) cabinNums.get(0).get("taskId");
+				cabinId = (int) cabinNums.get(0).get("id");
+				taskId = (int) cabinNums.get(0).get("taskId");
 
 				if (taskId != tid) {
 					continue;
@@ -194,7 +194,7 @@ public class DataSyncStepCImpl implements DataSyncStepC{
 						}
 
 						// 获取组编号
-						groupId = dataSyncStepB.resyncCalc(taskId, cabinId, cmsid, operationType, time);
+						groupId = dataSyncStepB.calc(taskId, cabinId, cmsid, operationType, time);
 
 						// 维护开工时间（由系统自动计算，以船舶的靠泊时间为起始点，判断卸船机第一斗的时间为开工时间）
 						String beginTime = this.jdbcTemplate.queryForObject(

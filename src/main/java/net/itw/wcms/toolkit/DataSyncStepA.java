@@ -108,13 +108,13 @@ public class DataSyncStepA {
 					"ABB_GSU_" + cmsNum);
 			for (Map<String, Object> map : list) {
 
-				Integer operationType = (Integer) map.get("operationType");
+				int operationType = (int) map.get("operationType");
 				// 过滤卸船机在线状态数据
 				if (2 == operationType) {
 					continue;
 				}
 
-				Integer id = (Integer) map.get("id");
+				int id = (int) map.get("id");
 				String cmsid = (String) map.get("Cmsid");
 
 				// 检查数据是否存在

@@ -88,7 +88,7 @@ public class CargoController {
 	 */
 	@RequestMapping(value = "/getCargoList")
 	public Map<String, Object> getDataTables(@RequestParam Map<String, String> params,
-			@RequestParam("taskId") Integer taskId, ModelMap map) {
+			@RequestParam("taskId") int taskId, ModelMap map) {
 		// 从session取出User对象
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
 		Map<String, Object> result = null;
@@ -113,7 +113,7 @@ public class CargoController {
 	 * @return
 	 */
 	@RequestMapping(value = "/add")
-	public Map<String, Object> add(@ModelAttribute("cargo") Cargo cargo, @RequestParam("taskId") Integer taskId) {
+	public Map<String, Object> add(@ModelAttribute("cargo") Cargo cargo, @RequestParam("taskId") int taskId) {
 		User operator = SessionUtil.getSessionUser(req);
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "数据保存成功！");
 		try {
@@ -141,7 +141,7 @@ public class CargoController {
 	 * @return
 	 */
 	@RequestMapping("/updateform")
-	public ModelAndView updateform(Integer taskId) {
+	public ModelAndView updateform(int taskId) {
 		Cargo cargo = cargoService.findOne(taskId);
 		modelMap.put("cargo", cargo);
 		return new ModelAndView(PATH + "updateform");
@@ -154,7 +154,7 @@ public class CargoController {
 	 * @return
 	 */
 	@RequestMapping(value = "/update")
-	public Map<String, Object> update(@ModelAttribute("cargo") Cargo cargo, @RequestParam("taskId") Integer taskId) {
+	public Map<String, Object> update(@ModelAttribute("cargo") Cargo cargo, @RequestParam("taskId") int taskId) {
 		// 从session取出User对象
 		User operator = SessionUtil.getSessionUser(req);
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "数据修改成功！");
@@ -178,7 +178,7 @@ public class CargoController {
 	}
 	
 	@RequestMapping("/delete")
-	public MessageOption delete(@RequestParam("id") Integer id) {
+	public MessageOption delete(@RequestParam("id") int id) {
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
 		try {
 			// 从session取出User对象
@@ -200,7 +200,7 @@ public class CargoController {
 	 * @return
 	 */
 	@RequestMapping("/view")
-	public ModelAndView cargoInfoview(Integer taskId, Integer cabinNo) {
+	public ModelAndView cargoInfoview(int taskId, int cabinNo) {
 //		taskId = 59;
 //		cabinNo = 2;
 		Map<String, Object> map = taskShipService.doGetCargoDetail(taskId, cabinNo);
@@ -216,7 +216,7 @@ public class CargoController {
 	 * @return
 	 */
 	@RequestMapping("/cargoview")
-	public ModelAndView cargoview(Integer id) {
+	public ModelAndView cargoview(int id) {
 		Map<String, Object> map = taskShipService.doGetCargoDetailById(id);
 		Map<String, Object> data = (Map<String, Object>)map.get("data");
 		modelMap.put("cargo", data);

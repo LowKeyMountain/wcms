@@ -90,7 +90,7 @@ public class CabinController {
 	}
 
 	@RequestMapping("/addform")
-	public ModelAndView addform(@RequestParam("taskId") Integer taskId) {
+	public ModelAndView addform(@RequestParam("taskId") int taskId) {
 		 List<Cargo> cargos = cargoService.getCargosByTaskId(taskId);
 		 modelMap.put("cargos", cargos);
 		 List<Cabin> cabins = new ArrayList<>();
@@ -112,7 +112,7 @@ public class CabinController {
 	 */
 	@RequestMapping(value = "/getCabinList")
 	public Map<String, Object> getDataTables(@RequestParam Map<String, String> params,
-			@RequestParam("taskId") Integer taskId, ModelMap map) {
+			@RequestParam("taskId") int taskId, ModelMap map) {
 		// 从session取出User对象
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
 		Map<String, Object> result = null;
@@ -138,7 +138,7 @@ public class CabinController {
 	 */
 	@RequestMapping(value = "/getCabinPositionList")
 	public Map<String, Object> getCabinPositionList(@RequestParam Map<String, String> params,
-			@RequestParam("taskId") Integer taskId, ModelMap map) {
+			@RequestParam("taskId") int taskId, ModelMap map) {
 		// 从session取出User对象
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
 		Map<String, Object> result = null;
@@ -185,7 +185,7 @@ public class CabinController {
 	 * @return
 	 */
 	@RequestMapping("/updateform")
-	public ModelAndView updateform(Integer id) {
+	public ModelAndView updateform(int id) {
 		Cabin cabin = cabinService.findOne(id);
 		modelMap.put("cabin", cabin);
 		Set<Cargo> cargos = cabin.getCargo().getTask().getCargos();
@@ -218,7 +218,7 @@ public class CabinController {
 	}
 	
 	@RequestMapping("/delete")
-	public MessageOption delete(@RequestParam("id") Integer id) {
+	public MessageOption delete(@RequestParam("id") int id) {
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
 		try {
 			// 从session取出User对象
@@ -240,7 +240,7 @@ public class CabinController {
 	 * @return
 	 */
 	@RequestMapping(value = "/modifyCabinPosition")
-	public ModelAndView modifyCabinPosition(Integer taskId) {
+	public ModelAndView modifyCabinPosition(int taskId) {
 		modelMap.put("taskId", taskId);
 		Task task = taskService.getTaskById(taskId);
 		modelMap.put("cabinNum", task.getShip() != null ? task.getShip().getCabinNum() : 0);
@@ -296,7 +296,7 @@ public class CabinController {
 	 * @return
 	 */
 	@RequestMapping(value = "/view")
-	public ModelAndView viewCabinInfo(Integer taskId, Integer cabinNo) {
+	public ModelAndView viewCabinInfo(int taskId, int cabinNo) {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("fuctionType", "FN_002");
 		jsonObject.put("criteria", JSONObject.parseObject("{'$t.task_id':'" + taskId + "','$cabinNo':'" + cabinNo + "'}"));
@@ -315,7 +315,7 @@ public class CabinController {
 	 * @return
 	 */
 	@RequestMapping(value = "/doGetUnloaderDetail")
-	public Map<String, Object> doGetUnloaderDetail(@RequestParam("taskId") Integer taskId, @RequestParam("cabinNo") Integer cabinNo) {
+	public Map<String, Object> doGetUnloaderDetail(@RequestParam("taskId") int taskId, @RequestParam("cabinNo") int cabinNo) {
 		// 从session取出User对象
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
 		Map<String, Object> result = null;
