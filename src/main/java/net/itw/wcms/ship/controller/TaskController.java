@@ -117,7 +117,7 @@ public class TaskController {
 	}
 	
 	@RequestMapping(value = "/berthCheckout", produces = "text/json;charset=UTF-8")
-	public String berthCheckout(@RequestParam("id") Integer taskId, @RequestParam("berth") Integer berth) {
+	public String berthCheckout(@RequestParam("id") int taskId, @RequestParam("berth") int berth) {
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "校验成功！");
 		List<Task> tasks = taskService.getTaskByStatus(0);
 		for (Task task : tasks) {
@@ -136,7 +136,7 @@ public class TaskController {
 	}
 	
 	@RequestMapping("/updateform")
-	public ModelAndView updateform(Integer id) {
+	public ModelAndView updateform(int id) {
 		Task user = taskService.getTaskById(id);
 		modelMap.put("task", user);
 		return new ModelAndView(PATH + "updateTask");
@@ -150,7 +150,7 @@ public class TaskController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getTaskList", produces = "text/json;charset=UTF-8")
-	public String getUserDataTables(@RequestParam Map<String, String> params, @RequestParam("status") Integer status, ModelMap map) {
+	public String getUserDataTables(@RequestParam Map<String, String> params, @RequestParam("status") int status, ModelMap map) {
 		Pageable pageable = null;
 		if(status==2) {
 			int pageSize = Integer.parseInt(params.get("limit"));
@@ -218,7 +218,7 @@ public class TaskController {
 	 * @return
 	 */
 	@RequestMapping("/delete")
-	public MessageOption delete(@RequestParam("id") Integer id) {
+	public MessageOption delete(@RequestParam("id") int id) {
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
 		try {
 			Task task = taskService.getTaskById(id);
@@ -238,7 +238,7 @@ public class TaskController {
 	 * @return
 	 */
 	@RequestMapping("/unshipInfo")
-	public ModelAndView unshipInfo(@RequestParam("id") Integer id) {
+	public ModelAndView unshipInfo(@RequestParam("id") int id) {
 		Task task = taskService.getTaskById(id);
 		modelMap.put("taskId", id);
 		modelMap.put("task", task);
@@ -252,7 +252,7 @@ public class TaskController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getUnshipInfoList")
-	public Map<String, Object> getUnshipInfoList(@RequestParam("taskId") Integer taskId) {
+	public Map<String, Object> getUnshipInfoList(@RequestParam("taskId") int taskId) {
 		// 从session取出User对象
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
 		Map<String, Object> result = null;
@@ -282,7 +282,7 @@ public class TaskController {
 	 * @return
 	 */
 	@RequestMapping("/view")
-	public ModelAndView shipInfoview(Integer taskId) {
+	public ModelAndView shipInfoview(int taskId) {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("fuctionType", "FN_003");
 		jsonObject.put("criteria", JSONObject.parseObject("{'$t.id':'" + taskId + "'}"));
@@ -348,7 +348,7 @@ public class TaskController {
 	 * @return
 	 */
 	@RequestMapping("/unloadProgress")
-	public ModelAndView unloadProgress(@RequestParam("id") Integer id) {
+	public ModelAndView unloadProgress(@RequestParam("id") int id) {
 		Task task = taskService.getTaskById(id);
 		modelMap.put("taskId", id);
 		modelMap.put("task", task);
@@ -362,7 +362,7 @@ public class TaskController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getUnloadProgressList", produces = "text/json;charset=UTF-8")
-	public String getUnloadProgressList(@RequestParam("taskId") Integer taskId) {
+	public String getUnloadProgressList(@RequestParam("taskId") int taskId) {
 		Map<String, Object> result = null;
 		JSONObject json = new JSONObject();
 		try {
@@ -390,7 +390,7 @@ public class TaskController {
 	 * @return
 	 */
 	@RequestMapping("/unloaderOverview")
-	public ModelAndView unloaderOverview(@RequestParam("id") Integer id) {
+	public ModelAndView unloaderOverview(@RequestParam("id") int id) {
 		Task task = taskService.getTaskById(id);
 		modelMap.put("taskId", id);
 		modelMap.put("task", task);
@@ -438,7 +438,7 @@ public class TaskController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getUnloaderDetailList", produces = "text/json;charset=UTF-8")
-	public String getUnloaderDetailList(@RequestParam("taskId") Integer taskId,@RequestParam("unloaderId") String unloaderId) {
+	public String getUnloaderDetailList(@RequestParam("taskId") int taskId,@RequestParam("unloaderId") String unloaderId) {
 		Map<String, Object> result = null;
 		JSONObject json = new JSONObject();
 		try {
@@ -477,7 +477,7 @@ public class TaskController {
 	 * @return
 	 */
 	@RequestMapping("/cabinlist")
-	public ModelAndView cabinList(@RequestParam("id") Integer id) {
+	public ModelAndView cabinList(@RequestParam("id") int id) {
 		Task task = taskService.getTaskById(id);
 		modelMap.put("taskId", id);
 		modelMap.put("task", task);
@@ -491,7 +491,7 @@ public class TaskController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getCabinList", produces = "text/json;charset=UTF-8")
-	public String getCabinList(@RequestParam("taskId") Integer taskId) {
+	public String getCabinList(@RequestParam("taskId") int taskId) {
 		Map<String, Object> result = null;
 		JSONObject json = new JSONObject();
 		try {

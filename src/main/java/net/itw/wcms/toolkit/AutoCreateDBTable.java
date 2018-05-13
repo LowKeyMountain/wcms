@@ -48,7 +48,7 @@ public class AutoCreateDBTable {
 	 * @param taskId
 	 * @throws SQLException
 	 */
-	public void createTable(Integer taskId) throws SQLException {
+	public void createTable(int taskId) throws SQLException {
 		if (cache.containsKey(taskId)) {
 			return;
 		}
@@ -87,7 +87,7 @@ public class AutoCreateDBTable {
 		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
 		if (ctx != null) {
 			AutoCreateDBTable helper = (AutoCreateDBTable) ctx.getBean("autoCreateDBTable");
-			helper.createTable(null);
+			helper.createTable(0);
 		}
 	}
 	

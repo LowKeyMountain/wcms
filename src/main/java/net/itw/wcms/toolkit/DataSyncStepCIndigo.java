@@ -94,7 +94,7 @@ public class DataSyncStepCIndigo implements DataSyncStepC {
 	 * @param taskId
 	 * @throws Exception
 	 */
-	public void start(Integer taskId) throws Exception {
+	public void start(int taskId) throws Exception {
 		new Timer().schedule(new TimerTask() {
 			@Override
 			public void run() {
@@ -121,7 +121,7 @@ public class DataSyncStepCIndigo implements DataSyncStepC {
 		}, 1000);
 	}
 
-	private void delete(Integer taskId) {
+	private void delete(int taskId) {
 		try {
 			// 【任务子表】删除任务子表：卸船作业信息
 			jdbcTemplate.update(sqlMap.getSql("02", "tab_temp_b_" + taskId));
@@ -141,7 +141,7 @@ public class DataSyncStepCIndigo implements DataSyncStepC {
 	 * 
 	 * @param taskId
 	 */
-	private void resync(Integer taskId) {
+	private void resync(int taskId) {
 		final Date currentTime = new Date();
 		Task task = taskService.getTaskById(taskId);
 		List<Cabin> cabins = cabinService.findAllByTaskId(taskId);
@@ -184,9 +184,9 @@ public class DataSyncStepCIndigo implements DataSyncStepC {
 		log.info("[" + taskId + "] 共创建组 " + result.size() + "条");
 		System.out.println("[" + taskId + "] 共创建组 " + result.size() + "条");
 		for (Map<String, Object> m : result) {
-			Integer groupId = (Integer) m.get("id");
+			int groupId = (int) m.get("id");
 			String cmsid = (String) m.get("Cmsid");
-			Integer cabinId = (Integer) m.get("cabinId");
+			int cabinId = (int) m.get("cabinId");
 			Date g_startTime = (Date) m.get("startTime");
 			Date g_endTime = (Date) m.get("endTime");
 			g_endTime = g_endTime == null ? currentTime : g_endTime;
@@ -210,7 +210,7 @@ public class DataSyncStepCIndigo implements DataSyncStepC {
 		}
 	}
 
-	private void calcGroup(Integer taskId, Integer cabinId, String cmsid, Date startTime, Date endTime, Float p1,
+	private void calcGroup(int taskId, int cabinId, String cmsid, Date startTime, Date endTime, Float p1,
 			Float p2, Float p3, Float p4) {
 
 		Object[] args = new Object[] { cmsid, startTime, endTime, p2, p3 };

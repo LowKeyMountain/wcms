@@ -96,7 +96,7 @@
 	            footerFormatter: function (value) {
 	                var count = 0;
 	                for (var i in value) {
-	                	count += value[i].finishedBeforeClearance;
+	                	count += value[i].finishedUsedTimeBeforeClearance;
 	                }
 	                return count.toFixed(2);
 	            }
@@ -136,7 +136,7 @@
 	                for (var i in value) {
 	                	count += value[i].clearanceUsedTime;
 	                }
-	                return count.toFixed(4);
+	                return count.toFixed(2);
 	            }
 		    }, {
 		        field: 'clearanceEfficiency',
@@ -150,7 +150,11 @@
 	                	t_count += value[i].clearanceUsedTime;
 	                	h_count += value[i].clearance;
 	                }
-	                return (h_count/t_count).toFixed(2);
+	                if (t_count == 0){
+	                	return '0.00';
+	                } else {
+		                return (h_count/t_count).toFixed(2);
+	                }
 	            }
 		    }, {
 		        field: 'finished',
@@ -188,7 +192,11 @@
 	                	t_count += value[i].finishedUsedTime;
 	                	h_count += value[i].finished;
 	                }
-	                return (h_count/t_count).toFixed(2);
+	                if (t_count == 0){
+	                	return '0.00';
+	                } else {
+	                	return (h_count/t_count).toFixed(2);
+	                }
 	            }
 		    }, {
 		    	field: 'remainder',

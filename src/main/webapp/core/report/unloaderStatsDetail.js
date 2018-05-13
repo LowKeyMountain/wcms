@@ -112,5 +112,6 @@
 	 * 查看船舱卸货详情
 	 */
 	function view_unship(taskId, cabinNo) {
-		window.location.href = BasePath + "/cabin/view?taskId=" + taskId + '&cabinNo=' + cabinNo;
+//		window.location.href = BasePath + "/cabin/view?taskId=" + taskId + '&cabinNo=' + cabinNo;
+		window.location.href = BasePath + "/report/getCabinDetail?reportType=3&taskId=" + taskId + '&cabinNo=' + cabinNo;
 	}

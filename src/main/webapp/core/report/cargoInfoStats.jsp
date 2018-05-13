@@ -85,9 +85,8 @@ License: You must have a valid license purchased only from themeforest(the above
 							<li>管理中心 <i class="fa fa-angle-right"></i>
 							</li>
 							<li><a href="${IncPath}/report/reportview">报表统计 </a><i class="fa fa-angle-right"></i></li>
-							<li><a href="${IncPath}/report/shiplist?reportType=1">船舶货物进度统计</a><i class="fa fa-angle-right"></i>
-							</li>							
-							<li>统计结果</li>
+							<!-- <li><a href="${IncPath}/report/shiplist?reportType=1">船舶货物进度统计</a><i class="fa fa-angle-right"></i></li>-->
+							<li>船舶货物进度统计</li>
 						</ul>
 						<!-- END PAGE TITLE & BREADCRUMB-->
 					</div>

@@ -62,7 +62,11 @@
 		        field: 'cabinNo',
 		        title: '船舱号',
 		        align: 'center',
-		        width: '6%'
+		        width: '6%',
+		        formatter: function (value, row, index) {
+                    var html = '<a href="javascript:view_unship(' + taskId + ',' + row.cabinNo + ')" class="font-weight-normal">' + row.cabinNo + '</a>';
+                    return html;
+                }
 		    }, {
 		        field: 'startPosition',
 		        title: '开始位置',
@@ -131,4 +135,11 @@
 	 */
 	function view_cargo(taskId, cargoId) {
 		window.location.href = BasePath + "/report/cabinInfoStats?taskId="+ taskId + "&cargoId=" + cargoId;
+	}
+	
+	/**
+	 * 查看船舱卸货详情
+	 */
+	function view_unship(taskId, cabinNo) {
+		window.location.href = BasePath + "/report/getCabinDetail?reportType=7&taskId=" + taskId + '&cabinNo=' + cabinNo;
 	}
