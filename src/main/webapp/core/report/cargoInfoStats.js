@@ -34,7 +34,7 @@
 //			 buttonsAlign : 'left',// 按钮对齐方式
 //			 showExport : true, // 是否显示导出
 //			 exportDataType : "basic", // basic', 'all', 'selected'.
-			 showFooter : true,
+//			 showFooter : true,
 			
 			queryParams: function queryParams(params){//自定义参数，这里的参数是传给后台的，分页使用
 				var params = {//这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
@@ -67,8 +67,8 @@
                     //var html = '<a href="#" data-toggle="popover" data-original-title="货物详情" class="btn btn-success pop addon">'+row.cargoName+'</a>';
                     var html = '<a href="javascript:view_cargo(' + taskId + ',' + row.cargoId + ')" class="font-weight-normal">' + row.cargoName + '</a>';
                     return html;
-                },
-                footerFormatter: '合计'
+                }/*,
+                footerFormatter: '合计'*/
                 	/*,
                 events: {
                     'mouseenter .addon': function (e, value, row, index) {
@@ -101,62 +101,62 @@
 		        field: 'total',
 		        title: '总量',
 		        align: 'center',
-		        width: '18%',
+		        width: '18%'/*,
 	            footerFormatter: function (value) {
 	                var count = 0;
 	                for (var i in value) {
 	                	count += value[i].total;
 	                }
 	                return count.toFixed(2);
-	            }	        
+	            }*/
 		    }, {
 		    	field: 'finishedBeforeClearance',
 		        title: '清舱前',
 		        align: 'center',
-		        width: '18%',
+		        width: '18%'/*,
 	            footerFormatter: function (value) {
 	                var count = 0;
 	                for (var i in value) {
 	                	count += value[i].finishedBeforeClearance;
 	                }
 	                return count.toFixed(2);
-	            }
+	            }*/
 		    }, {
 		        field: 'clearance',
 		        title: '清舱量',
 		        align: 'center',
-		        width: '16%',
+		        width: '16%'/*,
 	            footerFormatter: function (value) {
 	                var count = 0;
 	                for (var i in value) {
 	                	count += value[i].clearance;
 	                }
 	                return count.toFixed(2);
-	            }
+	            }*/
 		    }, {
 		        field: 'finished',
 		        title: '完成量',
 		        align: 'center',
-		        width: '18%',
+		        width: '18%'/*,
 	            footerFormatter: function (value) {
 	                var count = 0;
 	                for (var i in value) {
 	                	count += value[i].finished;
 	                }
 	                return count.toFixed(2);
-	            }		        
+	            }		        */
 		    }, {
 		        field: 'remainder',
 		        title: '剩余量',
 		        align: 'center',
-		        width: '18%',
+		        width: '18%'/*,
 	            footerFormatter: function (value) {
 	                var count = 0;
 	                for (var i in value) {
 	                	count += value[i].remainder;
 	                }
 	                return count.toFixed(2);
-	            }		        
+	            }		        */
 		    }],
 			locale : 'zh-CN',// 中文支持,
 			responseHandler : function(res) {

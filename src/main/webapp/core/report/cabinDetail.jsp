@@ -117,28 +117,27 @@ License: You must have a valid license purchased only from themeforest(the above
 							<li><a href="${IncPath}/report/reportview">报表统计 </a><i class="fa fa-angle-right"></i></li>
 							<c:choose>
 								<c:when test="${reportType == 1}">
-									<li><a href="${IncPath}/report/shiplist?reportType=1">船舶货物进度统计</a><i class="fa fa-angle-right"></i></li>
+									<li>船舶货物进度统计</li>
 								</c:when>
 								<c:when test="${reportType == 2}">
-									<li><a href="${IncPath}/report/shiplist?reportType=2">船舶舱口卸货统计</a><i class="fa fa-angle-right"></i></li>
+									<li>船舶舱口卸货统计</li>
 								</c:when>
 								<c:when test="${reportType == 3}">
-									<li><a href="${IncPath}/report/shiplist?reportType=3">船舶卸船机作业量统计</a><i class="fa fa-angle-right"></i></li>
+									<li>船舶卸船机作业量统计</li>
 								</c:when>
 								<c:when test="${reportType == 4}">
-									<li><a href="${IncPath}/report/shiplist?reportType=4">船舶班次作业量统计</a><i class="fa fa-angle-right"></i></li>
+									<li>船舶班次作业量统计</li>
 								</c:when>
 								<c:when test="${reportType == 5}">
-									<li><a href="${IncPath}/report/shiplist?reportType=5">船舶舱口效率统计</a><i class="fa fa-angle-right"></i></li>
+									<li>船舶舱口效率统计</li>
 								</c:when>
 								<c:when test="${reportType == 6}">
-									<li><a href="${IncPath}/report/shiplist?reportType=6">船舶货物效率统计</a><i class="fa fa-angle-right"></i></li>
+									<li>船舶货物效率统计</li>
 								</c:when>
 								<c:otherwise>
-									<li><a href="${IncPath}/report/shiplist?reportType=7">舱外作业量统计</a><i class="fa fa-angle-right"></i></li>
+									<li>舱外作业量统计</li>
 								</c:otherwise>
 							</c:choose>						
-							<li>统计结果</li>
 						</ul>
 						<!-- END PAGE TITLE & BREADCRUMB-->
 					</div>
@@ -196,6 +195,8 @@ License: You must have a valid license purchased only from themeforest(the above
 										<thead>
 											<tr>
 												<th>卸船机</th>
+												<th>开始时间</th>
+												<th>结束时间</th>
 												<th>用时|h</th>
 												<th>卸货量|t</th>
 												<th>效率</th>

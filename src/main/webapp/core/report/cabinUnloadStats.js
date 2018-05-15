@@ -67,7 +67,7 @@
 		        field: 'cargoName',
 		        title: '货名',
 		        align: 'center',
-		        width: '16%',
+		        width: '10%',
 		        formatter: function (value, row, index) {
                     var html = '<a href="javascript:view_cargo(' + row.cargoId + ')" class="font-weight-normal">' + row.cargoName + '</a>';
                     return html;
@@ -77,7 +77,7 @@
 		        field: 'total',
 		        title: '总量',
 		        align: 'center',
-		        width: '12%',
+		        width: '10%',
 	            footerFormatter: function (value) {
 	                var count = 0;
 	                for (var i in value) {
@@ -89,7 +89,7 @@
 		    	field: 'finishedBeforeClearance',
 		        title: '清舱前',
 		        align: 'center',
-		        width: '12%',
+		        width: '10%',
 	            footerFormatter: function (value) {
 	                var count = 0;
 	                for (var i in value) {
@@ -101,7 +101,7 @@
 		        field: 'clearance',
 		        title: '清舱量',
 		        align: 'center',
-		        width: '12%',
+		        width: '10%',
 	            footerFormatter: function (value) {
 	                var count = 0;
 	                for (var i in value) {
@@ -113,7 +113,7 @@
 		        field: 'finished',
 		        title: '完成量',
 		        align: 'center',
-		        width: '12%',
+		        width: '10%',
 	            footerFormatter: function (value) {
 	                var count = 0;
 	                for (var i in value) {
@@ -125,7 +125,7 @@
 		        field: 'remainder',
 		        title: '剩余量',
 		        align: 'center',
-		        width: '12%',
+		        width: '10%',
 	            footerFormatter: function (value) {
 	                var count = 0;
 	                for (var i in value) {
@@ -137,7 +137,7 @@
 		        field: 'status',
 		        title: '状态',
 		        align: 'center',
-		        width: '12%',
+		        width: '10%',
                 formatter: function (value, row, index) {//自定义显示，这三个参数分别是：value该行的属性，row该行记录，index该行下标  
                     return row.status == 0 ? "<font color=red>卸货</font>" : row.status == 1 ? "<font color=lightgreen>清舱</font>" : row.status;  
                 },
@@ -146,7 +146,7 @@
 		        field: 'clearTime',
 		        title: '清舱时间',
 		        align: 'center',
-		        width: '12%',
+		        width: '18%',
 	            footerFormatter: '--'
 		    }],
 			locale : 'zh-CN',// 中文支持,
@@ -175,5 +175,5 @@
 	 * 查看船舱卸货详情
 	 */
 	function view_unship(taskId, cabinNo) {
-		window.location.href = BasePath + "/cabin/view?taskId=" + taskId + '&cabinNo=' + cabinNo;
+		window.location.href = BasePath + "/report/getCabinDetail?reportType=2&taskId=" + taskId + '&cabinNo=' + cabinNo;
 	}

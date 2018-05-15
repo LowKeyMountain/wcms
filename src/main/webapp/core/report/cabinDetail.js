@@ -40,6 +40,8 @@ var CabinView = function() {
 						var tr = ""
 							+ "<tr>"
 							+ "<td>"+res.unloaderName+"</td>"
+							+ "<td>"+res.startTime+"</td>"
+							+ "<td>"+res.endTime+"</td>"
 							+ "<td>"+res.usedTime+"</td>"
 							+ "<td>"+res.unloading+"</td>"
 							+ "<td>"+res.efficiency+"</td>"
