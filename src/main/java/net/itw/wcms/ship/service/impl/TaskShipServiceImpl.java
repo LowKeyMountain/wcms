@@ -178,7 +178,6 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			if (task == null) {
 				throw new X27Exception("操作失败：[taskId]未找到指定作业船舶 ！");
 			}
-
 			// 前置条件验证
 			// 1. 检查该船舱货物是否快卸完；
 			// TODO:??
