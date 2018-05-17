@@ -241,8 +241,8 @@
 					ELSE cabin.cmsid
 				END AS 'unloaderName', cabin.cabinNo, DATE_FORMAT(cabin.startTime, '%Y-%m-%d %H:%i:%s') AS 'startTime'
 				, DATE_FORMAT(cabin.endTime, '%Y-%m-%d %H:%i:%s') AS 'endTime', cabin.usedTime
-				, round(cabin.unloading, 1) AS 'unloading'
-				, round(cabin.efficiency, 4) AS 'efficiency', t.taskId AS 'task_id'
+				, round(cabin.unloading, 2) AS 'unloading'
+				, round(round(cabin.unloading, 2)/cabin.usedTime, 2) AS 'efficiency', t.taskId AS 'task_id'
 			FROM (
 				SELECT c2.cabinId, c2.cmsid, c2.startTime, c2.endTime, c2.usedTime
 					, c2.unloading, c2.efficiency, c2.cargo_id, c2.cabin_no AS 'cabinNo'
@@ -250,7 +250,7 @@
 					SELECT t1.*, t2.cargo_id, t2.cabin_no, t1.unloading / t1.usedTime AS 'efficiency'
 					FROM (
 						SELECT tc.*
-							, timestampdiff(MINUTE, tc.startTime, tc.endTime) / 60 AS 'usedTime'
+							, round(timestampdiff(MINUTE, tc.startTime, tc.endTime) / 60, 2) AS 'usedTime'
 							, tb.unloading
 							, CASE 
 								WHEN tc.endTime IS NULL THEN CURRENT_TIMESTAMP()
@@ -505,7 +505,7 @@
 					ELSE w.cmsid
 				END AS 'unloaderName', round(w.usedTime, 2) AS 'usedTime'
 				, round(w.unloading, 2) AS 'unloading'
-				, round(w.unloading / w.usedTime, 2) AS 'efficiency'
+				, round(round(w.unloading, 2) / round(w.usedTime, 2), 2) AS 'efficiency'
 			FROM (
 				SELECT c.cabinId, c.cmsid, SUM(c.usedTime) AS 'usedTime'
 					, SUM(c.unloading) AS 'unloading'
@@ -545,7 +545,7 @@
 					ELSE w.cmsid
 				END AS 'unloaderName', round(w.usedTime, 2) AS 'usedTime'
 				, round(w.unloading, 2) AS 'unloading'
-				, round(w.unloading / w.usedTime, 2) AS 'efficiency'
+				, round(round(w.unloading, 2) / round(w.usedTime, 2), 2) AS 'efficiency'
 			FROM (
 				SELECT c.cabinId, c.cmsid, SUM(c.usedTime) AS 'usedTime'
 					, SUM(c.unloading) AS 'unloading'
@@ -588,7 +588,7 @@
 				, DATE_FORMAT(w.endTime, '%Y-%m-%d %H:%i:%s') AS 'endTime'
 				, round(w.usedTime, 2) AS 'usedTime'
 				, round(w.unloading, 2) AS 'unloading'
-				, round(w.unloading / w.usedTime, 2) AS 'efficiency'
+				, round(round(w.unloading, 2) / round(w.usedTime, 2), 2) AS 'efficiency'
 			FROM (
 				SELECT c.cabinId, b.cmsid, MIN(b.Time) AS 'startTime'
 					, MAX(b.Time) AS 'endTime'
@@ -624,7 +624,7 @@
 				, DATE_FORMAT(w.endTime, '%Y-%m-%d %H:%i:%s') AS 'endTime'
 				, round(w.usedTime, 2) AS 'usedTime'
 				, round(w.unloading, 2) AS 'unloading'
-				, round(w.unloading / w.usedTime, 2) AS 'efficiency'
+				, round(round(w.unloading, 2) / round(w.usedTime, 2), 2) AS 'efficiency'
 			FROM (
 				SELECT c.cabinId, b.cmsid, MIN(b.Time) AS 'startTime'
 					, MAX(b.Time) AS 'endTime'
@@ -690,7 +690,7 @@
 				FROM (
 					SELECT cabin.task_id, cabin.cargo_id, cabin.cabin_id, cabin.cabin_no, cabin.status
 						, cabin.clear_time, MAX(cabin.cargo_type) AS cargoName
-						, round(cabin.preunloading, 1) AS total
+						, round(cabin.cargoPreunloading, 1) AS total
 					FROM v_cabin_info cabin
 					GROUP BY cabin.cargo_id, cabin.task_id
 				) ccxx, (
@@ -718,7 +718,7 @@
 										AND tb.operationType = 1
 								) tbc
 								ON vcab.clear_time <= tbc.Time
-									AND vcab.clear_time >= tbc.Time
+									AND vcab.end_time >= tbc.Time
 									AND vcab.cabin_id = tbc.cabinId
 							GROUP BY vcab.cabin_id, tbc.groupId
 						) cabinlist
@@ -844,7 +844,7 @@
 										AND tb.operationType = 1
 								) tbc
 								ON vcab.clear_time <= tbc.Time
-									AND vcab.clear_time >= tbc.Time
+									AND vcab.end_time >= tbc.Time
 									AND vcab.cabin_id = tbc.cabinId
 							GROUP BY vcab.cabin_id, tbc.groupId
 						) cabinlist
@@ -911,13 +911,13 @@
 					ELSE w.cmsid
 				END AS 'unloaderName', round(w.usedTime, 2) AS 'usedTime'
 				, round(w.unloading, 2) AS 'unloading'
-				, round(w.unloading / w.usedTime, 2) AS 'efficiency'
+				, round(round(w.unloading, 2) / round(w.usedTime, 2), 2) AS 'efficiency'
 			FROM (
 				SELECT c.cabinId, c.cmsid, SUM(c.usedTime) AS 'usedTime'
 					, SUM(c.unloading) AS 'unloading'
 				FROM (
 					SELECT MAX(`cc`.`cabinId`) AS `cabinId`, MAX(`bb`.`Cmsid`) AS `Cmsid`, `bb`.`groupId` AS `groupId`
-						, timestampdiff(SECOND, MIN(bb.Time), MAX(bb.Time)) / 3600 AS 'usedTime'
+						, timestampdiff(MINUTE, MIN(bb.Time), MAX(bb.Time)) / 60 AS 'usedTime'
 						, SUM(bb.OneTask) AS 'unloading'
 					FROM `tab_temp_c_%s` `cc`
 						JOIN `tab_temp_b_%s` `bb`

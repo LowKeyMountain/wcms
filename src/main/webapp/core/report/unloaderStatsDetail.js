@@ -3,7 +3,7 @@
 			
 			method : 'post',
 			contentType : "application/x-www-form-urlencoded",
-			url:BasePath + "/task/getUnloaderDetailList?taskId=" + taskId + "&unloaderId=" + unloaderId,
+			url:BasePath + "/task/getUnloaderDetailList",
 			dataType : 'json',
 //			 dataField: 'res',//bootstrap table 可以前端分页也可以后端分页
 			 striped : true, // 是否显示行间隔色
@@ -46,6 +46,10 @@
 //			             pageindex:params.pageNumber,
 //						 order: params.order,
 //						 sort: params.sort,
+			             taskId: taskId,
+			             unloaderId: unloaderId,
+			             startTime: startTime,
+			             endTime: endTime
 				};
 				return params; 
 			},
@@ -55,7 +59,7 @@
 		        field: 'cabinNo',
 		        title: '船舱号',
 		        align: 'center',
-		        width: '7%',
+		        width: '10%',
 		        formatter: function (value, row, index) {
                     var html = '<a href="javascript:view_unship(' + taskId + ',' + row.cabinNo + ')" class="font-weight-normal">' + row.cabinNo + '</a>';
                     return html;
@@ -64,27 +68,27 @@
 		        field: 'startTime',
 		        title: '开始时间',
 		        align: 'center',
-		        width: '6%',
+		        width: '20%',
 		    },  {
 		        field: 'endTime',
 		        title: '结束时间',
 		        align: 'center',
-		        width: '6%',
+		        width: '20%',
 		    },  {
 		        field: 'usedTime',
 		        title: '用时|h',
 		        align: 'center',
-		        width: '3%',
+		        width: '18%',
 		    }, {
 		        field: 'unloading',
 		        title: '卸货量|t',
 		        align: 'center',
-		        width: '3%',
+		        width: '18%',
 		    }, {
 		        field: 'efficiency',
 		        title: '效率',
 		        align: 'center',
-		        width: '3%',
+		        width: '18%',
 		    }],
 			locale : 'zh-CN',// 中文支持,
 			responseHandler : function(res) {

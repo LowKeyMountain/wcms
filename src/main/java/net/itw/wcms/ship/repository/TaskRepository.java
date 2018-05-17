@@ -124,7 +124,7 @@ public interface TaskRepository extends JpaRepository<Task, Integer>, JpaSpecifi
 				predicate = cb.and(predicates.toArray(new Predicate[predicates.size()]));
 				query.where(predicate);
 				// 添加排序的功能
-				query.orderBy(cb.desc(root.get("updateTime")));
+				query.orderBy(cb.desc(root.get("berthingTime")));
 				return query.getRestriction();
 				// return predicate;
 			}

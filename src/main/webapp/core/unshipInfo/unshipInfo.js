@@ -50,9 +50,10 @@ var UnshipInfo = function() {
 							+ "<td><a href='javascript:UnshipInfo.view_unship_click(\""+taskId+"\",\""+res.cabinNo+"\")'>"+res.cabinNo+"</a></td>"
 							+ "<td><a href='javascript:UnshipInfo.view_click(\""+taskId+"\",\""+res.cabinNo+"\")'>"+res.cargoName+"</a></td>"
 							+ "<td>"+res.total+"</td>"
+							+ "<td>"+res.finishedBeforeClearance+"</td>"
+							+ "<td>"+res.clearance+"</td>"
 							+ "<td>"+res.finished+"</td>"
 							+ "<td>"+res.remainder+"</td>"
-							+ "<td>"+res.clearance+"</td>"
 							+ "<td>"+status+"</td>"
 							+ "<td>"+res.clearTime+"</td>"
 							+ "<td>";
