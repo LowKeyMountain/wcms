@@ -27,6 +27,7 @@ import net.itw.wcms.ship.service.ICargoService;
 import net.itw.wcms.ship.service.ITaskService;
 import net.itw.wcms.ship.service.ITaskShipService;
 import net.itw.wcms.ship.service.IUnloaderService;
+import net.itw.wcms.toolkit.DateTimeUtils;
 import net.itw.wcms.x27.exception.X27Exception;
 
 @RestController
@@ -157,13 +158,28 @@ public class ReportController {
 	 * @return
 	 */
 	@RequestMapping(value = "/unloaderStatsDetail")
-	public ModelAndView unloaderStatsDetail(@RequestParam("taskId") Integer taskId, @RequestParam("unloaderId") String unloaderId) {
+	public ModelAndView unloaderStatsDetail(@RequestParam("taskId") Integer taskId,
+			@RequestParam("unloaderId") String unloaderId, @RequestParam("searchDate") String searchDate,
+			@RequestParam("shift") String shift) {
+		String startTime="";
+		String endTime="";
 		Task task = taskService.getTaskById(taskId);
 		modelMap.put("taskId", taskId);
 		modelMap.put("unloaderId", unloaderId);
+		if (StringUtils.equals("1", shift)) {
+			startTime = searchDate + " 20:00:00";
+			endTime = DateTimeUtils.getNextDay(searchDate)+ " 08:00:00";
+		} else if (StringUtils.equals("0", shift)){
+			startTime = searchDate + " 08:00:00";
+			endTime = searchDate+ " 20:00:00";			
+		} else {
+			
+		}
 		modelMap.put("shipName", task != null && task.getShip() != null ? task.getShip().getShipName() : "");
 		String unloaderNo = "#" + unloaderId.substring(8);
 		modelMap.put("unloaderNo", unloaderNo);
+		modelMap.put("startTime", startTime);
+		modelMap.put("endTime", endTime);
 		return new ModelAndView(PATH_REPORT + "unloaderStatsDetail");
 	}	
 

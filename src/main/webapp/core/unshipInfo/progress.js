@@ -73,7 +73,7 @@
 		        field: 'total',
 		        title: '总量',
 		        align: 'center',
-		        width: '22%',
+		        width: '18%',
 	            footerFormatter: function (value) {
 	                var count = 0;
 	                for (var i in value) {
@@ -82,10 +82,34 @@
 	                return count.toFixed(2);
 	            }	        
 		    }, {
-		        field: 'finished',
-		        title: '已完成',
+		        field: 'finishedBeforeClearance',
+		        title: '清舱前',
 		        align: 'center',
-		        width: '22%',
+		        width: '17%',
+	            footerFormatter: function (value) {
+	                var count = 0;
+	                for (var i in value) {
+	                	count += value[i].finishedBeforeClearance;
+	                }
+	                return count.toFixed(2);
+	            }		        
+		    }, {
+		        field: 'clearance',
+		        title: '清舱量',
+		        align: 'center',
+		        width: '17%',
+	            footerFormatter: function (value) {
+	                var count = 0;
+	                for (var i in value) {
+	                	count += value[i].clearance;
+	                }
+	                return count.toFixed(2);
+	            } 
+		    }, {
+		        field: 'finished',
+		        title: '完成量',
+		        align: 'center',
+		        width: '18%',
 	            footerFormatter: function (value) {
 	                var count = 0;
 	                for (var i in value) {
@@ -97,7 +121,7 @@
 		        field: 'remainder',
 		        title: '剩余量',
 		        align: 'center',
-		        width: '22%',
+		        width: '18%',
 	            footerFormatter: function (value) {
 	                var count = 0;
 	                for (var i in value) {
@@ -105,18 +129,6 @@
 	                }
 	                return count.toFixed(2);
 	            }        
-		    }, {
-		        field: 'clearance',
-		        title: '清舱量',
-		        align: 'center',
-		        width: '22%',
-	            footerFormatter: function (value) {
-	                var count = 0;
-	                for (var i in value) {
-	                	count += value[i].clearance;
-	                }
-	                return count.toFixed(2);
-	            } 
 		    }],
 			locale : 'zh-CN',// 中文支持,
 			responseHandler : function(res) {

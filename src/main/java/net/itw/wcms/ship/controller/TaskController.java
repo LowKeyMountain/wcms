@@ -437,11 +437,15 @@ public class TaskController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getUnloaderDetailList", produces = "text/json;charset=UTF-8")
-	public String getUnloaderDetailList(@RequestParam("taskId") Integer taskId,@RequestParam("unloaderId") String unloaderId) {
+	public String getUnloaderDetailList(@RequestParam Map<String, String> params) {
 		Map<String, Object> result = null;
 		JSONObject json = new JSONObject();
+		int taskId = Integer.parseInt(params.get("taskId"));
+		String unloaderId = params.get("unloaderId");
+		String startTime = params.get("startTime");
+		String endTime = params.get("endTime");
 		try {
-			result = taskShipService.doGetUnloaderUnshipDetailList(taskId,unloaderId, null, null);
+			result = taskShipService.doGetUnloaderUnshipDetailList(taskId, unloaderId, startTime, endTime);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

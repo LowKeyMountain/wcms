@@ -219,6 +219,8 @@ License: You must have a valid license purchased only from themeforest(the above
 			var BasePath = '${BasePath}';
 			var taskId = '${taskId}';
 			var unloaderId = '${unloaderId}';
+			var startTime = '${startTime}';
+			var endTime = '${endTime}';
 		</script>
 		<script src="${IncPath}/cl.js?v=${jsVersion}"
 			type="text/javascript"></script>

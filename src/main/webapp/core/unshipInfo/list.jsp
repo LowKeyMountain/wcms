@@ -217,9 +217,10 @@ License: You must have a valid license purchased only from themeforest(the above
 													<th>船舱号</th>
 													<th>货名</th>
 													<th>总量</th>
-													<th>已完成</th>
+													<th>清舱前</th>
+													<th>清舱量</th>			
+													<th>完成量</th>
 													<th>剩余量</th>
-													<th>清舱量</th>
 													<th>状态</th>
 													<th>清舱时间</th>
 													<th>操作</th>

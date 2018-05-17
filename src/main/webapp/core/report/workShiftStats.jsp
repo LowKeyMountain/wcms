@@ -78,7 +78,7 @@ License: You must have a valid license purchased only from themeforest(the above
 				<div class="row">
 					<div class="col-md-12">
 						<!-- BEGIN PAGE TITLE & BREADCRUMB-->
-						<h3 class="page-title icon-settings">&nbsp;&nbsp;船舶卸船机作业量统计</h3>
+						<h3 class="page-title icon-settings">&nbsp;&nbsp;船舶班次作业量统计</h3>
 						<ul class="page-breadcrumb breadcrumb">
 							<li><i class="fa fa-home"></i> <a
 								href="${BasePath}/web/main"> 主页 </a> <i
@@ -88,8 +88,7 @@ License: You must have a valid license purchased only from themeforest(the above
 							<li><a href="${IncPath}/report/reportview">报表统计 </a><i class="fa fa-angle-right"></i>
 							</li>
 							<!-- <li><a href="${IncPath}/report/shiplist?reportType=3">船舶卸船机作业量统计</a><i class="fa fa-angle-right"></i> -->
-							</li>
-							<li>船舶卸船机作业量统计</li>
+							<li>船舶班次作业量统计</li>
 						</ul>
 						<!-- END PAGE TITLE & BREADCRUMB-->
 					</div>
