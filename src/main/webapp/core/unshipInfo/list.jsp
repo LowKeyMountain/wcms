@@ -397,8 +397,8 @@ License: You must have a valid license purchased only from themeforest(the above
     				return;        		
             	}
             	var data={
-            			status:$("#status").val(),
-            			taskId:$("#taskId").val(),
+            			status:'1',
+            			taskId:taskId,
             			cabinNo:$("#cabinNo").val(),
             			clearTime:$("#clearTime").val()
             	}
