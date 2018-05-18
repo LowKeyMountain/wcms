@@ -321,7 +321,10 @@ public class TaskShipServiceImpl implements ITaskShipService {
 							cabin.setStatus(statusCode);
 							if (statusCode == 1) { // 设置清舱时间
 								cabin.setClearTime(new Date());
+							} else if  (statusCode == 0){
+								cabin.setClearTime(null);
 							}
+								
 							cabin.setUpdateTime(new Date());
 							cabin.setUpdateUser(operator.getUserName());
 						}
