@@ -105,7 +105,7 @@ public class TaskServiceImpl implements ITaskService {
 				}
 				break;	
 			case 2:
-				if (authorizeUtils.authorize(options.request, "3")){
+				if (authorizeUtils.authorize(options.request, "4")){
 					operation = "<a href='javascript:Task.update_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i> 修改</a>";
 				}
 				if (authorizeUtils.authorize(options.request, "17")){
