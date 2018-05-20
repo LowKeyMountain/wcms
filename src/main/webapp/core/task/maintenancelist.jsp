@@ -126,7 +126,7 @@ License: You must have a valid license purchased only from themeforest(the above
 										<div class = "input-group" >
 				                                <span class="input-group-addon text-center"><b class="icon-td">作业状态</b></span>
 												<select id="modiStatus" name="modiStatus" class="form-control select2me"  style="width:240px;">
-								   					<option value="0" >预靠</option>
+								   					<!-- <option value="0" >预靠</option> -->
 								   					<option value="1" >作业中</option>
 								   					<option value="2" >已离港</option>
 												</select>
@@ -174,7 +174,7 @@ License: You must have a valid license purchased only from themeforest(the above
 									                        <div class="col-md-2">
 																<select id="status" name="status" class="form-control select2me">
 																	<option value="">请选择...</option>
-												   					<option value="0" >预靠</option>
+												   					<!-- <option value="0" >预靠</option> -->
 												   					<option value="1" >作业中</option>
 												   					<option value="2" >已离港</option>
 																</select>
