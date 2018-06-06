@@ -101,7 +101,8 @@ License: You must have a valid license purchased only from themeforest(the above
 						</div>
 						<div class="alert alert-danger display-hide">
 							<button class="close" data-close="alert"></button>
-							<span class="alert-danger-span">Enter any username and password. </span>
+							<!-- <span class="alert-danger-span">Enter any username and password. </span> -->
+							<span class="alert-danger-span">用户登录失败，请输入用户名或密码. </span>
 						</div>
 						<div class="row">
 							<div class="col-sm-4">

@@ -13,7 +13,6 @@ import javax.xml.bind.JAXBException;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -620,6 +619,13 @@ public class TaskShipServiceImpl implements ITaskShipService {
 					task.setBeginTime(null);
 					task.setUpdateTime(new Date());
 					task.setUpdateUser(operator.getUserName());
+					// 清空各船舱清仓时间
+					for (Cargo cargo : task.getCargos()) {
+						for (Cabin cabin : cargo.getCabins()) {
+							cabin.setStatus(0);
+							cabin.setClearTime(null);
+						}
+					}
 					taskRepository.saveAndFlush(task);
 					// 3.清空作业子表数据(子表B、C)
 					this.deleteTempData(Integer.parseInt(taskId));
@@ -671,6 +677,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 		} catch (Exception e) {
 			mo.msg = e.getMessage();
 			mo.code = ConstantUtil.FailInt;
+			e.printStackTrace();
 		}
 
 		return mo;
@@ -863,16 +870,17 @@ public class TaskShipServiceImpl implements ITaskShipService {
 	}
 
 	private void deleteTempData(Integer taskId) {
-		try {
-			// 【任务子表】删除任务子表：卸船作业信息
-			jdbcTemplate.update(sqlMap.getSql("02", "tab_temp_b_" + taskId));
-			// 【任务子表】删除任务子表：组信息
-			jdbcTemplate.update(sqlMap.getSql("03", "tab_temp_c_" + taskId));
-		} catch (DataAccessException e) {
-			e.printStackTrace();
-			System.out.println(e.getMessage());
-			throw e;
-		}
+	//		try {
+	//			// 【任务子表】删除任务子表：卸船作业信息
+	//			jdbcTemplate.update(sqlMap.getSql("02", "tab_temp_b_" + taskId));
+	//			// 【任务子表】删除任务子表：组信息
+	//			jdbcTemplate.update(sqlMap.getSql("03", "tab_temp_c_" + taskId));
+	//		} catch (DataAccessException e) {
+	//			e.printStackTrace();
+	//			System.out.println(e.getMessage());
+	//			throw e;
+	//		}
+		dataSyncStepC.delete(taskId);
 	}
 
 	@Override

@@ -105,7 +105,7 @@ public class DataSyncStepCImpl implements DataSyncStepC{
 		}, 1000);
 	}
 
-	private void delete(int taskId) {
+	public void delete(int taskId) {
 		try {
 			// 【任务子表】删除任务子表：卸船作业信息
 			this.jdbcTemplate.update(sqlMap.getSql("02", "tab_temp_b_" + taskId));

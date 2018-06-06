@@ -400,7 +400,8 @@ License: You must have a valid license purchased only from themeforest(the above
                     async:false,
                     data: data,
                     success: function (data) {
-                    	if (data.success == true){
+                    	if (Cl.successInt == data.code){
+                    		alert(data.msg);  
     						if (status == '1') {
     							window.location.href = BasePath + "/task/tasklist?type=2";
     						} else {

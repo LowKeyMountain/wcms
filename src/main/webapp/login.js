@@ -28,7 +28,7 @@ var Login = function() {
             },
 
             invalidHandler: function(event, validator) { //display error alert on form submit   
-            	$('.alert-danger-span').text("Enter any username and password. ");
+            	$('.alert-danger-span').text("用户登录失败，请输入用户名或密码.  ");
                 $('.alert-danger', $('.login-form')).show();
             },
 
