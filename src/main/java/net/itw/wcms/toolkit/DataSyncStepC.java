@@ -14,5 +14,13 @@ public interface DataSyncStepC {
 	 * @throws Exception
 	 */
 	public abstract void start(int taskId) throws Exception;
+	
+	/**
+	 * 启动
+	 * 
+	 * @param taskId
+	 * @throws Exception
+	 */
+	public void delete(int taskId);
 
 }

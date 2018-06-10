@@ -44,5 +44,9 @@ v_cabin_info 新增 berthing_time 字段
 离泊时间
 
 
+// 舱口标定
+http://127.0.0.1:8080/wcms/cabin/modifyCabinPosition?taskId=87
+
+
 
 

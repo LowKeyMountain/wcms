@@ -253,10 +253,10 @@
                 async:false,
                 data: data,
                 success: function (data) {
-                	if (data.success == true){
+                	if (Cl.successInt == data.code){
                 		alert(data.msg);
                 	} else {
-                		alert(data.msg);                		
+                		alert("修改失败!");                		
                 	}
             		initTable();              	
                 },
