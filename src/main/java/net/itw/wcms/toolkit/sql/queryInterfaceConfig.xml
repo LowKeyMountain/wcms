@@ -597,6 +597,7 @@
 				FROM `tab_temp_c_%#` `c`, `tab_temp_b_%#` `b`
 				WHERE 1 = 1
 					AND `c`.`id` = `b`.`groupId`
+					AND `b`.`operationType` = 1
 				GROUP BY b.Cmsid, b.groupId
 			) w
 				LEFT JOIN v_cabin_info c ON w.cabinId = c.cabin_id
@@ -633,6 +634,7 @@
 				FROM `tab_temp_c_%#` `c`, `tab_temp_b_%#` `b`
 				WHERE 1 = 1
 					AND `c`.`id` = `b`.`groupId`
+					AND `b`.`operationType` = 1
 					AND UNIX_TIMESTAMP(b.Time) BETWEEN UNIX_TIMESTAMP(?) AND UNIX_TIMESTAMP(?) 
 				GROUP BY b.Cmsid, b.groupId
 			) w
