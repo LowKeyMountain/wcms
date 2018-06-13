@@ -23,6 +23,7 @@ import net.itw.wcms.x27.entity.User;
 import net.itw.wcms.x27.exception.X27Exception;
 import net.itw.wcms.x27.repository.ResourceRepository;
 import net.itw.wcms.x27.service.IResourceService;
+import net.itw.wcms.x27.service.IRoleService;
 import net.itw.wcms.x27.service.IUserService;
 import net.itw.wcms.x27.utils.ConstantUtil;
 import net.itw.wcms.x27.utils.StringUtil;
@@ -34,28 +35,18 @@ public class ResourceServiceImpl implements IResourceService {
 
 	@Autowired
 	private IUserService userService;
+	
+	@Autowired
+	private IRoleService roleService;
+	
 	@Autowired
 	private ResourceRepository resourceRepository;
 	
 	@javax.annotation.Resource(name = "jdbcTemplate")
 	private JdbcTemplate jdbcTemplate;
 	
-	public List<Resource> getResourceListByUserId(Integer userId) {
-		return resourceRepository.getResourceListByUserId(userId);
-	}
-	
-	public List<String> getResourcesByUserName_BK(String userName) {
-		User user = userService.getUserByUserName(userName);
-		List<String> ids = new ArrayList<>();
-		if (user != null) {
-			List<Resource> list = this.getResourceListByUserId(user.getId());
-			if (list != null) {
-				for (Resource resource : list) {
-					ids.add(resource.getId()+"");
-				}
-			}
-		}
-		return ids;
+	public List<Resource> getResourceListByRoleId(Integer roleId) {
+		return resourceRepository.getResourceListByRoleId(roleId);
 	}
 	
 	public List<String> getResourcesByUserName(String userName) {
@@ -81,8 +72,8 @@ public class ResourceServiceImpl implements IResourceService {
 		return resourceRepository.findAll();
 	}
 
-	public String getResourceForOptions(Integer userId) {
-		List<Resource> assignResources = getResourceListByUserId(userId);
+	public String getResourceForOptions(Integer roleId) {
+		List<Resource> assignResources = getResourceListByRoleId(roleId);
 		List<Resource> allResources = getResourceList();
 
 		Map<Integer, Resource> hmAssignRoles = new HashMap<Integer, Resource>();
@@ -109,8 +100,8 @@ public class ResourceServiceImpl implements IResourceService {
 		return resourceRepository.findAll(pageable);
 	}
 
-	public String getPrivilegeForOptions(Integer userId) {
-		List<Resource> assignResources = getResourceListByUserId(userId);
+	public String getPrivilegeForOptions(Integer roleId) {
+		List<Resource> assignResources = getResourceListByRoleId(roleId);
 		List<Resource> allResources = getResourceList();
 
 		Map<Integer, Resource> hmAssignResources = new HashMap<Integer, Resource>();
@@ -136,9 +127,8 @@ public class ResourceServiceImpl implements IResourceService {
 			return "{\"iTotalRecords\":0,\"iTotalDisplayRecords\":0,\"aaData\":[]}";
 		}
 		
-		long total = page.getTotalElements();
 		StringBuilder sb = new StringBuilder();
-		sb.append(String.format("{\"iTotalRecords\":%d,\"iTotalDisplayRecords\":%d,\"aaData\":[",total, pageable.getPageSize()));
+		sb.append(String.format("{\"iTotalRecords\":%d,\"iTotalDisplayRecords\":%d,\"aaData\":[",page.getContent().size(), page.getTotalElements()));
 		int i= 0;
 		for(Resource r: page)
 		{
@@ -214,9 +204,9 @@ public class ResourceServiceImpl implements IResourceService {
 	@Override
 	public void deleteById(Integer id) throws Exception{
 		Resource resource = this.resourceRepository.getResourceById(id);
-		if (!resource.getUsers().isEmpty()) {
-			throw new X27Exception("被用户使用的资源不允许删除！");
+		if (!resource.getRoles().isEmpty()) {
+			throw new X27Exception("被角色使用的资源不允许删除！");
 		}
-		resourceRepository.delete(resource);
+		resourceRepository.deleteById(id);
 	}
 }

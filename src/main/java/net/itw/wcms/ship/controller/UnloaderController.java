@@ -1,20 +1,31 @@
 package net.itw.wcms.ship.controller;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -26,7 +37,9 @@ import net.itw.wcms.ship.service.IUnloaderService;
 import net.itw.wcms.toolkit.DateTimeUtils;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
+import net.itw.wcms.x27.utils.CollectionUtil;
 import net.itw.wcms.x27.utils.ConstantUtil;
+import net.itw.wcms.x27.utils.ExcelTool;
 import net.itw.wcms.x27.utils.PageUtils;
 import net.itw.wcms.x27.utils.SessionUtil;
 
@@ -168,5 +181,88 @@ public class UnloaderController {
 		return map;
 	}
 
-	
+	/**
+	 * 导出卸船机数据
+	 * 
+	 * @param unloader
+	 * @return
+	 */
+	@RequestMapping(value = "/exportExcel", method = RequestMethod.POST)
+	@ResponseBody
+	public void exportExcel(@RequestParam Map<String, String> params, ModelMap modelMap) throws UnsupportedEncodingException {
+
+		List unloaderList = unloaderService.findListByParams(params);
+
+		// 设置Excel的格式
+		HSSFWorkbook workbook = new HSSFWorkbook();
+		String nameDector = "";
+		String cmsId = params.get("cmsId");
+		if("1".equals(cmsId)) {
+			nameDector = "1_卸船机数据";
+		} else if ("2".equals(cmsId)) {
+			nameDector = "2_卸船机数据";
+		} else if ("3".equals(cmsId)) {
+			nameDector = "3_卸船机数据";
+		} else if ("4".equals(cmsId)) {
+			nameDector = "4_卸船机数据";
+		} else if ("5".equals(cmsId)) {
+			nameDector = "5_卸船机数据";
+		} else if ("6".equals(cmsId)) {
+			nameDector = "6_卸船机数据";
+		} else {
+			nameDector = "卸船机数据";
+		}
+		HSSFSheet sheet = ExcelTool.createSheet(workbook, 0, nameDector);
+		int i = 0;
+		sheet.setColumnWidth(0, 5000);
+		sheet.setColumnWidth(1, 3000);
+		sheet.setColumnWidth(2, 6000);
+		sheet.setColumnWidth(3, 6000);
+		sheet.setColumnWidth(4, 5000);
+		sheet.setColumnWidth(5, 5000);
+
+		HSSFRow row = ExcelTool.createRow(sheet, i++);
+		ExcelTool.createCellValueStr(row, 0, "Cms卸船机编号");
+		ExcelTool.createCellValueStr(row, 1, "操作类型");
+		ExcelTool.createCellValueStr(row, 2, "操作时间");
+		ExcelTool.createCellValueStr(row, 3, "推送时间");
+		ExcelTool.createCellValueStr(row, 4, "卸船机移动位置");
+		ExcelTool.createCellValueStr(row, 5, "一次抓钩作业量");
+		for (Iterator iterator = unloaderList.iterator(); iterator.hasNext();) {
+			UnloaderAll unloader = (UnloaderAll) iterator.next();
+			// 创建excel值和列的对应关系
+			row = ExcelTool.createRow(sheet, i++);
+			ExcelTool.createCellValueStr(row, 0, unloader.getCmsId());
+			ExcelTool.createCellValueStr(row, 1, "0".equals(unloader.getOperationType()) ? "位移"
+					: ("1".equals(unloader.getOperationType()) ? "作业" : "在线"));
+			ExcelTool.createCellValueStr(row, 2, DateTimeUtils.date2StrDateTime(unloader.getTime()));
+			ExcelTool.createCellValueStr(row, 3, DateTimeUtils.date2StrDateTime(unloader.getPushTime()));
+			ExcelTool.createCellValueStr(row, 4, unloader.getUnloaderMove().toString());
+			ExcelTool.createCellValueStr(row, 5, unloader.getOneTask().toString());
+		}
+		String fileName = nameDector + ".xls";
+		try {
+			fileName = new String(fileName.getBytes("GBK"), "ISO-8859-1");
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+			fileName = "unloader";
+		}
+		res.reset();
+		res.addHeader("Content-Disposition", "attachment;filename=\"" + fileName + "\"");
+		res.setContentType("application/octet-stream;charset=UTF-8");
+		OutputStream outPut = null;
+		try {
+			outPut = res.getOutputStream();
+			workbook.write(outPut);
+			outPut.flush();
+		} catch (IOException ex) {
+			//ex.printStackTrace();
+		} finally {
+			try {
+				outPut.close();
+			} catch (IOException ex) {
+			//	ex.printStackTrace();
+			}
+		}
+	}
 }

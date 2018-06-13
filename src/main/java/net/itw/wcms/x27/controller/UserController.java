@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
 import net.itw.wcms.x27.service.IResourceService;
+import net.itw.wcms.x27.service.IRoleService;
 import net.itw.wcms.x27.service.IUserService;
 import net.itw.wcms.x27.utils.ConstantUtil;
 import net.itw.wcms.x27.utils.PageUtils;
@@ -33,9 +34,10 @@ public class UserController {
 
 	@Autowired
 	private IUserService userService;
+	
 	@Autowired
-	private IResourceService resourceService;
-
+	private IRoleService roleService;
+	
 	protected HttpServletRequest req;
 	protected HttpServletResponse res;
 	protected HttpSession session;
@@ -233,7 +235,7 @@ public class UserController {
 
 	@RequestMapping("/assignform")
 	public ModelAndView assignform(Integer id, ModelMap map) {
-		map.put("options", resourceService.getResourceForOptions(id));
+		map.put("options", roleService.getRoleForOptions(id));
 		map.put("id", id);
 		return new ModelAndView("./x27/user/assignform");
 	}

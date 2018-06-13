@@ -24,20 +24,16 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
 import net.itw.wcms.toolkit.lang.Int32;
+import net.itw.wcms.x27.entity.Resource;
 import net.itw.wcms.x27.entity.Role;
 import net.itw.wcms.x27.utils.StringUtil;
 
 public interface RoleRepository extends JpaRepository<Role, Integer>, JpaSpecificationExecutor<Role>,
 		PagingAndSortingRepository<Role, Integer> {
 
-	default List<Role> getRoleListByUserId(Integer userId) {
-		return this.findAll(new Specification<Role>() {
-			public Predicate toPredicate(Root<Role> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				return null;
-			}
-		});
-	}
-
+	@Query(value = "select * from x27_roles r where r.id in (select ur.role_id from X27_JOIN_USER_ROLE ur where ur.user_id = ?1)", nativeQuery = true)
+	List<Role> getRoleListByUserId(Integer userId);
+	
 	default Page<Role> findAllSupportQuery(Pageable pageable, Map<String, String> params) {
 		return this.findAll(new Specification<Role>() {
 			public Predicate toPredicate(Root<Role> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
@@ -80,5 +76,9 @@ public interface RoleRepository extends JpaRepository<Role, Integer>, JpaSpecifi
 			+ ", r.updatePersion=:updatePersion " + "where r.id =:id")
 	void updateRoleById(@Param("id") Integer id, @Param("roleName") String roleName, @Param("remark") String remark,
 			@Param("updateDate") Date updateDate, @Param("updatePersion") String updatePersion);
+	
+	@Modifying(clearAutomatically = true)
+	@Query("delete from Role u where u.id =:id")
+	Integer deleteById(@Param("id") Integer id);
 
 }

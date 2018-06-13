@@ -63,7 +63,8 @@
 		        align: 'center',
 		        width: '10%',
 		        formatter: function (value, row, index) {
-                    var html = "<a href='javascript:view_unloader(\"" + taskId + "\",\"" + row.unloaderId + "\")' class='font-weight-normal'>" + row.unloaderName + "</a>";
+                    var html = "<a href='javascript:view_unloader(\"" + taskId + "\",\"" + row.unloaderId  + "\",\"\",\"\")' class='font-weight-normal'>" + row.unloaderName + "</a>";
+
                     return html;
                 },
 		        footerFormatter: '合计'
@@ -124,6 +125,9 @@
 	/**
 	 * 查看卸船机作业明细
 	 */
-	function view_unloader(taskId, unloaderId) {
+/*	function view_unloader(taskId, unloaderId) {
 		window.location.href = BasePath + "/report/unloaderStatsDetail?taskId=" + taskId + "&unloaderId=" + unloaderId;
+	}*/
+	function view_unloader(taskId, unloaderId, searchDate, shift) {
+		window.location.href = BasePath + "/report/unloaderStatsDetail?taskId=" + taskId + "&unloaderId=" + unloaderId + "&searchDate=" + searchDate + "&shift=" + shift;
 	}

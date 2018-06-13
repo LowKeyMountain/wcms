@@ -213,7 +213,12 @@ License: You must have a valid license purchased only from themeforest(the above
         <script src="${IncPath}/assets/layouts/global/scripts/quick-sidebar.min.js" type="text/javascript"></script>
 		<script src="${IncPath}/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
 		<script src="${IncPath}/assets/global/plugins/knockout/knockout-3.4.2.js" type="text/javascript"></script>
-        
+		<script src="${IncPath}/assets/extensions/export/tableExport.js"></script>
+		<!-- <script src="${IncPath}/assets/extensions/export/table-export.js"></script>
+		<script src="${IncPath}/assets/extensions/export/main.js"></script>-->
+		<script src="${IncPath}/assets/extensions/export/jquery.base64.js"></script>
+		<script src="${IncPath}/assets/extensions/export/bootstrap-table-export.js"></script>
+		
 		<script type="text/javascript">
 			var IncPath = '${IncPath}';
 			var BasePath = '${BasePath}';

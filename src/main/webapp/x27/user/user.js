@@ -45,8 +45,8 @@ var DataTableCl = function() {
             "bStateSave": true, // save datatable state(pagination, sort, etc) in cookie.
 
             "lengthMenu": [
-                [5, 15, 20, -1],
-                [5, 15, 20, "All"] // change per page values here
+                [5, 15, 20],
+                [5, 15, 20] // change per page values here
             ],
             // set the initial value
             "pageLength": 5,            

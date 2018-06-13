@@ -58,8 +58,8 @@ var DataTableCl = function() {
                          {"name":""}
                      ],
             "lengthMenu": [
-                [5, 15, 20, -1],
-                [5, 15, 20, "All"] // change per page values here
+                [5, 15, 20],
+                [5, 15, 20] // change per page values here
             ],
             // set the initial value
             "pageLength": 5,            
@@ -341,7 +341,6 @@ var Resource = function(){
 			};
 			Cl.ajaxRequest(url,data,function(result){
 				if(!result) return ;		
-//				result = result.replace(/(^\s*)|(\s*$)/g,'');
 				 var code = result.code;
 				 if(Cl.successInt == code){
 					Cl.refreshDataTable(DataTableCl.tableName);

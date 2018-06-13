@@ -4,7 +4,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <div class="modal-header">
 	<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-	<h4 class="modal-title">分配权限</h4>
+	<h4 class="modal-title">关联角色</h4>
 </div>
 
 <div class="modal-body">
@@ -32,6 +32,6 @@
 
 <script>
 	$(document).ready(function() {       
-	   $('#multi_role').multiSelect({selectableHeader: "<div class='custom-header'>所有权限</div>",selectionHeader: "<div class='custom-header'>已拥有权限</div>"});
+	   $('#multi_role').multiSelect({selectableHeader: "<div class='custom-header'>所有角色</div>",selectionHeader: "<div class='custom-header'>已拥有角色</div>"});
 	});
 </script>

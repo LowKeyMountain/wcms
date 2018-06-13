@@ -1,11 +1,16 @@
 package net.itw.wcms.x27.entity;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import net.itw.wcms.toolkit.hibernate.Entityable;
@@ -26,7 +31,10 @@ public class Role implements Entityable {
 	private String remark;
 	private Date updateDate;
 	private String updatePersion;
-
+	
+    private Set<User> users = new HashSet<>();
+	private Set<Resource> resources = new HashSet<>();
+	
 	@GeneratedValue
 	@Id
 	public Integer getId() {
@@ -72,4 +80,24 @@ public class Role implements Entityable {
 		this.updatePersion = updatePersion;
 	}
 	
+	@ManyToMany(mappedBy = "roles")
+	public Set<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(Set<User> users) {
+		this.users = users;
+	}
+	
+	@JoinTable(name = "X27_JOIN_ROLE_RESOURCE", joinColumns = {
+	@JoinColumn(name = "ROLE_ID", referencedColumnName = "ID") }, inverseJoinColumns = {
+			@JoinColumn(name = "RESOURCE_ID", referencedColumnName = "ID") })
+	@ManyToMany
+	public Set<Resource> getResources() {
+		return resources;
+	}
+	
+	public void setResources(Set<Resource> resources) {
+		this.resources = resources;
+	}
 }

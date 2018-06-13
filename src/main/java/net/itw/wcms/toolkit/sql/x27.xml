@@ -18,7 +18,7 @@
 						x27_join_role_resource rr,
 						x27_join_user_role ur
 					WHERE
-						rr.ROLE_ID = ur.ROLUE_ID
+						rr.ROLE_ID = ur.ROLE_ID
 					AND ur.USER_ID = (
 						SELECT
 							u.id

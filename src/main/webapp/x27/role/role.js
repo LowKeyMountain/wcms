@@ -5,23 +5,28 @@ var DataTableCl = function() {
         table.dataTable({
             // Internationalisation. For more info refer to http://datatables.net/manual/i18n
             "language": {
-                "aria": {
-                    "sortAscending": ": activate to sort column ascending",
-                    "sortDescending": ": activate to sort column descending"
-                },
-                "emptyTable": "No data available in table",
-                "info": "Showing _START_ to _END_ of _TOTAL_ records",
-                "infoEmpty": "No records found",
-                "infoFiltered": "(filtered1 from _MAX_ total records)",
-                "lengthMenu": "Show _MENU_",
-                "search": "Search:",
-                "zeroRecords": "No matching records found",
-                "paginate": {
-                    "previous":"Prev",
-                    "next": "Next",
-                    "last": "Last",
-                    "first": "First"
-                }
+            	"sProcessing":   "处理中...",
+            	"sLengthMenu":   "显示 _MENU_ 项结果",
+            	"sZeroRecords":  "没有匹配结果",
+            	"sInfo":         "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+            	"sInfoEmpty":    "显示第 0 至 0 项结果，共 0 项",
+            	"sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+            	"sInfoPostFix":  "",
+            	"sSearch":       "搜索:",
+            	"sUrl":          "",
+            	"sEmptyTable":     "表中数据为空",
+            	"sLoadingRecords": "载入中...",
+            	"sInfoThousands":  ",",
+            	"oPaginate": {
+            		"sFirst":    "首页",
+            		"sPrevious": "上页",
+            		"sNext":     "下页",
+            		"sLast":     "末页"
+            	},
+            	"oAria": {
+            		"sSortAscending":  ": 以升序排列此列",
+            		"sSortDescending": ": 以降序排列此列"
+            	}
             },
 			"bServerSide" : true, // server side processing
 			"sAjaxSource" : BasePath + "/role/getRoleDataTables", // ajax source
@@ -45,8 +50,8 @@ var DataTableCl = function() {
             }],
 
             "lengthMenu": [
-                [5, 15, 20, -1],
-                [5, 15, 20, "All"] // change per page values here
+                [5, 15, 20],
+                [5, 15, 20] // change per page values here
             ],
             // set the initial value
             "pageLength": 5,            
@@ -269,7 +274,8 @@ var Role = function(){
 				url : BasePath + "/role/add.do",
 				success : function(result) {
 					 if(!result) return ;
-					 if(result.success == "success"){
+					 var code = result.code;
+					 if(Cl.successInt == code){
 						 Cl.hideModalWindow(Cl.modalName);
 						 Cl.refreshDataTable(DataTableCl.tableName);
 						 alert("增加成功");
@@ -287,7 +293,7 @@ var Role = function(){
 				resetForm: true,
 			 	timeout:   3000  
 			};
-			 	$("#form_cl").ajaxSubmit(options);
+		 	$("#form_cl").ajaxSubmit(options);
 		},
 		/**
 		 * 修改角色
@@ -300,9 +306,10 @@ var Role = function(){
 				url : BasePath + "/role/update.do",
 				success : function(result) {
 					 if(!result) return ;
-					 if(result.success == "success"){
+					 var code = result.code;
+					 if(Cl.successInt == code){
 						Cl.hideModalWindow(Cl.modalName);
-						Cl.updateDataRow(DataTableCl.tableName,result.id,1,BasePath + '/user/getUserDataRow.do');
+						Cl.updateDataRow(DataTableCl.tableName,result.id,1,BasePath + '/role/getRoleDataRow.do');
 						 alert("修改成功");
 					 } else {
 						 alert("修改失败");
@@ -333,9 +340,9 @@ var Role = function(){
 			};
 			Cl.ajaxRequest(url,data,function(result){
 				if(!result) return ;		
-				result = result.replace(/(^\s*)|(\s*$)/g,'');
-				if(result == "success"){
-					Cl.deleteDataRow(DataTableCl.tableName,data.id,0);
+				 var code = result.code;
+				 if(Cl.successInt == code){
+					Cl.deleteDataRow(DataTableCl.tableName,data.id,1);
 					alert("删除成功");
 				} else {
 					alert("被用户使用的角色不允许删除");
@@ -347,22 +354,35 @@ var Role = function(){
 		 * 提交资源分配表单
 		 */
 		assign: function(){
-			var checkedStr = Role.getCheckedNodes();
-			if(checkedStr==""){
-				alert("没有选择任何菜单资源");
-				return;
-			}
+//			var checkedStr = Role.getCheckedNodes();
+			
+//			if(checkedStr==""){
+//			alert("没有选择任何菜单资源");
+//			return;
+//			}
+			
+			var checkedStr = "";
+			var i = 0;
+			$("#multi_role").find("option:selected").each(function(){
+				if(i==0)
+				{
+					checkedStr = $(this).val();
+				} else {
+					checkedStr = checkedStr + "," + $(this).val();
+				}
+				i++;
+			});
 			
 			var url=BasePath + "/role/assign";
 			var data={
 				"id":$("#id").val(),
-				"checkedStr":checkedStr
+				"selectedStr":checkedStr
 			};
 			
 			Cl.ajaxRequest(url,data,function(result){
 				if(!result) return ;		
-				result = result.replace(/(^\s*)|(\s*$)/g,'');
-				if(result == "success"){
+				 var code = result.code;
+				 if(Cl.successInt == code){
 					Cl.hideModalWindow(Cl.modalName);
 					alert("分配权限成功");			
 				} else {
