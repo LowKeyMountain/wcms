@@ -49,7 +49,6 @@ var DataTableCl = function() {
                 "searchable": false
             }],
             "columns" : [ 
-                         {"name":""},
                          {"name":"id"}, 
                          {"name":"name"}, 
                          {"name":"remark"}, 
@@ -65,7 +64,7 @@ var DataTableCl = function() {
             "pageLength": 5,            
             "pagingType": "bootstrap_full_number",
             "order": [
-                [1, "asc"]
+                [0, "asc"]
             ] // set first column as a default sort by asc
         });
 

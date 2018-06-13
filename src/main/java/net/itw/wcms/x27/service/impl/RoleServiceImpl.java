@@ -112,8 +112,8 @@ public class RoleServiceImpl implements IRoleService {
 	private void addDataRow(StringBuilder sb,Role r)
 	{
 		sb.append("[");
-		sb.append("\"<input type=\\\"checkbox\\\"  class=\\\"checkboxes\\\" name=\\\"id[]\\\" value=\\\"").append(r.getId()).append("\\\">\"");
-		sb.append(",").append(r.getId());
+//		sb.append("\"<input type=\\\"checkbox\\\"  class=\\\"checkboxes\\\" name=\\\"id[]\\\" value=\\\"").append(r.getId()).append("\\\">\"").append(",");
+		sb.append(r.getId());
 		sb.append(",\"").append(r.getRoleName()).append("\"");
 		sb.append(",\"").append(r.getRemark()).append("\"");
 		sb.append(",\"").append(r.getUpdatePersion()).append("\"");

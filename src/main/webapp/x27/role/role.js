@@ -63,6 +63,14 @@ var DataTableCl = function() {
                 "searchable": false,
                 "targets": [0]
             }],
+            "columns" : [ 
+                         {"name":"id"}, 
+                         {"name":"roleName"}, 
+                         {"name":"remark"}, 
+                         {"name":"updatePersion"}, 
+                         {"name":"updateDate"}, 
+                         {"name":""}
+                     ],
             "order": [
                 [1, "asc"]
             ] // set first column as a default sort by asc

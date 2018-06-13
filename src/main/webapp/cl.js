@@ -146,13 +146,14 @@ var Cl = function() {
 					"password": $("#password").val()
 				};
 				Cl.ajaxRequest(url,data,function(result){
-					if(!result) return ;						
-					result = result.replace(/(^\s*)|(\s*$)/g,'');
-					if(result == "success"){						
-						alert("修改成功");
+					if(!result) return ;	
+					 var code = result.code;
+					 if(Cl.successInt == code){				
+						alert(result.msg);
+						window.location.href = BasePath + "/web/gotoLoginPage";
 						Cl.hideModalWindow(Cl.modalName);
 					} else {
-						alert("旧密码输入错误");
+						alert(result.msg);
 						return ;			
 					}
 				});

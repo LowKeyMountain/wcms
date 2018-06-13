@@ -148,8 +148,8 @@ public class ResourceServiceImpl implements IResourceService {
 	private void addDataRow(StringBuilder sb,Resource r)
 	{
 		sb.append("[");
-		sb.append("\"<input type=\\\"checkbox\\\"  class=\\\"checkboxes\\\" name=\\\"id[]\\\" value=\\\"").append(r.getId()).append("\\\">\"");
-		sb.append(",").append(r.getId());
+//		sb.append("\"<input type=\\\"checkbox\\\"  class=\\\"checkboxes\\\" name=\\\"id[]\\\" value=\\\"").append(r.getId()).append("\\\">\"").append(",");
+		sb.append(r.getId());
 		sb.append(",\"").append(r.getName()).append("\"");
 		sb.append(",\"").append(r.getRemark()).append("\"");
 		sb.append(",\"").append(r.getUpdatePerson()).append("\"");
