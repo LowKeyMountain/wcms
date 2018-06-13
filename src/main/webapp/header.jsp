@@ -27,7 +27,7 @@
                         <i class="fa fa-angle-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-default">
-						<li><a href="javascript:;" id="modify_password"> <i
+						<li><a href="javascript:Cl.showModalWindow(Cl.modalName,'${BasePath}/web/modifypasswordform.do');" id="modify_password"> <i
 								class="fa fa-arrows"></i> 修改密码
 						</a></li>
 

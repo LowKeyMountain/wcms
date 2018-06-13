@@ -96,9 +96,9 @@ public class UserServiceImpl implements IUserService {
 
 	private void addDataRow(StringBuilder sb, User u) {
 		sb.append("[");
-		sb.append("\"<input type=\\\"checkbox\\\" class=\\\"checkboxes\\\" name=\\\"id[]\\\" value=\\\"")
-				.append(u.getId()).append("\\\">\"");
-		sb.append(",").append(u.getId());
+//		sb.append("\"<input type=\\\"checkbox\\\" class=\\\"checkboxes\\\" name=\\\"id[]\\\" value=\\\"")
+//				.append(u.getId()).append("\\\">\"").append(",");
+		sb.append(u.getId());
 		sb.append(",\"").append(u.getUserName()).append("\"");
 		sb.append(",\"").append(u.getRealName()).append("\"");
 		//sb.append(",\"").append(u.getGender() ? "男" : "女").append("\"");

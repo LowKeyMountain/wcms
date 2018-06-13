@@ -57,7 +57,7 @@ var DataTableCl = function() {
 				"searchable" : false
 			} ],
             "columns" : [ 
-                          {"name":""},
+                          //{"name":""},
                           {"name":"id"}, 
                           {"name":"userName"}, 
                           {"name":"realName"}, 
@@ -378,7 +378,7 @@ var User = function(){
 		 * 复位密码
 		 */
 		resetpass: function(id){
-			if(!confirm("确定要重置密码为root吗")){
+			if(!confirm("确定要重置密码为q1w2e3r4吗")){
 				return;
 			}	
 			var url=BasePath + "/user/resetpass.do";

@@ -2,6 +2,7 @@ package net.itw.wcms.x27.controller;
 
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -24,6 +26,7 @@ import net.itw.wcms.x27.entity.User;
 import net.itw.wcms.x27.service.IUserService;
 import net.itw.wcms.x27.utils.ConstantUtil;
 import net.itw.wcms.x27.utils.SessionUtil;
+import net.itw.wcms.x27.utils.StringUtil;
 
 /**
  * 
@@ -125,5 +128,42 @@ public class LoginController {
 		modelMap.put("hours", Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
 		return new ModelAndView("./main");
 	}
-
+	
+	@RequestMapping("/modifypasswordform")
+	public ModelAndView modifypasswordform(HttpServletRequest request) throws Exception
+	{
+		return new ModelAndView("./modifypasswordform");
+	}
+	
+	@ResponseBody
+	@RequestMapping("/modifypassword")
+	public MessageOption modifypassword(String oldpassword,String password,HttpServletRequest request) throws Exception
+	{
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "修改成功！");
+		if(StringUtil.isStrEmpty(oldpassword) || StringUtil.isStrEmpty(password))	{
+			mo.code = ConstantUtil.FailInt;
+			mo.msg = "新老密码不能为空！";
+			return mo;
+		}
+		//初始化用户、菜单
+		User user = SessionUtil.getSessionUser(request);
+		if(!user.getPassword().equals(StringUtil.makeMD5(oldpassword))) {
+			mo.code = ConstantUtil.FailInt;
+			mo.msg = "旧密码输入错误！";
+			return mo;
+		}
+		User newUser = new User();
+		newUser.setId(user.getId());
+		newUser.setPassword(StringUtil.makeMD5(password));
+		newUser.setUpdateDate(new Date());
+		newUser.setUpdatePerson(user.getUserName());
+		userService.updatePasswordById(newUser, user);
+		
+		//更新session
+		user.setPassword(newUser.getPassword());
+		request.getSession().setAttribute(SessionUtil.SessionSystemLoginUserName,user);
+		
+		return mo;
+	}
+	
 }

@@ -151,7 +151,7 @@ License: You must have a valid license purchased only from themeforest(the above
 									id="datatable_cl">
 									<thead>
 										<tr role="row" class="heading">
-											<th width="1%"><input type="checkbox" class="group-checkable"></th>
+											<!-- <th width="1%"><input type="checkbox" class="group-checkable"></th> -->
 											<th width="5%">ID</th>
 											<th width="7.5%">角色名</th>
 											<th width="7.5%">说明</th>
