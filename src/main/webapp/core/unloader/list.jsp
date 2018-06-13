@@ -175,12 +175,13 @@ License: You must have a valid license purchased only from themeforest(the above
 					<div class="col-md-12">
 						<!-- BEGIN EXAMPLE TABLE PORTLET-->
 						<div class="portlet light bordered">
-<!-- 							<div class="portlet-title">
+							<div class="portlet-title">
 								<div class="caption font-dark">
 									<i class="icon-settings font-dark"></i> <span
 										class="caption-subject bold uppercase"> 卸船机作业数据</span>
 								</div>
-							</div> -->
+								<div class="tools"> </div>
+							</div>
 							<div class="portlet-body">
 								<div class="table-toolbar">
 						                <div class="col-md-12">
@@ -238,7 +239,10 @@ License: You must have a valid license purchased only from themeforest(the above
 												            <button id="btn_add" type="button" class="btn btn-primary btn-default" data-toggle="modal" data-target="#addModal">
 												                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
 												            </button>
-												        </div>
+															<!-- <button id="exportBtn" type="button" style="margin-left:5px" class="export-excel btn btn-primary btn-default" 
+															data-table="unloader">导出Excel</button>
+															<button type="button" id="download" style="margin-left:5px" class="btn btn-primary" onClick ="$('#unloader').tableExport({ type: 'excel', escape: 'false' })">数据导出</button>
+ -->												        </div>
 									                    <table id="unloader" class="table table-striped table-bordered table-hover table-checkable order-column"></table>												            
 									                </form>
 									            </div>
@@ -303,6 +307,11 @@ License: You must have a valid license purchased only from themeforest(the above
 		<script src="${IncPath}/assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.min.js" type="text/javascript"></script>
 		
 		<script src="${IncPath}/assets/global/plugins/knockout/knockout-3.4.2.js" type="text/javascript"></script>
+		<script src="${IncPath}/assets/extensions/export/tableExport.js"></script>
+		<!-- <script src="${IncPath}/assets/extensions/export/table-export.js"></script>
+		<script src="${IncPath}/assets/extensions/export/main.js"></script>-->
+		<script src="${IncPath}/assets/extensions/export/jquery.base64.js"></script>
+		<script src="${IncPath}/assets/extensions/export/bootstrap-table-export.js"></script>
         
 		<script type="text/javascript">
 			var IncPath = '${IncPath}';
@@ -374,7 +383,8 @@ License: You must have a valid license purchased only from themeforest(the above
     	            })
     	        }
     	        //DatePicker("#startDate","#endDate");
- 			
+     			//TableExport.init();
+     		    //TableDatatablesButtons.init();
             });  
         </script>			
 		<!-- BEGIN THEME LAYOUT SCRIPTS -->

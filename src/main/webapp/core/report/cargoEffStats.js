@@ -32,8 +32,10 @@
 //			 toolbar : '#toolbar',
 //			 toolbarAlign : 'right',
 //			 buttonsAlign : 'left',// 按钮对齐方式
-//			 showExport : true, // 是否显示导出
-//			 exportDataType : "basic", // basic', 'all', 'selected'.
+			 showExport : true, // 是否显示导出
+			 exportDataType : "basic", // basic', 'all', 'selected'.
+			 exportTypes:['excel'],  //导出文件类型 'csv', 'txt', 'sql', 'doc', 'excel', 'xlsx', 'pdf'
+
 //			 showFooter: true,
 
 			queryParams: function queryParams(params){//自定义参数，这里的参数是传给后台的，分页使用
