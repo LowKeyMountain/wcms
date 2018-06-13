@@ -15,7 +15,15 @@ import net.itw.wcms.x27.entity.User;
  * @author Michael 18 Oct 2017 14:45:51
  */
 public interface IRoleService {
-
+	
+	/**
+	 * 根据id查询角色
+	 * 
+	 * @param id
+	 * @return
+	 */
+	Role getRoleById(Integer id);
+	
 	/**
 	 * 所有角色列表
 	 * 
@@ -53,13 +61,32 @@ public interface IRoleService {
 	 * @param user
 	 * @return
 	 */
-	Integer createRole(Role role, User user);
+	Integer createRole(Role role, User operator);
 	
 	/**
-	 * 
+	 * 更新角色信息
 	 * @param role
 	 * @param user
 	 * @return
 	 */
-	Integer updateRoleById(Role role, User user);
+	Integer updateRoleById(Role role, User operator);
+	
+	/**
+	 * 删除角色
+	 * @param id
+	 * @param operator
+	 * @return
+	 */
+	Integer deleteRoleById(Integer id, User operator);
+
+	String getRoleDataRow(Integer id);
+
+	/**
+	 * 角色分配资源
+	 * 
+	 * @param id
+	 * @param selectedStr
+	 * @return
+	 */
+	String assignResource(Integer id, String selectedStr);
 }

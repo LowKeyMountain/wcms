@@ -19,10 +19,10 @@ public interface IResourceService {
 	/**
 	 * 返回jquery-multi-select需要的options数据
 	 * 
-	 * @param userId
+	 * @param roleId
 	 * @return
 	 */
-	String getResourceForOptions(Integer userId);
+	String getResourceForOptions(Integer roleId);
 	
 	/**
 	 * 根据id查询资源
@@ -40,12 +40,12 @@ public interface IResourceService {
 	List<Resource> getResourceList();
 
 	/**
-	 * 根据userId获取关联的权限列表
+	 * 根据角色编号获取关联的权限列表
 	 * 
-	 * @param userId
+	 * @param roleId
 	 * @return
 	 */
-	List<Resource> getResourceListByUserId(Integer userId);
+	List<Resource> getResourceListByRoleId(Integer roleId);
 	
 	/**
 	 * 根据userName获取权限ID列表

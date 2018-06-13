@@ -11,9 +11,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import net.itw.wcms.x27.entity.Resource;
 import net.itw.wcms.x27.entity.Role;
 import net.itw.wcms.x27.entity.User;
 import net.itw.wcms.x27.repository.RoleRepository;
+import net.itw.wcms.x27.service.IResourceService;
 import net.itw.wcms.x27.service.IRoleService;
 import net.itw.wcms.x27.utils.ConstantUtil;
 import net.itw.wcms.x27.utils.StringUtil;
@@ -24,7 +26,10 @@ public class RoleServiceImpl implements IRoleService {
 
 	@Autowired
 	private RoleRepository roleRepository;
-
+	
+	@Autowired
+	private IResourceService resourceService;
+	
 	public Page<Role> findAll(Pageable pageable) {
 		return roleRepository.findAll(pageable);
 	}
@@ -87,7 +92,7 @@ public class RoleServiceImpl implements IRoleService {
 		
 		int total = page.getTotalPages();
 		StringBuilder sb = new StringBuilder();
-		sb.append(String.format("{\"iTotalRecords\":%d,\"iTotalDisplayRecords\":%d,\"aaData\":[",total,total));
+		sb.append(String.format("{\"iTotalRecords\":%d,\"iTotalDisplayRecords\":%d,\"aaData\":[",page.getContent().size(), page.getTotalElements()));
 		int i= 0;
 		for(Role r: page)
 		{
@@ -135,18 +140,57 @@ public class RoleServiceImpl implements IRoleService {
 		return ConstantUtil.SuccessInt;
 	}
 	
-	private void setPersonUpdate(Role role,User user)
+	private void setPersonUpdate(Role role,User operator)
 	{
 		Date d = new Date();
-		role.setUpdatePersion(user.getUserName());
+		role.setUpdatePersion(operator.getUserName());
 		role.setUpdateDate(d);
 	}
 	
 	@Override
-	public Integer updateRoleById(Role role,User user) {
-		setPersonUpdate(role,user);
+	public Integer updateRoleById(Role role,User operator) {
+		setPersonUpdate(role,operator);
 		roleRepository.updateRoleById(role.getId(), role.getRoleName(), role.getRemark(), role.getUpdateDate(), role.getUpdatePersion());
 		return ConstantUtil.SuccessInt;
+	}
+	
+	@Override
+	public Integer deleteRoleById(Integer id, User operator) {
+		return roleRepository.deleteById(id);
+	}
+	
+	@Override
+	public Role getRoleById(Integer id) {
+		return roleRepository.getOne(id);
+	}
+	
+	@Override
+	public String getRoleDataRow(Integer id) {
+		Role u = getRoleById(id);
+		StringBuilder sb = new StringBuilder();
+		addDataRow(sb, u);
+		return sb.toString();
+	}
+	
+	@Override
+	public String assignResource(Integer id, String selectedStr) {
+
+		Role role = this.getRoleById(id);
+
+		String[] selectedArr = selectedStr.split(",");
+
+		role.getResources().clear();
+
+		for (String s : selectedArr) {
+			if (org.springframework.util.StringUtils.hasText(s)) {
+				Resource resource = resourceService.getResourceById(Integer.parseInt(s));
+				if (resource != null) {
+					role.getResources().add(resource);
+				}
+			}
+		}
+		roleRepository.saveAndFlush(role);
+		return ConstantUtil.Success;
 	}
 	
 }

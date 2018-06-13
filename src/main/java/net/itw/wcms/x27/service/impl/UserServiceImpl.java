@@ -11,7 +11,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.tomcat.util.bcel.classfile.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,11 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.toolkit.security.PasswordUtils;
-import net.itw.wcms.x27.entity.Resource;
+import net.itw.wcms.x27.entity.Role;
 import net.itw.wcms.x27.entity.User;
-import net.itw.wcms.x27.repository.ResourceRepository;
 import net.itw.wcms.x27.repository.UserRepository;
-import net.itw.wcms.x27.service.IResourceService;
+import net.itw.wcms.x27.service.IRoleService;
 import net.itw.wcms.x27.service.IUserService;
 import net.itw.wcms.x27.utils.ConstantUtil;
 import net.itw.wcms.x27.utils.PageUtils;
@@ -39,7 +37,11 @@ public class UserServiceImpl implements IUserService {
 	private UserRepository userRepository;
 	
 	@Autowired
-	private IResourceService resourceService;
+	private IRoleService roleService;
+	
+//	@Autowired
+//	private IResourceService resourceService;
+	
 
 	public Integer createUser(User user, User operator) {
 		user.setIsAdmin(false);
@@ -113,7 +115,7 @@ public class UserServiceImpl implements IUserService {
 				.append("</a>").append("&nbsp;&nbsp;<a href=\\\"javascript:User.remove('").append(u.getId())
 				.append("');\\\" class=\\\"btn btn-xs default btn-editable\\\"><i class=\\\"fa fa-times\\\"></i> 删除</a>")
 				.append("&nbsp;&nbsp;<a href=\\\"javascript:User.assign_click('").append(u.getId())
-				.append("');\\\" class=\\\"btn btn-xs default btn-editable\\\"><i class=\\\"fa fa-key\\\"></i> 分配权限</a>")
+				.append("');\\\" class=\\\"btn btn-xs default btn-editable\\\"><i class=\\\"fa fa-key\\\"></i> 关联角色</a>")
 				.append("\"");
 		sb.append("]");
 	}
@@ -183,16 +185,17 @@ public class UserServiceImpl implements IUserService {
 
 		String[] selectedArr = selectedStr.split(",");
 
-		user.getResources().clear();
+		user.getRoles().clear();
 
 		for (String s : selectedArr) {
 			if (org.springframework.util.StringUtils.hasText(s)) {
-				Resource resource = resourceService.getResourceById(Integer.parseInt(s));
-				if (resource != null) {
-					user.getResources().add(resource);
+				Role role = roleService.getRoleById(Integer.parseInt(s));
+				if (role != null) {
+					user.getRoles().add(role);
 				}
 			}
 		}
+		
 		userRepository.saveAndFlush(user);
 		return ConstantUtil.Success;
 	}
@@ -248,9 +251,8 @@ public class UserServiceImpl implements IUserService {
 			return "{\"iTotalRecords\":0,\"iTotalDisplayRecords\":0,\"aaData\":[]}";
 		}
 
-		int total = page.getTotalPages();
 		StringBuilder sb = new StringBuilder();
-		sb.append(String.format("{\"iTotalRecords\":%d,\"iTotalDisplayRecords\":%d,\"aaData\":[", total, total));
+		sb.append(String.format("{\"iTotalRecords\":%d,\"iTotalDisplayRecords\":%d,\"aaData\":[", page.getContent().size(), page.getTotalElements()));
 		int i = 0;
 		for (User u : page) {
 			if (i != 0)

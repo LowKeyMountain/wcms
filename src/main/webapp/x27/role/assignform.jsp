@@ -4,47 +4,34 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <div class="modal-header">
 	<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-	<h4 class="modal-title">修改角色</h4>
+	<h4 class="modal-title">分配权限</h4>
 </div>
 
 <div class="modal-body">
 	<div class="row">
 		<div class="col-md-12">
-			<!-- BEGIN FORM-->
-			<form action="#" id="form_cl" class="form-horizontal">
-				<div class="form-body">
-					<div class="form-group">
-						<label class="control-label col-md-3">名称
-						<span class="required">
-							 *
-						</span>
-						</label>
-						<div class="col-md-8">
-							<input type="hidden" id="id" name="id" value="${role.id}"/>
-							<input type="text" id="name" name="name" data-required="1" class="form-control" value="${role.name}"/>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-md-3">备注
-						</label>
-						<div class="col-md-8">
-							<input type="text" id="remark" name="remark" data-required="1" class="form-control" value="${role.remark}"/>
-						</div>
+			<!-- BEGIN MULTI SELECT-->
+				<div class="form-group">
+					<div class="col-md-12">
+						<input  type="hidden" id="id" name="id" value="${id}" />
+						<select multiple="multiple" class="multi-select" id="multi_role" name="multi_role[]">
+							${options}
+						</select>
 					</div>
 				</div>
-			</form>
-			<!-- END FORM-->
+			<!-- END MULTI SELECT-->
 		</div>
 	</div>
 </div>
 
 <div class="modal-footer">
+	<input type="hidden" id="id" name="id" value="${id}"/>
 	<button type="button" class="btn default" data-dismiss="modal">关闭</button>
-	<button type="button" class="btn blue" onclick="javascript:$('#form_cl').submit();">保存</button>
+	<button type="button" class="btn blue" onclick="javascript:Role.assign();">保存</button>
 </div>
 
 <script>
-    jQuery(document).ready(function() {       
-       FormCl.init();
-    });
+	$(document).ready(function() {       
+	   $('#multi_role').multiSelect({selectableHeader: "<div class='custom-header'>所有权限</div>",selectionHeader: "<div class='custom-header'>已拥有权限</div>"});
+	});
 </script>

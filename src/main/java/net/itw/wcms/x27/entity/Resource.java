@@ -47,7 +47,7 @@ public class Resource implements Serializable {
 
     private Date updateDate;
     
-    private Set<User> users = new HashSet<>();
+    private Set<Role> roles = new HashSet<>();
     
 	@GeneratedValue
 	@Id
@@ -155,12 +155,11 @@ public class Resource implements Serializable {
     }
     
 	@ManyToMany(mappedBy = "resources")
-	public Set<User> getUsers() {
-		return users;
+	public Set<Role> getRoles() {
+		return roles;
 	}
 
-	public void setUsers(Set<User> users) {
-		this.users = users;
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
 	}
-    
 }

@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.Role;
 import net.itw.wcms.x27.entity.User;
+import net.itw.wcms.x27.service.IResourceService;
 import net.itw.wcms.x27.service.IRoleService;
 import net.itw.wcms.x27.service.IUserService;
 import net.itw.wcms.x27.utils.ConstantUtil;
@@ -34,6 +35,9 @@ public class RoleController {
 	private IUserService userService;
 	@Autowired
 	private IRoleService roleService;
+	@Autowired
+	private IResourceService resourceService;
+	
 
 	protected HttpServletRequest req;
 	protected HttpServletResponse res;
@@ -112,7 +116,8 @@ public class RoleController {
 	
 	@RequestMapping("/updateform")
 	public ModelAndView updateform(Integer id) {
-		modelMap.put("id", id);
+		Role role = roleService.getRoleById(id);
+		modelMap.put("role", role);
 		return new ModelAndView(PagePath + "/updateform");
 	}
 	
@@ -141,9 +146,9 @@ public class RoleController {
 		return map;
 	}
 
-	@RequestMapping(value = "/getUserDataRow", produces = "text/json;charset=UTF-8")
-	public String getUserDataRow(@RequestParam("id") Integer id) throws Exception {
-		return userService.getUserDataRow(id);
+	@RequestMapping(value = "/getRoleDataRow", produces = "text/json;charset=UTF-8")
+	public String getRoleDataRow(@RequestParam("id") Integer id) throws Exception {
+		return roleService.getRoleDataRow(id);
 	}
 
 	@RequestMapping("/delete")
@@ -152,11 +157,7 @@ public class RoleController {
 		User operator = SessionUtil.getSessionUser(req);
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, " 操作成功！");
 		try {
-			User user = new User();
-			user.setId(id);
-			user.setIsDelete(true);
-
-			userService.updateIsDeleteById(user, operator);
+			roleService.deleteRoleById(id, operator);
 		} catch (Exception e) {
 			e.printStackTrace();
 			mo.msg = e.getMessage();
@@ -211,19 +212,21 @@ public class RoleController {
 	}
 
 	@RequestMapping("/assignform")
-	public String assignform(Integer id, ModelMap map) {
-		map.put("options", roleService.getRoleForOptions(id));
+	public ModelAndView assignform(Integer id, ModelMap map) {
+		map.put("options", resourceService.getResourceForOptions(id));
 		map.put("id", id);
-		return PagePath + "/assignform.ftl";
+		return new ModelAndView(PagePath + "/assignform");
 	}
 
 	@RequestMapping("/assign")
-	public String assign(Integer id, String selectedStr) {
-		if (id == null || StringUtil.isStrEmpty(id.toString()) || StringUtil.isStrEmpty(selectedStr)) {
-			return ConstantUtil.Fail;
+	public MessageOption assign(Integer id, String selectedStr) {
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
+		if (id == null || StringUtil.isStrEmpty(id.toString())) { // || StringUtil.isStrEmpty(selectedStr)
+			mo.code = ConstantUtil.FailInt;
+			mo.msg = "操作失败：角色信息未找到！";
+			return mo;
 		}
-		userService.assignResource(id, selectedStr);
-		return ConstantUtil.Success;
+		roleService.assignResource(id, selectedStr);
+		return mo;
 	}
-	
 }

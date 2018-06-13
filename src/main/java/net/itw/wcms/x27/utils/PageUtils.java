@@ -72,10 +72,10 @@ public class PageUtils {
             } else {
                 sort = new Sort(Direction.DESC, sortType);
             }
-            return new PageRequest(pageNum - 1, pageSize, sort);
+            return new PageRequest(pageNum -1, pageSize, sort);
         } else {
             sort = new Sort(Direction.ASC, sortType);
-            return new PageRequest(pageNum - 1, pageSize, sort);
+            return new PageRequest(pageNum -1, pageSize, sort);
         }
     }
 
@@ -134,7 +134,8 @@ public class PageUtils {
 		int pageNum = 1;
 		String ids = aoData.get("iDisplayStart");
 		int iDisplayStart = StringUtils.isBlank(ids) ? 0 : Integer.parseInt(ids);
-
+		pageNum = iDisplayStart/pageSize + 1;
+		
 		// 排序字段
 		String sortType = "";
 		try {

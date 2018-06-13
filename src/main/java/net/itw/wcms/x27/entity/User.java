@@ -43,7 +43,7 @@ public class User implements Entityable {
 	private Date lastLoginTime;
 	private String lastLoginIp;
 
-	private Set<Resource> resources = new HashSet<>();
+	private Set<Role> roles = new HashSet<>();
 
 	@GeneratedValue
 	@Id
@@ -116,18 +116,18 @@ public class User implements Entityable {
 		this.lastLoginIp = lastLoginIp;
 	}
 
-	@JoinTable(name = "X27_JOIN_USER_RESOURCE", joinColumns = {
-			@JoinColumn(name = "USER_ID", referencedColumnName = "ID") }, inverseJoinColumns = {
-					@JoinColumn(name = "RESOURCE_ID", referencedColumnName = "ID") })
+	@JoinTable(name = "X27_JOIN_USER_ROLE", joinColumns = {
+	@JoinColumn(name = "USER_ID", referencedColumnName = "ID") }, inverseJoinColumns = {
+			@JoinColumn(name = "ROLE_ID", referencedColumnName = "ID") })
 	@ManyToMany
-	public Set<Resource> getResources() {
-		return resources;
+	public Set<Role> getRoles() {
+		return roles;
 	}
 
-	public void setResources(Set<Resource> resources) {
-		this.resources = resources;
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
 	}
-
+	
 	public Boolean getGender() {
 		return gender;
 	}

@@ -32,8 +32,8 @@ public interface ResourceRepository extends JpaRepository<Resource, Integer>, Jp
 
 	Resource getResourceById(Integer id);
 
-	@Query(value = "select * from X27_Resources r where r.id in (select ur.resource_id from X27_JOIN_USER_RESOURCE ur where ur.user_id = ?1)", nativeQuery = true)
-	List<Resource> getResourceListByUserId(Integer userId);
+	@Query(value = "select * from X27_Resources r where r.id in (select rr.resource_id from X27_JOIN_ROLE_RESOURCE rr where rr.role_id = ?1)", nativeQuery = true)
+	List<Resource> getResourceListByRoleId(Integer roleId);
 	
 
 	default Page<Resource> findAllSupportQuery(Pageable pageable, Map<String, String> params) {
@@ -78,5 +78,9 @@ public interface ResourceRepository extends JpaRepository<Resource, Integer>, Jp
 			+ ", r.updatePerson=:updatePerson " + "where r.id =:id")
 	void updateResourceById(@Param("id") Integer id, @Param("name") String name, @Param("remark") String remark,
 			@Param("updateDate") Date updateDate, @Param("updatePerson") String updatePerson);
-
+	
+	@Modifying(clearAutomatically = true)
+	@Query("delete from Resource u where u.id =:id")
+	Integer deleteById(@Param("id") Integer id);
+	
 }
