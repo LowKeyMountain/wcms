@@ -4,7 +4,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <div class="modal-header">
 	<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-	<h4 class="modal-title">分配权限</h4>
+	<h4 class="modal-title">分配权限(角色名：${roleName})</h4>
 </div>
 
 <div class="modal-body">

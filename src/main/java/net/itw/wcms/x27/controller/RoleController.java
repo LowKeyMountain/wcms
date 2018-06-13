@@ -215,6 +215,8 @@ public class RoleController {
 	public ModelAndView assignform(Integer id, ModelMap map) {
 		map.put("options", resourceService.getResourceForOptions(id));
 		map.put("id", id);
+		Role role = roleService.getRoleById(id);
+		map.put("roleName", role != null?role.getRoleName():"");
 		return new ModelAndView(PagePath + "/assignform");
 	}
 
