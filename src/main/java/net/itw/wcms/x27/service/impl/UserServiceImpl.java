@@ -35,7 +35,6 @@ public class UserServiceImpl implements IUserService {
 
 	@Autowired
 	private UserRepository userRepository;
-	
 	@Autowired
 	private IRoleService roleService;
 	

@@ -234,6 +234,9 @@ License: You must have a valid license purchased only from themeforest(the above
 									                        <div class="col-md-2" style="text-align:left;">
 									                            <button type="button" style="margin-left:20px" id="btn_reset" class="btn btn-sm">重置</button>
 									                        </div>
+									                        <!-- <div class="col-md-2" style="text-align:left;">
+									                            <button type="button" style="margin-left:20px" id="btn_export" class="btn btn-primary btn-sm">导出excel</button>
+									                        </div>-->
 									                    </div>
 												        <div id="toolbar" class="btn-group">
 												            <button id="btn_add" type="button" class="btn btn-primary btn-default" data-toggle="modal" data-target="#addModal">
@@ -242,7 +245,8 @@ License: You must have a valid license purchased only from themeforest(the above
 															<!-- <button id="exportBtn" type="button" style="margin-left:5px" class="export-excel btn btn-primary btn-default" 
 															data-table="unloader">导出Excel</button>
 															<button type="button" id="download" style="margin-left:5px" class="btn btn-primary" onClick ="$('#unloader').tableExport({ type: 'excel', escape: 'false' })">数据导出</button>
- -->												        </div>
+ -->														<button type="button" id="btn_export" style="margin-left:5px" class="btn btn-primary">数据导出</button>
+												        </div>
 									                    <table id="unloader" class="table table-striped table-bordered table-hover table-checkable order-column"></table>												            
 									                </form>
 									            </div>

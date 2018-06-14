@@ -1,5 +1,6 @@
 package net.itw.wcms.ship.service.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,11 @@ public class UnloaderServiceImpl implements IUnloaderService {
 	public Page<UnloaderAll> findAll(Pageable pageable, Map<String , String > params)
 	{
 		return unloaderRepository.findAllByParams(pageable, params);
+	}
+
+	public List<UnloaderAll> findListByParams(Map<String , String > params)
+	{
+		return unloaderRepository.findListByParams(params);
 	}
 	
 	@Override

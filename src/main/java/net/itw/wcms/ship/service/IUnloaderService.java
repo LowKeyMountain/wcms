@@ -1,5 +1,6 @@
 package net.itw.wcms.ship.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.Pageable;
@@ -26,7 +27,13 @@ public interface IUnloaderService {
 	 * @return
 	 */
 	String getUnloaderList(Pageable pageable, Map<String, String> params);
-	
+
+	/**
+	 * 获取卸船机数据,用于报表导出
+	 * @param params
+	 * @return
+	 */
+	List<UnloaderAll> findListByParams(Map<String, String> params);
 	/**
 	 * 添加卸船机作业信息
 	 * 

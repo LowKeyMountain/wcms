@@ -63,7 +63,8 @@
 		        align: 'center',
 		        width: '10%',
 		        formatter: function (value, row, index) {
-                    var html = "<a href='javascript:view_unloader(\"" + taskId + "\",\"" + row.unloaderId + "\")' class='font-weight-normal'>" + row.unloaderName + "</a>";
+                    var html = "<a href='javascript:view_unloader(\"" + taskId + "\",\"" + row.unloaderId  + "\",\"\",\"\")' class='font-weight-normal'>" + row.unloaderName + "</a>";
+
                     return html;
                 },
 		        footerFormatter: '合计'

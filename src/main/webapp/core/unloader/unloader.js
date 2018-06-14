@@ -32,10 +32,10 @@
 			 toolbar : '#toolbar',
 			 toolbarAlign : 'right',
 			 buttonsAlign : 'left',// 按钮对齐方式
-			 showExport : true, // 是否显示导出
-			 exportDataType : 'basic', // 'basic', 'all', 'selected'.
+//			 showExport : true, // 是否显示导出
+//			 exportDataType : 'basic', // 'basic', 'all', 'selected'.
 //			 Icons:'glyphicon glyphicon-export', //导出图标
-			 exportTypes:['excel'],  //导出文件类型 'csv', 'txt', 'sql', 'doc', 'excel', 'xlsx', 'pdf'
+//			 exportTypes:['excel'],  //导出文件类型 'csv', 'txt', 'sql', 'doc', 'excel', 'xlsx', 'pdf'
 /*			 exportOptions:{
 				    // ignoreColumn: [0,1],  //忽略某一列的索引
 				 fileName: questionNaireName,  //文件名称设置
@@ -69,7 +69,7 @@
 			
 			idField : "id",// 指定主键列
 		    columns: [
-		    {
+		    /*{
 		    	title:'全选',
 		        field:'select',
 		        //复选框
@@ -80,7 +80,7 @@
 		        field: 'id',
 		        title: 'id',
 		        align: 'center'
-		    }, {
+		    },*/ {
 		        field: 'Cmsid',
 		        title: 'Cms卸船机编号',
 		        align: 'center',
@@ -199,7 +199,34 @@ $(function(){
                     alert("保存失败!");
                 }                
             });
-        });        
+        });
+        var encodeParam = function(json) {
+            var tmps = [];
+            for ( var key in json) {
+                tmps.push(key + '=' + json[key]);
+            }
+            return tmps.join('&');
+        };
+        $('#btn_export').off().on("click", function () {        
+        	var data={
+	    			startDate : $("#startDate").val(),
+	    			endDate : $("#endDate").val(),
+	    			startPosition : $("#startPosition").val(),
+	    			endPosition : $("#endPosition").val(),
+	    			cmsId : $("#cmsid").val(),
+	    			operationType : $("#operationType").val()
+	    	};
+	        var url = BasePath + "/unloader/exportExcel?" + encodeParam(data);
+	        var exportForm = document.getElementById("formSearch");
+	        if (exportForm){
+/*	            exportForm = document.createElement("form");
+	            exportForm.setAttribute('id',"_exportForm");*/
+	            exportForm.setAttribute("action", url);
+	            exportForm.setAttribute("method", "post");
+	        }
+//	        document.body.appendChild(exportForm);
+	        exportForm.submit();
+        });
 });
 
 /*var TableDatatablesButtons = function () {

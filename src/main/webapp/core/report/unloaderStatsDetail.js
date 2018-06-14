@@ -31,8 +31,10 @@
 //			 toolbar : '#toolbar',
 //			 toolbarAlign : 'right',
 //			 buttonsAlign : 'left',// 按钮对齐方式
-//			 showExport : true, // 是否显示导出
-//			 exportDataType : "basic", // basic', 'all', 'selected'.
+			 showExport : true, // 是否显示导出
+			 exportDataType : "basic", // basic', 'all', 'selected'.
+			 exportTypes:['excel'],  //导出文件类型 'csv', 'txt', 'sql', 'doc', 'excel', 'xlsx', 'pdf'
+
 			
 			queryParams: function queryParams(params){//自定义参数，这里的参数是传给后台的，分页使用
 				var params = {//这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
