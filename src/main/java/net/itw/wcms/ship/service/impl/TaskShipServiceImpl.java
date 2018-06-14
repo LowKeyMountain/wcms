@@ -503,6 +503,9 @@ public class TaskShipServiceImpl implements ITaskShipService {
 					}
 					taskRepository.saveAndFlush(task);
 
+					// 重新计算作业量
+					dataSyncStepC.start(Integer.parseInt(taskId));
+					
 				} else if ("1".equals(status)) {
 					throw new X27Exception("操作失败: 当前船舶为预靠状态！");
 				} else {
