@@ -125,9 +125,6 @@
 	/**
 	 * 查看卸船机作业明细
 	 */
-/*	function view_unloader(taskId, unloaderId) {
+	function view_unloader(taskId, unloaderId) {
 		window.location.href = BasePath + "/report/unloaderStatsDetail?taskId=" + taskId + "&unloaderId=" + unloaderId + "&searchDate=&shift=";
-	}*/
-	function view_unloader(taskId, unloaderId, searchDate, shift) {
-		window.location.href = BasePath + "/report/unloaderStatsDetail?taskId=" + taskId + "&unloaderId=" + unloaderId + "&searchDate=" + searchDate + "&shift=" + shift;
-	}	
+	}

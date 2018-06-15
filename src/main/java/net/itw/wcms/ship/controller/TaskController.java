@@ -67,6 +67,8 @@ public class TaskController {
 		modelMap.put("IncPath", req.getContextPath());
 		modelMap.put("BasePath", req.getContextPath());
 		modelMap.put("jsVersion", System.currentTimeMillis());
+		User operator = SessionUtil.getSessionUser(req);
+		modelMap.put("user", operator!=null?operator.getRealName():"");
 	}
 
 	/**

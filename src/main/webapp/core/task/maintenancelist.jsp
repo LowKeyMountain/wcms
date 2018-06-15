@@ -282,6 +282,8 @@ License: You must have a valid license purchased only from themeforest(the above
 			
         <script>  
             $(document).ready(function(){
+    			App.init();
+    			Cl.initModal();
       			$(".form_datetime").datetimepicker({
 	            	startView: 'month',
 	            	minView: 'hour',

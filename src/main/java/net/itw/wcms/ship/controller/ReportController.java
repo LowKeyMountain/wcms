@@ -28,7 +28,9 @@ import net.itw.wcms.ship.service.ITaskService;
 import net.itw.wcms.ship.service.ITaskShipService;
 import net.itw.wcms.ship.service.IUnloaderService;
 import net.itw.wcms.toolkit.DateTimeUtils;
+import net.itw.wcms.x27.entity.User;
 import net.itw.wcms.x27.exception.X27Exception;
+import net.itw.wcms.x27.utils.SessionUtil;
 
 @RestController
 @RequestMapping(value = "/report")
@@ -68,6 +70,8 @@ public class ReportController {
 		modelMap.put("IncPath", req.getContextPath());
 		modelMap.put("BasePath", req.getContextPath());
 		modelMap.put("jsVersion", System.currentTimeMillis());
+		User operator = SessionUtil.getSessionUser(req);
+		modelMap.put("user", operator!=null?operator.getRealName():"");
 	}
 
 	/**
