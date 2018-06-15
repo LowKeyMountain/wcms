@@ -189,9 +189,13 @@ License: You must have a valid license purchased only from themeforest(the above
 											<td>${cabin.clearance}</td>
 										</tr>
 									</table>
-
-									<table
-										class="table table-striped table-bordered table-hover editable">
+									<div id="toolbar" align="left" class="btn-group">
+									    <!-- <button type="button" class="btn btn-default">
+									        <i class="glyphicon glyphicon-plus"></i>
+									    </button>-->
+										<button type="button" id="download" style="margin-left:5px" class="btn btn-primary" onClick ="$('#cabin-detail').tableExport({ type: 'excel', escape: 'false' })">数据导出</button> 
+									</div>
+									<table id="cabin-detail" class="table table-striped table-bordered table-hover editable" >
 										<thead>
 											<tr>
 												<th>卸船机</th>
@@ -267,7 +271,12 @@ License: You must have a valid license purchased only from themeforest(the above
 <script src="${IncPath}/assets/layouts/layout/scripts/layout.min.js" type="text/javascript"></script>
 <script src="${IncPath}/assets/layouts/layout/scripts/demo.min.js" type="text/javascript"></script>
 <script src="${IncPath}/assets/layouts/global/scripts/quick-sidebar.min.js" type="text/javascript"></script>
-		
+<script src="${IncPath}/assets/extensions/export/tableExport.js"></script>
+<!-- <script src="${IncPath}/assets/extensions/export/table-export.js"></script>
+<script src="${IncPath}/assets/extensions/export/main.js"></script>-->
+<script src="${IncPath}/assets/extensions/export/jquery.base64.js"></script>
+<script src="${IncPath}/assets/extensions/export/bootstrap-table-export.js"></script>
+
 	<script type="text/javascript">
 		var IncPath = '${IncPath}';
 		var BasePath = '${BasePath}';
