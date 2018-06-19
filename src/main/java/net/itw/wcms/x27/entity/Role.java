@@ -23,7 +23,6 @@ import net.itw.wcms.toolkit.hibernate.Entityable;
 @Table(name = "X27_ROLES")
 @Entity
 public class Role implements Entityable {
-
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
