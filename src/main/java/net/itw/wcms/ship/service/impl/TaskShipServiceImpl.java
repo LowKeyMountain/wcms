@@ -279,15 +279,16 @@ public class TaskShipServiceImpl implements ITaskShipService {
 	}
 
 	/**
-	 * 修改船舱状态
-	 * 
+	 * 修改船舱状态（用于APP端因误操作或忘记操作时的船舱状态维护）
 	 * @param taskId
-	 * @param cabinNo
 	 * @param userName
+	 * @param cabinNo
+	 * @param status
+	 * @param clearTime
 	 * @return
 	 */
 	@Override
-	public MessageOption remendyCabinStatus(String taskId, String userName, String cabinNo, String status) {
+	public MessageOption remendyCabinStatus(String taskId, String userName, String cabinNo, String status, String clearTime) {
 		// 需求：作业船舶设置船舱状态（0|卸货;1|清舱;）
 		// 前置条件：
 		// 1. 检查该船舱货物是否快卸完；
@@ -319,7 +320,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 						if (cabin.getCabinNo() == Integer.parseInt(cabinNo)) {
 							cabin.setStatus(statusCode);
 							if (statusCode == 1) { // 设置清舱时间
-								cabin.setClearTime(new Date());
+								cabin.setClearTime(DateTimeUtils.strDateTime2Date(clearTime));
 							} else if  (statusCode == 0){
 								cabin.setClearTime(null);
 							}

@@ -317,7 +317,7 @@ var Role = function(){
 					 var code = result.code;
 					 if(Cl.successInt == code){
 						Cl.hideModalWindow(Cl.modalName);
-						Cl.updateDataRow(DataTableCl.tableName,result.id,1,BasePath + '/role/getRoleDataRow.do');
+						Cl.updateDataRow(DataTableCl.tableName,result.id,0,BasePath + '/role/getRoleDataRow.do');
 						 alert("修改成功");
 					 } else {
 						 alert("修改失败");
@@ -350,7 +350,7 @@ var Role = function(){
 				if(!result) return ;		
 				 var code = result.code;
 				 if(Cl.successInt == code){
-					Cl.deleteDataRow(DataTableCl.tableName,data.id,1);
+					Cl.deleteDataRow(DataTableCl.tableName,data.id,0);
 					alert("删除成功");
 				} else {
 					alert("被用户使用的角色不允许删除");

@@ -193,7 +193,7 @@ License: You must have a valid license purchased only from themeforest(the above
 									                    <div class="form-group" style="margin-top:5px;margin-bottom:5px">
 									                        <label class="control-label col-md-1" for="cmsid">卸船机编号: </label>
 									                        <div class="col-md-3">
-																<select id="cmsid" name="cmsid" class="form-control select2me">
+																<select id="cmsid" class="form-control select2me">
 																	<option value="">请选择...</option>
 												   					<option value="1" >ABB_GSU_1</option>
 												   					<option value="2" >ABB_GSU_2</option>
@@ -214,17 +214,17 @@ License: You must have a valid license purchased only from themeforest(the above
 									                        </div>
 															<label class="control-label col-md-1">位置：</label>		
 													        <div class="col-md-3 input-group">
-													            <input type="text" class="form-control" name="startPosition" placeholder="请输入起始位置" id="startPosition" />
+													            <input type="text" class="form-control" placeholder="请输入起始位置" id="startPosition" />
 													            <span class="input-group-addon">--</span>
-																<input type="text" class="form-control" name="endPosition" placeholder="请输入结束位置" id="endPosition" />
+																<input type="text" class="form-control" placeholder="请输入结束位置" id="endPosition" />
 															</div>									                        
 									                    </div>
 													    <div class="form-group"  style="margin-top:10px;margin-bottom:5px">
 															<label class="control-label  col-md-1 cy-pad-hor-s">操作时间：</label>
 													        <div class="col-md-4 input-daterange input-group">
-													            <input class="form_datetime form-control" name="start" placeholder="请选择开始日期" id="startDate" readonly/>
+													            <input class="form_datetime form-control" placeholder="请选择开始日期" id="startDate" readonly/>
 													            <span class="input-group-addon">--</span>
-																<input class="form_datetime form-control" name="end" placeholder="请选择结束日期" id="endDate" readonly/>
+																<input class="form_datetime form-control" placeholder="请选择结束日期" id="endDate" readonly/>
 															</div>
 														</div>
 									                    <div class="form-group" style="margin-top:5px;margin-left:500px;margin-bottom:5px">
@@ -239,10 +239,10 @@ License: You must have a valid license purchased only from themeforest(the above
 									                        </div>-->
 									                    </div>
 												        <div id="toolbar" class="btn-group">
-												            <button id="btn_add" type="button" class="btn btn-primary btn-default" data-toggle="modal" data-target="#addModal">
+												            <!-- <button id="btn_add" type="button" class="btn btn-primary btn-default" data-toggle="modal" data-target="#addModal">
 												                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
 												            </button>
-															<!-- <button id="exportBtn" type="button" style="margin-left:5px" class="export-excel btn btn-primary btn-default" 
+															<button id="exportBtn" type="button" style="margin-left:5px" class="export-excel btn btn-primary btn-default" 
 															data-table="unloader">导出Excel</button>
 															<button type="button" id="download" style="margin-left:5px" class="btn btn-primary" onClick ="$('#unloader').tableExport({ type: 'excel', escape: 'false' })">数据导出</button>
  -->														<button type="button" id="btn_export" style="margin-left:5px" class="btn btn-primary">数据导出</button>
