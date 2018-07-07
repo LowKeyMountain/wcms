@@ -8,6 +8,7 @@ var DataTableCl = function() {
             	"sProcessing":   "处理中...",
             	"sLengthMenu":   "显示 _MENU_ 项结果",
             	"sZeroRecords":  "没有匹配结果",
+            	
             	"sInfo":         "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
             	"sInfoEmpty":    "显示第 0 至 0 项结果，共 0 项",
             	"sInfoFiltered": "(由 _MAX_ 项结果过滤)",
@@ -296,7 +297,7 @@ var User = function(){
 					 var code = result.code;
 					 if(Cl.successInt == code){
 						Cl.hideModalWindow(Cl.modalName);
-						Cl.updateDataRow(DataTableCl.tableName,result.id,1,BasePath + '/user/getUserDataRow.do');
+						Cl.updateDataRow(DataTableCl.tableName,result.id,0,BasePath + '/user/getUserDataRow.do');
 						 alert("修改成功");
 					 } else {
 						 alert("修改失败");
@@ -329,7 +330,7 @@ var User = function(){
 				if(!result) return ;		
 				 var code = result.code;
 				 if(Cl.successInt == code){
-					Cl.deleteDataRow(DataTableCl.tableName,data.id,1);
+					Cl.deleteDataRow(DataTableCl.tableName,data.id,0);
 					alert("删除成功");
 				} else {
 					alert("被用户使用的角色不允许删除");
@@ -411,7 +412,7 @@ var User = function(){
 				if(!result) return ;		
 				 var code = result.code;
 				 if(Cl.successInt == code){
-					Cl.updateDataRow(DataTableCl.tableName,data.id,1,BasePath + '/user/getUserDataRow.do');
+					Cl.updateDataRow(DataTableCl.tableName,data.id,0,BasePath + '/user/getUserDataRow.do');
 					alert("锁定成功");
 				} else {
 					alert("锁定失败");
@@ -434,7 +435,7 @@ var User = function(){
 				if(!result) return ;		
 				 var code = result.code;
 				 if(Cl.successInt == code){
-					Cl.updateDataRow(DataTableCl.tableName,data.id,1,BasePath + '/user/getUserDataRow.do');
+					Cl.updateDataRow(DataTableCl.tableName,data.id,0,BasePath + '/user/getUserDataRow.do');
 					alert("解锁成功");
 				} else {
 					alert("解锁失败");

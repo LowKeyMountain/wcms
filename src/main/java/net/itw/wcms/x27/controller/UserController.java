@@ -88,7 +88,7 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping(value = "/add")
-	public MessageOption add(@ModelAttribute("user") User user) {
+	public MessageOption add(@ModelAttribute("user2") User user) {
 		User operator = SessionUtil.getSessionUser(req);
 		user.setLastLoginIp(WebUtil.getRemoteHost(req));
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "数据保存成功！");
@@ -131,7 +131,7 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping(value = "/update")
-	public Map<String, Object> update(@ModelAttribute("user") User user) {
+	public Map<String, Object> update(@ModelAttribute("user2") User user) {
 		// 从session取出User对象
 		User operator = SessionUtil.getSessionUser(req);
 		user.setLastLoginIp(WebUtil.getRemoteHost(req));

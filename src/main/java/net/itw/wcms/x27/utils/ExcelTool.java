@@ -44,7 +44,7 @@ public class ExcelTool {
     }
     
     public static HSSFRow createRow(HSSFSheet sheet, int rowNum) {
-        return sheet.createRow((short)rowNum);
+        return sheet.createRow(rowNum);
     }
     
     public static HSSFCell createCellValueStr(HSSFRow row, int cellNum, String valueStr) {
