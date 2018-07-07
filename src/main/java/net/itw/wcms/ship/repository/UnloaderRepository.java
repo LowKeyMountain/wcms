@@ -35,11 +35,11 @@ public interface UnloaderRepository extends JpaRepository<UnloaderAll, Integer>,
 				Predicate predicate = null;
 				List<Predicate> predicates = new ArrayList<Predicate>();
 				String cmsId = params.get("cmsId");
-				String startPosition = (params.get("startPosition") == null ? "0" : params.get("startPosition"));
-				String endPosition = (params.get("endPosition") == null ? "0" : params.get("endPosition"));
-				String startDate = (params.get("startDate") == null ? "" : params.get("startDate"));
-				String endDate = (params.get("endDate") == null ? "" : params.get("endDate"));
-				String operationType = (params.get("operationType") == null ? "" : params.get("operationType"));
+				String startPosition = params.get("startPosition") == null ? "0" : params.get("startPosition");
+				String endPosition = params.get("endPosition") == null ? "0" : params.get("endPosition");
+				String startDate = params.get("startDate") == null ? "" : params.get("startDate");
+				String endDate = params.get("endDate") == null ? "" : params.get("endDate");
+				String operationType = params.get("operationType") == null ? "" : params.get("operationType");
 
 				if(StringUtils.isNotEmpty(startPosition)) {
 					predicates.add(cb.ge(root.get("unloaderMove"),Float.parseFloat(startPosition)));
@@ -96,11 +96,11 @@ public interface UnloaderRepository extends JpaRepository<UnloaderAll, Integer>,
 				Predicate predicate = null;
 				List<Predicate> predicates = new ArrayList<Predicate>();
 				String cmsId = params.get("cmsId");
-				String startPosition = (params.get("startPosition") == null ? "0" : params.get("startPosition"));
-				String endPosition = (params.get("endPosition") == null ? "0" : params.get("endPosition"));
-				String startDate = (params.get("startDate") == null ? "" : params.get("startDate"));
-				String endDate = (params.get("endDate") == null ? "" : params.get("endDate"));
-				String operationType = (params.get("operationType") == null ? "" : params.get("operationType"));
+				String startPosition = params.get("startPosition") == null ? "0" : params.get("startPosition");
+				String endPosition = params.get("endPosition") == null ? "0" : params.get("endPosition");
+				String startDate = params.get("startDate") == null ? "" : params.get("startDate");
+				String endDate = params.get("endDate") == null ? "" : params.get("endDate");
+				String operationType = params.get("operationType") == null ? "" : params.get("operationType");
 				
 				if(StringUtils.isNotEmpty(startPosition)) {
 					predicates.add(cb.ge(root.get("unloaderMove"),Float.parseFloat(startPosition)));
@@ -133,6 +133,8 @@ public interface UnloaderRepository extends JpaRepository<UnloaderAll, Integer>,
 				}
 				else {
 				}
+				predicates.add(cb.greaterThanOrEqualTo(root.get("pushTime"),
+						DateTimeUtils.strDateTime2Date(DateTimeUtils.getDateBefore(7))));
 				predicate = cb.and(predicates.toArray(new Predicate[predicates.size()]));				
 		        query.where(predicate);  
 		        //添加排序的功能  

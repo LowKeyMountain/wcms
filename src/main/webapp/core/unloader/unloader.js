@@ -207,8 +207,11 @@ $(function(){
             }
             return tmps.join('&');
         };
-        $('#btn_export').off().on("click", function () {        
-        	var data={
+        $('#btn_export').off().on("click", function () {
+			if(!confirm("卸船机数据量大，支持导出最近7天的数据。")){
+				return;
+			}
+        	var data_param={
 	    			startDate : $("#startDate").val(),
 	    			endDate : $("#endDate").val(),
 	    			startPosition : $("#startPosition").val(),
@@ -216,7 +219,7 @@ $(function(){
 	    			cmsId : $("#cmsid").val(),
 	    			operationType : $("#operationType").val()
 	    	};
-	        var url = BasePath + "/unloader/exportExcel?" + encodeParam(data);
+	        var url = BasePath + "/unloader/exportExcel?" + encodeParam(data_param);
 	        var exportForm = document.getElementById("formSearch");
 	        if (exportForm){
 /*	            exportForm = document.createElement("form");
