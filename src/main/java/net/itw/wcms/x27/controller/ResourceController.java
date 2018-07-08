@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import net.itw.wcms.common.log.annotation.OperateLog;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.Resource;
 import net.itw.wcms.x27.entity.User;
@@ -78,6 +79,13 @@ public class ResourceController {
 	 * @param resource
 	 * @return
 	 */
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_PZZX
+            ,bussTypeDesc="配置中心"
+            ,moudleName = "权限管理"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "新增权限"
+    )
 	@RequestMapping(value = "/add")
 	public MessageOption add(@ModelAttribute("resource") Resource resource) {
 		User operator = SessionUtil.getSessionUser(req);
@@ -118,6 +126,13 @@ public class ResourceController {
 	 * @param resource
 	 * @return
 	 */
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_PZZX
+            ,bussTypeDesc="配置中心"
+            ,moudleName = "权限管理"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "修改权限"
+    )
 	@RequestMapping(value = "/update")
 	public MessageOption update(@ModelAttribute("resource") Resource resource) {
 		// 从session取出User对象
@@ -137,7 +152,14 @@ public class ResourceController {
 	public String getUserDataRow(@RequestParam("id") Integer id) throws Exception {
 		return resourceService.getResourceDataRow(id);
 	}
-
+	
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_PZZX
+            ,bussTypeDesc="配置中心"
+            ,moudleName = "权限管理"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "删除权限"
+    )
 	@RequestMapping("/delete")
 	public MessageOption delete(@RequestParam("id") Integer id) {
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "删除成功");

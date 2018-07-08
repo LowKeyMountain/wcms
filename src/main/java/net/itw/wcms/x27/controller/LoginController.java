@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import net.itw.wcms.common.log.annotation.OperateLog;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
 import net.itw.wcms.x27.service.IUserService;
@@ -82,6 +83,13 @@ public class LoginController {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_PZZX
+            ,bussTypeDesc="配置中心"
+            ,moudleName = "用户管理"
+            ,operateType = ConstantUtil.LogOperateType_Query
+            ,operateTypeDesc = "用户登录"
+    )
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public Map<?, ?> login(@RequestParam("username") String userName, @RequestParam("password") String password)
 			throws ServletException, IOException {
@@ -135,6 +143,13 @@ public class LoginController {
 		return new ModelAndView("./modifypasswordform");
 	}
 	
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_PZZX
+            ,bussTypeDesc="配置中心"
+            ,moudleName = "用户管理"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "密码修改"
+    )
 	@ResponseBody
 	@RequestMapping("/modifypassword")
 	public MessageOption modifypassword(String oldpassword,String password,HttpServletRequest request) throws Exception

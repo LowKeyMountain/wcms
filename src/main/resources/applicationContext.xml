@@ -82,5 +82,7 @@
 	<!-- 5.配置 SpringData -->
 	<jpa:repositories base-package="net.itw.wcms"
 		entity-manager-factory-ref="entityManagerFactory"></jpa:repositories>
-
+		
+    <!-- 开启AOP拦截 -->
+    <aop:aspectj-autoproxy proxy-target-class="true" /> 
 </beans>

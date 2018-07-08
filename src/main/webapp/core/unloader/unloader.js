@@ -208,27 +208,62 @@ $(function(){
             return tmps.join('&');
         };
         $('#btn_export').off().on("click", function () {
-			if(!confirm("卸船机数据量大，支持导出最近7天的数据。")){
+        	if ($("#startDate").val() == ""){
+        		alert('请选择开始日期！');
+        		return;
+        	}
+        	if ($("#endDate").val() == ""){
+        		alert('请选择结束日期！');
+        		return;
+        	}
+
+        	var data={
+        			startDate:$("#startDate").val(),
+        			endDate:$("#endDate").val()
+        	}
+            $.ajax({
+                url: BasePath + "/unloader/getDifferenceDays",
+                type: "post",
+                dataType: "json",
+                cache: false,
+                async:false,
+                data: data,
+                success: function (data) {
+                	if (data.code == 1){
+                		if(!confirm(data.msg)){
+                			return;
+                		}
+                    	var data_param={
+            	    			startDate : $("#startDate").val(),
+            	    			endDate : $("#endDate").val(),
+            	    			startPosition : $("#startPosition").val(),
+            	    			endPosition : $("#endPosition").val(),
+            	    			cmsId : $("#cmsid").val(),
+            	    			operationType : $("#operationType").val()
+            	    	};
+            	        var url = BasePath + "/unloader/exportExcel?" + encodeParam(data_param);
+            	        var exportForm = document.getElementById("formSearch");
+            	        if (exportForm){
+            /*	            exportForm = document.createElement("form");
+            	            exportForm.setAttribute('id',"_exportForm");*/
+            	            exportForm.setAttribute("action", url);
+            	            exportForm.setAttribute("method", "post");
+            	        }
+//            	        document.body.appendChild(exportForm);
+            	        exportForm.submit();
+                	} else {
+                		alert(data.msg);                		
+                	}
+                },
+                failure: function(data){
+                    alert("导出数据异常!");
+                }                
+            });
+        	
+/*			if(!confirm("卸船机数据量大，仅支持导出7天范围内的数据。")){
 				return;
 			}
-        	var data_param={
-	    			startDate : $("#startDate").val(),
-	    			endDate : $("#endDate").val(),
-	    			startPosition : $("#startPosition").val(),
-	    			endPosition : $("#endPosition").val(),
-	    			cmsId : $("#cmsid").val(),
-	    			operationType : $("#operationType").val()
-	    	};
-	        var url = BasePath + "/unloader/exportExcel?" + encodeParam(data_param);
-	        var exportForm = document.getElementById("formSearch");
-	        if (exportForm){
-/*	            exportForm = document.createElement("form");
-	            exportForm.setAttribute('id',"_exportForm");*/
-	            exportForm.setAttribute("action", url);
-	            exportForm.setAttribute("method", "post");
-	        }
-//	        document.body.appendChild(exportForm);
-	        exportForm.submit();
+*/
         });
 });
 

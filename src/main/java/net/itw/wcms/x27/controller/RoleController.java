@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import net.itw.wcms.common.log.annotation.OperateLog;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.Role;
 import net.itw.wcms.x27.entity.User;
@@ -90,6 +91,13 @@ public class RoleController {
 	 * @param role
 	 * @return
 	 */
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_PZZX
+            ,bussTypeDesc="配置中心"
+            ,moudleName = "角色管理"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "新增角色"
+    )
 	@RequestMapping(value = "/add")
 	public MessageOption add(@ModelAttribute("role") Role role) {
 		User operator = SessionUtil.getSessionUser(req);
@@ -129,6 +137,13 @@ public class RoleController {
 	 * @param role
 	 * @return
 	 */
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_PZZX
+            ,bussTypeDesc="配置中心"
+            ,moudleName = "角色管理"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "修改角色"
+    )
 	@RequestMapping(value = "/update")
 	public Map<String, Object> update(@ModelAttribute("role") Role role) {
 		// 从session取出User对象
@@ -152,7 +167,14 @@ public class RoleController {
 	public String getRoleDataRow(@RequestParam("id") Integer id) throws Exception {
 		return roleService.getRoleDataRow(id);
 	}
-
+	
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_PZZX
+            ,bussTypeDesc="配置中心"
+            ,moudleName = "角色管理"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "删除角色"
+    )
 	@RequestMapping("/delete")
 	public MessageOption delete(@RequestParam("id") Integer id) {
 		// 从session取出User对象
@@ -221,7 +243,14 @@ public class RoleController {
 		map.put("roleName", role != null?role.getRoleName():"");
 		return new ModelAndView(PagePath + "/assignform");
 	}
-
+	
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_PZZX
+            ,bussTypeDesc="配置中心"
+            ,moudleName = "角色管理"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "角色权限分配"
+    )
 	@RequestMapping("/assign")
 	public MessageOption assign(Integer id, String selectedStr) {
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");

@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
 
+import net.itw.wcms.common.log.annotation.OperateLog;
 import net.itw.wcms.interfaceApi.http.InfoQueryHelper;
 import net.itw.wcms.interfaceApi.http.QueryOptions;
 import net.itw.wcms.ship.entity.Task;
@@ -170,6 +171,13 @@ public class TaskController {
 	 * @param task
 	 * @return
 	 */
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_GLZX
+            ,bussTypeDesc="管理中心"
+            ,moudleName = "工作管理"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "新增船舶信息"
+    )
 	@RequestMapping(value = "/add")
 	public Map<String, Object> add(@ModelAttribute("task") Task task) {
 		User operator = SessionUtil.getSessionUser(req);
@@ -194,6 +202,13 @@ public class TaskController {
 	 * @param cargo
 	 * @return
 	 */
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_GLZX
+            ,bussTypeDesc="管理中心"
+            ,moudleName = "工作管理"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "修改船舶信息"
+    )
 	@RequestMapping(value = "/update")
 	public Map<String, Object> update(@ModelAttribute("task") Task task) {
 		User operator = SessionUtil.getSessionUser(req);
@@ -218,6 +233,13 @@ public class TaskController {
 	 * @param id
 	 * @return
 	 */
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_GLZX
+            ,bussTypeDesc="管理中心"
+            ,moudleName = "工作管理"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "删除船舶信息"
+    )
 	@RequestMapping("/delete")
 	public MessageOption delete(@RequestParam("id") Integer id) {
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
@@ -300,6 +322,13 @@ public class TaskController {
 	 * @param status
 	 * @return
 	 */
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_GLZX
+            ,bussTypeDesc="管理中心"
+            ,moudleName = "工作管理"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "设置船舶状态"
+    )
 	@RequestMapping(value = "/doSetShipStatus")
 	public Map<String, Object> doSetShipStatus(@RequestParam("taskId") String taskId,
 			@RequestParam("status") String status, @RequestParam("time") String time) {
@@ -325,6 +354,13 @@ public class TaskController {
 	 * @param params
 	 * @return
 	 */
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_GLZX
+            ,bussTypeDesc="管理中心"
+            ,moudleName = "作业船舶维护"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "设置船舶状态"
+    )
 	@RequestMapping(value = "/doModifyShipStatus")
 	public Map<String, Object> doModifyShipStatus(@RequestParam Map<String, String> params) {
 		User operator = SessionUtil.getSessionUser(req);
