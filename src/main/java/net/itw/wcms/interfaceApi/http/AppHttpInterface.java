@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import net.itw.wcms.common.log.annotation.OperateLog;
 import net.itw.wcms.ship.service.ITaskShipService;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
 import net.itw.wcms.x27.exception.X27Exception;
 import net.itw.wcms.x27.service.IResourceService;
 import net.itw.wcms.x27.service.IUserService;
+import net.itw.wcms.x27.utils.ConstantUtil;
 
 /**
  * Description: 移动端HTTP接口
@@ -48,6 +50,13 @@ public class AppHttpInterface {
 	 * @param json
 	 * @return
 	 */
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_JKZX
+            ,bussTypeDesc="接口管理"
+            ,moudleName = "用户接口"
+            ,operateType = ConstantUtil.LogOperateType_Query
+            ,operateTypeDesc = "用户登录"
+    )
 	@RequestMapping(value = "/user/doLogin")
 	public Map<?, ?> doLogin(@RequestParam("json") String json) {
 
@@ -437,6 +446,13 @@ public class AppHttpInterface {
 	 * @param json
 	 * @return
 	 */
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_JKZX
+            ,bussTypeDesc="接口管理"
+            ,moudleName = "船舶接口"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "设置舱位"
+    )
 	@RequestMapping(value = "/ship/doSetCabinPosition")
 	public Map<String, Object> doSetCabinPosition(@RequestParam("json") String json) {
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -488,6 +504,13 @@ public class AppHttpInterface {
 	 * @param json
 	 * @return
 	 */
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_JKZX
+            ,bussTypeDesc="接口管理"
+            ,moudleName = "船舶接口"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "设置清舱状态"
+    )
 	@RequestMapping(value = "/ship/doSetCabinStatus")
 	public Map<String, Object> doSetCabinStatus(@RequestParam("json") String json) {
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -532,6 +555,13 @@ public class AppHttpInterface {
 	 * @param json
 	 * @return
 	 */
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_JKZX
+            ,bussTypeDesc="接口管理"
+            ,moudleName = "船舶接口"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "设置船舶状态"
+    )
 	@RequestMapping(value = "/ship/doSetShipStatus")
 	public Map<String, Object> doSetShipStatus(@RequestParam("json") String json) {
 		Map<String, Object> result = new HashMap<String, Object>();

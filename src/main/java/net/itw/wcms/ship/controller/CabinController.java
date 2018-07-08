@@ -23,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import net.itw.wcms.common.log.annotation.OperateLog;
 import net.itw.wcms.interfaceApi.http.InfoQueryHelper;
 import net.itw.wcms.interfaceApi.http.QueryOptions;
 import net.itw.wcms.ship.entity.Cabin;
@@ -163,6 +164,13 @@ public class CabinController {
 	 * @param cabin
 	 * @return
 	 */
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_GLZX
+            ,bussTypeDesc="管理中心"
+            ,moudleName = "工作管理"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "新增船舱信息"
+    )
 	@RequestMapping(value = "/add")
 	public Map<String, Object> add(@ModelAttribute("cabin") Cabin cabin) {
 		User operator = SessionUtil.getSessionUser(req);
@@ -200,6 +208,13 @@ public class CabinController {
 	 * @param cabin
 	 * @return
 	 */
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_GLZX
+            ,bussTypeDesc="管理中心"
+            ,moudleName = "工作管理"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "修改船舱信息"
+    )
 	@RequestMapping(value = "/update")
 	public Map<String, Object> update(@ModelAttribute("cabin") Cabin cabin) {
 		// 从session取出User对象
@@ -218,7 +233,13 @@ public class CabinController {
 		map.put("code", mo.code);
 		return map;
 	}
-	
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_GLZX
+            ,bussTypeDesc="管理中心"
+            ,moudleName = "工作管理"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "删除船舱信息"
+    )
 	@RequestMapping("/delete")
 	public MessageOption delete(@RequestParam("id") Integer id) {
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
@@ -241,6 +262,13 @@ public class CabinController {
 	 * @param taskId
 	 * @return
 	 */
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_GLZX
+            ,bussTypeDesc="管理中心"
+            ,moudleName = "工作管理"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "修改舱位"
+    )
 	@RequestMapping(value = "/modifyCabinPosition")
 	public ModelAndView modifyCabinPosition(Integer taskId) {
 		modelMap.put("taskId", taskId);
@@ -256,6 +284,13 @@ public class CabinController {
 	 * @param taskId
 	 * @return
 	 */
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_JKZX
+            ,bussTypeDesc="接口管理"
+            ,moudleName = "船舶接口"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "设置舱位"
+    )
 	@RequestMapping(value = "/doSetCabinPosition")
 	public Map<String, Object> doSetCabinPosition(@RequestParam("json") String json) {
 		// 从session取出User对象
@@ -349,6 +384,13 @@ public class CabinController {
 	 * @param status
 	 * @return
 	 */
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_GLZX
+            ,bussTypeDesc="管理中心"
+            ,moudleName = "工作管理"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "设置船舱状态"
+    )
 	@RequestMapping(value = "/updateCabinStatus")
 	public Map<String, Object> updateCabinStatus(@RequestParam("taskId") String taskId,
 			@RequestParam("cabinNo") String cabinNo, @RequestParam("status") String status, @RequestParam("clearTime") String clearTime) {
@@ -376,6 +418,13 @@ public class CabinController {
 	 * @param status
 	 * @return
 	 */
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_GLZX
+            ,bussTypeDesc="管理中心"
+            ,moudleName = "作业船舶维护"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "设置船舱状态"
+    )
 	@RequestMapping(value = "/remendyCabinStatus")
 	public Map<String, Object> remendyCabinStatus(@RequestParam("taskId") String taskId,
 			@RequestParam("cabinNo") String cabinNo, @RequestParam("status") String status, @RequestParam("clearTime") String clearTime) {

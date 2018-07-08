@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import net.itw.wcms.common.log.annotation.OperateLog;
 import net.itw.wcms.ship.entity.Cargo;
 import net.itw.wcms.ship.entity.Task;
 import net.itw.wcms.ship.service.ICargoService;
@@ -114,6 +115,13 @@ public class CargoController {
 	 * @param task
 	 * @return
 	 */
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_GLZX
+            ,bussTypeDesc="管理中心"
+            ,moudleName = "工作管理"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "新增货物信息"
+    )
 	@RequestMapping(value = "/add")
 	public Map<String, Object> add(@ModelAttribute("cargo") Cargo cargo, @RequestParam("taskId") Integer taskId) {
 		User operator = SessionUtil.getSessionUser(req);
@@ -155,6 +163,13 @@ public class CargoController {
 	 * @param cargo
 	 * @return
 	 */
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_GLZX
+            ,bussTypeDesc="管理中心"
+            ,moudleName = "工作管理"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "修改货物信息"
+    )
 	@RequestMapping(value = "/update")
 	public Map<String, Object> update(@ModelAttribute("cargo") Cargo cargo, @RequestParam("taskId") Integer taskId) {
 		// 从session取出User对象
@@ -179,6 +194,13 @@ public class CargoController {
 		return map;
 	}
 	
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_GLZX
+            ,bussTypeDesc="管理中心"
+            ,moudleName = "工作管理"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "删除货物信息"
+    )
 	@RequestMapping("/delete")
 	public MessageOption delete(@RequestParam("id") Integer id) {
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");

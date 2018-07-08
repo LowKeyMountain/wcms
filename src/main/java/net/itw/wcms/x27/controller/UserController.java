@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.ui.ModelMap;
@@ -17,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import net.itw.wcms.common.log.annotation.OperateLog;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
-import net.itw.wcms.x27.service.IResourceService;
 import net.itw.wcms.x27.service.IRoleService;
 import net.itw.wcms.x27.service.IUserService;
 import net.itw.wcms.x27.utils.ConstantUtil;
@@ -87,6 +88,13 @@ public class UserController {
 	 * @param user
 	 * @return
 	 */
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_PZZX
+            ,bussTypeDesc="配置中心"
+            ,moudleName = "用户管理"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "新增用户信息"
+    )
 	@RequestMapping(value = "/add")
 	public MessageOption add(@ModelAttribute("user2") User user) {
 		User operator = SessionUtil.getSessionUser(req);
@@ -130,6 +138,13 @@ public class UserController {
 	 * @param user
 	 * @return
 	 */
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_PZZX
+            ,bussTypeDesc="配置中心"
+            ,moudleName = "用户管理"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "修改用户信息"
+    )
 	@RequestMapping(value = "/update")
 	public Map<String, Object> update(@ModelAttribute("user2") User user) {
 		// 从session取出User对象
@@ -154,7 +169,14 @@ public class UserController {
 	public String getUserDataRow(@RequestParam("id") Integer id) throws Exception {
 		return userService.getUserDataRow(id);
 	}
-
+	
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_PZZX
+            ,bussTypeDesc="配置中心"
+            ,moudleName = "用户管理"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "删除用户信息"
+    )
 	@RequestMapping("/delete")
 	public MessageOption delete(@RequestParam("id") Integer id) {
 		// 从session取出User对象
@@ -172,7 +194,14 @@ public class UserController {
 		}
 		return mo;
 	}
-
+	
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_PZZX
+            ,bussTypeDesc="配置中心"
+            ,moudleName = "用户管理"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "重置用户密码"
+    )
 	@RequestMapping("/resetpass")
 	public MessageOption resetpass(@RequestParam("id") Integer id) {
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
@@ -192,7 +221,14 @@ public class UserController {
 		}
 		return mo;
 	}
-
+	
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_PZZX
+            ,bussTypeDesc="配置中心"
+            ,moudleName = "用户管理"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "用户账户锁定"
+    )
 	@RequestMapping("/lock")
 	public MessageOption lock(@RequestParam("id") Integer id) {
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
@@ -213,7 +249,14 @@ public class UserController {
 
 		return mo;
 	}
-
+	
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_PZZX
+            ,bussTypeDesc="配置中心"
+            ,moudleName = "用户管理"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "用户账户解锁"
+    )
 	@RequestMapping("/unlock")
 	public MessageOption unlock(@RequestParam("id") Integer id) {
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
@@ -241,13 +284,26 @@ public class UserController {
 		map.put("id", id);
 		return new ModelAndView("./x27/user/assignform");
 	}
-
+	
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_PZZX
+            ,bussTypeDesc="配置中心"
+            ,moudleName = "用户管理"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "用户角色分配"
+    )
 	@RequestMapping("/assign")
 	public MessageOption assign(Integer id, String selectedStr) {
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
 		if (id == null || StringUtil.isStrEmpty(id.toString())) { // || StringUtil.isStrEmpty(selectedStr)
 			mo.code = ConstantUtil.FailInt;
-			mo.msg = "操作失败：用户信息未找到！";
+			mo.msg = "分配权限失败：用户信息未找到！";
+			return mo;
+		}
+		// 用户关联角色个数校验，一个用户只能关联一个角色
+		if (StringUtils.isNotEmpty(selectedStr) && selectedStr.split(",").length >= 2) {
+			mo.code = ConstantUtil.FailInt;
+			mo.msg = "分配权限失败：用户只能关联一个角色!";
 			return mo;
 		}
 		userService.assignResource(id, selectedStr);

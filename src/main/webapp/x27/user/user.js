@@ -370,7 +370,8 @@ var User = function(){
 					Cl.hideModalWindow(Cl.modalName);
 					alert("分配权限成功!");			
 				} else {
-					alert("分配权限失败!");
+//					alert("分配权限失败!");
+					alert(result.msg);
 					return ;			
 				}
 			});
