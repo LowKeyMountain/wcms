@@ -37,6 +37,7 @@ import net.itw.wcms.ship.service.IUnloaderService;
 import net.itw.wcms.toolkit.DateTimeUtils;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
+import net.itw.wcms.x27.exception.X27Exception;
 import net.itw.wcms.x27.utils.CollectionUtil;
 import net.itw.wcms.x27.utils.ConstantUtil;
 import net.itw.wcms.x27.utils.ExcelTool;
@@ -192,7 +193,8 @@ public class UnloaderController {
 	@RequestMapping(value = "/exportExcel", method = RequestMethod.POST)
 	@ResponseBody
 	public void exportExcel(@RequestParam Map<String, String> params, ModelMap modelMap) throws UnsupportedEncodingException {
-
+		String startDate = params.get("startDate") == null ? "" : params.get("startDate");
+		String endDate = params.get("endDate") == null ? "" : params.get("endDate");
 		List unloaderList = unloaderService.findListByParams(params);
 
 		// 设置Excel的格式
@@ -267,4 +269,28 @@ public class UnloaderController {
 			}
 		}
 	}
+	
+	/**
+	 * 通过时间秒毫秒数判断两个时间的间隔
+	 * 
+	 * @param date1
+	 * @param date2
+	 * @return
+	 */
+	@RequestMapping(value = "/getDifferenceDays")
+	public Map<String, Object>  differentDaysByMillisecond(@RequestParam Map<String, String> params) {
+		String startDate= params.get("startDate");
+		String endDate= params.get("endDate");
+//		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "卸船机数据量大，仅支持导出7天范围内的数据！");
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "请确认是否导出！");
+		int days = (int) ((DateTimeUtils.strDateTime2Date(endDate).getTime() - (DateTimeUtils.strDateTime2Date(startDate).getTime())) / (1000 * 3600 * 24));
+		if (days > 5) {
+			mo.msg = "日期范围不能大于5天，请重新选择日期！";
+			mo.code = ConstantUtil.FailInt;
+		}
+		Map<String, Object> map = new HashMap<>();
+		map.put("msg", mo.msg);
+		map.put("code", mo.code);
+		return map;
+	}	
 }

@@ -133,8 +133,10 @@ public interface UnloaderRepository extends JpaRepository<UnloaderAll, Integer>,
 				}
 				else {
 				}
-				predicates.add(cb.greaterThanOrEqualTo(root.get("pushTime"),
-						DateTimeUtils.strDateTime2Date(DateTimeUtils.getDateBefore(7))));
+/*				predicates.add(cb.greaterThanOrEqualTo(root.get("pushTime"),
+						DateTimeUtils.strDateTime2Date(DateTimeUtils.getDateBefore(7))));*/
+				
+				
 				predicate = cb.and(predicates.toArray(new Predicate[predicates.size()]));				
 		        query.where(predicate);  
 		        //添加排序的功能  
