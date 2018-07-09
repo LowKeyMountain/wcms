@@ -80,7 +80,6 @@ License: You must have a valid license purchased only from themeforest(the above
 			                <h4 class="modal-title">
 			                    <i class="icon-pencil"></i>
 			                    <a class="close" data-dismiss="modal">×</a>
-			                    
 			                    <span id="lblAddTitle" style="font-weight:bold">卸船机数据推送模拟</span>
 			                </h4>
 			            </div>
