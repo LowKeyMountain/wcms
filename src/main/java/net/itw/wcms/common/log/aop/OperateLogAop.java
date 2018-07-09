@@ -79,6 +79,7 @@ public class OperateLogAop {
 	@AfterReturning(pointcut = "log() && args(..)", returning = "result")
 	public void doAfterReturning(JoinPoint joinPoint, Object result) throws Exception {
 		info(joinPoint, result);
+		saveLogDetails(joinPoint, result);
 		MethodSignature ms = (MethodSignature) joinPoint.getSignature();
 		Method method = ms.getMethod();
 		logger.info("标记为" + tag.get() + "的方法" + method.getName() + "运行消耗" + (System.currentTimeMillis() - time.get())
@@ -148,6 +149,7 @@ public class OperateLogAop {
 	public void doAfterThrowing(JoinPoint joinPoint, Throwable e) {
 		try {
 			info(joinPoint, null);
+			saveLogDetails(joinPoint, null);
 			Object[] orgs = joinPoint.getArgs();
 			SystemLog valueReturn = null;
 			for (int i = 0; i < orgs.length; i++) {
@@ -195,6 +197,7 @@ public class OperateLogAop {
 	}
 
 	private void info(JoinPoint joinPoint, Object returnResult) throws Exception {
+		
 		logger.info("--------------------------------------------------");
 //		logger.info("King:\t" + joinPoint.getKind());
 		logger.info("Target:\t" + joinPoint.getTarget().toString());
@@ -228,7 +231,54 @@ public class OperateLogAop {
 //		logger.info("StaticPart:\t" + joinPoint.getStaticPart());
 		logger.info("--------------------------------------------------");
 	}
+	
+	/**
+	 * 保存日志详情信息
+	 * @param joinPoint
+	 * @param returnResult
+	 * @throws Exception
+	 */
+	private void saveLogDetails(JoinPoint joinPoint, Object returnResult) throws Exception {
+		StringBuffer sb = new StringBuffer();
+		sb.append("--------------------------------------------------" + "</br>");
+		sb.append("King:\t" + joinPoint.getKind()+ "</br>");
+		sb.append("Target:\t" + joinPoint.getTarget().toString()+ "</br>");
 
+		sb.append("Args:"+ "</br>");
+		Object[] args = joinPoint.getArgs();
+		String classType = joinPoint.getTarget().getClass().getName();
+		Class<?> clazz = Class.forName(classType);
+		String clazzName = clazz.getName();
+		String methodName = joinPoint.getSignature().getName(); // 获取方法名称
+		// 获取参数名称和值
+		Map<String, Object> nameAndArgs = this.getFieldsName(this.getClass(), clazzName, methodName, args);
+		for (Map.Entry<String, Object> entry : nameAndArgs.entrySet()) {
+			String objStr = "";
+			Object obj = entry.getValue();
+			if (obj != null && (obj instanceof Entityable || obj instanceof Serializable)) {
+				objStr = JSONObject.toJSONString(obj);
+			} else {
+				objStr = String.valueOf(entry.getValue());
+			}
+			sb.append("\t==>参数[" + entry.getKey() + "]:\t" + objStr+ "</br>");
+		}
+
+		sb.append("return:"+ "</br>");
+		if (returnResult != null) {
+			sb.append(JSONObject.toJSONString(returnResult)+ "</br>");
+		}
+
+		sb.append("Signature:\t" + joinPoint.getSignature()+ "</br>");
+		sb.append("--------------------------------------------------"+ "</br>");
+		
+		MethodSignature ms = (MethodSignature) joinPoint.getSignature();
+		Method method = ms.getMethod();
+		sb.append("标记为" + tag.get() + "的方法" + method.getName() + "运行消耗" + (System.currentTimeMillis() - time.get())
+				+ "ms");
+		
+		systemLogService.updateLogDetailsByUids(tag.get(), sb.toString());
+	}
+	
 	/**
 	 * 获取远程客户端Ip
 	 * 

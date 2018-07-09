@@ -1,6 +1,5 @@
 package net.itw.wcms.common.log.entity;
 
-
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -38,6 +37,7 @@ public class SystemLog implements Entityable {
 	private String uids;
 	private String errorMessage;
 	private Date operationTime;
+	private String logDetails;
 
 	@GeneratedValue
 	@Id
@@ -165,7 +165,7 @@ public class SystemLog implements Entityable {
 		this.errorMessage = errorMessage;
 	}
 
-	@Column(name = "Operation_Time",columnDefinition="datetime")
+	@Column(name = "Operation_Time", columnDefinition = "datetime")
 	public Date getOperationTime() {
 		return operationTime;
 	}
@@ -173,4 +173,14 @@ public class SystemLog implements Entityable {
 	public void setOperationTime(Date operationTime) {
 		this.operationTime = operationTime;
 	}
+
+	@Column(name = "Log_Details", columnDefinition = "text")
+	public String getLogDetails() {
+		return logDetails;
+	}
+
+	public void setLogDetails(String logDetails) {
+		this.logDetails = logDetails;
+	}
+
 }
