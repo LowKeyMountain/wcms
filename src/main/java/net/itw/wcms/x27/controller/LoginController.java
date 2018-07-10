@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.annotation.JsonCreator.Mode;
+
 import net.itw.wcms.common.log.annotation.OperateLog;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
@@ -73,7 +75,25 @@ public class LoginController {
 	public ModelAndView gotoLoginPage() {
 		return new ModelAndView("./login");
 	}
-
+	
+	/**
+	 * 用户登出
+	 * 
+	 * @return
+	 */
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_PZZX
+            ,bussTypeDesc="配置中心"
+            ,moudleName = "用户管理"
+            ,operateType = ConstantUtil.LogOperateType_Query
+            ,operateTypeDesc = "用户登出"
+    )
+	@RequestMapping(value = "/logOutPage")
+	public ModelAndView logOutPage(){
+		session.removeAttribute(SessionUtil.SessionSystemLoginUserName);
+		return new ModelAndView("./login");
+	}
+	
 	/**
 	 * 登录验证
 	 * 

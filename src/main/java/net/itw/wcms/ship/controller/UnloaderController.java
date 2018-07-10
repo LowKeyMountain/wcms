@@ -31,6 +31,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
 
+import net.itw.wcms.common.log.annotation.OperateLog;
 import net.itw.wcms.ship.entity.Unloader;
 import net.itw.wcms.ship.entity.UnloaderAll;
 import net.itw.wcms.ship.service.IUnloaderService;
@@ -105,7 +106,14 @@ public class UnloaderController {
 		Pageable pageable = PageUtils.buildPageRequest(pageNum, pageSize, sortType, direction);
 		return unloaderService.getUnloaderList(pageable, params);
 	}
-
+	
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_GLZX
+            ,bussTypeDesc="管理中心"
+            ,moudleName = "卸船机实时数据"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "新增卸船机数据"
+    )
 	@RequestMapping(value = "/addUnloader", produces = "text/json;charset=UTF-8")
 	public void addUnloader(@RequestParam Map<String, String> params) throws IOException {
 		UnloaderAll unloader = new UnloaderAll();		
@@ -190,6 +198,13 @@ public class UnloaderController {
 	 * @param unloader
 	 * @return
 	 */
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_GLZX
+            ,bussTypeDesc="管理中心"
+            ,moudleName = "卸船机实时数据"
+            ,operateType = ConstantUtil.LogOperateType_Execu
+            ,operateTypeDesc = "导出卸船机数据"
+    )
 	@RequestMapping(value = "/exportExcel", method = RequestMethod.POST)
 	@ResponseBody
 	public void exportExcel(@RequestParam Map<String, String> params, ModelMap modelMap) throws UnsupportedEncodingException {

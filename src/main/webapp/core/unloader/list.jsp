@@ -238,9 +238,10 @@ License: You must have a valid license purchased only from themeforest(the above
 									                        </div>-->
 									                    </div>
 												        <div id="toolbar" class="btn-group">
-												            <!-- <button id="btn_add" type="button" class="btn btn-primary btn-default" data-toggle="modal" data-target="#addModal">
+												            <button id="btn_add" type="button" class="btn btn-primary btn-default" data-toggle="modal" data-target="#addModal">
 												                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
 												            </button>
+												            <!-- 
 															<button id="exportBtn" type="button" style="margin-left:5px" class="export-excel btn btn-primary btn-default" 
 															data-table="unloader">导出Excel</button>
 															<button type="button" id="download" style="margin-left:5px" class="btn btn-primary" onClick ="$('#unloader').tableExport({ type: 'excel', escape: 'false' })">数据导出</button>
