@@ -21,7 +21,14 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
-
+	<listener>
+	<!-- 用户session监听服务，处理session失效时，更新用户登录状态表信息  lws 2014-9-23 -->
+	<listener-class>net.itw.wcms.x27.utils.UserSessionListener</listener-class>
+	</listener>
+	<session-config>
+  		<session-timeout>30</session-timeout>
+ 	</session-config>
+	 
 	<!-- 配置编码过滤器 -->
 	<filter>
 		<filter-name>characterEncodingFilter</filter-name>

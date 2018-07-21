@@ -451,7 +451,7 @@ public class AppHttpInterface {
             ,bussTypeDesc="接口管理"
             ,moudleName = "船舶接口"
             ,operateType = ConstantUtil.LogOperateType_Execu
-            ,operateTypeDesc = "设置舱位"
+            ,operateTypeDesc = "修改舱位"
     )
 	@RequestMapping(value = "/ship/doSetCabinPosition")
 	public Map<String, Object> doSetCabinPosition(@RequestParam("json") String json) {
@@ -509,7 +509,7 @@ public class AppHttpInterface {
             ,bussTypeDesc="接口管理"
             ,moudleName = "船舶接口"
             ,operateType = ConstantUtil.LogOperateType_Execu
-            ,operateTypeDesc = "设置清舱状态"
+            ,operateTypeDesc = "清舱"
     )
 	@RequestMapping(value = "/ship/doSetCabinStatus")
 	public Map<String, Object> doSetCabinStatus(@RequestParam("json") String json) {

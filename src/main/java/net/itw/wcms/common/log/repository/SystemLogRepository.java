@@ -32,11 +32,11 @@ public interface SystemLogRepository extends JpaRepository<SystemLog, Integer>, 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 				String startDate = params.get("startDate") == null ? "" : params.get("startDate");
 				String endDate = params.get("endDate") == null ? "" : params.get("endDate");
-				String bussTypeDesc = params.get("bussTypeDesc") == null ? "" : params.get("bussTypeDesc");
+				String workPlatform = params.get("workPlatform") == null ? "" : params.get("workPlatform");
 				String inputUserId = params.get("inputUserId") == null ? "" : params.get("inputUserId");
 
-				if (StringUtils.isNotEmpty(bussTypeDesc)) {
-					predicates.add(cb.like(root.get("bussTypeDesc"), bussTypeDesc));
+				if (StringUtils.isNotEmpty(workPlatform)) {
+					predicates.add(cb.like(root.get("workPlatform"), workPlatform));
 				}
 				if (StringUtils.isNotEmpty(inputUserId)) {
 					predicates.add(cb.like(root.get("inputUserId"), inputUserId));

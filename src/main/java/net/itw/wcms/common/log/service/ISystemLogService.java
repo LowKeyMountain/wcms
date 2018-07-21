@@ -15,6 +15,13 @@ import net.itw.wcms.common.log.entity.SystemLog;
 public interface ISystemLogService {
 
 	/**
+	 * 查询日志，根据uids
+	 * @param uids
+	 * @return
+	 */
+	SystemLog getSystemLogByUids(String uids);
+	
+	/**
 	 * 保存日志
 	 * 
 	 * @param log

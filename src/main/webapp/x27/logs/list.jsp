@@ -189,13 +189,12 @@ License: You must have a valid license purchased only from themeforest(the above
 									            <div class="panel-body">
 									                <form id="formSearch" class="form-horizontal">
 									                    <div class="form-group" style="margin-top:5px;margin-bottom:5px">
-									                        <label class="control-label col-md-1" for="bussTypeDesc">业务类型: </label>
+									                        <label class="control-label col-md-1" for="workPlatform">作业平台: </label>
 									                        <div class="col-md-3">
-																<select id="bussTypeDesc" class="form-control select2me">
+																<select id="workPlatform" class="form-control select2me">
 																	<option value="">请选择...</option>
-												   					<option value="配置中心" >配置中心</option>
-												   					<option value="管理中心" >管理中心</option>
-												   					<option value="接口中心" >接口中心</option>
+												   					<option value="01" >电脑端</option>
+												   					<option value="02" >移动端</option>
 																</select>
 									                        </div>
 									                        <label class="control-label col-md-1" for="inputUserId">操作用户: </label>

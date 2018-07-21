@@ -52,7 +52,7 @@ function initTable() {
 								startDate : $("#startDate").val(),
 								endDate : $("#endDate").val(),
 								inputUserId : $("#inputUserId").val(),
-								bussTypeDesc : $("#bussTypeDesc").val()
+								workPlatform : $("#workPlatform").val()
 							};
 							return params;
 						},
@@ -60,8 +60,8 @@ function initTable() {
 						idField : "id",// 指定主键列
 						columns : [
 								{
-									field : 'bussTypeDesc',
-									title : '业务类型',
+									field : 'workPlatform',
+									title : '作业平台',
 									align : 'center',
 									width : '10%'
 								},
@@ -84,13 +84,13 @@ function initTable() {
 									width : '10%',
 									sortable : true
 								},
-								{
-									field : 'requestIp',
-									title : '请求IP',
-									align : 'center',
-									width : '10%',
-									sortable : true
-								},
+//								{
+//									field : 'requestIp',
+//									title : '请求IP',
+//									align : 'center',
+//									width : '10%',
+//									sortable : true
+//								},
 								{
 									field : 'operateResult',
 									title : '操作结果',
@@ -164,7 +164,7 @@ $(function() {
 	$("#btn_reset").off().on("click", function() {
 		$("#startDate").val("");
 		$("#endDate").val("");
-		$("#bussTypeDesc").val("");
+		$("#workPlatform").val("");
 		$("#inputUserId").val("");
 	});
 

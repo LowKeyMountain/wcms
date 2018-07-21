@@ -27,7 +27,11 @@ public class ConstantUtil {
 	public static final String BusinessType_PZZX = "02";
 	public static final String BusinessType_JKZX = "03";
 	
+	public static final String WorkPlatform_PC = "01";
+	public static final String WorkPlatform_APP = "02";
+	
+	
 	public static final long LogOperateType_Query = 0;
 	public static final long LogOperateType_Execu = 1;
-
+	
 }

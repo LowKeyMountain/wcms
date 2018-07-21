@@ -1,6 +1,7 @@
 package net.itw.wcms.ship.service.impl;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -1085,21 +1086,21 @@ public class TaskShipServiceImpl implements ITaskShipService {
 				
 				Date startTime = task.getBeginTime() == null ? task.getBerthingTime() : task.getBeginTime();
 				Date endTime = task.getEndTime() == null ? new Date() : task.getEndTime();
-				Object[] args = new Object[] { cabin.getStartPosition(), leftOffsetPosition, startTime, endTime };
+				Object[] args = new Object[] { cabin.getStartPosition(), floatUtils(leftOffsetPosition), startTime, endTime };
 				Map<String, Object> leftMap = this.jdbcTemplate.queryForMap(sqlMap.getSql("FN_014_1"), args);
 
 				System.out.println("船舱号"+i+"|leftOffset|" + cabin.getStartPosition() + "|" + leftOffsetPosition);
 				
-				data.put("leftOffset", leftMap.get("leftOffset") != null ? leftMap.get("leftOffset") : 0.0);
-				data.put("leftUnloading", leftMap.get("leftUnloading") != null ? leftMap.get("leftUnloading") : 0.0);
+				data.put("leftOffset", leftMap.get("leftOffset") != null ? doubleFormat((Double)leftMap.get("leftOffset")) : 0.0);
+				data.put("leftUnloading", leftMap.get("leftUnloading") != null ? doubleFormat((Double)leftMap.get("leftUnloading")) : 0.0);
 				data.put("leftShovelNumber", leftMap.get("leftShovelNumber"));
 				
-				args = new Object[] { rightOffsetPosition, cabin.getEndPosition(), startTime, endTime };
+				args = new Object[] { floatUtils(leftOffsetPosition), cabin.getEndPosition(), startTime, endTime };
 				Map<String, Object> rightMap = this.jdbcTemplate.queryForMap(sqlMap.getSql("FN_014_2"), args);
 				System.out.println("船舱号"+i+"|rightOffset|" + rightOffsetPosition + "|" + cabin.getEndPosition());
-				data.put("rightOffset", rightMap.get("rightOffset") != null ? rightMap.get("rightOffset") : 0.0);
+				data.put("rightOffset", rightMap.get("rightOffset") != null ? doubleFormat((Double)rightMap.get("rightOffset")) : 0.0);
 				data.put("rightUnloading",
-						rightMap.get("rightUnloading") != null ? rightMap.get("rightUnloading") : 0.0);
+						rightMap.get("rightUnloading") != null ? doubleFormat((Double)rightMap.get("rightUnloading")) : 0.0);
 				data.put("rightShovelNumber", rightMap.get("rightShovelNumber"));
 				
 				datas.add(data);
@@ -1115,6 +1116,16 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			return result;
 		}
 		return result;
+	}
+
+	public String doubleFormat(Double f) {
+		DecimalFormat df = new DecimalFormat("#.0");
+		return df.format(f);
+	}
+
+	
+	private float floatUtils(float leftOffsetPosition) {
+		return Float.compare(Float.NaN, leftOffsetPosition) == 0 ? 0 : leftOffsetPosition;
 	}
 
 	/**

@@ -106,16 +106,25 @@ public class UserServiceImpl implements IUserService {
 		// sb.append(",\"").append(u.getDepartmentName()==null?"":u.getDepartmentName()).append("\"");
 		sb.append(",\"").append(u.getUpdatePerson()).append("\"");
 		sb.append(",\"").append(StringUtil.formatDate(u.getUpdateDate(), "yyyy-MM-dd HH:mm:ss")).append("\"");
+//		sb.append(",\"").append("<a href=\\\"javascript:User.update_click('").append(u.getId())
+//				.append("');\\\" class=\\\"btn btn-xs default btn-editable\\\"><i class=\\\"fa fa-edit\\\"></i> 修改</a>")
+//				.append("&nbsp;&nbsp;<a href=\\\"javascript:").append(u.getIsLock() ? "User.unlock('" : "User.lock('")
+//				.append(u.getId()).append("');\\\" class=\\\"btn btn-xs default btn-editable\\\"><i class=\\\"fa fa-")
+//				.append(u.getIsLock() ? "un" : "").append("lock\\\"></i> ").append(u.getIsLock() ? "解锁" : "锁定")
+//				.append("</a>").append("&nbsp;&nbsp;<a href=\\\"javascript:User.remove('").append(u.getId())
+//				.append("');\\\" class=\\\"btn btn-xs default btn-editable\\\"><i class=\\\"fa fa-times\\\"></i> 删除</a>")
+//				.append("&nbsp;&nbsp;<a href=\\\"javascript:User.assign_click('").append(u.getId())
+//				.append("');\\\" class=\\\"btn btn-xs default btn-editable\\\"><i class=\\\"fa fa-key\\\"></i> 关联角色</a>")
+//				.append("\"");
+		
 		sb.append(",\"").append("<a href=\\\"javascript:User.update_click('").append(u.getId())
-				.append("');\\\" class=\\\"btn btn-xs default btn-editable\\\"><i class=\\\"fa fa-edit\\\"></i> 修改</a>")
-				.append("&nbsp;&nbsp;<a href=\\\"javascript:").append(u.getIsLock() ? "User.unlock('" : "User.lock('")
-				.append(u.getId()).append("');\\\" class=\\\"btn btn-xs default btn-editable\\\"><i class=\\\"fa fa-")
-				.append(u.getIsLock() ? "un" : "").append("lock\\\"></i> ").append(u.getIsLock() ? "解锁" : "锁定")
-				.append("</a>").append("&nbsp;&nbsp;<a href=\\\"javascript:User.remove('").append(u.getId())
-				.append("');\\\" class=\\\"btn btn-xs default btn-editable\\\"><i class=\\\"fa fa-times\\\"></i> 删除</a>")
-				.append("&nbsp;&nbsp;<a href=\\\"javascript:User.assign_click('").append(u.getId())
-				.append("');\\\" class=\\\"btn btn-xs default btn-editable\\\"><i class=\\\"fa fa-key\\\"></i> 关联角色</a>")
-				.append("\"");
+		.append("');\\\" class=\\\"btn btn-xs default btn-editable\\\"><i class=\\\"fa fa-edit\\\"></i> 修改</a>")
+		.append("&nbsp;&nbsp;<a href=\\\"javascript:User.remove('").append(u.getId())
+		.append("');\\\" class=\\\"btn btn-xs default btn-editable\\\"><i class=\\\"fa fa-times\\\"></i> 删除</a>")
+		.append("&nbsp;&nbsp;<a href=\\\"javascript:User.assign_click('").append(u.getId())
+		.append("');\\\" class=\\\"btn btn-xs default btn-editable\\\"><i class=\\\"fa fa-key\\\"></i> 关联角色</a>")
+		.append("\"");
+		
 		sb.append("]");
 	}
 

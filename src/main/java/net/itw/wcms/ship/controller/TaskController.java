@@ -327,7 +327,7 @@ public class TaskController {
             ,bussTypeDesc="管理中心"
             ,moudleName = "工作管理"
             ,operateType = ConstantUtil.LogOperateType_Execu
-            ,operateTypeDesc = "设置船舶状态"
+			,operateTypeDesc = "^ParamIndex|1|0#船舶靠泊,1#船舶离港$"
     )
 	@RequestMapping(value = "/doSetShipStatus")
 	public Map<String, Object> doSetShipStatus(@RequestParam("taskId") String taskId,
@@ -359,7 +359,7 @@ public class TaskController {
             ,bussTypeDesc="管理中心"
             ,moudleName = "作业船舶维护"
             ,operateType = ConstantUtil.LogOperateType_Execu
-            ,operateTypeDesc = "设置船舶状态"
+            ,operateTypeDesc = "修正船舶状态"
     )
 	@RequestMapping(value = "/doModifyShipStatus")
 	public Map<String, Object> doModifyShipStatus(@RequestParam Map<String, String> params) {

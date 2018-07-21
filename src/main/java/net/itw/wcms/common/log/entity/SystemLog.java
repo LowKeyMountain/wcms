@@ -38,6 +38,7 @@ public class SystemLog implements Entityable {
 	private String errorMessage;
 	private Date operationTime;
 	private String logDetails;
+	private String workPlatform;
 
 	@GeneratedValue
 	@Id
@@ -183,4 +184,13 @@ public class SystemLog implements Entityable {
 		this.logDetails = logDetails;
 	}
 
+	@Column(name = "Work_Platform")
+	public String getWorkPlatform() {
+		return workPlatform;
+	}
+
+	public void setWorkPlatform(String workPlatform) {
+		this.workPlatform = workPlatform;
+	}
+	
 }

@@ -23,7 +23,11 @@ public class SystemLogServiceImpl implements ISystemLogService {
 
 	@Autowired
 	private SystemLogRepository systemLogRepository;
-
+	
+	public SystemLog getSystemLogByUids(String uids) {
+		return systemLogRepository.getSystemLogByUids(uids);
+	}
+	
 	@Override
 	public Integer save(SystemLog log) throws Exception {
 		try {
@@ -78,6 +82,10 @@ public class SystemLogServiceImpl implements ISystemLogService {
 			jo.put("operationTime",
 					t.getOperationTime() != null ? DateTimeUtils.date2StrDateTime(t.getOperationTime()) : "");
 			jo.put("logDetails", t.getLogDetails());
+			String workPlatform = t.getWorkPlatform();
+			workPlatform = ConstantUtil.WorkPlatform_PC.equalsIgnoreCase(workPlatform) ? "电脑端"
+					: ConstantUtil.WorkPlatform_APP.equalsIgnoreCase(workPlatform) ? "移动端" :"";
+			jo.put("workPlatform", workPlatform);
 			jsonArray.add(jo);
 		}
 		JSONObject jsonObject = new JSONObject();

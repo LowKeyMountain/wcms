@@ -21,8 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fasterxml.jackson.annotation.JsonCreator.Mode;
-
 import net.itw.wcms.common.log.annotation.OperateLog;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
@@ -84,6 +82,7 @@ public class LoginController {
 	@OperateLog(
             bussType=ConstantUtil.BusinessType_PZZX
             ,bussTypeDesc="配置中心"
+            ,moudleCode = "M02"
             ,moudleName = "用户管理"
             ,operateType = ConstantUtil.LogOperateType_Query
             ,operateTypeDesc = "用户登出"
@@ -106,6 +105,7 @@ public class LoginController {
 	@OperateLog(
             bussType=ConstantUtil.BusinessType_PZZX
             ,bussTypeDesc="配置中心"
+            ,moudleCode = "M01"
             ,moudleName = "用户管理"
             ,operateType = ConstantUtil.LogOperateType_Query
             ,operateTypeDesc = "用户登录"
@@ -167,6 +167,7 @@ public class LoginController {
             bussType=ConstantUtil.BusinessType_PZZX
             ,bussTypeDesc="配置中心"
             ,moudleName = "用户管理"
+            ,moudleCode = "M03"
             ,operateType = ConstantUtil.LogOperateType_Execu
             ,operateTypeDesc = "密码修改"
     )
