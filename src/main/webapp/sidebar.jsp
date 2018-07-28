@@ -126,11 +126,13 @@
                          </a>
                      </li>
                      <security:authorize buttonUrl="20">
+                     <!-- 
                      <li class="nav-item  ">
                          <a href="${IncPath}/resource/list" class="nav-link ">
                              <span class="title">资源管理</span>
                          </a>
                      </li>
+                      -->
                      </security:authorize>
                      <li class="nav-item  ">
                          <a href="${IncPath}/logs/list" class="nav-link ">

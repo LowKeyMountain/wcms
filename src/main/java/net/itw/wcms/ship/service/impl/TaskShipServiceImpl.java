@@ -1,6 +1,7 @@
 package net.itw.wcms.ship.service.impl;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -887,9 +888,129 @@ public class TaskShipServiceImpl implements ITaskShipService {
 	//		}
 		dataSyncStepC.delete(taskId);
 	}
-
-	@Override
+	
 	public Map<String, Object> doOutboardInfoStatistics(Map<String, Object> argsMap) {
+		String msg = "操作成功！";
+		Integer isSuccess = ConstantUtil.SuccessInt;
+		Map<String, Object> result = new HashMap<>();
+		try {
+			int taskId = (Integer) argsMap.get("taskId");
+			Task task = this.taskRepository.getTaskById(taskId);
+			List<Cabin> cabins = this.cabinRepository.findAllByTaskId(taskId);
+			Map<Integer, Cabin> cabinMap = new HashMap<>();
+			for (Cabin c : cabins) {
+				cabinMap.put(c.getCabinNo(), c);
+			}
+			// 获取船舶方向
+			int direction = this.getShipDirection(cabinMap);
+			final int count = cabinMap.size(); // 船舱数
+			List<Float> list = new ArrayList<Float>();
+			if (direction == 1) {
+				for (int i = 1; i <= count; i++) {
+					Cabin cabin = cabinMap.get(i);
+					if (cabin.getStartPosition() == 0 && cabin.getEndPosition() == 0) {
+						continue;
+					}
+					list.add(cabin.getStartPosition());
+					list.add(cabin.getEndPosition());
+				}
+			} else {
+				for (int i = count; i > 0; i--) {
+					Cabin cabin = cabinMap.get(i);
+					if (cabin.getStartPosition() == 0 && cabin.getEndPosition() == 0) {
+						continue;
+					}
+					list.add(cabin.getStartPosition());
+					list.add(cabin.getEndPosition());
+				}
+			}
+			
+			List<Map<String, Object>> temp = new ArrayList<>();
+			Date startTime = task.getBeginTime() == null ? task.getBerthingTime() : task.getBeginTime();
+			Date endTime = task.getEndTime() == null ? new Date() : task.getEndTime();
+
+			for (int i = 0; i <= list.size() - 2; i += 2) {
+				Float sp = list.get(i);
+				Float ep = list.get(i + 1);
+				
+				float leftOffset = 0;
+				float leftOffsetPosition = 0;
+				float rightOffset = 0;
+				float rightOffsetPosition = 0;
+				
+				// 计算左偏移量
+				if (i == 0) {
+					leftOffset = ConstantUtil.CabinOffset;
+				} else {
+					Float pp = list.get(i - 1);
+					leftOffset = (sp - pp) / 2;
+				}
+				leftOffsetPosition = sp - leftOffset;
+				leftOffsetPosition = leftOffsetPosition < 0 ? 0 : leftOffsetPosition;
+				// 计算右偏移量
+				if (i == list.size() - 2) {
+					rightOffset = ConstantUtil.CabinOffset;
+				} else {
+					Float np = list.get(i + 2);
+					rightOffset = (np - ep) / 2;
+				}
+				rightOffsetPosition = ep + rightOffset;
+				
+				Map<String, Object> data = new LinkedHashMap<>();
+				data.put("startPosition", sp);
+				data.put("endPosition", ep);
+				Object[] args = new Object[] { sp, floatUtils(leftOffsetPosition), startTime, endTime };
+				Map<String, Object> leftMap = this.jdbcTemplate.queryForMap(sqlMap.getSql("FN_014_1"), args);
+				data.put("leftOffset", leftMap.get("leftOffset") != null ? doubleFormat((Double) leftMap.get("leftOffset")) : 0.0);
+				data.put("leftUnloading", leftMap.get("leftUnloading") != null ? doubleFormat((Double) leftMap.get("leftUnloading")) : 0.0);
+				data.put("leftShovelNumber", leftMap.get("leftShovelNumber"));
+
+				args = new Object[] { floatUtils(rightOffsetPosition), ep, startTime, endTime };
+				Map<String, Object> rightMap = this.jdbcTemplate.queryForMap(sqlMap.getSql("FN_014_2"), args);
+				data.put("rightOffset", rightMap.get("rightOffset") != null ? doubleFormat((Double) rightMap.get("rightOffset")) : 0.0);
+				data.put("rightUnloading", rightMap.get("rightUnloading") != null ? doubleFormat((Double) rightMap.get("rightUnloading")) : 0.0);
+				data.put("rightShovelNumber", rightMap.get("rightShovelNumber"));
+				System.out.println(">>>" + leftOffsetPosition + "|" + sp + "<>" + ep+ "|" + rightOffsetPosition);
+				temp.add(data);
+			}
+			
+			List<Map<String, Object>> datas = new ArrayList<>();
+			for (int i = 1; i <= count; i++) {
+				Cabin cabin = cabinMap.get(i);
+				Map<String, Object> data = null;
+				for (Map<String, Object> m : temp) {
+					if (cabin.getStartPosition().equals(m.get("startPosition")) && cabin.getEndPosition().equals(m.get("endPosition"))) {
+						data = m;
+						data.put("cabinNo", cabin.getCabinNo());
+					}
+				}
+				if (data == null) {
+					data = new HashMap<>();
+					data.put("cabinNo", cabin.getCabinNo());
+					data.put("startPosition", cabin.getStartPosition());
+					data.put("endPosition", cabin.getEndPosition());
+					data.put("leftOffset", 0.0);
+					data.put("leftShovelNumber", 0);
+					data.put("leftUnloading", 0.0);
+					data.put("rightOffset", 0.0);
+					data.put("rightShovelNumber", 0);
+					data.put("rightUnloading", 0.0);
+				}
+				datas.add(data);
+			}
+			result.put("msg", msg);
+			result.put("data", datas);
+			result.put("code", isSuccess);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", ConstantUtil.FailInt);
+			result.put("msg", e.getMessage());
+			return result;
+		}
+		return result;
+	}
+	
+	public Map<String, Object> doOutboardInfoStatistics_bk(Map<String, Object> argsMap) {
 		String msg = "操作成功！";
 		Integer isSuccess = ConstantUtil.SuccessInt;
 		Map<String, Object> result = new HashMap<>();
@@ -1119,8 +1240,10 @@ public class TaskShipServiceImpl implements ITaskShipService {
 	}
 
 	public String doubleFormat(Double f) {
-		DecimalFormat df = new DecimalFormat("#.0");
-		return df.format(f);
+		// DecimalFormat df = new DecimalFormat("#.0");
+		// return df.format(f);
+		BigDecimal b = new BigDecimal(f);
+		return "" + b.setScale(1, BigDecimal.ROUND_DOWN).doubleValue();
 	}
 
 	

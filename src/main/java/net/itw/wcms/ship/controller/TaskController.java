@@ -29,6 +29,7 @@ import net.itw.wcms.ship.service.ITaskShipService;
 import net.itw.wcms.toolkit.AuthorizeOptions;
 import net.itw.wcms.toolkit.DateTimeUtils;
 import net.itw.wcms.toolkit.MessageOption;
+import net.itw.wcms.toolkit.lang.IntUtils;
 import net.itw.wcms.x27.entity.User;
 import net.itw.wcms.x27.utils.ConstantUtil;
 import net.itw.wcms.x27.utils.PageUtils;
@@ -123,10 +124,10 @@ public class TaskController {
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "校验成功！");
 		List<Task> tasks = taskService.getTaskByStatus(0);
 		for (Task task : tasks) {
-			if (task.getId() == taskId) {
+			if (IntUtils.intValueEquals(task.getId(), taskId)) {
 				continue;
 			}
-			if (task.getBerth() == berth) {
+			if (IntUtils.intValueEquals(task.getBerth(), berth)) {
 				mo.msg = "矿" + (berth == 1 ? "一" : (berth == 2 ? "二" : "其他")) + "已被占用！";
 				mo.code = ConstantUtil.FailInt;
 			}
