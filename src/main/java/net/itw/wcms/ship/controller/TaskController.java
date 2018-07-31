@@ -29,6 +29,7 @@ import net.itw.wcms.ship.service.ITaskShipService;
 import net.itw.wcms.toolkit.AuthorizeOptions;
 import net.itw.wcms.toolkit.DateTimeUtils;
 import net.itw.wcms.toolkit.MessageOption;
+import net.itw.wcms.toolkit.lang.IntUtils;
 import net.itw.wcms.x27.entity.User;
 import net.itw.wcms.x27.utils.ConstantUtil;
 import net.itw.wcms.x27.utils.PageUtils;
@@ -123,10 +124,10 @@ public class TaskController {
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "校验成功！");
 		List<Task> tasks = taskService.getTaskByStatus(0);
 		for (Task task : tasks) {
-			if (task.getId() == taskId) {
+			if (IntUtils.intValueEquals(task.getId(), taskId)) {
 				continue;
 			}
-			if (task.getBerth() == berth) {
+			if (IntUtils.intValueEquals(task.getBerth(), berth)) {
 				mo.msg = "矿" + (berth == 1 ? "一" : (berth == 2 ? "二" : "其他")) + "已被占用！";
 				mo.code = ConstantUtil.FailInt;
 			}
@@ -266,7 +267,7 @@ public class TaskController {
 		modelMap.put("taskId", id);
 		modelMap.put("task", task);
 		modelMap.put("shipName", task != null && task.getShip() != null ? task.getShip().getShipName() : "");
-		return new ModelAndView(PATH_UNSHIPINFO + "list");
+		return new ModelAndView(PATH_UNSHIPINFO + "unloadlist");
 	}
 	
 	/**
@@ -274,11 +275,12 @@ public class TaskController {
 	 * @param taskId
 	 * @return
 	 */
-	@RequestMapping(value = "/getUnshipInfoList")
-	public Map<String, Object> getUnshipInfoList(@RequestParam("taskId") Integer taskId) {
+	@RequestMapping(value = "/getUnshipInfoList", produces = "text/json;charset=UTF-8")
+	public String getUnshipInfoList(@RequestParam("taskId") Integer taskId) {
 		// 从session取出User对象
-		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
+//		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
 		Map<String, Object> result = null;
+		JSONObject json = new JSONObject();
 		try {
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("fuctionType", "FN_004");
@@ -290,12 +292,17 @@ public class TaskController {
 			result = infoQueryHelper.doQueryInfo(jsonObject, options);
 		} catch (Exception e) {
 			e.printStackTrace();
-			mo.msg = e.getMessage();
-			mo.code = ConstantUtil.FailInt;
+//			mo.msg = e.getMessage();
+//			mo.code = ConstantUtil.FailInt;
 		}
-		result.put("msg", mo.msg);
-		result.put("code", mo.code);
-		return result;
+//		result.put("msg", mo.msg);
+//		result.put("code", mo.code);
+		
+//		return result;
+		json.put("rows",result.get("data"));
+		json.put("total",result.get("total"));
+
+		return json.toString();
 	}
 	
 	/**
@@ -327,7 +334,7 @@ public class TaskController {
             ,bussTypeDesc="管理中心"
             ,moudleName = "工作管理"
             ,operateType = ConstantUtil.LogOperateType_Execu
-            ,operateTypeDesc = "设置船舶状态"
+			,operateTypeDesc = "^ParamIndex|1|0#船舶靠泊,1#船舶离港$"
     )
 	@RequestMapping(value = "/doSetShipStatus")
 	public Map<String, Object> doSetShipStatus(@RequestParam("taskId") String taskId,
@@ -359,7 +366,7 @@ public class TaskController {
             ,bussTypeDesc="管理中心"
             ,moudleName = "作业船舶维护"
             ,operateType = ConstantUtil.LogOperateType_Execu
-            ,operateTypeDesc = "设置船舶状态"
+            ,operateTypeDesc = "修正船舶状态"
     )
 	@RequestMapping(value = "/doModifyShipStatus")
 	public Map<String, Object> doModifyShipStatus(@RequestParam Map<String, String> params) {

@@ -213,7 +213,7 @@ public class CabinController {
             ,bussTypeDesc="管理中心"
             ,moudleName = "工作管理"
             ,operateType = ConstantUtil.LogOperateType_Execu
-            ,operateTypeDesc = "修改船舱信息"
+            ,operateTypeDesc = "输入船舱信息"
     )
 	@RequestMapping(value = "/update")
 	public Map<String, Object> update(@ModelAttribute("cabin") Cabin cabin) {
@@ -389,7 +389,7 @@ public class CabinController {
             ,bussTypeDesc="管理中心"
             ,moudleName = "工作管理"
             ,operateType = ConstantUtil.LogOperateType_Execu
-            ,operateTypeDesc = "设置船舱状态"
+            ,operateTypeDesc = "^ParamIndex|2|1#清舱,2#完成$"
     )
 	@RequestMapping(value = "/updateCabinStatus")
 	public Map<String, Object> updateCabinStatus(@RequestParam("taskId") String taskId,
@@ -423,7 +423,7 @@ public class CabinController {
             ,bussTypeDesc="管理中心"
             ,moudleName = "作业船舶维护"
             ,operateType = ConstantUtil.LogOperateType_Execu
-            ,operateTypeDesc = "设置船舱状态"
+            ,operateTypeDesc = "修正船舱状态"
     )
 	@RequestMapping(value = "/remendyCabinStatus")
 	public Map<String, Object> remendyCabinStatus(@RequestParam("taskId") String taskId,

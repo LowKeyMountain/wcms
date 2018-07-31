@@ -122,9 +122,9 @@ License: You must have a valid license purchased only from themeforest(the above
 									<table class="table table-striped">
 										<tr>
 											<td colspan="3"><b>${cabin.cabinNo}#舱</b></td>
-											<td>货物种类</td>
+											<td>货名</td>
 											<td>${cabin.cargoName}</td>
-											<td>船舱状态</td>
+											<td>状态</td>
 											<td>
 											<!-- 状态 （卸货|0、清舱|1、完成|2） -->
 											<c:choose>
@@ -147,6 +147,13 @@ License: You must have a valid license purchased only from themeforest(the above
 											<td>${cabin.remainder}</td>
 											<td>清舱量</td>
 											<td>${cabin.clearance}</td>
+										</tr>
+										<tr>
+											<td colspan="3"></td>
+											<td>清舱前</td>
+											<td>${cabin.finishedBeforeClearance}</td>
+											<td></td>
+											<td></td>
 										</tr>
 									</table>
 

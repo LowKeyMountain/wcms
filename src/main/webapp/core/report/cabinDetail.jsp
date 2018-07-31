@@ -188,6 +188,13 @@ License: You must have a valid license purchased only from themeforest(the above
 											<td>清舱量</td>
 											<td>${cabin.clearance}</td>
 										</tr>
+										<tr>
+											<td colspan="3"></td>
+											<td>清舱前</td>
+											<td>${cabin.finishedBeforeClearance}</td>
+											<td></td>
+											<td></td>
+										</tr>
 									</table>
 									<div id="toolbar" align="left" class="btn-group">
 									    <!-- <button type="button" class="btn btn-default">

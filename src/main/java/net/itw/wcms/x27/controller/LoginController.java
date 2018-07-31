@@ -73,7 +73,26 @@ public class LoginController {
 	public ModelAndView gotoLoginPage() {
 		return new ModelAndView("./login");
 	}
-
+	
+	/**
+	 * 用户登出
+	 * 
+	 * @return
+	 */
+	@OperateLog(
+            bussType=ConstantUtil.BusinessType_PZZX
+            ,bussTypeDesc="配置中心"
+            ,moudleCode = "M02"
+            ,moudleName = "用户管理"
+            ,operateType = ConstantUtil.LogOperateType_Query
+            ,operateTypeDesc = "用户登出"
+    )
+	@RequestMapping(value = "/logOutPage")
+	public ModelAndView logOutPage(){
+		session.removeAttribute(SessionUtil.SessionSystemLoginUserName);
+		return new ModelAndView("./login");
+	}
+	
 	/**
 	 * 登录验证
 	 * 
@@ -86,6 +105,7 @@ public class LoginController {
 	@OperateLog(
             bussType=ConstantUtil.BusinessType_PZZX
             ,bussTypeDesc="配置中心"
+            ,moudleCode = "M01"
             ,moudleName = "用户管理"
             ,operateType = ConstantUtil.LogOperateType_Query
             ,operateTypeDesc = "用户登录"
@@ -147,6 +167,7 @@ public class LoginController {
             bussType=ConstantUtil.BusinessType_PZZX
             ,bussTypeDesc="配置中心"
             ,moudleName = "用户管理"
+            ,moudleCode = "M03"
             ,operateType = ConstantUtil.LogOperateType_Execu
             ,operateTypeDesc = "密码修改"
     )

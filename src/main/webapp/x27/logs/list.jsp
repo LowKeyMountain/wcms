@@ -21,7 +21,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
     <head>
         <meta charset="utf-8" />
-        <title>京唐港  | 卸船机 - 数据管理</title>
+        <title>京唐港  | 配置中心 - 日志管理</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         <meta content="" name="description" />
@@ -148,14 +148,13 @@ License: You must have a valid license purchased only from themeforest(the above
 				<div class="row">
 					<div class="col-md-12">
 						<!-- BEGIN PAGE TITLE & BREADCRUMB-->
-						<h3 class="page-title icon-settings">&nbsp;&nbsp;卸船机数据管理</h3>
 						<ul class="page-breadcrumb breadcrumb">
 							<li><i class="fa fa-home"></i> <a
 								href="${BasePath}/web/main"> 主页 </a> <i
 								class="fa fa-angle-right"></i></li>
 							<li>管理中心 <i class="fa fa-angle-right"></i>
 							</li>
-							<li>卸船机数据管理</li>
+							<li>日志管理</li>
 						</ul>
 						<!-- END PAGE TITLE & BREADCRUMB-->
 					</div>
@@ -177,7 +176,7 @@ License: You must have a valid license purchased only from themeforest(the above
 							<div class="portlet-title">
 								<div class="caption font-dark">
 									<i class="icon-settings font-dark"></i> <span
-										class="caption-subject bold uppercase"> 卸船机作业数据</span>
+										class="caption-subject bold uppercase"> 日志列表 </span>
 								</div>
 								<div class="tools"> </div>
 							</div>
@@ -190,42 +189,25 @@ License: You must have a valid license purchased only from themeforest(the above
 									            <div class="panel-body">
 									                <form id="formSearch" class="form-horizontal">
 									                    <div class="form-group" style="margin-top:5px;margin-bottom:5px">
-									                        <label class="control-label col-md-1" for="cmsid">卸船机编号: </label>
+									                        <label class="control-label col-md-1" for="workPlatform">作业平台: </label>
 									                        <div class="col-md-3">
-																<select id="cmsid" class="form-control select2me">
+																<select id="workPlatform" class="form-control select2me">
 																	<option value="">请选择...</option>
-												   					<option value="1" >ABB_GSU_1</option>
-												   					<option value="2" >ABB_GSU_2</option>
-												   					<option value="3" >ABB_GSU_3</option>
-												   					<option value="4" >ABB_GSU_4</option>
-												   					<option value="5" >ABB_GSU_5</option>
-												   					<option value="6" >ABB_GSU_6</option>
+												   					<option value="01" >电脑端</option>
+												   					<option value="02" >移动端</option>
 																</select>
 									                        </div>
-									                        <label class="control-label col-md-1" for="operationType">操作类型: </label>
+									                        <label class="control-label col-md-1" for="inputUserId">操作用户: </label>
 									                        <div class="col-md-2">
-																<select id="operationType" name="operationType" class="form-control select2me">
-																	<option value="">请选择...</option>
-												   					<option value="2" >在线</option>
-												   					<option value="0" >位移</option>
-												   					<option value="1" >作业</option>
-																</select>
+																<input type = "text"  class=" form-control" id="inputUserId"/>
 									                        </div>
-															<label class="control-label col-md-1">位置：</label>		
-													        <div class="col-md-3 input-group">
-													            <input type="text" class="form-control" placeholder="请输入起始位置" id="startPosition" />
-													            <span class="input-group-addon">--</span>
-																<input type="text" class="form-control" placeholder="请输入结束位置" id="endPosition" />
-															</div>									                        
-									                    </div>
-													    <div class="form-group"  style="margin-top:10px;margin-bottom:5px">
 															<label class="control-label  col-md-1 cy-pad-hor-s">操作时间：</label>
 													        <div class="col-md-4 input-daterange input-group">
 													            <input class="form_datetime form-control" placeholder="请选择开始日期" id="startDate" readonly/>
 													            <span class="input-group-addon">--</span>
 																<input class="form_datetime form-control" placeholder="请选择结束日期" id="endDate" readonly/>
-															</div>
-														</div>
+															</div>							                        
+									                    </div>
 									                    <div class="form-group" style="margin-top:5px;margin-left:500px;margin-bottom:5px">
 									                        <div class="col-md-2" style="text-align:left;">
 									                            <button type="button" style="margin-left:20px" id="btn_query" class="btn btn-primary btn-sm">查询</button>
@@ -233,21 +215,8 @@ License: You must have a valid license purchased only from themeforest(the above
 									                        <div class="col-md-2" style="text-align:left;">
 									                            <button type="button" style="margin-left:20px" id="btn_reset" class="btn btn-sm">重置</button>
 									                        </div>
-									                        <!-- <div class="col-md-2" style="text-align:left;">
-									                            <button type="button" style="margin-left:20px" id="btn_export" class="btn btn-primary btn-sm">导出excel</button>
-									                        </div>-->
 									                    </div>
-												        <div id="toolbar" class="btn-group">
-												            <button id="btn_add" type="button" class="btn btn-primary btn-default" data-toggle="modal" data-target="#addModal">
-												                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
-												            </button>
-												            <!-- 
-															<button id="exportBtn" type="button" style="margin-left:5px" class="export-excel btn btn-primary btn-default" 
-															data-table="unloader">导出Excel</button>
-															<button type="button" id="download" style="margin-left:5px" class="btn btn-primary" onClick ="$('#unloader').tableExport({ type: 'excel', escape: 'false' })">数据导出</button>
- -->														<button type="button" id="btn_export" style="margin-left:5px" class="btn btn-primary">数据导出</button>
-												        </div>
-									                    <table id="unloader" class="table table-striped table-bordered table-hover table-checkable order-column"></table>												            
+									                    <table id="systemLog" class="table table-striped table-bordered table-hover table-checkable order-column"></table>												            
 									                </form>
 									            </div>
 									        </div>						                
@@ -323,7 +292,7 @@ License: You must have a valid license purchased only from themeforest(the above
 		</script>
 		<script src="${IncPath}/cl.js?v=${jsVersion}"
 			type="text/javascript"></script>
-		<script src="${IncPath}/core/unloader/unloader.js?v=${jsVersion}"
+		<script src="${IncPath}/x27/logs/logs.js?v=${jsVersion}"
 			type="text/javascript"></script>
 			
         <script>  

@@ -31,7 +31,7 @@
 								class="fa fa-arrows"></i> 修改密码
 						</a></li>
 
-						<li><a href="${IncPath}/web/gotoLoginPage"
+						<li><a href="${IncPath}/web/logOutPage"
 							id="modify_password"> <i class="fa fa-key"></i> 退出
 						</a></li>
 					</ul>

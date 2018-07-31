@@ -49,4 +49,5 @@ public @interface OperateLog {
 	 * @return
 	 */
 	String bussTypeDesc() default "";
+
 }
