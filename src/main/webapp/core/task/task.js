@@ -621,6 +621,15 @@ var Task = function() {
 			}*/
 		},
 		/**
+		 * 点击设置离港时间
+		 */
+		setDepartureTime_click : function(taskId, status) {
+     	    $('#departureTimeForm')[0].reset();
+			$('#taskId').val(taskId);
+			$('#status').val(status);
+			$('#setDepartureTime').modal('show');
+		},
+		/**
 		 * 点击查看船舶信息
 		 */
 		view_ship_click : function(taskId) {

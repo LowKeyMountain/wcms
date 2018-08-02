@@ -20,7 +20,6 @@ import com.alibaba.fastjson.JSONObject;
 import net.itw.wcms.ship.entity.Cabin;
 import net.itw.wcms.ship.entity.Cargo;
 import net.itw.wcms.ship.entity.Task;
-import net.itw.wcms.ship.entity.UnloaderAll;
 import net.itw.wcms.ship.repository.CabinRepository;
 import net.itw.wcms.ship.repository.TaskRepository;
 import net.itw.wcms.ship.service.ITaskService;
@@ -29,7 +28,6 @@ import net.itw.wcms.toolkit.AutoCreateDBTable;
 import net.itw.wcms.toolkit.DateTimeUtils;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
-import net.itw.wcms.x27.security.tag.AuthorizeTag;
 import net.itw.wcms.x27.security.tag.AuthorizeUtils;
 import net.itw.wcms.x27.utils.ConstantUtil;
 
@@ -106,7 +104,9 @@ public class TaskServiceImpl implements ITaskService {
 				break;	
 			case 2:
 				if (authorizeUtils.authorize(options.request, "4")){
-					operation = "<a href='javascript:Task.update_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i> 修改</a>";
+					if (t.getDepartureTime() == null) {
+						operation = "<a href='javascript:Task.setDepartureTime_click(\"" + t.getId() + "\",\"2\");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i> 修改</a>";
+					}
 				}
 				if (authorizeUtils.authorize(options.request, "17")){
 					operation += "<a href='javascript:Task.unshipInfo_click(" + t.getId() + ");' class='btn btn-xs default btn-editable'><i class='fa fa-edit'></i>卸船情况</a>";

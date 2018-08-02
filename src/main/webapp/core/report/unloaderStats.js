@@ -78,7 +78,7 @@
 	                for (var i in value) {
 	                	count += value[i].usedTime;
 	                }
-	                return count.toFixed(2);
+	                return count.toFixed(1);
 	            }
 		    }, {
 		        field: 'unloading',
@@ -90,7 +90,7 @@
 	                for (var i in value) {
 	                	count += value[i].unloading;
 	                }
-	                return count.toFixed(2);
+	                return count.toFixed(1);
 	            }
 		    }, {
 		        field: 'efficiency',
@@ -104,7 +104,7 @@
 	                	t_count += value[i].usedTime;
 	                	h_count += value[i].unloading;
 	                }
-	                return (h_count/t_count).toFixed(2);
+	                return (h_count/t_count).toFixed(1);
 	            }		
 		    }],
 			locale : 'zh-CN',// 中文支持,

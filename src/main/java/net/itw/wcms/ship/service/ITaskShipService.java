@@ -133,6 +133,16 @@ public interface ITaskShipService {
 	 * @return
 	 */
 	Map<String, Object> doOutboardInfoStatistics(Map<String, Object> args);
+	
+	/**
+	 * 更新船舶离港时间
+	 * @param taskId
+	 * @param userName
+	 * @param status
+	 * @param time
+	 * @return
+	 */
+	MessageOption updateDepartureTime(String taskId, String userName, String status, String time);
 
 	
 }
