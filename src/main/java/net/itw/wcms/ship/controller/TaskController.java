@@ -267,7 +267,7 @@ public class TaskController {
 		modelMap.put("taskId", id);
 		modelMap.put("task", task);
 		modelMap.put("shipName", task != null && task.getShip() != null ? task.getShip().getShipName() : "");
-		return new ModelAndView(PATH_UNSHIPINFO + "list");
+		return new ModelAndView(PATH_UNSHIPINFO + "unloadlist");
 	}
 	
 	/**
@@ -275,11 +275,12 @@ public class TaskController {
 	 * @param taskId
 	 * @return
 	 */
-	@RequestMapping(value = "/getUnshipInfoList")
-	public Map<String, Object> getUnshipInfoList(@RequestParam("taskId") Integer taskId) {
+	@RequestMapping(value = "/getUnshipInfoList", produces = "text/json;charset=UTF-8")
+	public String getUnshipInfoList(@RequestParam("taskId") Integer taskId) {
 		// 从session取出User对象
-		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
+//		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
 		Map<String, Object> result = null;
+		JSONObject json = new JSONObject();
 		try {
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("fuctionType", "FN_004");
@@ -291,12 +292,17 @@ public class TaskController {
 			result = infoQueryHelper.doQueryInfo(jsonObject, options);
 		} catch (Exception e) {
 			e.printStackTrace();
-			mo.msg = e.getMessage();
-			mo.code = ConstantUtil.FailInt;
+//			mo.msg = e.getMessage();
+//			mo.code = ConstantUtil.FailInt;
 		}
-		result.put("msg", mo.msg);
-		result.put("code", mo.code);
-		return result;
+//		result.put("msg", mo.msg);
+//		result.put("code", mo.code);
+		
+//		return result;
+		json.put("rows",result.get("data"));
+		json.put("total",result.get("total"));
+
+		return json.toString();
 	}
 	
 	/**
