@@ -164,6 +164,11 @@ License: You must have a valid license purchased only from themeforest(the above
 											<td colspan="3"><b>${cabin.cabinNo}#舱</b></td>
 											<td>货名</td>
 											<td>${cabin.cargoName}</td>
+											<td>总量</td>
+											<td>${cabin.total}</td>
+										</tr>
+										<tr>
+											<td colspan="3"></td>
 											<td>状态</td>
 											<td>
 											<!-- 状态 （卸货|0、清舱|1、完成|2） -->
@@ -173,11 +178,13 @@ License: You must have a valid license purchased only from themeforest(the above
 												<c:when test="${cabin.status == 2}">完成</c:when>
 											</c:choose>
 											</td>
+											<td>清舱前</td>
+											<td>${cabin.finishedBeforeClearance}</td>
 										</tr>
 										<tr>
 											<td colspan="3"></td>
-											<td>总量</td>
-											<td>${cabin.total}</td>
+											<td>清舱量</td>
+											<td>${cabin.clearance}</td>
 											<td>已完成</td>
 											<td>${cabin.finished}</td>
 										</tr>
@@ -185,13 +192,6 @@ License: You must have a valid license purchased only from themeforest(the above
 											<td colspan="3"></td>
 											<td>剩余量</td>
 											<td>${cabin.remainder}</td>
-											<td>清舱量</td>
-											<td>${cabin.clearance}</td>
-										</tr>
-										<tr>
-											<td colspan="3"></td>
-											<td>清舱前</td>
-											<td>${cabin.finishedBeforeClearance}</td>
 											<td></td>
 											<td></td>
 										</tr>

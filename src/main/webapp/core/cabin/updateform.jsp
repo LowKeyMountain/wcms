@@ -47,24 +47,38 @@
 							</div>
 						</div>
 						 -->
+						<%
+							boolean isSelected = false;
+						%>
 						<div class="col-md-8">
-							<select id="cargo.id" name="cargo.id" class="form-control select2me">
-					   			<c:if test="${!(cargos == null || fn:length(cargos) == 0)}">
-					   				<c:forEach var="cargo" items="${cargos}">
+							<select id="cargo.id" name="cargo.id"
+								class="form-control select2me">
+								<c:if test="${!(cargos == null || fn:length(cargos) == 0)}">
+									<c:forEach var="cargo" items="${cargos}">
 										<c:choose>
 											<c:when test="${cargo.cargoType == null}">
-												<option value="${cargo.id}">«Î—°‘Ò...</option>
+												<c:set var="cargoId" value="${cargo.id}" />
 											</c:when>
 											<c:when test="${cargo.id == cabin.cargo.id}">
 												<option value="${cargo.id}" selected>${cargo.cargoType}</option>
+												<%
+													isSelected = true;
+												%>
 											</c:when>
-											
 											<c:otherwise>
 												<option value="${cargo.id}">${cargo.cargoType}</option>
 											</c:otherwise>
 										</c:choose>
 									</c:forEach>
-					   			</c:if>
+								</c:if>
+								<%
+									if (!isSelected) {
+									Integer cargoId = (Integer) pageContext.getAttribute("cargoId");
+								%>
+								<option value="<%=cargoId%>" selected>«Î—°‘Ò...</option>
+								<%
+									}
+								%>
 							</select>
 						</div>
 					</div>

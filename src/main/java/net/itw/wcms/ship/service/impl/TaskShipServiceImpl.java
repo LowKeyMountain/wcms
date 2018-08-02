@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -13,6 +15,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.xml.bind.JAXBException;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -193,10 +196,10 @@ public class TaskShipServiceImpl implements ITaskShipService {
 				for (Cargo cargo : task.getCargos()) {
 					for (Cabin cabin : cargo.getCabins()) {
 						if (cabin.getCabinNo() == Integer.parseInt(cabinNo)) {
-							cabin.setStatus(statusCode);
-							if (statusCode == 1) { // 设置清舱时间
-								cabin.setClearTime(new Date());
-							}
+							cabin.setStatus(2);
+//							if (statusCode == 1) { // 设置清舱时间
+							cabin.setClearTime(new Date());
+//							}
 							cabin.setUpdateTime(new Date());
 							cabin.setUpdateUser(operator.getUserName());
 						}
@@ -257,10 +260,10 @@ public class TaskShipServiceImpl implements ITaskShipService {
 				for (Cargo cargo : task.getCargos()) {
 					for (Cabin cabin : cargo.getCabins()) {
 						if (cabin.getCabinNo() == Integer.parseInt(cabinNo)) {
-							cabin.setStatus(statusCode);
-							if (statusCode == 1) { // 设置清舱时间
-								cabin.setClearTime(DateTimeUtils.strDateTime2Date(clearTime));
-							}
+							cabin.setStatus(2);
+//							if (statusCode == 1) { // 设置清舱时间
+							cabin.setClearTime(DateTimeUtils.strDateTime2Date(clearTime));
+//							}
 							cabin.setUpdateTime(new Date());
 							cabin.setUpdateUser(operator.getUserName());
 						}
@@ -713,6 +716,18 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			data.put("owner", cargo.getCargoOwner());
 			data.put("stowage", cargo.getStowage());
 			String warehouse = cargoRepository.getCargoWarehouse(cargo.getId());
+			if (StringUtils.isNotBlank(warehouse)) {
+				List<String> list = Arrays.asList(warehouse.split(","));
+				Collections.sort(list);
+				String temp = "";
+				for (String s : list) {
+					temp += s + ",";
+				}
+				if (temp.lastIndexOf(",") > -1) {
+					temp = temp.substring(0, temp.length() - 1);
+				}
+				warehouse = temp;
+			}
 			data.put("warehouse", warehouse);
 
 			result.put("msg", msg);

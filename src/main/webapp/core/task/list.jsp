@@ -299,7 +299,7 @@ License: You must have a valid license purchased only from themeforest(the above
         <script src="${IncPath}/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>     -->
 
 	<script
-		src="${IncPath}/assets/global/plugins/bootstrap-table/js/bootstrap-table-zh-CN.js"
+		src="${IncPath}/assets/global/plugins/bootstrap-table/js/bootstrap-table-zh-CN.js?v=${jsVersion}"
 		type="text/javascript"></script>
 	<!-- END PAGE LEVEL PLUGINS -->
 	<!-- BEGIN THEME GLOBAL SCRIPTS -->
