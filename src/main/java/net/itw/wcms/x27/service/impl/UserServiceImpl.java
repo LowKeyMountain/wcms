@@ -130,7 +130,7 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public User getUserByUserName(String userName) {
-		return userRepository.getUserByUserName(userName);
+		return userRepository.getUserByUserNameAndIsDeleteFalse(userName);
 	}
 
 	@Override
@@ -282,7 +282,7 @@ public class UserServiceImpl implements IUserService {
 			return option;
 		}
 
-		User user = userRepository.getUserByUserName(userName);
+		User user = userRepository.getUserByUserNameAndIsDeleteFalse(userName);
 
 		if (user == null || user.getIsDelete()) {
 			option.code = ConstantUtil.FailInt;

@@ -83,7 +83,7 @@
 	                for (var i in value) {
 	                	count += value[i].total;
 	                }
-	                return count.toFixed(2);
+	                return count.toFixed(1);
 	            }	        
 		    }, {
 		        field: 'finishedBeforeClearance',
@@ -95,7 +95,7 @@
 	                for (var i in value) {
 	                	count += value[i].finishedBeforeClearance;
 	                }
-	                return count.toFixed(2);
+	                return count.toFixed(1);
 	            }		        
 		    }, {
 		        field: 'clearance',
@@ -107,7 +107,7 @@
 	                for (var i in value) {
 	                	count += value[i].clearance;
 	                }
-	                return count.toFixed(2);
+	                return count.toFixed(1);
 	            } 
 		    }, {
 		        field: 'finished',
@@ -119,7 +119,7 @@
 	                for (var i in value) {
 	                	count += value[i].finished;
 	                }
-	                return count.toFixed(2);
+	                return count.toFixed(1);
 	            }		        
 		    },{
 		        field: 'remainder',
@@ -131,7 +131,7 @@
 	                for (var i in value) {
 	                	count += value[i].remainder;
 	                }
-	                return count.toFixed(2);
+	                return count.toFixed(1);
 	            }        
 		    },{
 		        field: 'status',

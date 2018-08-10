@@ -2,8 +2,9 @@ package net.itw.wcms.ship.service.impl;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -193,10 +194,10 @@ public class TaskShipServiceImpl implements ITaskShipService {
 				for (Cargo cargo : task.getCargos()) {
 					for (Cabin cabin : cargo.getCabins()) {
 						if (cabin.getCabinNo() == Integer.parseInt(cabinNo)) {
-							cabin.setStatus(statusCode);
-							if (statusCode == 1) { // 设置清舱时间
-								cabin.setClearTime(new Date());
-							}
+							cabin.setStatus(2);
+//							if (statusCode == 1) { // 设置清舱时间
+							cabin.setClearTime(new Date());
+//							}
 							cabin.setUpdateTime(new Date());
 							cabin.setUpdateUser(operator.getUserName());
 						}
@@ -257,10 +258,10 @@ public class TaskShipServiceImpl implements ITaskShipService {
 				for (Cargo cargo : task.getCargos()) {
 					for (Cabin cabin : cargo.getCabins()) {
 						if (cabin.getCabinNo() == Integer.parseInt(cabinNo)) {
-							cabin.setStatus(statusCode);
-							if (statusCode == 1) { // 设置清舱时间
-								cabin.setClearTime(DateTimeUtils.strDateTime2Date(clearTime));
-							}
+							cabin.setStatus(2);
+//							if (statusCode == 1) { // 设置清舱时间
+							cabin.setClearTime(DateTimeUtils.strDateTime2Date(clearTime));
+//							}
 							cabin.setUpdateTime(new Date());
 							cabin.setUpdateUser(operator.getUserName());
 						}
@@ -713,6 +714,18 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			data.put("owner", cargo.getCargoOwner());
 			data.put("stowage", cargo.getStowage());
 			String warehouse = cargoRepository.getCargoWarehouse(cargo.getId());
+			if (StringUtils.isNotBlank(warehouse)) {
+				List<String> list = Arrays.asList(warehouse.split(","));
+				Collections.sort(list);
+				String temp = "";
+				for (String s : list) {
+					temp += s + ",";
+				}
+				if (temp.lastIndexOf(",") > -1) {
+					temp = temp.substring(0, temp.length() - 1);
+				}
+				warehouse = temp;
+			}
 			data.put("warehouse", warehouse);
 
 			result.put("msg", msg);
@@ -751,6 +764,18 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			data.put("owner", cargo.getCargoOwner());
 			data.put("stowage", cargo.getStowage());
 			String warehouse = cargoRepository.getCargoWarehouse(cargo.getId());
+			if (StringUtils.isNotBlank(warehouse)) {
+				List<String> list = Arrays.asList(warehouse.split(","));
+				Collections.sort(list);
+				String temp = "";
+				for (String s : list) {
+					temp += s + ",";
+				}
+				if (temp.lastIndexOf(",") > -1) {
+					temp = temp.substring(0, temp.length() - 1);
+				}
+				warehouse = temp;
+			}
 			data.put("warehouse", warehouse);
 
 			result.put("msg", msg);
@@ -1278,5 +1303,50 @@ public class TaskShipServiceImpl implements ITaskShipService {
 		}
 		return 1;
 	}
+	
+	/**
+	 * 更新船舶离港时间
+	 * 
+	 * @param taskId
+	 * @param userName
+	 * @param status
+	 * @param time
+	 * @return
+	 */
+	@Override
+	@Transactional
+	public MessageOption updateDepartureTime(String taskId, String userName, String status, String time) {
 
+		// 需求：设置船舶离港时间
+		// 前置条件：
+		// 1.检查当前船舶状态，只有“离港船舶|2”状态才能设置“船舶离港时间”，其它状态不能进行设定；
+		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "操作成功！");
+		try {
+			User operator = userService.getUserByUserName(userName);
+			Task task = taskRepository.findOne(Integer.parseInt(taskId));
+			if (task == null) {
+				throw new X27Exception("操作失败：[taskId]未找到指定作业船舶 ！");
+			}
+			// 作业状态 （预靠船舶|0、 作业船舶|1、离港船舶|2）
+			// 1.检查当前船舶状态，只有“离港船舶|2”状态才能设置“船舶离港时间”，其它状态不能进行设定；
+			switch (task.getStatus()) {
+			case 2:
+				task.setDepartureTime(DateTimeUtils.strDateTime2Date(time));
+				task.setUpdateTime(new Date());
+				task.setUpdateUser(operator.getUserName());
+				taskRepository.saveAndFlush(task);
+				break;
+			case 0:
+			case 1:
+				throw new X27Exception("操作失败: 只有离港船舶才能设置船舶离港时间！");
+			default:
+				break;
+			}
+		} catch (Exception e) {
+			mo.msg = e.getMessage();
+			mo.code = ConstantUtil.FailInt;
+		}
+		return mo;
+	}
+	
 }

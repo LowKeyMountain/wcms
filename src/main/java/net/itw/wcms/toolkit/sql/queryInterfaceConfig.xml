@@ -241,8 +241,8 @@
 					ELSE cabin.cmsid
 				END AS 'unloaderName', cabin.cabinNo, DATE_FORMAT(cabin.startTime, '%Y-%m-%d %H:%i:%s') AS 'startTime'
 				, DATE_FORMAT(cabin.endTime, '%Y-%m-%d %H:%i:%s') AS 'endTime', cabin.usedTime
-				, round(cabin.unloading, 2) AS 'unloading'
-				, round(round(cabin.unloading, 2)/cabin.usedTime, 2) AS 'efficiency', t.taskId AS 'task_id'
+				, round(cabin.unloading, 1) AS 'unloading'
+				, round(round(cabin.unloading, 1)/cabin.usedTime, 1) AS 'efficiency', t.taskId AS 'task_id'
 			FROM (
 				SELECT c2.cabinId, c2.cmsid, c2.startTime, c2.endTime, c2.usedTime
 					, c2.unloading, c2.efficiency, c2.cargo_id, c2.cabin_no AS 'cabinNo'
@@ -250,7 +250,7 @@
 					SELECT t1.*, t2.cargo_id, t2.cabin_no, t1.unloading / t1.usedTime AS 'efficiency'
 					FROM (
 						SELECT tc.*
-							, round(timestampdiff(MINUTE, tc.startTime, tc.endTime) / 60, 2) AS 'usedTime'
+							, round(timestampdiff(MINUTE, tc.startTime, tc.endTime) / 60, 1) AS 'usedTime'
 							, tb.unloading
 							, CASE 
 								WHEN tc.endTime IS NULL THEN CURRENT_TIMESTAMP()
@@ -503,9 +503,9 @@
 					WHEN 'ABB_GSU_5' THEN '#5'
 					WHEN 'ABB_GSU_6' THEN '#6'
 					ELSE w.cmsid
-				END AS 'unloaderName', round(w.usedTime, 2) AS 'usedTime'
-				, round(w.unloading, 2) AS 'unloading'
-				, round(round(w.unloading, 2) / round(w.usedTime, 2), 2) AS 'efficiency'
+				END AS 'unloaderName', round(w.usedTime, 1) AS 'usedTime'
+				, round(w.unloading, 1) AS 'unloading'
+				, round(round(w.unloading, 1) / round(w.usedTime, 1), 1) AS 'efficiency'
 			FROM (
 				SELECT c.cabinId, c.cmsid, SUM(c.usedTime) AS 'usedTime'
 					, SUM(c.unloading) AS 'unloading'
@@ -543,9 +543,9 @@
 					WHEN 'ABB_GSU_5' THEN '#5'
 					WHEN 'ABB_GSU_6' THEN '#6'
 					ELSE w.cmsid
-				END AS 'unloaderName', round(w.usedTime, 2) AS 'usedTime'
-				, round(w.unloading, 2) AS 'unloading'
-				, round(round(w.unloading, 2) / round(w.usedTime, 2), 2) AS 'efficiency'
+				END AS 'unloaderName', round(w.usedTime, 1) AS 'usedTime'
+				, round(w.unloading, 1) AS 'unloading'
+				, round(round(w.unloading, 1) / round(w.usedTime, 1), 1) AS 'efficiency'
 			FROM (
 				SELECT c.cabinId, c.cmsid, SUM(c.usedTime) AS 'usedTime'
 					, SUM(c.unloading) AS 'unloading'
@@ -586,9 +586,9 @@
 					ELSE w.cmsid
 				END AS 'unloaderName', DATE_FORMAT(w.startTime, '%Y-%m-%d %H:%i:%s') AS 'startTime'
 				, DATE_FORMAT(w.endTime, '%Y-%m-%d %H:%i:%s') AS 'endTime'
-				, round(w.usedTime, 2) AS 'usedTime'
-				, round(w.unloading, 2) AS 'unloading'
-				, round(round(w.unloading, 2) / round(w.usedTime, 2), 2) AS 'efficiency'
+				, round(w.usedTime, 1) AS 'usedTime'
+				, round(w.unloading, 1) AS 'unloading'
+				, round(round(w.unloading, 1) / round(w.usedTime, 1), 1) AS 'efficiency'
 			FROM (
 				SELECT c.cabinId, b.cmsid, MIN(b.Time) AS 'startTime'
 					, MAX(b.Time) AS 'endTime'
@@ -623,9 +623,9 @@
 					ELSE w.cmsid
 				END AS 'unloaderName', DATE_FORMAT(w.startTime, '%Y-%m-%d %H:%i:%s') AS 'startTime'
 				, DATE_FORMAT(w.endTime, '%Y-%m-%d %H:%i:%s') AS 'endTime'
-				, round(w.usedTime, 2) AS 'usedTime'
-				, round(w.unloading, 2) AS 'unloading'
-				, round(round(w.unloading, 2) / round(w.usedTime, 2), 2) AS 'efficiency'
+				, round(w.usedTime, 1) AS 'usedTime'
+				, round(w.unloading, 1) AS 'unloading'
+				, round(round(w.unloading, 1) / round(w.usedTime, 1), 1) AS 'efficiency'
 			FROM (
 				SELECT c.cabinId, b.cmsid, MIN(b.Time) AS 'startTime'
 					, MAX(b.Time) AS 'endTime'
@@ -654,8 +654,8 @@
 			FROM (
 				SELECT ccxx.task_id, ccxx.cabin_id AS cabinId, ccxx.cabin_no AS cabinNo, ccxx.cargo_id AS cargoId, ccxx.cargoName AS cargoName
 					, ccxx.total AS total, round(qcq.finished, 1) AS finishedBeforeClearance, qcq.finishedUsedTime AS finishedUsedTimeBeforeClearance
-					, qcq.finishedEfficiency AS finishedEfficiencyBeforeClearance, round(qch.clearance, 1) AS clearance, qch.clearanceUsedTime
-					, qch.clearanceEfficiency
+					, qcq.finishedEfficiency AS finishedEfficiencyBeforeClearance, round(qch.clearance, 1) AS clearance, round(qch.clearanceUsedTime, 1) AS clearanceUsedTime
+					, round(qch.clearanceEfficiency, 1) AS clearanceEfficiency
 					, CASE 
 						WHEN round(qcq.finished, 1) IS NULL
 						AND ROUND(qch.clearance, 1) IS NULL THEN 0
@@ -667,8 +667,8 @@
 						WHEN qcq.finishedUsedTime IS NULL
 						AND qch.clearanceUsedTime IS NULL THEN 0
 						WHEN qcq.finishedUsedTime IS NOT NULL
-						AND qch.clearanceUsedTime IS NULL THEN qcq.finishedUsedTime
-						ELSE qcq.finishedUsedTime + qch.clearanceUsedTime
+						AND qch.clearanceUsedTime IS NULL THEN round(qcq.finishedUsedTime, 1)
+						ELSE round(qcq.finishedUsedTime + qch.clearanceUsedTime, 1)
 					END AS finishedUsedTime, round(CASE 
 						WHEN round(qcq.finished, 1) IS NULL
 						AND ROUND(qch.clearance, 1) IS NULL THEN 0
@@ -681,7 +681,7 @@
 						WHEN qcq.finishedUsedTime IS NOT NULL
 						AND qch.clearanceUsedTime IS NULL THEN qcq.finishedUsedTime
 						ELSE qcq.finishedUsedTime + qch.clearanceUsedTime
-					END, 2) AS finishedEfficiency
+					END, 1) AS finishedEfficiency
 					, CASE 
 						WHEN round(ccxx.total - qcq.finished, 1) IS NULL
 						AND round(qch.clearance, 1) IS NULL THEN ccxx.total
@@ -697,7 +697,7 @@
 					GROUP BY cabin.cargo_id, cabin.task_id
 				) ccxx, (
 						SELECT SUM(cabinlist.groupClearance) AS clearance, SUM(cabinlist.groupClearanceUsedTime) AS clearanceUsedTime
-							, round(SUM(cabinlist.groupClearance) / SUM(cabinlist.groupClearanceUsedTime), 2) AS clearanceEfficiency
+							, round(SUM(cabinlist.groupClearance) / SUM(cabinlist.groupClearanceUsedTime), 1) AS clearanceEfficiency
 							, cabinlist.cabin_id, cabinlist.task_id, cabinlist.cargo_id
 						FROM (
 							SELECT SUM(tbc.OneTask) AS groupClearance
@@ -727,7 +727,7 @@
 						GROUP BY cabinlist.cargo_id
 					) qch, (
 						SELECT SUM(cabinlist.groupFinished) AS finished, SUM(cabinlist.groupFinishedUsedTime) AS finishedUsedTime
-							, round(SUM(cabinlist.groupFinished) / SUM(cabinlist.groupFinishedUsedTime), 2) AS finishedEfficiency
+							, round(SUM(cabinlist.groupFinished) / SUM(cabinlist.groupFinishedUsedTime), 1) AS finishedEfficiency
 							, cabinlist.cabin_id, cabinlist.task_id, cabinlist.cargo_id
 						FROM (
 							SELECT SUM(tbc.OneTask) AS groupFinished
@@ -779,9 +779,9 @@
 			SELECT *
 			FROM (
 				SELECT ccxx.task_id, ccxx.cabin_id AS cabinId, ccxx.cabin_no AS cabinNo, ccxx.cargo_id AS cargoId, ccxx.cargoName AS cargoName
-					, ccxx.total AS total, round(qcq.finished, 1) AS finishedBeforeClearance, qcq.finishedUsedTime AS finishedUsedTimeBeforeClearance
-					, qcq.finishedEfficiency AS finishedEfficiencyBeforeClearance, round(qch.clearance, 1) AS clearance, qch.clearanceUsedTime
-					, qch.clearanceEfficiency
+					, ccxx.total AS total, round(qcq.finished, 1) AS finishedBeforeClearance, round(qcq.finishedUsedTime, 1) AS finishedUsedTimeBeforeClearance
+					, round(qcq.finishedEfficiency, 1) AS finishedEfficiencyBeforeClearance, round(qch.clearance, 1) AS clearance, round(qch.clearanceUsedTime, 1) AS clearanceUsedTime
+					, round(qch.clearanceEfficiency, 1) AS clearanceEfficiency
 					, CASE 
 						WHEN round(qcq.finished, 1) IS NULL
 						AND ROUND(qch.clearance, 1) IS NULL THEN 0
@@ -793,8 +793,8 @@
 						WHEN qcq.finishedUsedTime IS NULL
 						AND qch.clearanceUsedTime IS NULL THEN 0
 						WHEN qcq.finishedUsedTime IS NOT NULL
-						AND qch.clearanceUsedTime IS NULL THEN qcq.finishedUsedTime
-						ELSE qcq.finishedUsedTime + qch.clearanceUsedTime
+						AND qch.clearanceUsedTime IS NULL THEN round(qcq.finishedUsedTime, 1)
+						ELSE round(qcq.finishedUsedTime + qch.clearanceUsedTime, 1)
 					END AS finishedUsedTime, round(CASE 
 						WHEN round(qcq.finished, 1) IS NULL
 						AND ROUND(qch.clearance, 1) IS NULL THEN 0
@@ -807,14 +807,14 @@
 						WHEN qcq.finishedUsedTime IS NOT NULL
 						AND qch.clearanceUsedTime IS NULL THEN qcq.finishedUsedTime
 						ELSE qcq.finishedUsedTime + qch.clearanceUsedTime
-					END, 2) AS finishedEfficiency
+					END, 1) AS finishedEfficiency
 					, CASE 
 						WHEN round(ccxx.total - qcq.finished, 1) IS NULL
-						AND round(qch.clearance, 1) IS NULL THEN ccxx.total
+						AND round(qch.clearance, 1) IS NULL THEN round(ccxx.total, 1)
 						WHEN round(ccxx.total - qcq.finished, 1) IS NOT NULL
 						AND round(qch.clearance, 1) IS NULL THEN round(ccxx.total - qcq.finished, 1)
 						ELSE round(ccxx.total - qcq.finished - qch.clearance, 1)
-					END AS remainder, ccxx.status AS status, ccxx.clear_time AS clearTime
+					END AS remainder, ccxx.status AS status, round(ccxx.clear_time, 1) AS clearTime
 				FROM (
 					SELECT cabin.task_id, cabin.cargo_id, cabin.cabin_id, cabin.cabin_no, cabin.status
 						, cabin.clear_time, MAX(cabin.cargo_type) AS cargoName
@@ -823,7 +823,7 @@
 					GROUP BY cabin.cabin_id, cabin.task_id
 				) ccxx, (
 						SELECT SUM(cabinlist.groupClearance) AS clearance, SUM(cabinlist.groupClearanceUsedTime) AS clearanceUsedTime
-							, round(SUM(cabinlist.groupClearance) / SUM(cabinlist.groupClearanceUsedTime), 2) AS clearanceEfficiency
+							, round(SUM(cabinlist.groupClearance) / SUM(cabinlist.groupClearanceUsedTime), 1) AS clearanceEfficiency
 							, cabinlist.cabin_id, cabinlist.task_id
 						FROM (
 							SELECT SUM(tbc.OneTask) AS groupClearance
@@ -853,7 +853,7 @@
 						GROUP BY cabinlist.cabin_id
 					) qch, (
 						SELECT SUM(cabinlist.groupFinished) AS finished, SUM(cabinlist.groupFinishedUsedTime) AS finishedUsedTime
-							, round(SUM(cabinlist.groupFinished) / SUM(cabinlist.groupFinishedUsedTime), 2) AS finishedEfficiency
+							, round(SUM(cabinlist.groupFinished) / SUM(cabinlist.groupFinishedUsedTime), 1) AS finishedEfficiency
 							, cabinlist.cabin_id, cabinlist.task_id
 						FROM (
 							SELECT SUM(tbc.OneTask) AS groupFinished
@@ -911,9 +911,9 @@
 					WHEN 'ABB_GSU_5' THEN '#5'
 					WHEN 'ABB_GSU_6' THEN '#6'
 					ELSE w.cmsid
-				END AS 'unloaderName', round(w.usedTime, 2) AS 'usedTime'
-				, round(w.unloading, 2) AS 'unloading'
-				, round(round(w.unloading, 2) / round(w.usedTime, 2), 2) AS 'efficiency'
+				END AS 'unloaderName', round(w.usedTime, 1) AS 'usedTime'
+				, round(w.unloading, 1) AS 'unloading'
+				, round(round(w.unloading, 1) / round(w.usedTime, 1), 1) AS 'efficiency'
 			FROM (
 				SELECT c.cabinId, c.cmsid, SUM(c.usedTime) AS 'usedTime'
 					, SUM(c.unloading) AS 'unloading'

@@ -101,6 +101,13 @@ public class UserController {
 		user.setLastLoginIp(WebUtil.getRemoteHost(req));
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "数据保存成功！");
 		try {
+			// 校验用户名唯一性
+			User tempUser = userService.getUserByUserName(user.getUserName());
+			if (tempUser != null) {
+				mo.code = ConstantUtil.FailInt;
+				mo.msg = "操作失败：新增用户名已存在!";
+				return mo;
+			}
 			mo.code = userService.createUser(user, operator);
 		} catch (Exception e) {
 			e.printStackTrace();

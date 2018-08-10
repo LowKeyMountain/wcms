@@ -61,7 +61,7 @@
 		        width: '10%'
 		    },*/ {
 		        field: 'cabinNo',
-		        title: '船舱号',
+		        title: '舱号',
 		        align: 'center',
 		        width: '6%',
 		        formatter: function (value, row, index) {
@@ -70,17 +70,17 @@
                 }
 		    }, {
 		        field: 'startPosition',
-		        title: '开始位置',
+		        title: '后橄',
 		        align: 'center',
 		        width: '11%'
 		    }, {
 		        field: 'endPosition',
-		        title: '结束位置',
+		        title: '前橄',
 		        align: 'center',
 		        width: '11%'
 		    },{
 		        field: 'leftOffset',
-		        title: '舱左边最远偏移距离|米',
+		        title: '舱左边最远偏移位置|米',
 		        align: 'center',
 		        width: '12%'
 		    }, {
@@ -95,7 +95,7 @@
 		        width: '12%'
 		    }, {
 		        field: 'rightOffset',
-		        title: '舱右边最远偏移距离|米',
+		        title: '舱右边最远偏移位置|米',
 		        align: 'center',
 		        width: '12%'
 		    }, {

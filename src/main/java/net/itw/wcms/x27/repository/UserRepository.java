@@ -32,6 +32,8 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
 
 	User getUserByUserName(String userName);
 	
+	User getUserByUserNameAndIsDeleteFalse(String userName);
+	
 	User getUserByUserNameAndPassword(String userName, String password);
 
 	User getUserById(Integer id);

@@ -75,7 +75,7 @@
 	                for (var i in value) {
 	                	count += value[i].total;
 	                }
-	                return count.toFixed(2);
+	                return count.toFixed(1);
 	            }		        
 		    }, {
 		    	field: 'finishedBeforeClearance',
@@ -87,7 +87,7 @@
 	                for (var i in value) {
 	                	count += value[i].finishedBeforeClearance;
 	                }
-	                return count.toFixed(2);
+	                return count.toFixed(1);
 	            }
 		    }, {
 		    	field: 'finishedUsedTimeBeforeClearance',
@@ -99,7 +99,7 @@
 	                for (var i in value) {
 	                	count += value[i].finishedUsedTimeBeforeClearance;
 	                }
-	                return count.toFixed(2);
+	                return count.toFixed(1);
 	            }
 		    }, {
 		    	field: 'finishedEfficiencyBeforeClearance',
@@ -113,7 +113,7 @@
 	                	t_count += value[i].finishedUsedTimeBeforeClearance;
 	                	h_count += value[i].finishedBeforeClearance;
 	                }
-	                return (h_count/t_count).toFixed(2);
+	                return (h_count/t_count).toFixed(1);
 	            }
 		    }, {
 		        field: 'clearance',
@@ -125,7 +125,7 @@
 	                for (var i in value) {
 	                	count += value[i].clearance;
 	                }
-	                return count.toFixed(2);
+	                return count.toFixed(1);
 	            }
 		    }, {
 		        field: 'clearanceUsedTime',
@@ -137,7 +137,7 @@
 	                for (var i in value) {
 	                	count += value[i].clearanceUsedTime;
 	                }
-	                return count.toFixed(2);
+	                return count.toFixed(1);
 	            }
 		    }, {
 		        field: 'clearanceEfficiency',
@@ -152,9 +152,9 @@
 	                	h_count += value[i].clearance;
 	                }
 	                if (t_count == 0){
-	                	return '0.00';
+	                	return '0.0';
 	                } else {
-		                return (h_count/t_count).toFixed(2);
+		                return (h_count/t_count).toFixed(1);
 	                }
 	            }
 		    }, {
@@ -167,7 +167,7 @@
 	                for (var i in value) {
 	                	count += value[i].finished;
 	                }
-	                return count.toFixed(2);
+	                return count.toFixed(1);
 	            }
 		    }, {
 		        field: 'finishedUsedTime',
@@ -179,7 +179,7 @@
 	                for (var i in value) {
 	                	count += value[i].finishedUsedTime;
 	                }
-	                return count.toFixed(4);
+	                return count.toFixed(1);
 	            }
 		    }, {
 		        field: 'finishedEfficiency',
@@ -194,9 +194,9 @@
 	                	h_count += value[i].finished;
 	                }
 	                if (t_count == 0){
-	                	return '0.00';
+	                	return '0.0';
 	                } else {
-	                	return (h_count/t_count).toFixed(2);
+	                	return (h_count/t_count).toFixed(1);
 	                }
 	            }
 		    }, {
@@ -209,7 +209,7 @@
 	                for (var i in value) {
 	                	count += value[i].remainder;
 	                }
-	                return count.toFixed(2);
+	                return count.toFixed(1);
 	            }
 		    }, {
 		        field: 'status',

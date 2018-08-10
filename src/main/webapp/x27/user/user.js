@@ -268,7 +268,7 @@ var User = function(){
 						 Cl.refreshDataTable(DataTableCl.tableName);
 						 alert("增加成功");
 					 } else {
-						 alert("增加失败");
+						 alert(result.msg);
 						 return ;
 					 }
 				},

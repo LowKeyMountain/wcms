@@ -15,9 +15,9 @@
 					WHEN 'ABB_GSU_5' THEN '#5'
 					WHEN 'ABB_GSU_6' THEN '#6'
 					ELSE w.cmsid
-				END AS 'unloaderName', round(w.usedTime, 2) AS 'usedTime'
-				, round(w.unloading, 2) AS 'unloading'
-				, round(w.unloading / w.usedTime, 2) AS 'efficiency'
+				END AS 'unloaderName', round(w.usedTime, 1) AS 'usedTime'
+				, round(w.unloading, 1) AS 'unloading'
+				, round(w.unloading / w.usedTime, 1) AS 'efficiency'
 			FROM (
 				SELECT cabinId, cmsid, MIN(Time) AS 'startTime'
 					, MAX(Time) AS 'endTime'
@@ -51,9 +51,9 @@
 					ELSE w.cmsid
 				END AS 'unloaderName', DATE_FORMAT(w.startTime, '%Y-%m-%d %H:%i:%s') AS 'startTime'
 				, DATE_FORMAT(w.endTime, '%Y-%m-%d %H:%i:%s') AS 'endTime'
-				, round(w.usedTime, 2) AS 'usedTime'
-				, round(w.unloading, 2) AS 'unloading'
-				, round(w.unloading / w.usedTime, 2) AS 'efficiency'
+				, round(w.usedTime, 1) AS 'usedTime'
+				, round(w.unloading, 1) AS 'unloading'
+				, round(w.unloading / w.usedTime, 1) AS 'efficiency'
 			FROM (
 				SELECT c.cabinId, b.cmsid, MIN(b.Time) AS 'startTime'
 					, MAX(b.Time) AS 'endTime'

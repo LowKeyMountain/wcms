@@ -194,7 +194,38 @@ License: You must have a valid license purchased only from themeforest(the above
 							        </div>
 							    </div>
 							</div>	
-
+							
+							<div id="setDepartureTime" class="modal fade" role="dialog" tabindex="-1" aria-hidden="true" aria-labelledby="myModalLabel" style="display: block;">
+							    <div class="modal-dialog">
+							        <div class="modal-content">
+							            <div class="modal-header bg-primary">
+							                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+							                <h4 class="modal-title">
+							                    <i class="icon-pencil"></i>
+							                    <a class="close" data-dismiss="modal">×</a>
+							                    <span id="lblAddTitle" style="font-weight:bold">设置离泊时间</span>
+							                </h4>
+							            </div>
+						                <div class="modal-body" style="text-align:left;">
+						                    <form  id ='departureTimeForm' class="bs-example bs-example-form" role = "form">
+						                    <div class="modal-body" >
+												<div class = "input-group" id="departureTime_div">
+														<span class="input-group-addon text-center"><b class="icon-td">离泊时间</b></span>
+												        <input class="form-control form_datetime" name="departureTime" placeholder="请选择离泊时间" id="departureTime" style="width:240px;" readonly />
+												</div>										
+												<input type="hidden" class="form-control" name="taskId" placeholder="taskId" id="taskId" />
+												<input type="hidden" class="form-control" name="status" placeholder="status" id="status" />
+						                    </div>                            
+						                    </form>
+						                </div>
+										<div class="modal-footer bg-info"  style="width:500px;">
+											<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>取消</button>
+											<button type="button" id="departureTime_btn_submit" class="btn btn-primary" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>提交</button>
+										</div>
+							        </div>
+							    </div>
+							</div>	
+							
 							<div class="portlet-body">
 								<div class="table-toolbar">
 									<div class="col-md-12 col-sm-6">
@@ -299,7 +330,7 @@ License: You must have a valid license purchased only from themeforest(the above
         <script src="${IncPath}/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>     -->
 
 	<script
-		src="${IncPath}/assets/global/plugins/bootstrap-table/js/bootstrap-table-zh-CN.js"
+		src="${IncPath}/assets/global/plugins/bootstrap-table/js/bootstrap-table-zh-CN.js?v=${jsVersion}"
 		type="text/javascript"></script>
 	<!-- END PAGE LEVEL PLUGINS -->
 	<!-- BEGIN THEME GLOBAL SCRIPTS -->
@@ -416,6 +447,43 @@ License: You must have a valid license purchased only from themeforest(the above
                     }                
                 });
             });
+            
+            $('#departureTime_btn_submit').modal({backdrop: 'static', show:false,  keyboard: false});
+
+            $('#departureTime_btn_submit').off().on("click", function () {
+            	
+            	if($("#departureTime").is(':visible')){
+    	        	if($("#departureTime").val()==""){
+    					alert("请选择离泊时间！");
+    					return;        		
+    	        	}
+            	}
+            	var data={
+            			status:$("#status").val(),
+            			taskId:$("#taskId").val(),
+            			departureTime:$("#departureTime").val(),
+            	}
+                $.ajax({
+                    url: BasePath + "/task/doSetDepartureTime",
+                    type: "post",
+                    dataType: "json",
+                    cache: false,
+                    async:false,
+                    data: data,
+                    success: function (data) {
+                    	if (Cl.successInt == data.code){
+                    		alert(data.msg);  
+   							window.location.href = BasePath + "/task/tasklist?type=2";
+    					} else {
+                    		alert(data.msg);                		
+                    	}
+                    },
+                    failure: function(data){
+                        alert("修改失败!");
+                    }                
+                });
+            });
+            
 		});
 	</script>
 </body>

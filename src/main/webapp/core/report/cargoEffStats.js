@@ -80,7 +80,7 @@
 	                for (var i in value) {
 	                	count += value[i].finishedBeforeClearance;
 	                }
-	                return count.toFixed(2);
+	                return count.toFixed(1);
 	            }
 		    }, {
 		    	field: 'finishedUsedTimeBeforeClearance',
@@ -92,7 +92,7 @@
 	                for (var i in value) {
 	                	count += value[i].finishedBeforeClearance;
 	                }
-	                return count.toFixed(2);
+	                return count.toFixed(1);
 	            }
 		    }, {
 		    	field: 'finishedEfficiencyBeforeClearance',
@@ -106,7 +106,7 @@
 	                	t_count += value[i].finishedUsedTimeBeforeClearance;
 	                	h_count += value[i].finishedBeforeClearance;
 	                }
-	                return (h_count/t_count).toFixed(2);
+	                return (h_count/t_count).toFixed(1);
 	            }
 		    }, {
 		        field: 'clearance',

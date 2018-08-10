@@ -353,7 +353,31 @@ public class TaskController {
 			return result;
 		}
 	}
-
+	/**
+	 * 更新船舶离港时间
+	 * @param taskId
+	 * @param status
+	 * @param time
+	 * @return
+	 */
+	@RequestMapping(value = "/doSetDepartureTime")
+	public Map<String, Object> doSetDepartureTime(@RequestParam("taskId") String taskId,
+			@RequestParam("status") String status, @RequestParam("departureTime") String time) {
+		User operator = SessionUtil.getSessionUser(req);
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			MessageOption mo = this.taskShipService.updateDepartureTime(taskId, operator.getUserName(), status, time);
+			result.put("msg", mo.msg);
+			result.put("code", mo.isSuccess() ? "1" : "0");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", "0");
+			result.put("msg", e.getMessage());
+			return result;
+		}
+	}
+	
 	/**
 	 * 设置船舶状态（用于APP端因误操作或忘记操作时的船舶状态维护）
 	 * 
