@@ -490,7 +490,7 @@
 			</value>
 		</entry>
 		<entry>
-			<key>FN_009_1</key>
+			<key>FN_009_1(实际工作量)</key>
 			<description></description>
 			<value>
 			<![CDATA[
@@ -530,7 +530,7 @@
 			</value>
 		</entry>
 		<entry>
-			<key>FN_009_2</key>
+			<key>FN_009_2(实际工作量)</key>
 			<description></description>
 			<value>
 			<![CDATA[
@@ -571,7 +571,86 @@
 			</value>
 		</entry>
 		<entry>
-			<key>FN_010_1</key>
+			<key>FN_009_1</key>
+			<description></description>
+			<value>
+			<![CDATA[
+			SELECT c.task_id, w.cmsid AS 'unloaderId'
+				, CASE w.cmsid
+					WHEN 'ABB_GSU_1' THEN '#1'
+					WHEN 'ABB_GSU_2' THEN '#2'
+					WHEN 'ABB_GSU_3' THEN '#3'
+					WHEN 'ABB_GSU_4' THEN '#4'
+					WHEN 'ABB_GSU_5' THEN '#5'
+					WHEN 'ABB_GSU_6' THEN '#6'
+					ELSE w.cmsid
+				END AS 'unloaderName', round(w.usedTime, 1) AS 'usedTime'
+				, round(w.unloading, 1) AS 'unloading'
+				, round(round(w.unloading, 1) / round(w.usedTime, 1), 1) AS 'efficiency'
+			FROM (
+				SELECT c.cabinId, c.cmsid
+					, timestampdiff(MINUTE, MIN(c.Time), MAX(c.Time)) / 60 AS `usedTime`
+					, SUM(c.OneTask) AS 'unloading'
+				FROM (
+					SELECT `cc`.`cabinId`, `bb`.*
+					FROM `tab_temp_c_%s` `cc`
+						JOIN `tab_temp_b_%s` `bb`
+					WHERE `cc`.`id` = `bb`.`groupId`
+						AND (`bb`.`operationType` = 1
+							OR `bb`.`operationType` = 0)
+				) c
+				WHERE 1 = 1
+				GROUP BY c.Cmsid
+			) w
+				LEFT JOIN v_cabin_info c ON w.cabinId = c.cabin_id
+			WHERE 1 = 1
+				AND c.task_id = ?
+			ORDER BY w.cmsid ASC
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>FN_009_2</key>
+			<description></description>
+			<value>
+			<![CDATA[
+			SELECT c.task_id, w.cmsid AS 'unloaderId'
+				, CASE w.cmsid
+					WHEN 'ABB_GSU_1' THEN '#1'
+					WHEN 'ABB_GSU_2' THEN '#2'
+					WHEN 'ABB_GSU_3' THEN '#3'
+					WHEN 'ABB_GSU_4' THEN '#4'
+					WHEN 'ABB_GSU_5' THEN '#5'
+					WHEN 'ABB_GSU_6' THEN '#6'
+					ELSE w.cmsid
+				END AS 'unloaderName', round(w.usedTime, 1) AS 'usedTime'
+				, round(w.unloading, 1) AS 'unloading'
+				, round(round(w.unloading, 1) / round(w.usedTime, 1), 1) AS 'efficiency'
+			FROM (
+				SELECT c.cabinId, c.cmsid
+					, timestampdiff(MINUTE, MIN(c.Time), MAX(c.Time)) / 60 AS `usedTime`
+					, SUM(c.OneTask) AS 'unloading'
+				FROM (
+					SELECT `cc`.`cabinId`, `bb`.*
+					FROM `tab_temp_c_%s` `cc`
+						JOIN `tab_temp_b_%s` `bb`
+					WHERE `cc`.`id` = `bb`.`groupId`
+						AND (`bb`.`operationType` = 1
+							OR `bb`.`operationType` = 0)
+						AND UNIX_TIMESTAMP(bb.Time) BETWEEN UNIX_TIMESTAMP(?) AND UNIX_TIMESTAMP(?)
+				) c
+				WHERE 1 = 1
+				GROUP BY c.Cmsid
+			) w
+				LEFT JOIN v_cabin_info c ON w.cabinId = c.cabin_id
+			WHERE 1 = 1
+				AND c.task_id = ?
+			ORDER BY w.cmsid ASC
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>FN_010_1(实际工作量)</key>
 			<description></description>
 			<value>
 			<![CDATA[
@@ -608,7 +687,7 @@
 			</value>
 		</entry>
 		<entry>
-			<key>FN_010_2</key>
+			<key>FN_010_2(实际工作量)</key>
 			<description></description>
 			<value>
 			<![CDATA[
@@ -635,6 +714,83 @@
 				WHERE 1 = 1
 					AND `c`.`id` = `b`.`groupId`
 					AND `b`.`operationType` = 1
+					AND UNIX_TIMESTAMP(b.Time) BETWEEN UNIX_TIMESTAMP(?) AND UNIX_TIMESTAMP(?) 
+				GROUP BY b.Cmsid, b.groupId
+			) w
+				LEFT JOIN v_cabin_info c ON w.cabinId = c.cabin_id
+			WHERE 1 = 1
+			AND c.task_id = ? AND w.cmsid = ?
+			ORDER BY w.startTime ASC
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>FN_010_1</key>
+			<description></description>
+			<value>
+			<![CDATA[
+			SELECT c.task_id, w.cmsid AS 'unloaderId',c.cargo_type AS 'cargoName', c.cabin_id AS 'cabinId', c.cabin_no AS 'cabinNo'
+				, CASE w.cmsid
+					WHEN 'ABB_GSU_1' THEN '#1'
+					WHEN 'ABB_GSU_2' THEN '#2'
+					WHEN 'ABB_GSU_3' THEN '#3'
+					WHEN 'ABB_GSU_4' THEN '#4'
+					WHEN 'ABB_GSU_5' THEN '#5'
+					WHEN 'ABB_GSU_6' THEN '#6'
+					ELSE w.cmsid
+				END AS 'unloaderName', DATE_FORMAT(w.startTime, '%Y-%m-%d %H:%i:%s') AS 'startTime'
+				, DATE_FORMAT(w.endTime, '%Y-%m-%d %H:%i:%s') AS 'endTime'
+				, round(w.usedTime, 1) AS 'usedTime'
+				, round(w.unloading, 1) AS 'unloading'
+				, round(round(w.unloading, 1) / round(w.usedTime, 1), 1) AS 'efficiency'
+			FROM (
+				SELECT c.cabinId, b.cmsid, MIN(b.Time) AS 'startTime'
+					, MAX(b.Time) AS 'endTime'
+					, timestampdiff(MINUTE, MIN(b.Time), MAX(b.Time)) / 60 AS 'usedTime'
+					, SUM(b.OneTask) AS 'unloading'
+				FROM `tab_temp_c_%#` `c`, `tab_temp_b_%#` `b`
+				WHERE 1 = 1
+					AND `c`.`id` = `b`.`groupId`
+					AND (`b`.`operationType` = 1
+							OR `b`.`operationType` = 0)
+				GROUP BY b.Cmsid, b.groupId
+			) w
+				LEFT JOIN v_cabin_info c ON w.cabinId = c.cabin_id
+			WHERE 1 = 1
+			AND c.task_id = ? AND w.cmsid = ?
+			ORDER BY w.startTime ASC
+			]]>
+			</value>
+		</entry>
+		<entry>
+			<key>FN_010_2</key>
+			<description></description>
+			<value>
+			<![CDATA[
+			SELECT c.task_id, w.cmsid AS 'unloaderId',c.cargo_type AS 'cargoName', c.cabin_id AS 'cabinId', c.cabin_no AS 'cabinNo'
+				, CASE w.cmsid
+					WHEN 'ABB_GSU_1' THEN '#1'
+					WHEN 'ABB_GSU_2' THEN '#2'
+					WHEN 'ABB_GSU_3' THEN '#3'
+					WHEN 'ABB_GSU_4' THEN '#4'
+					WHEN 'ABB_GSU_5' THEN '#5'
+					WHEN 'ABB_GSU_6' THEN '#6'
+					ELSE w.cmsid
+				END AS 'unloaderName', DATE_FORMAT(w.startTime, '%Y-%m-%d %H:%i:%s') AS 'startTime'
+				, DATE_FORMAT(w.endTime, '%Y-%m-%d %H:%i:%s') AS 'endTime'
+				, round(w.usedTime, 1) AS 'usedTime'
+				, round(w.unloading, 1) AS 'unloading'
+				, round(round(w.unloading, 1) / round(w.usedTime, 1), 1) AS 'efficiency'
+			FROM (
+				SELECT c.cabinId, b.cmsid, MIN(b.Time) AS 'startTime'
+					, MAX(b.Time) AS 'endTime'
+					, timestampdiff(MINUTE, MIN(b.Time), MAX(b.Time)) / 60 AS 'usedTime'
+					, SUM(b.OneTask) AS 'unloading'
+				FROM `tab_temp_c_%#` `c`, `tab_temp_b_%#` `b`
+				WHERE 1 = 1
+					AND `c`.`id` = `b`.`groupId`
+					AND (`b`.`operationType` = 1
+							OR `b`.`operationType` = 0)
 					AND UNIX_TIMESTAMP(b.Time) BETWEEN UNIX_TIMESTAMP(?) AND UNIX_TIMESTAMP(?) 
 				GROUP BY b.Cmsid, b.groupId
 			) w
@@ -954,7 +1110,7 @@
 			AND t.unloaderMove > ?
 			AND t.Time >= ?
 			AND t.Time <= ?
-			]]>
+			]]>  
 			</value>
 		</entry>
 		<entry>
