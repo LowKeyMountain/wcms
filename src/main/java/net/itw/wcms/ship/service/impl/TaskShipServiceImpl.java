@@ -5,11 +5,15 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.TreeMap;
 
 import javax.annotation.Resource;
 import javax.xml.bind.JAXBException;
@@ -917,6 +921,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 	public Map<String, Object> doOutboardInfoStatistics(Map<String, Object> argsMap) {
 		String msg = "操作成功！";
 		Integer isSuccess = ConstantUtil.SuccessInt;
+		boolean whetherOutboardInfo = false;
 		Map<String, Object> result = new HashMap<>();
 		try {
 			int taskId = (Integer) argsMap.get("taskId");
@@ -997,6 +1002,13 @@ public class TaskShipServiceImpl implements ITaskShipService {
 				data.put("rightShovelNumber", rightMap.get("rightShovelNumber"));
 				System.out.println(">>>" + leftOffsetPosition + "|" + sp + "<>" + ep+ "|" + rightOffsetPosition);
 				temp.add(data);
+				
+				// 计算是否有舱外数据量
+				if (!whetherOutboardInfo) {
+					Double leftUnloading = leftMap.get("leftUnloading") != null ? (Double) leftMap.get("leftUnloading") : 0.0;
+					Double rightUnloading = rightMap.get("rightUnloading") != null ? (Double) rightMap.get("rightUnloading") : 0.0;
+					whetherOutboardInfo = leftUnloading > 0.0 || rightUnloading >0.0;
+				}
 			}
 			
 			List<Map<String, Object>> datas = new ArrayList<>();
@@ -1025,6 +1037,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			}
 			result.put("msg", msg);
 			result.put("data", datas);
+			result.put("whetherOutboardInfo", whetherOutboardInfo);
 			result.put("code", isSuccess);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1347,6 +1360,189 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			mo.code = ConstantUtil.FailInt;
 		}
 		return mo;
+	}
+	
+	class UnloaderDroppedInfo {
+		public String unloaderId;
+		public String unloaderName;
+		public String dropTime;
+
+		public UnloaderDroppedInfo(String unloaderId, String unloaderName, String dropTime) {
+			super();
+			this.unloaderId = unloaderId;
+			this.unloaderName = unloaderName;
+			this.dropTime = dropTime;
+		}
+
+		public String getUnloaderId() {
+			return unloaderId;
+		}
+
+		public void setUnloaderId(String unloaderId) {
+			this.unloaderId = unloaderId;
+		}
+
+		public String getUnloaderName() {
+			return unloaderName;
+		}
+
+		public void setUnloaderName(String unloaderName) {
+			this.unloaderName = unloaderName;
+		}
+
+		public String getDropTime() {
+			return dropTime;
+		}
+
+		public void setDropTime(String dropTime) {
+			this.dropTime = dropTime;
+		}
+	}
+
+	// 是否启动卸船机掉线缓存
+	private static Boolean whetherStartUDC = false;
+	// 卸船机掉线缓存(UDC)
+	private static Map<String, UnloaderDroppedInfo> unloaderDroppedCache = new LinkedHashMap<>();
+
+	/**
+	 * 卸船机掉线查询
+	 * 
+	 * @param args
+	 * @return
+	 */
+	@Override
+	public Map<String, Object> doQueryUnloaderDropped(Map<String, Object> args) {
+		String msg = "操作成功！";
+		Integer isSuccess = ConstantUtil.SuccessInt;
+		Map<String, Object> result = new HashMap<>();
+		try {
+			startUDC();
+			result.put("msg", msg);
+			List<Map<String, Object>> datas = new ArrayList<>();
+			for (UnloaderDroppedInfo udi : unloaderDroppedCache.values()) {
+				Map<String, Object> data = new HashMap<>();
+				data.put("dropTime", udi.getDropTime());
+				data.put("unloaderId", udi.getUnloaderId());
+				data.put("unloaderName", udi.getUnloaderName());
+				datas.add(data);
+			}
+			result.put("data", datas);
+			result.put("code", isSuccess);
+			result.put("whetherToDrop",
+					unloaderDroppedCache.isEmpty() ? ConstantUtil.SuccessInt : ConstantUtil.FailInt);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", ConstantUtil.FailInt);
+			result.put("msg", e.getMessage());
+			return result;
+		}
+		return result;
+	}
+
+	/**
+	 * 启动卸船机掉线缓存
+	 */
+	private void startUDC() {
+		if (!whetherStartUDC) {
+			new Timer().schedule(new TimerTask() {
+				@Override
+				public void run() {
+					try {
+						while (true) {
+							Map<String, UnloaderDroppedInfo> temp = new TreeMap<String, UnloaderDroppedInfo>(
+									new Comparator<String>() {
+										public int compare(String obj1, String obj2) {
+											// 降序排序
+											return obj1.compareTo(obj2);
+										}
+									});
+							List<Map<String, Object>> data = jdbcTemplate
+									.queryForList("select * from tab_unloader_all t where t.operationType = 2");
+							for (Map<String, Object> e : data) {
+								Date time = (Date) e.get("Time");
+								String cmsid = (String) e.get("Cmsid");
+								long diff = new Date().getTime() - time.getTime();
+								long min = diff / (1000 * 60);
+								if (min > 10) {
+									String cmsNumber = "#" + cmsid.substring(cmsid.length() - 1);
+									temp.put(cmsNumber, new UnloaderDroppedInfo(cmsNumber, cmsNumber + "卸船机",
+											DateTimeUtils.date2StrDateTime(time)));
+								}
+							}
+							unloaderDroppedCache.clear();
+							unloaderDroppedCache.putAll(temp);
+							// 10分钟执行一次
+							Thread.sleep(1000 * 60 * 10);
+						}
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}, 1000);
+			whetherStartUDC = true;
+		}
+	}
+
+	// 是否舱外作业量提醒服务
+	private static Boolean whetherOutboardInfoRemindservice = false;
+	// 舱外作业量提醒缓存
+	private static List<String> outboardInfoRemindCache = new ArrayList<>();
+
+	/**
+	 * 舱外作业量提醒查询
+	 * 
+	 * @param args
+	 * @return
+	 */
+	@Override
+	public Map<String, Object> doQueryOutboardInfoRemind(Map<String, Object> args) {
+		String msg = "操作成功！";
+		Integer isSuccess = ConstantUtil.SuccessInt;
+		Map<String, Object> result = new HashMap<>();
+		try {
+			if (!whetherOutboardInfoRemindservice) {
+				new Timer().schedule(new TimerTask() {
+					@Override
+					public void run() {
+						try {
+							while (true) {
+								List<String> temp = new ArrayList<>();
+								List<Map<String, Object>> data = jdbcTemplate
+										.queryForList("select * from tab_task t where t.`status` = 1");
+								for (Map<String, Object> e : data) {
+									Integer id = (Integer) e.get("id");
+									Map<String, Object> map = new HashMap<>();
+									map.put("taskId", id);
+									Map<String, Object> temMap = doOutboardInfoStatistics(map);
+									boolean whetherOutboardInfo = (Boolean) temMap.get("whetherOutboardInfo");
+									if (whetherOutboardInfo) {
+										temp.add(id + "");
+									}
+								}
+								outboardInfoRemindCache.clear();
+								outboardInfoRemindCache.addAll(temp);
+								// 10分钟执行一次
+								Thread.sleep(1000 * 60 * 10);
+							}
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+				}, 1000);
+				whetherOutboardInfoRemindservice = true;
+			}
+			int taskId = (int) args.get("taskId");
+			result.put("msg", msg);
+			result.put("code", isSuccess);
+			result.put("whetherOutboardInfo",
+					outboardInfoRemindCache.contains(taskId + "") ? ConstantUtil.FailInt : ConstantUtil.SuccessInt);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", ConstantUtil.FailInt);
+			result.put("msg", e.getMessage());
+			return result;
+		}
+		return result;
 	}
 	
 }

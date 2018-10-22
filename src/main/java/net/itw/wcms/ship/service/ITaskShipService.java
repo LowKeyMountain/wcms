@@ -143,6 +143,20 @@ public interface ITaskShipService {
 	 * @return
 	 */
 	MessageOption updateDepartureTime(String taskId, String userName, String status, String time);
+	
+	/**
+	 * 卸船机掉线查询
+	 * @param args
+	 * @return
+	 */
+	Map<String, Object> doQueryUnloaderDropped(Map<String, Object> args);
+	
+	/**
+	 * 舱外作业量提醒查询
+	 * @param args
+	 * @return
+	 */
+	Map<String, Object> doQueryOutboardInfoRemind(Map<String, Object> args);
 
 	
 }
