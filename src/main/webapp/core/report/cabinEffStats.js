@@ -67,6 +67,16 @@
                 },
                 footerFormatter: '合计'
 		    }, {
+		        field: 'cargoName',
+		        title: '货名',
+		        align: 'center',
+		        width: '10%',
+		        formatter: function (value, row, index) {
+                    var html = '<a href="javascript:view_cargo(' + taskId + ',' + row.cargoId + ')" class="font-weight-normal">' + row.cargoName + '</a>';
+                    return html;
+                },
+                footerFormatter: '--'
+		    }, {
 		        field: 'total',
 		        title: '总量',
 		        align: 'center',
