@@ -28,8 +28,6 @@ import net.itw.wcms.x27.utils.ConstantUtil;
 /**
  * Description: 移动端HTTP接口
  *
- * 
- * 
  * @author Michael 19 Nov 2017 08:33:39
  */
 @Controller
