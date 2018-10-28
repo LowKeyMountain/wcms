@@ -36,7 +36,7 @@
 			 exportDataType : "basic", // basic', 'all', 'selected'.
 			 exportTypes:['excel'],  //导出文件类型 'csv', 'txt', 'sql', 'doc', 'excel', 'xlsx', 'pdf'
 
-//			 showFooter: true,
+			 showFooter: true,
 
 			queryParams: function queryParams(params){//自定义参数，这里的参数是传给后台的，分页使用
 				var params = {//这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
@@ -64,17 +64,42 @@
 		        formatter: function (value, row, index) {
                     var html = '<a href="javascript:view_unship(' + taskId + ',' + row.cabinNo + ')" class="font-weight-normal">' + row.cabinNo + '</a>';
                     return html;
-                }
+                },
+                footerFormatter: '合计'
+		    }, {
+		        field: 'cargoName',
+		        title: '货名',
+		        align: 'center',
+		        width: '10%',
+		        formatter: function (value, row, index) {
+                    var html = '<a href="javascript:view_cargo(' + taskId + ',' + row.cargoId + ')" class="font-weight-normal">' + row.cargoName + '</a>';
+                    return html;
+                },
+                footerFormatter: '--'
 		    }, {
 		        field: 'total',
 		        title: '总量',
 		        align: 'center',
-		        width: '7%'
+		        width: '7%',
+	            footerFormatter: function (value) {
+	                var count = 0;
+	                for (var i in value) {
+	                	count += value[i].total;
+	                }
+	                return count.toFixed(1);
+	            }
 		    }, {
 		    	field: 'finishedBeforeClearance',
 		        title: '清舱前',
 		        align: 'center',
-		        width: '7%'
+		        width: '7%',
+	            footerFormatter: function (value) {
+	                var count = 0;
+	                for (var i in value) {
+	                	count += value[i].finishedBeforeClearance;
+	                }
+	                return count.toFixed(1);
+	            }
 		    }, {
 		    	field: 'finishedUsedTimeBeforeClearance',
 		        title: '清舱前用时',
@@ -83,7 +108,7 @@
 	            footerFormatter: function (value) {
 	                var count = 0;
 	                for (var i in value) {
-	                	count += value[i].finishedBeforeClearance;
+	                	count += value[i].finishedUsedTimeBeforeClearance;
 	                }
 	                return count.toFixed(1);
 	            }
@@ -99,43 +124,108 @@
 	                	t_count += value[i].finishedUsedTimeBeforeClearance;
 	                	h_count += value[i].finishedBeforeClearance;
 	                }
-	                return (h_count/t_count).toFixed(1);
+	                if (t_count == 0){
+		                return '--';
+	                }else{
+		                return (h_count/t_count).toFixed(1);
+	                }
 	            }
 		    }, {
 		        field: 'clearance',
 		        title: '清舱量',
 		        align: 'center',
-		        width: '7%'
+		        width: '7%',
+	            footerFormatter: function (value) {
+	                var count = 0;
+	                for (var i in value) {
+	                	count += value[i].clearance;
+	                }
+	                return count.toFixed(1);
+	            }
 		    }, {
 		        field: 'clearanceUsedTime',
 		        title: '清舱用时',
 		        align: 'center',
-		        width: '7%'
+		        width: '7%',
+	            footerFormatter: function (value) {
+	                var count = 0;
+	                for (var i in value) {
+	                	count += value[i].clearanceUsedTime;
+	                }
+	                return count.toFixed(1);
+	            }
 		    }, {
 		        field: 'clearanceEfficiency',
 		        title: '清舱效率',
 		        align: 'center',
-		        width: '8%'
+		        width: '8%',
+	            footerFormatter: function (value) {
+	                var t_count = 0;	            	
+	                var h_count = 0;
+	                for (var i in value) {
+	                	t_count += value[i].clearanceUsedTime;
+	                	h_count += value[i].clearance;
+	                }
+	                if (t_count == 0){
+		                return '--';
+	                }else{
+		                return (h_count/t_count).toFixed(1);
+	                }
+	            }
 		    }, {
 		        field: 'finished',
 		        title: '整舱完成量',
 		        align: 'center',
-		        width: '7%'
+		        width: '7%',
+	            footerFormatter: function (value) {
+	                var count = 0;
+	                for (var i in value) {
+	                	count += value[i].finished;
+	                }
+	                return count.toFixed(1);
+	            }
 		    }, {
 		        field: 'finishedUsedTime',
 		        title: '整舱用时',
 		        align: 'center',
-		        width: '7%'
+		        width: '7%',
+	            footerFormatter: function (value) {
+	                var count = 0;
+	                for (var i in value) {
+	                	count += value[i].finishedUsedTime;
+	                }
+	                return count.toFixed(1);
+	            }
 		    }, {
 		        field: 'finishedEfficiency',
 		        title: '整舱效率',
 		        align: 'center',
-		        width: '7%'
+		        width: '7%',
+	            footerFormatter: function (value) {
+	                var t_count = 0;	            	
+	                var h_count = 0;
+	                for (var i in value) {
+	                	t_count += value[i].finishedUsedTime;
+	                	h_count += value[i].finished;
+	                }
+	                if (t_count == 0){
+		                return '--';
+	                }else{
+		                return (h_count/t_count).toFixed(1);
+	                }
+	           }
 		    }, {
 		    	field: 'remainder',
 		        title: '剩余量',
 		        align: 'center',
-		        width: '7%'
+		        width: '7%',
+	            footerFormatter: function (value) {
+	                var count = 0;
+	                for (var i in value) {
+	                	count += value[i].remainder;
+	                }
+	                return count.toFixed(1);
+	            }
 		    }, /*{
 		        field: 'clearTime',
 		        title: '清舱时间',

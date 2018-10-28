@@ -95,7 +95,11 @@
 	                	t_count += value[i].usedTime;
 	                	h_count += value[i].unloading;
 	                }
-	                return (h_count/t_count).toFixed(1);
+	                if (t_count == 0){
+		                return '--';
+	                }else{
+		                return (h_count/t_count).toFixed(1);
+	                }
 	            }		        
 		    }],
 			locale : 'zh-CN',// 中文支持,
