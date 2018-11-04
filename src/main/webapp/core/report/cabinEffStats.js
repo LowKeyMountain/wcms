@@ -237,7 +237,7 @@
 		        align: 'center',
 		        width: '8%',
                 formatter: function (value, row, index) {//自定义显示，这三个参数分别是：value该行的属性，row该行记录，index该行下标  
-                    return row.status == 0 ? "<font color=red>卸货</font>" : row.status == 1 ? "<font color=lightgreen>清舱</font>" : row.status;  
+                    return row.status == 0 ? "<font color=red>卸货</font>" : row.status == 1 ? "<font color=lightgreen>清舱</font>" : "<font color=grey>完成</font>";  
                 } 
 		    }],
 			locale : 'zh-CN',// 中文支持,

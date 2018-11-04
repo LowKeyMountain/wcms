@@ -98,7 +98,7 @@
 	            footerFormatter: function (value) {
 	                var count = 0;
 	                for (var i in value) {
-	                	count += value[i].finishedBeforeClearance;
+	                	count += value[i].finishedUsedTimeBeforeClearance;
 	                }
 	                return count.toFixed(1);
 	            }
@@ -128,7 +128,7 @@
 	            footerFormatter: function (value) {
 	                var count = 0;
 	                for (var i in value) {
-	                	count += value[i].finishedBeforeClearance;
+	                	count += value[i].clearance;
 	                }
 	                return count.toFixed(1);
 	            }
@@ -140,7 +140,7 @@
 	            footerFormatter: function (value) {
 	                var count = 0;
 	                for (var i in value) {
-	                	count += value[i].finishedBeforeClearance;
+	                	count += value[i].clearanceUsedTime;
 	                }
 	                return count.toFixed(1);
 	            }

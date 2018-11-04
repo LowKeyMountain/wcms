@@ -61,7 +61,8 @@
 		        formatter: function (value, row, index) {
                     var html = '<a href="javascript:view_unship_click(' + taskId + ',' + row.cabinNo + ')" class="font-weight-normal">' + row.cabinNo + '</a>';
                     return html;
-                }
+                },
+                footerFormatter: '合计'
 		    }, {
 		        field: 'cargoName',
 		        title: '货名',
@@ -72,7 +73,7 @@
                     var html = '<a href="javascript:view_click(' + taskId + ',' + row.cabinNo + ')" class="font-weight-normal">' + row.cargoName + '</a>';
                     return html;
                 },
-                footerFormatter: '合计'
+                footerFormatter: '--'
 		    }, {
 		        field: 'total',
 		        title: '总量',
@@ -139,7 +140,7 @@
 		        align: 'center',
 		        width: '8%',
                 formatter: function (value, row, index) {//自定义显示，这三个参数分别是：value该行的属性，row该行记录，index该行下标  
-                    return row.status == 0 ? "<font color=red>卸货</font>" : row.status == 1 ? "<font color=lightgreen>清舱</font>" : "<font color=grey>未知</font>";  
+                    return row.status == 0 ? "<font color=red>卸货</font>" : row.status == 1 ? "<font color=lightgreen>清舱</font>" : "<font color=grey>完成</font>";  
                 }
 		    },{
 		        field: 'clearTime',
