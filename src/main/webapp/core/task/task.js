@@ -21,8 +21,9 @@ var FormCl = function () {
 					required : true
 				},
 				'enterPortTime' : {
-					required : true,
-					date:true
+					required : true
+//					,
+//					date:true
 				},
 				'berth' : {
 					required : true,

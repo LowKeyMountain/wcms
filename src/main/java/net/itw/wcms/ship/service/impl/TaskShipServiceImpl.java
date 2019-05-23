@@ -64,7 +64,7 @@ public class TaskShipServiceImpl implements ITaskShipService {
 
 	@Autowired
 	private DataSyncStepB dataSyncStepB;
-	@Resource(name = "dataSyncStepCImpl")
+	@Resource(name = "dataSyncStepCIndigo")
 	private DataSyncStepC dataSyncStepC;
 
 	@Resource(name = "jdbcTemplate")

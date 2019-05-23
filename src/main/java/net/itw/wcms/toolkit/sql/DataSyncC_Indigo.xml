@@ -2,70 +2,46 @@
 <sqlMap>
 	<sqls>
 		<entry>
-			<key>02</key>
-			<description>【任务子表】删除任务子表：卸船作业信息</description>
-			<value>
-			<![CDATA[
- 			DELETE FROM %s
-			]]>
-			</value>
-		</entry>
-		<entry>
-			<key>03</key>
-			<description>【任务子表】删除任务子表：组信息</description>
-			<value>
-			<![CDATA[
-			DELETE FROM %s
-			]]>
-			</value>
-		</entry>
-		<entry>
 			<key>04</key>
 			<description></description>
 			<value>
 			<![CDATA[
-				SELECT
-					*
-				FROM
-					tab_unloader_all t
-				WHERE
-					t.operationType = 1
-				AND t.Cmsid = ?
-				AND t.Time > ?
-				AND t.Time <= ?
-				AND t.unloaderMove >= ?
-				AND t.unloaderMove <= ?
-				ORDER BY
-					t.Time ASC
-				LIMIT 1
+			drop table if exists `tab_unloader_all_%s`;
 			]]>
 			</value>
 		</entry>
 		<entry>
 			<key>05</key>
-			<description>重新同步任务子表数据</description>
+			<description></description>
 			<value>
 			<![CDATA[
-							SELECT
-					*
-				FROM
-					tab_unloader_all t
-				WHERE
-					t.operationType = 1
-				AND t.Cmsid = ?
-				AND t.Time > ?
-				AND t.Time <= ?
-				AND 
-				(
-				(t.unloaderMove >= ?
-				AND t.unloaderMove < ?)
-				OR
-				 (t.unloaderMove > ?
-				AND t.unloaderMove <= ?)
-				)
-				ORDER BY
-					t.Time ASC
-				LIMIT 1
+			INSERT INTO tab_unloader_all_%s (
+			`id`,
+			`uid`,
+			`Cmsid`,
+			`operationType`,
+			`Time`,
+			`PushTime`,
+			`direction`,
+			`unloaderMove`,
+			`OneTask`
+			) SELECT
+			`id`,
+			`uid`,
+			`Cmsid`,
+			`operationType`,
+			`Time`,
+			`PushTime`,
+			`direction`,
+			`unloaderMove`,
+			`OneTask`
+			FROM
+				tab_unloader_all
+			WHERE
+			Time >= ?
+			AND Time < ?
+			AND unloaderMove >= ?
+			AND unloaderMove <= ?
 			]]>
 			</value>
 		</entry>
@@ -74,7 +50,19 @@
 			<description></description>
 			<value>
 			<![CDATA[
-				UPDATE tab_task t SET t.begin_time = null WHERE t.id = ?
+			CREATE table `tab_unloader_all_%s` (
+			`id`  int(11) NOT NULL AUTO_INCREMENT COMMENT '主键id' ,
+			`uid`  int(11) NOT NULL ,
+			`Cmsid`  varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Cms卸船机编号' ,
+			`operationType`  int(2) NOT NULL COMMENT '操作类型(0大车位置，1作业量信息。)' ,
+			`Time`  datetime NOT NULL COMMENT '操作时间(YYYY—MM—dd  HH_mi_SS)' ,
+			`PushTime`  datetime NOT NULL ,
+			`direction`  varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '方向(0正方向，1反方向，设定编码器一个方向为正方向，如果无需设定，默认正方向)' ,
+			`unloaderMove`  double NULL DEFAULT NULL COMMENT '卸船机移动位置(移动位置)' ,
+			`OneTask`  double NULL DEFAULT NULL COMMENT '一次抓钩作业量(一次抓钩作业量)' ,
+			PRIMARY KEY (`id`),
+			INDEX `zjindex` (`id`, `uid`) USING BTREE 
+			);
 			]]>
 			</value>
 		</entry>
@@ -106,11 +94,12 @@
 				0,
 				?
 			FROM
-				tab_unloader_all
+				tab_unloader_all_%s
 			WHERE
-				cmsid = ?
+			 	operationType = 1
+			AND	cmsid = ?
 			AND Time >= ?
-			AND Time <= ?
+			AND Time < ?
 			AND unloaderMove >= ?
 			AND unloaderMove <= ?
 			]]>
@@ -121,87 +110,21 @@
 			<description></description>
 			<value>
 			<![CDATA[
-				SELECT t.begin_time from tab_task t WHERE t.id = ?
-			]]>
-			</value>
-		</entry>
-		<entry>
-			<key>09</key>
-			<description></description>
-			<value>
-			<![CDATA[
-				UPDATE tab_task t SET t.begin_time = ? WHERE t.id = ?
-			]]>
-			</value>
-		</entry>
-		<entry>
-			<key>10</key>
-			<description></description>
-			<value>
-			<![CDATA[
-				 insert into tab_temp_c_%s (cabinId, Cmsid, startTime, firstTime, endTime,
-				 status)  values(?,?,?,?,?,?) 
-			]]>
-			</value>
-		</entry>
-		<entry>
-			<key>11</key>
-			<description></description>
-			<value>
-			<![CDATA[
-				select * from tab_temp_c_%s t  
-			]]>
-			</value>
-		</entry>
-		<entry>
-			<key>12</key>
-			<description></description>
-			<value>
-			<![CDATA[
-				SELECT
-				uid,
-				Time,
-				Cmsid,
-				PushTime,
-				OneTask,
-				direction,
-				unloaderMove,
-				operationType,
-				0,
+			SELECT
+				*,
 				?
 			FROM
-				tab_unloader_all
+				tab_unloader_all_%s
 			WHERE
-				cmsid = ?
+			 	(operationType = 1)
+			AND	cmsid = ?
 			AND Time >= ?
-			AND Time <= ?
+			AND Time < ?
 			AND unloaderMove >= ?
-			AND unloaderMove <= ? 
-			ORDER BY
-			Time DESC
-			LIMIT 1
+			AND unloaderMove <= ?
+			ORDER BY Time DESC limit 1
 			]]>
 			</value>
 		</entry>
-		<entry>
-			<key>13</key>
-			<description></description>
-			<value>
-			<![CDATA[
-				UPDATE tab_temp_c_%s t SET t.lastTime = ?, t.endTime = ? WHERE t.id = ?   
-			]]>
-			</value>
-		</entry>
-		<entry>
-			<key>14</key>
-			<description></description>
-			<value>
-			<![CDATA[
-				 insert into tab_temp_c_%s (cabinId, Cmsid, startTime, firstTime, 
-				 status)  values(?,?,?,?,?) 
-			]]>
-			</value>
-		</entry>
-		
 	</sqls>
 </sqlMap>
