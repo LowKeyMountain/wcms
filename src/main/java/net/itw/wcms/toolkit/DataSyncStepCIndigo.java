@@ -255,20 +255,35 @@ public class DataSyncStepCIndigo implements DataSyncStepC {
 		int enter_operationType = (int) enter_data.get("operationType");
 		double enter_unloaderMove = (Double) enter_data.get("unloaderMove");
 		Cabin enter_cabin = this.getCabinByUnloaderMove(cabins, enter_unloaderMove);
-
+		
+		// 计算组编号
+		int groupId = dataSyncStepB.calc(taskId, enter_cabin.getId(), enter_cmsid, enter_operationType,
+				enter_time);
+		
 		// 查询卸船机出舱第一铲数据
 		Map<String, Object> out_data = getOutCabinFirstShovel(task, cabins, enter_data);
 		if (out_data == null) {
+			// 批量入库
+			List<Object[]> batchArgs = new ArrayList<Object[]>();
+			Object[] args = new Object[] { groupId, enter_cmsid, enter_time, this.getTaskEndTime(task), enter_cabin.getStartPosition(),
+					enter_cabin.getEndPosition() };
+			batchArgs.add(args);
+
+			List<Map<String, Object>> list = this.jdbcTemplate.queryForList(sqlMap.getSql("08", taskId), args);
+			if (list != null && !list.isEmpty() && enter_id != (int) list.get(0).get("id")) {
+				dataSyncStepB.calc(taskId, enter_cabin.getId(), (String) list.get(0).get("Cmsid"),
+						(int) list.get(0).get("operationType"), (Date) list.get(0).get("Time"));
+			}
+
+			int[] batchResult = this.jdbcTemplate.batchUpdate(sqlMap.getSql("07", taskId, taskId), batchArgs);
+			log.info("[taskId:" + taskId + "] [groupId:" + groupId + "] [Cmsid:" + enter_cmsid + "] 最后几铲更新数据 " + batchResult[0] + "条");
+			System.out.println("[taskId:" + taskId + "] [groupId:" + groupId + "] [Cmsid:" + enter_cmsid + "] 最后几铲更新数据 " + batchResult[0] + "条");
 			return;
 		}
 
 		Date out_time = (Date) out_data.get("Time");
 		String out_cmsid = (String) out_data.get("Cmsid");
 		double out_unloaderMove = (Double) out_data.get("unloaderMove");
-
-		// 计算组编号
-		int groupId = dataSyncStepB.calc(taskId, enter_cabin.getId(), enter_cmsid, enter_operationType,
-				enter_time);
 
 		// 批量入库
 		List<Object[]> batchArgs = new ArrayList<Object[]>();
@@ -467,7 +482,7 @@ public class DataSyncStepCIndigo implements DataSyncStepC {
 			c.dataSyncStepA = (DataSyncStepA) ctx.getBean(DataSyncStepA.class);
 			c.autoCreateDBTable = (AutoCreateDBTable) ctx.getBean(AutoCreateDBTable.class);
 			c.log = Logger.getLogger("dataSyncInfo");
-			c.resync(394);
+			c.resync(388);
 		}
 	}
 }
