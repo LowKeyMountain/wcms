@@ -247,6 +247,7 @@ public class DataSyncStepCIndigo implements DataSyncStepC {
 			return;
 		}
 
+		
 		int taskId = task.getId();
 
 		int enter_id = (int) enter_data.get("id");
