@@ -806,12 +806,23 @@
 			<description>统计货物信息(doCargoInfoStatistics)</description>
 			<value>
 			<![CDATA[
-			SELECT *
+			SELECT *, round(
+				finished / finishedUsedTime,
+				1
+			) AS finishedEfficiency,
+			round(
+				finishedBeforeClearance / finishedUsedTimeBeforeClearance,
+				1
+			) AS finishedEfficiencyBeforeClearance,
+			round(
+				clearance / clearanceUsedTime,
+				1
+			) AS clearanceEfficiency
 			FROM (
 				SELECT ccxx.task_id, ccxx.cabin_id AS cabinId, ccxx.cabin_no AS cabinNo, ccxx.cargo_id AS cargoId, ccxx.cargoName AS cargoName
-					, ccxx.total AS total, round(qcq.finished, 1) AS finishedBeforeClearance, qcq.finishedUsedTime AS finishedUsedTimeBeforeClearance
-					, qcq.finishedEfficiency AS finishedEfficiencyBeforeClearance, round(qch.clearance, 1) AS clearance, round(qch.clearanceUsedTime, 1) AS clearanceUsedTime
-					, round(qch.clearanceEfficiency, 1) AS clearanceEfficiency
+					, ccxx.total AS total, round(qcq.finished, 1) AS finishedBeforeClearance, round(qcq.finishedUsedTime,1) AS finishedUsedTimeBeforeClearance
+					, qcq.finishedEfficiency AS finishedEfficiencyBeforeClearance_bk, round(qch.clearance, 1) AS clearance, round(qch.clearanceUsedTime, 1) AS clearanceUsedTime
+					, round(qch.clearanceEfficiency, 1) AS clearanceEfficiency_bk
 					, CASE 
 						WHEN round(qcq.finished, 1) IS NULL
 						AND ROUND(qch.clearance, 1) IS NULL THEN 0
@@ -837,7 +848,7 @@
 						WHEN qcq.finishedUsedTime IS NOT NULL
 						AND qch.clearanceUsedTime IS NULL THEN qcq.finishedUsedTime
 						ELSE qcq.finishedUsedTime + qch.clearanceUsedTime
-					END, 1) AS finishedEfficiency
+					END, 1) AS finishedEfficiency_bk
 					, CASE 
 						WHEN round(ccxx.total - qcq.finished, 1) IS NULL
 						AND round(qch.clearance, 1) IS NULL THEN ccxx.total
