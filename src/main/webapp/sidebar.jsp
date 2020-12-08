@@ -94,7 +94,21 @@
                                 <span class="title">作业船舶维护</span>
                             </a>
                         </li>
-                        </security:authorize>                          
+                        </security:authorize>
+                        
+                        <li class="nav-item start ">
+                            <a href="${IncPath}/unloader/paramConfigList" class="nav-link ">
+                                <i class="icon-settings"></i>
+                                <span class="title">卸船机参数面板</span>
+                            </a>
+                        </li>
+                		<li class="nav-item start ">
+                            <a href="${IncPath}/unloader/historyParamList" class="nav-link ">
+                                <i class="icon-settings"></i>
+                                <span class="title">卸船机参数管理</span>
+                            </a>
+                        </li>  
+                                                
                         <!-- 
                         <li class="nav-item start active open">
                             <a href="#" class="nav-link ">

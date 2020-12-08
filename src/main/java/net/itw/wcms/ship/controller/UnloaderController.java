@@ -78,6 +78,16 @@ public class UnloaderController {
 	}
 
 	/**
+	 * 跳转至卸船历史参数列表页面
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/historyParamList")
+	public ModelAndView historyParamList() {
+		return new ModelAndView(PATH + "history_param_list");
+	}
+	
+	/**
 	 * 跳转至卸船机数据页面
 	 * 
 	 * @return
@@ -88,7 +98,48 @@ public class UnloaderController {
 	}
 	
 	/**
-	 * 返回卸船机数据
+	 * 跳转至卸船机参数配置展示页面
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/paramConfigList")
+	public ModelAndView paramConfigList() {
+		return new ModelAndView(PATH + "param_config_list");
+	}
+	
+	/**
+	 * 获取卸船机参数数据
+	 * 
+	 * @param params
+	 * @param map
+	 * @return
+	 */
+	@RequestMapping(value = "/getParamListDatas", produces = "text/json;charset=UTF-8")
+	public String getParamListDatas(@RequestParam Map<String, String> params, ModelMap map) {
+		Pageable pageable = PageUtils.buildPageRequest(6, 1, "", "");
+		return unloaderService.getParamListDatas(pageable, params);
+	}
+	
+	/**
+	 * 返回卸船机历史参数数据
+	 * 
+	 * @param params
+	 * @param map
+	 * @return
+	 */
+	@RequestMapping(value = "/getUnloaderHistoryParamList", produces = "text/json;charset=UTF-8")
+	public String getHistoryParamDatas(@RequestParam Map<String, String> params, ModelMap map) {
+		int pageSize = Integer.parseInt(params.get("limit"));
+		int pageNum = Integer.parseInt(params.get("offset"));
+		String sortType = params.get("sortName");
+		String direction = params.get("sortOrder");
+		
+		Pageable pageable = PageUtils.buildPageRequest(pageNum, pageSize, sortType, direction);
+		return unloaderService.getHistoryParamDatas(pageable, params);
+	}
+	
+	/**
+	 * 返回卸船机参数数据
 	 * 
 	 * @param params
 	 * @param map
@@ -104,7 +155,7 @@ public class UnloaderController {
 		Pageable pageable = PageUtils.buildPageRequest(pageNum, pageSize, sortType, direction);
 		return unloaderService.getUnloaderList(pageable, params);
 	}
-
+	
 	@RequestMapping(value = "/addUnloader", produces = "text/json;charset=UTF-8")
 	public void addUnloader(@RequestParam Map<String, String> params) throws IOException {
 		UnloaderAll unloader = new UnloaderAll();		
@@ -144,6 +195,85 @@ public class UnloaderController {
 		
 		try {
 			int val = unloaderService.addUnloader(unloader , tableName);
+			if (val > 0) {
+				jsonObject.put("success", true);
+				jsonObject.put("msg", "保存成功！");
+			} else {
+				jsonObject.put("failure", true);
+				jsonObject.put("msg", "保存失败！");				
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			jsonObject.put("failure", true);
+			jsonObject.put("msg", "保存失败！");
+		}
+		res.getWriter().write(jsonObject.toString());
+
+	}
+	
+	@RequestMapping(value = "/addUnloaderParam", produces = "text/json;charset=UTF-8")
+	public void addUnloaderParam(@RequestParam Map<String, String> params) throws IOException {
+		UnloaderAll unloader = new UnloaderAll();		
+		JSONObject jsonObject = new JSONObject();
+		String tableName="";
+		String cmsId= params.get("fcmsid");
+		unloader.setOperationType(params.get("operationtype"));		
+		unloader.setTime(DateTimeUtils.strDateTime2Date(params.get("operationtime")));
+		unloader.setPushTime(new Date());
+		try {
+			unloader.setDeliveryRate(Float.parseFloat(params.get("deliveryRate")));
+		} catch (Exception e) {
+			e.printStackTrace();
+			jsonObject.put("failure", true);
+			jsonObject.put("msg", "给料速度数据格式错误！");
+			res.getWriter().write(jsonObject.toString());
+			return;
+		}
+		try {
+			unloader.setDoumenOpeningDegree(Float.parseFloat(params.get("doumenOpeningDegree")));
+		} catch (Exception e) {
+			e.printStackTrace();
+			jsonObject.put("failure", true);
+			jsonObject.put("msg", "斗门开度数据格式错误！");
+			res.getWriter().write(jsonObject.toString());
+			return;
+		}
+		try {
+			unloader.setHopperLoad(Float.parseFloat(params.get("hopperLoad")));
+		} catch (Exception e) {
+			e.printStackTrace();
+			jsonObject.put("failure", true);
+			jsonObject.put("msg", "料斗荷载数据格式错误！");
+			res.getWriter().write(jsonObject.toString());
+			return;
+		}
+		if("1".equals(cmsId)) {
+			unloader.setCmsId("ABB_GSU_1");
+			tableName="tab_unloader_1";
+		} else if ("2".equals(cmsId)) {
+			unloader.setCmsId("ABB_GSU_2");
+			tableName="tab_unloader_2";
+		} else if ("3".equals(cmsId)) {
+			unloader.setCmsId("ABB_GSU_3");
+			tableName="tab_unloader_3";
+		} else if ("4".equals(cmsId)) {
+			unloader.setCmsId("ABB_GSU_4");
+			tableName="tab_unloader_4";
+		} else if ("5".equals(cmsId)) {
+			unloader.setCmsId("ABB_GSU_5");
+			tableName="tab_unloader_5";
+		} else if ("6".equals(cmsId)) {
+			unloader.setCmsId("ABB_GSU_6");
+			tableName="tab_unloader_6";
+		}
+
+		if ("3".equals(params.get("operationtype"))) {
+			unloader.setOneTask(0f);
+			unloader.setUnloaderMove(0f);
+		}
+		
+		try {
+			int val = unloaderService.addUnloaderParam(unloader , tableName);
 			if (val > 0) {
 				jsonObject.put("success", true);
 				jsonObject.put("msg", "保存成功！");

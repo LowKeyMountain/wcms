@@ -50,4 +50,30 @@ public interface IUnloaderService {
 	 * @return
 	 */
 	int addUnloader(UnloaderAll unloader, String tablename) throws Exception;
+	
+	/**
+	 * 添加卸船机作业信息
+	 * 
+	 * @param unloader
+	 * @return
+	 */
+	int addUnloaderParam(UnloaderAll unloader, String tablename) throws Exception;
+	
+	/**
+	 * 获取卸船机参数数据
+	 * @param pageable
+	 * @param params
+	 * @return
+	 */
+	String getParamListDatas(Pageable pageable, Map<String, String> params);
+	
+	/**
+	 * 返回卸船机历史参数数据
+	 * @param pageable
+	 * @param params
+	 * @return
+	 */
+	String getHistoryParamDatas(Pageable pageable, Map<String, String> params);
+	
+	
 }
