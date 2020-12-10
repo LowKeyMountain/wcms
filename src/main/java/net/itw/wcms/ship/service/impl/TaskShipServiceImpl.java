@@ -2,6 +2,7 @@ package net.itw.wcms.ship.service.impl;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -1536,6 +1537,51 @@ public class TaskShipServiceImpl implements ITaskShipService {
 			result.put("code", isSuccess);
 			result.put("whetherOutboardInfo",
 					outboardInfoRemindCache.contains(taskId + "") ? ConstantUtil.FailInt : ConstantUtil.SuccessInt);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", ConstantUtil.FailInt);
+			result.put("msg", e.getMessage());
+			return result;
+		}
+		return result;
+	}
+	
+		/**
+	 * 查询卸船机PLC参数信息接口 <br>
+	 * 
+	 * @param json
+	 * @return
+	 */
+	public Map<String, Object> doGetUnloaderPlcParamDetailList(Map<String, Object> args) {
+		String msg = "操作成功！";
+		Integer isSuccess = ConstantUtil.SuccessInt;
+
+		Map<String, Object> result = new HashMap<>();
+		try {
+			String sql = sqlMap.getSql("doGetUnloaderPlcParamDetailList");
+			List<Map<String, Object>> data = this.jdbcTemplate.queryForList(sql.toString());
+			if (data != null && !data.isEmpty()) {
+				for (Map<String, Object> m : data) {
+					Object o = m.get("updateTime");
+					if (o != null && o instanceof Timestamp) {
+						m.put("updateTime", DateTimeUtils.date2StrDateTime((Date) o));
+					}
+					String id = m.get("unloaderId") + "";
+					String cmsid = "ABB_GSU_" + id.substring(1);
+					sql = " select TIMESTAMPDIFF(MINUTE,t.Time,now()) MinuteDifference from tab_unloader_all t where t.operationType = '2' and t.Cmsid = ? ";
+					Map<String, Object> map = this.jdbcTemplate.queryForMap(sql, cmsid);
+					Long minuteDifference = (Long)map.get("MinuteDifference");
+					if (minuteDifference > 10) {
+						m.put("systemState", "异常");
+					} else {
+						m.put("systemState", "在线");
+					}
+				}
+			}
+			System.out.println(sql.toString());
+			result.put("msg", msg);
+			result.put("data", data);
+			result.put("code", isSuccess);
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.put("code", ConstantUtil.FailInt);

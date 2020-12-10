@@ -993,4 +993,33 @@ public class AppHttpInterface {
 		}
 	}
 	
+		
+	/**
+	 * 查询卸船机PLC参数信息接口 <br>
+	 * 
+	 * @param json
+	 * @return
+	 */
+	@RequestMapping(value = "/ship/doGetUnloaderPlcParamDetailList")
+	public Map<String, Object> doGetUnloaderPlcParamDetailList (@RequestParam("json") String json) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			JSONObject jsonObject = JSONObject.parseObject(json);
+			if (!jsonObject.containsKey("userId")) {
+				 throw new X27Exception("操作失败：参数[userId]不能为空！");
+			}
+			
+			checkUser(jsonObject); // 验证用户是否存在
+
+			Map<String, Object> args = new HashMap<>();
+			return taskShipService.doGetUnloaderPlcParamDetailList(args);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", "0");
+			result.put("msg", e.getMessage());
+			return result;
+		}
+	}
+	
+	
 }

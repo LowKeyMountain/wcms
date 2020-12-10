@@ -31,7 +31,10 @@ public class UnloaderAll implements Entityable {
 	private String direction;	//方向(0|正方向;1|反方向)
 	private Float unloaderMove;	//移动位置
 	private Float oneTask;	//一次抓钩作业量
-	
+	private Float deliveryRate;	//给料速度（%）
+	private Float doumenOpeningDegree;	//斗门开度（%）
+	private Float hopperLoad;	//料斗荷载（吨）
+		
 	@Id	
 	public int getId() {
 		return id;
@@ -104,4 +107,28 @@ public class UnloaderAll implements Entityable {
 		this.oneTask = oneTask;
 	}
 
+	public Float getDeliveryRate() {
+		return deliveryRate;
+	}
+
+	public void setDeliveryRate(Float deliveryRate) {
+		this.deliveryRate = deliveryRate;
+	}
+
+	public Float getDoumenOpeningDegree() {
+		return doumenOpeningDegree;
+	}
+
+	public void setDoumenOpeningDegree(Float doumenOpeningDegree) {
+		this.doumenOpeningDegree = doumenOpeningDegree;
+	}
+
+	public Float getHopperLoad() {
+		return hopperLoad;
+	}
+
+	public void setHopperLoad(Float hopperLoad) {
+		this.hopperLoad = hopperLoad;
+	}
+	
 }

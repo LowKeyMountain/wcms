@@ -158,5 +158,13 @@ public interface ITaskShipService {
 	 */
 	Map<String, Object> doQueryOutboardInfoRemind(Map<String, Object> args);
 
+	/**
+	 * 查询卸船机PLC参数信息接口 <br>
+	 * 
+	 * @param json
+	 * @return
+	 */
+	Map<String, Object> doGetUnloaderPlcParamDetailList(Map<String, Object> args);
+
 	
 }
