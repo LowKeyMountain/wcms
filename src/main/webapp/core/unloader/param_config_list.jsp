@@ -117,7 +117,7 @@ License: You must have a valid license purchased only from themeforest(the above
 										class="caption-subject bold uppercase"> 参数列表</span>
 								</div>
 							</div>
-							<div class="portlet-body">
+							<div class="portlet-body" id = "table">
 										<!-- 
 								<div class="table-toolbar">
 									<div class="row">
@@ -157,12 +157,12 @@ License: You must have a valid license purchased only from themeforest(the above
 									id="datatable_cl">
 									<thead>
 										<tr role="row" class="heading">
-											<th width="7.5%">卸船机编号</th>
-											<th width="7.5%">给料速度（%）</th>
-											<th width="7.5%">料斗门开度（%）</th>
-											<th width="7.5%">料斗载荷(吨)</th>
-											<th width="7.5%">最后更新时间</th>
-											<th width="7.5%">卸船机状态</th>
+											<th style="text-align:center" width="7.5%">卸船机编号</th>
+											<th style="text-align:center" width="7.5%">给料速度(%)</th>
+											<th style="text-align:center" width="7.5%">料斗门开度(%)</th>
+											<th style="text-align:center" width="7.5%">料斗载荷(吨)</th>
+											<th style="text-align:center" width="7.5%">最后更新时间</th>
+											<th style="text-align:center" width="7.5%">卸船机状态</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -242,7 +242,7 @@ License: You must have a valid license purchased only from themeforest(the above
 			App.init();
 			Cl.initModal();
 			DataTableCl.init();
-			setTimeout("location.reload()", 10000);
+			setInterval("refreshTable()", 10000);
 		});
 	</script>
 </body>

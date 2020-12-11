@@ -1,8 +1,26 @@
+var tables;
+function refreshTable() {
+	if (tables) {
+		//tables.destroy();
+		//tables.clear();
+		tables = null;
+		// 删除dom中的标签片段
+		$("#table").html("")
+		// 重新加入table标签
+		$("#table")
+				.append(
+						"<table class='dataTable table table-striped table-bordered table-hover table-checkable order-column' id='datatable_cl'>"
+							+ "<thead> <tr role='row' class='heading'> <th style='text-align:center' width='7.5%'>卸船机编号</th> <th  style='text-align:center' width='7.5%'>给料速度(%)</th> <th  style='text-align:center' width='7.5%'>料斗门开度(%)</th>"
+							+ "<th  style='text-align:center' width='7.5%'>料斗载荷(吨)</th> <th  style='text-align:center' width='7.5%'>最后更新时间</th> <th  style='text-align:center' width='7.5%'>卸船机状态</th> </tr>"
+							+ "</thead> <tbody> </tbody> </table> ");
+		DataTableCl.init()
+	}
+}
 var DataTableCl = function() {
 	var handleUser = function() {
         var table = $('#datatable_cl');
         // begin first table
-        table.dataTable({
+        tables = table.dataTable({
             // Internationalisation. For more info refer to http://datatables.net/manual/i18n
             "language": {
             	"sProcessing":   "处理中...",
@@ -30,12 +48,13 @@ var DataTableCl = function() {
             		"sSortDescending": ": 以降序排列此列"
             	}
             },
+            "destroy":true,
 			"paging" : false,
 			"bFilter" : false,
 			"bLengthChange" : false,
 			"ordering": false,//取消升序降序排列功能
 		    "info":     false,//取消显示行数信息的功能Showing 1 to 10 of 57 entries
-			"sAjaxSource" : BasePath + "/unloader/getParamListDatas", // ajax
+			"sAjaxSource" : BasePath + "/unloader/getParamListDatas?ver=" + new Date().getTime(), // ajax
 			
             // Or you can use remote translation file
             //"language": {
@@ -94,6 +113,7 @@ var DataTableCl = function() {
         table.on('change', 'tbody tr .checkboxes', function () {
             $(this).parents('tr').toggleClass("active");
         });
+        
 	}
 	return {
 		// main function to initiate the module

@@ -96,19 +96,22 @@
                         </li>
                         </security:authorize>
                         
+                        <security:authorize buttonUrl="79">
                         <li class="nav-item start ">
                             <a href="${IncPath}/unloader/paramConfigList" class="nav-link ">
                                 <i class="icon-settings"></i>
                                 <span class="title">卸船机参数面板</span>
                             </a>
                         </li>
+                        </security:authorize>
+                        <security:authorize buttonUrl="80">
                 		<li class="nav-item start ">
                             <a href="${IncPath}/unloader/historyParamList" class="nav-link ">
                                 <i class="icon-settings"></i>
                                 <span class="title">卸船机参数管理</span>
                             </a>
                         </li>  
-                                                
+                        </security:authorize>                        
                         <!-- 
                         <li class="nav-item start active open">
                             <a href="#" class="nav-link ">
@@ -139,7 +142,6 @@
                              <span class="title">角色管理</span>
                          </a>
                      </li>
-                     <!-- 
                      <security:authorize buttonUrl="20">
                      <li class="nav-item  ">
                          <a href="${IncPath}/resource/list" class="nav-link ">
@@ -147,7 +149,6 @@
                          </a>
                      </li>
                      </security:authorize>
-                      -->
                      <li class="nav-item  ">
                          <a href="${IncPath}/logs/list" class="nav-link ">
                              <span class="title">日志管理</span>
