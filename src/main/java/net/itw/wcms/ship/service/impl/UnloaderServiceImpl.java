@@ -2,6 +2,7 @@ package net.itw.wcms.ship.service.impl;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +25,7 @@ import net.itw.wcms.ship.entity.UnloaderAll;
 import net.itw.wcms.ship.repository.UnloaderRepository;
 import net.itw.wcms.ship.service.IUnloaderService;
 import net.itw.wcms.toolkit.DateTimeUtils;
+import net.itw.wcms.toolkit.lang.FloatUtils;
 import net.itw.wcms.toolkit.sql.SqlMap;
 import net.itw.wcms.x27.entity.User;
 import net.itw.wcms.x27.utils.StringUtil;
@@ -96,12 +98,11 @@ public class UnloaderServiceImpl implements IUnloaderService {
 			jo.put("id", t.getId());
 			jo.put("Cmsid", t.getCmsId());
 			jo.put("operationType", t.getOperationType());
-			
 			jo.put("time", t.getTime() == null ? "" : DateTimeUtils.date2StrDateTime(t.getTime()));
 			jo.put("pushTime", t.getPushTime() == null ? "" : DateTimeUtils.date2StrDateTime(t.getPushTime()));
-			jo.put("deliveryRate", t.getDeliveryRate());
-			jo.put("doumenOpeningDegree", t.getDoumenOpeningDegree());
-			jo.put("hopperLoad", t.getHopperLoad());
+			jo.put("deliveryRate", FloatUtils.format(t.getDeliveryRate()));
+			jo.put("doumenOpeningDegree", FloatUtils.format(t.getDoumenOpeningDegree()));
+			jo.put("hopperLoad", FloatUtils.format(t.getHopperLoad()));
 			jsonArray.add(jo);
 		}
 		JSONObject jsonObject=new JSONObject();

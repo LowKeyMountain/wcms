@@ -164,13 +164,6 @@ public interface UnloaderRepository extends JpaRepository<UnloaderAll, Integer>,
 				String endDate = params.get("endDate") == null ? "" : params.get("endDate");
 				String operationType = params.get("operationType") == null ? "" : params.get("operationType");
 
-				if(StringUtils.isNotEmpty(startPosition)) {
-					predicates.add(cb.ge(root.get("unloaderMove"),Float.parseFloat(startPosition)));
-				}
-				if(StringUtils.isNotEmpty(endPosition)) {
-					predicates.add(cb.le(root.get("unloaderMove"),Float.parseFloat(endPosition)));
-				}
-
 				if(StringUtils.isNotEmpty(startDate)) {
 					predicates.add(cb.greaterThanOrEqualTo(root.get("time"), DateTimeUtils.strDateTime2Date(startDate)));
 				}
