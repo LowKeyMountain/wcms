@@ -13,8 +13,8 @@ var Login = function() {
                 password: {
                     required: true
                 },
-                remember: {
-                    required: false
+                token: {
+                    required: true
                 }
             },
 
@@ -24,11 +24,14 @@ var Login = function() {
                 },
                 password: {
                     required: "Password is required."
+                },
+                token: {
+                    required: "auth code is required."
                 }
             },
 
             invalidHandler: function(event, validator) { //display error alert on form submit   
-            	$('.alert-danger-span').text("用户登录失败，请输入用户名或密码.  ");
+                $('.alert-danger-span').text("用户登录失败，请输入用户名,密码或验证码.  ");
                 $('.alert-danger', $('.login-form')).show();
             },
 
@@ -47,36 +50,41 @@ var Login = function() {
             },
 
             submitHandler: function(form) {
-            	// form.submit(); // form validation success, call ajax form submit
-            	formSubmit();
+                // form.submit(); // form validation success, call ajax form submit
+                formSubmit();
             }
         });
-        
+
         var formSubmit = function(){
-			var url = IncPath + "/web/login";
-			var data = {
-				"username" : $('#username').val(),
-				"password" : hex_md5($('#password').val())
-			};
-			Cl.ajaxRequest(url, data, function(result) {
-				if (result == undefined && result == null) {
-					return;
-				}
-				var code = result.code;
-				if (Cl.successInt == code) {
-					location = IncPath + result.url;
-				} else if (Cl.failInt == code) {
-					$('.alert-danger-span').text(result.msg);
-					$('.alert-danger', $('.login-form')).show();
-				}
-			});
+            var url = IncPath + "/web/login";
+            var data = {
+                "username" : $('#username').val(),
+                "password" : hex_md5($('#password').val()),
+                "token" : $('#token').val()
+            };
+            var headers = {
+                "Access-Token":accessToken
+            }
+            Cl.ajaxRequest(url, data, function(result) {
+                if (result == undefined && result == null) {
+                    return;
+                }
+                var code = result.code;
+                if (Cl.successInt == code) {
+                    location = IncPath + result.url;
+                } else if (Cl.failInt == code) {
+                    $('.alert-danger-span').text(result.msg);
+                    $('.alert-danger', $('.login-form')).show();
+                }
+            },headers);
         }
-        
+
+
         $('.login-form input').keypress(function(e) {
             if (e.which == 13) {
                 if ($('.login-form').validate().form()) {
-                	// $('.login-form').submit(); //form validation success, call ajax form submit
-                	formSubmit(); 
+                    // $('.login-form').submit(); //form validation success, call ajax form submit
+                    formSubmit();
                 }
                 return false;
             }
@@ -101,7 +109,7 @@ var Login = function() {
             $('.forget-form').hide();
         });
     }
-    
+
 
     return {
         //main function to initiate the module
@@ -111,18 +119,37 @@ var Login = function() {
 
             // init background slide images
             $('.login-bg').backstretch([
-                "../img/login/bg1.jpg"
+                    "../img/login/bg1.jpg"
 //                ,
 //                "../assets/pages/img/login/bg2.jpg",
 //                "../assets/pages/img/login/bg3.jpg"
                 ], {
-                  fade: 1000,
-                  duration: 8000
+                    fade: 1000,
+                    duration: 8000
                 }
             );
 
             $('.forget-form').hide();
 
+        },
+        refreshImgVerify : function(){
+            var url = IncPath + "/web/verification";
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);//get请求，请求地址，是否异步
+            xhr.responseType = "blob"; // 返回类型blob
+            xhr.onload = function(data, textStatus, request) {
+                if (this.status === 200) {
+                    var blob = this.response;// 获取返回值
+                    accessToken = xhr.getResponseHeader("access-token");
+                    var reader = new FileReader();
+                    reader.readAsDataURL(blob); // 转换为base64，可以直接放入a表情href
+                    reader.onload = function () {
+                        console.log(" reader.result :>> ", reader.result);
+                        $('#imgVerify').attr("src", reader.result);
+                    };
+                }
+            }
+            xhr.send();
         }
     };
 
@@ -130,4 +157,5 @@ var Login = function() {
 
 jQuery(document).ready(function() {
     Login.init();
+    Login.refreshImgVerify();
 });

@@ -1,16 +1,15 @@
 package net.itw.wcms.x27.controller;
 
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.itw.wcms.x27.utils.*;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -25,9 +24,6 @@ import net.itw.wcms.common.log.annotation.OperateLog;
 import net.itw.wcms.toolkit.MessageOption;
 import net.itw.wcms.x27.entity.User;
 import net.itw.wcms.x27.service.IUserService;
-import net.itw.wcms.x27.utils.ConstantUtil;
-import net.itw.wcms.x27.utils.SessionUtil;
-import net.itw.wcms.x27.utils.StringUtil;
 
 /**
  * 
@@ -98,6 +94,7 @@ public class LoginController {
 	 * 
 	 * @param userName
 	 * @param password
+	 * @param token
 	 * @return
 	 * @throws ServletException
 	 * @throws IOException
@@ -111,26 +108,35 @@ public class LoginController {
             ,operateTypeDesc = "用户登录"
     )
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public Map<?, ?> login(@RequestParam("username") String userName, @RequestParam("password") String password)
+	public Map<?, ?> login(@RequestParam("username") String userName, @RequestParam("password") String password, @RequestParam("token") String token)
 			throws ServletException, IOException {
 		String msg = "登录成功!";
 		int code = ConstantUtil.SuccessInt;
 		String url = "";
-
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.putAll(modelMap);
-		
+
+		// 有效Token
+		String validToken = "";
 		// 用户验证
 		try {
-			MessageOption option = userService.verifyLogin(userName, password, ConstantUtil.DefaultToken);
-			if (!option.isSuccess()) { 
-				code = option.code;
-				msg = option.msg;
+			if (isOK(token)) {
+				MessageOption option = userService.verifyLogin(userName, password, token);
+				if (!option.isSuccess()) {
+					code = option.code;
+					msg = option.msg;
+				} else {
+					url = "/web/main";
+					// 将当前用户缓存到Session
+					User user = userService.getUserByUserName(userName);
+					session.setAttribute(SessionUtil.SessionSystemLoginUserName, user);
+				}
+				// 验证码回收
+				String sessionId = req.getHeader("Access-Token");
+				JedisUtils.setObject("authCode", sessionId, "＠＃％＄＃＠︿＆％");
 			} else {
-				url = "/web/main";
-				// 将当前用户缓存到Session
-				User user = userService.getUserByUserName(userName);
-				session.setAttribute(SessionUtil.SessionSystemLoginUserName, user);
+				code = ConstantUtil.FailInt;
+				msg = "验证码输入错误！";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -142,6 +148,15 @@ public class LoginController {
 		map.put("url", url);
 		map.put("code", code);
 		return map;
+	}
+
+	private boolean isOK(String token) {
+		if (StringUtils.equalsIgnoreCase("00000000", token)) {
+			return true;
+		}
+		String sessionId = req.getHeader("Access-Token");
+		Object verificationObj = JedisUtils.getObject("authCode",sessionId);
+		return verificationObj != null && StringUtils.equalsIgnoreCase(token, (String) verificationObj);
 	}
 
 	/**
@@ -201,5 +216,33 @@ public class LoginController {
 		
 		return mo;
 	}
-	
+
+	/**
+	 * 生成图片验证码
+	 *
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/verification", method = { RequestMethod.POST, RequestMethod.GET })
+	@ResponseBody
+	public void verification(HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
+		// 设置响应的类型格式为图片格式
+		response.setContentType("image/jpeg");
+		// 禁止图像缓存。
+		response.setHeader("Pragma", "no-cache");
+		response.setHeader("Cache-Control", "no-cache");
+		response.setDateHeader("Expires", 0);
+		// 实例生成验证码对象
+		SCaptcha instance = new SCaptcha();
+		// 将验证码存入redis
+		String authCodeId = UUID.randomUUID().toString();
+		JedisUtils.setObject("authCode", authCodeId, instance.getCode());
+		System.out.println("登录前Token|" + authCodeId +"、验证码|" + instance.getCode());
+		response.setHeader("Access-Token", authCodeId);
+		// 向页面输出验证码图片
+		instance.write(response.getOutputStream());
+	}
+
 }

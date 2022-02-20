@@ -275,12 +275,12 @@ public class UserServiceImpl implements IUserService {
 	public MessageOption verifyLogin(String userName, String password, String token) throws Exception {
 
 		MessageOption option = new MessageOption(ConstantUtil.SuccessInt, "登录成功！");
-
-		if (!StringUtils.equals(ConstantUtil.DefaultToken, token)) {
-			option.code = ConstantUtil.FailInt;
-			option.msg = "登录失败：用户令牌失效！";
-			return option;
-		}
+//
+//		if (!StringUtils.equals(ConstantUtil.DefaultToken, token)) {
+//			option.code = ConstantUtil.FailInt;
+//			option.msg = "登录失败：用户令牌失效！";
+//			return option;
+//		}
 
 		User user = userRepository.getUserByUserNameAndIsDeleteFalse(userName);
 

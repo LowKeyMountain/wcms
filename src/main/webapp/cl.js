@@ -1,4 +1,6 @@
-var Cl = function() {	
+// 获取验证码时，后端推送的识别信息
+var accessToken;
+var Cl = function() {
     return {
     	action: "",
     	failInt:0,
@@ -8,12 +10,13 @@ var Cl = function() {
     	modalName: "modal_cl",
     	formName: "form_cl",
     	treeName: "tree_cl",
-    	ajaxRequest: function (url,reqParam,callback) {
+    	ajaxRequest: function (url,reqParam,callback,headers) {
 	    	$.ajax({
 	  		  type: 'POST',
 	  		  url: url,
 	  		  data: reqParam,
 	  		  cache: false,
+			  headers:headers,
 	  		  success: callback
 	    	});
         },
