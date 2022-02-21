@@ -68,7 +68,7 @@ var Cl = function() {
                 '</div>' +
               '</div>';
             $.fn.modalmanager.defaults.resize = true;
-            $("<div id=\"modal_cl\" class=\"modal fade\" tabindex=\"-1\"></div>").appendTo($('body'));
+            $("<div id=\"modal_cl\" class=\"modal fade\" data-backdrop=\"static\" data-keyboard=\"false\"  tabindex=\"-1\"></div>").appendTo($('body'));
         },
         showModalWindow: function(modalName,url) {
         	var $modal = $('#'+modalName);

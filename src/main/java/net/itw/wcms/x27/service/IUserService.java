@@ -17,6 +17,14 @@ import net.itw.wcms.x27.entity.User;
 public interface IUserService {
 	
 	/**
+	 * 弱口令校验
+	 * 
+	 * @param paramString
+	 * @return
+	 */
+	boolean checkPassWord(String paramString) throws Exception;
+	
+	/**
 	 * 验证用户登录
 	 * @param userName
 	 * @param password
@@ -154,5 +162,4 @@ public interface IUserService {
 	 * @return
 	 */
 	String getUserDataRow(Integer id);
-
 }

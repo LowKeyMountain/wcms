@@ -129,6 +129,9 @@ public class LoginController {
 					url = "/web/main";
 					// 将当前用户缓存到Session
 					User user = userService.getUserByUserName(userName);
+			        if (ConstantUtil.DefaultMd5Password.equals(user.getPassword())) {
+			            url = "/web/main?flag=1"; 
+			        }
 					session.setAttribute(SessionUtil.SessionSystemLoginUserName, user);
 				}
 				// 验证码回收
@@ -165,8 +168,10 @@ public class LoginController {
 	 * @return
 	 */
 	@RequestMapping(value = "/main")
-	public ModelAndView main() {
+	public ModelAndView main(HttpServletRequest request) {
 		User operator = SessionUtil.getSessionUser(req);
+		String flag = request.getParameter("flag");
+		this.modelMap.put("flag", flag);
 		modelMap.put("user", operator.getRealName());
 		modelMap.put("hours", Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
 		return new ModelAndView("./main");
@@ -177,7 +182,12 @@ public class LoginController {
 	{
 		return new ModelAndView("./modifypasswordform");
 	}
-	
+
+	@RequestMapping({ "/modifypasswordforce" })
+	public ModelAndView modifypasswordforce(HttpServletRequest request) throws Exception {
+		return new ModelAndView("./modifypasswordforce");
+	}
+	  
 	@OperateLog(
             bussType=ConstantUtil.BusinessType_PZZX
             ,bussTypeDesc="配置中心"
@@ -193,7 +203,7 @@ public class LoginController {
 		MessageOption mo = new MessageOption(ConstantUtil.SuccessInt, "修改成功！");
 		if(StringUtil.isStrEmpty(oldpassword) || StringUtil.isStrEmpty(password))	{
 			mo.code = ConstantUtil.FailInt;
-			mo.msg = "新老密码不能为空！";
+			mo.msg = "新旧密码均不能为空！";
 			return mo;
 		}
 		//初始化用户、菜单
@@ -201,6 +211,16 @@ public class LoginController {
 		if(!user.getPassword().equals(StringUtil.makeMD5(oldpassword))) {
 			mo.code = ConstantUtil.FailInt;
 			mo.msg = "旧密码输入错误！";
+			return mo;
+		}
+		if (this.userService.checkPassWord(password)) {
+			mo.code = ConstantUtil.FailInt;
+			mo.msg = "新密码必须是8-20位，大小写字母、数字、符号（不含空格）中至少3种，且不能与账号或账号倒写相同！";
+			return mo;
+		}
+		if (password.equals(oldpassword)) {
+			mo.code = ConstantUtil.FailInt;
+			mo.msg = "新密码不能和原密码相同！";
 			return mo;
 		}
 		User newUser = new User();

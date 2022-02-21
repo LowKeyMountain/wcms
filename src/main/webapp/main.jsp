@@ -184,6 +184,7 @@ License: You must have a valid license purchased only from themeforest(the above
     	<script type="text/javascript">
 			var IncPath = '${IncPath}';
 			var BasePath = '${BasePath}';
+			var flag = '${flag}';
 		</script>
 		<script src="${IncPath}/cl.js?v=${jsVersion}" type="text/javascript"></script>
 		<script>
@@ -191,6 +192,9 @@ License: You must have a valid license purchased only from themeforest(the above
 			// initiate layout and plugins
 			App.init();
 			Cl.initModal();
+			if(flag == 1){
+				Cl.showModalWindow(Cl.modalName,'${BasePath}/web/modifypasswordforce.do');
+			}
 		});
 	</script>
     </body>
