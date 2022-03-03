@@ -69,6 +69,16 @@ public class LoginController {
 	public ModelAndView gotoLoginPage() {
 		return new ModelAndView("./login");
 	}
+
+	/**
+	 * 跳转到错误页面
+	 *
+	 * @return
+	 */
+	@RequestMapping(value = "/error")
+	public ModelAndView gotoRrrorPage() {
+		return new ModelAndView("./error");
+	}
 	
 	/**
 	 * 用户登出
@@ -257,7 +267,7 @@ public class LoginController {
 		// 实例生成验证码对象
 		SCaptcha instance = new SCaptcha();
 		// 将验证码存入redis
-		String authCodeId = UUID.randomUUID().toString();
+		String authCodeId = UUID.randomUUID().toString().replaceAll("-","");
 		JedisUtils.setObject("authCode", authCodeId, instance.getCode());
 		System.out.println("登录前Token|" + authCodeId +"、验证码|" + instance.getCode());
 		response.setHeader("Access-Token", authCodeId);
