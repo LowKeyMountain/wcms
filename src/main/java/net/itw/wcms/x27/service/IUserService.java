@@ -22,7 +22,7 @@ public interface IUserService {
 	 * @param paramString
 	 * @return
 	 */
-	boolean checkPassWord(String paramString, String oldPassword) throws Exception;
+	boolean checkPassWord(String paramString, String userName) throws Exception;
 	
 	/**
 	 * 验证用户登录

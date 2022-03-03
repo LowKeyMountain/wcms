@@ -180,7 +180,8 @@ public class XssRequestWrapper extends HttpServletRequestWrapper {
     public static String sql_inj(String str) {
         if (StringUtils.isEmpty(str))
           return str; 
-        String inj_str = "'|and|exec|insert|union|select|delete|update|count|*|chr|mid|master|truncate|char|declare|having|(|)|;|or|+|,|%|&|-";
+        String inj_str = "'|and|or|exec|insert|union|select|delete|update|count|chr|mid|master|truncate|char|declare|having";
+//        String inj_str = "'|and|exec|insert|union|select|delete|update|count|*|chr|mid|master|truncate|char|declare|having|(|)|;|or|+|,|%|&|-";
         String[] inj_stra = inj_str.split("\\|");
         for (int i = 0; i < inj_stra.length; i++) {
           if (str.toLowerCase().indexOf(inj_stra[i]) >= 0)

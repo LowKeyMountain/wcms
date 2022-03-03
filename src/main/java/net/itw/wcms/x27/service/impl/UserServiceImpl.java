@@ -305,13 +305,14 @@ public class UserServiceImpl implements IUserService {
 		return option;
 	}
 
-	  public boolean checkPassWord(String password, String oldPassword) throws Exception {
-		boolean flag = true;
-		StringBuffer oldPasswordReverse = new StringBuffer(oldPassword).reverse();
+	  public boolean checkPassWord(String password, String userName) throws Exception {
+		boolean flag = false;
+		StringBuffer userNameReverse = new StringBuffer(userName).reverse();
 		if (password.matches(
 				"^(?![a-zA-Z]+$)(?![A-Z0-9]+$)(?![A-Z\\W_!@#$%^&*`~()-+=;:'.<>/?]+$)(?![a-z0-9]+$)(?![a-z\\W_!@#$%^&*`~()-+=;:'.<>/?]+$)(?![0-9\\W_!@#$%^&*`~()-+=;:'.<>/?]+$)[a-zA-Z0-9\\W_!@#$%^&*`~()-+=;:'.<>/?]{8,20}$")
-				&& !password.equals(oldPasswordReverse))
-			flag = false;
+				&& !password.equals(userNameReverse.toString()) && !password.equals(userName)) {
+			flag = true;
+		}
 		return flag;
 	  }
 }

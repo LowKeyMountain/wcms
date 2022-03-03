@@ -213,7 +213,7 @@ public class LoginController {
 			mo.msg = "旧密码输入错误！";
 			return mo;
 		}
-		if (this.userService.checkPassWord(password, oldpassword)) {
+		if (!this.userService.checkPassWord(password, user.getUserName())) {
 			mo.code = ConstantUtil.FailInt;
 			mo.msg = "新密码必须是8-20位，大小写字母、数字、符号（不含空格）中至少3种，且不能与账号或账号倒写相同！";
 			return mo;
