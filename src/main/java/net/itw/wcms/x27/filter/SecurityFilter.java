@@ -62,7 +62,7 @@ public class SecurityFilter implements Filter {
 			User operator = SessionUtil.getSessionUser(request);
 			Connection conn = DBUtil.openConnection();
 			if (url.startsWith("/")) {
-				url = url.replaceAll("^(/+)", "");
+				url = "/" + url.replaceAll("^(/+)", "");
 			}
 			String sql = "select count(*) AS n from x27_resources t where t.structure like '%"+url+"%'";
 			Integer count = null;
