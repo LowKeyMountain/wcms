@@ -60,38 +60,40 @@ public class SecurityFilter implements Filter {
         }
 		try {
 			User operator = SessionUtil.getSessionUser(request);
-			Connection conn = DBUtil.openConnection();
-			if (url.startsWith("/")) {
-				url = "/" + url.replaceAll("^(/+)", "");
-			}
-			String sql = "select count(*) AS n from x27_resources t where t.structure like '%"+url+"%'";
-			Integer count = null;
-			PreparedStatement ps = conn.prepareStatement(sql);
-			ResultSet rs = ps.executeQuery();
-			while (rs.next()) {
-				count = rs.getInt("n");
-				break;
-			}
-			if ( count != null && count > 0) {
-				sql = "select DISTINCT r.structure AS urls from x27_resources r, x27_join_role_resource rr, x27_roles role, x27_join_user_role ur, x27_users u where  r.id = rr.RESOURCE_ID and role.id = rr.ROLE_ID and ur.ROLE_ID = role.id and u.id = ur.USER_ID and u.USER_NAME = '"+operator.getUserName()+"' and r.structure is not null\n";
-				ps = conn.prepareStatement(sql);
-				rs = ps.executeQuery();
-				List<String> urls = new ArrayList<>();
+			if (operator != null) {
+				Connection conn = DBUtil.openConnection();
+				if (url.startsWith("/")) {
+					url = "/" + url.replaceAll("^(/+)", "");
+				}
+				String sql = "select count(*) AS n from x27_resources t where t.structure like '%"+url+"%'";
+				Integer count = null;
+				PreparedStatement ps = conn.prepareStatement(sql);
+				ResultSet rs = ps.executeQuery();
 				while (rs.next()) {
-					String u = rs.getString("urls");
-					if (StringUtils.isNotBlank(u)) {
-						urls.addAll(Arrays.asList(u.split(",")));
-					}
+					count = rs.getInt("n");
+					break;
 				}
-				boolean isPassed = false;
-				for (String u : urls) {
-					if (url.startsWith(u)) {
-						isPassed = true;
-						break;
+				if ( count != null && count > 0) {
+					sql = "select DISTINCT r.structure AS urls from x27_resources r, x27_join_role_resource rr, x27_roles role, x27_join_user_role ur, x27_users u where  r.id = rr.RESOURCE_ID and role.id = rr.ROLE_ID and ur.ROLE_ID = role.id and u.id = ur.USER_ID and u.USER_NAME = '"+operator.getUserName()+"' and r.structure is not null\n";
+					ps = conn.prepareStatement(sql);
+					rs = ps.executeQuery();
+					List<String> urls = new ArrayList<>();
+					while (rs.next()) {
+						String u = rs.getString("urls");
+						if (StringUtils.isNotBlank(u)) {
+							urls.addAll(Arrays.asList(u.split(",")));
+						}
 					}
-				}
-				if (!isPassed) {
-					response.sendRedirect(request.getContextPath() + "/web/error");
+					boolean isPassed = false;
+					for (String u : urls) {
+						if (url.startsWith(u)) {
+							isPassed = true;
+							break;
+						}
+					}
+					if (!isPassed) {
+						response.sendRedirect(request.getContextPath() + "/web/error");
+					}
 				}
 			}
 		} catch (SQLException e) {
