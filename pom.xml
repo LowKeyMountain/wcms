@@ -23,7 +23,7 @@
 		<spring.version>4.3.4.RELEASE</spring.version>
 		<hibernate.version>4.2.4.Final</hibernate.version>
 		<hibernate.validator.version>5.1.1.Final</hibernate.validator.version>
-		<springframework.data.version>1.7.1.RELEASE</springframework.data.version>
+		<springframework.data.version>1.11.23.RELEASE</springframework.data.version>
 
 		<!-- JDK版本 -->
 		<jdk.version>1.8</jdk.version>
